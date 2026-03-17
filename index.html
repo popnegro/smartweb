@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Propuesta Técnica v4.0 | WebSafe 24</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        body { background-color: #f8fafc; }
+        .sidebar { min-width: 280px; max-width: 280px; min-height: 100vh; transition: all 0.3s; }
+        @media (max-width: 992px) {
+            .sidebar { margin-left: -280px; position: fixed; z-index: 1050; }
+            .sidebar.show { margin-left: 0; }
+            .content { margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="d-flex">
+    <aside class="sidebar bg-dark text-white p-4 shadow shadow-lg d-flex flex-column" id="sidebar">
+        <div class="mb-5 px-2">
+            <h5 class="fw-bold mb-0 text-primary"><i class="bi bi-shield-lock-fill me-2"></i>WebSafe 24</h5>
+            <small class="text-secondary text-uppercase fw-semibold" style="font-size: 0.7rem;">Mendoza | Argentina</small>
+        </div>
+
+        <ul class="nav nav-pills flex-column mb-auto" id="pills-tab" role="tablist">
+            <li class="nav-item mb-2" role="presentation">
+                <button class="nav-link active w-100 text-start text-white py-3 border-0" id="pills-restauracion-tab" data-bs-toggle="pill" data-bs-target="#pills-restauracion" type="button" role="tab"><i class="bi bi-life-preserver me-3"></i>Restauración</button>
+            </li>
+            <li class="nav-item mb-2" role="presentation">
+                <button class="nav-link w-100 text-start text-white py-3 border-0" id="pills-seguridad-tab" data-bs-toggle="pill" data-bs-target="#pills-seguridad" type="button" role="tab"><i class="bi bi-shield-check me-3"></i>Seguridad Web</button>
+            </li>
+            <li class="nav-item mb-2" role="presentation">
+                <button class="nav-link w-100 text-start text-white py-3 border-0" id="pills-mantenimiento-tab" data-bs-toggle="pill" data-bs-target="#pills-mantenimiento" type="button" role="tab"><i class="bi bi-calendar-check me-3"></i>Mant. Mensual</button>
+            </li>
+            <li class="nav-item mb-2" role="presentation">
+                <button class="nav-link w-100 text-start text-white py-3 border-0" id="pills-accesos-tab" data-bs-toggle="pill" data-bs-target="#pills-accesos" type="button" role="tab"><i class="bi bi-key me-3"></i>Accesos</button>
+            </li>
+        </ul>
+
+        <div class="mt-auto p-3 bg-white bg-opacity-10 rounded-3">
+            <p class="small mb-0 opacity-50">Propuesta Técnica 2026</p>
+            <p class="small fw-bold mb-0">Ciclo de Respuesta: 1 Día</p>
+        </div>
+    </aside>
+
+    <main class="flex-grow-1 p-4 p-md-5 content">
+        <div class="container-fluid">
+            
+            <div class="d-flex justify-content-between align-items-center mb-5">
+                <div>
+                    <h1 class="h3 fw-bold text-dark">Propuesta de Continuidad Digital</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb mb-0">
+                            <li class="breadcrumb-item"><a href="#">Servicios Técnicos</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Dashboard de Rescate</li>
+                        </ol>
+                    </nav>
+                </div>
+                <button class="btn btn-dark d-none d-md-block shadow-sm px-4" onclick="window.print()"><i class="bi bi-printer me-2"></i>Imprimir</button>
+                <button class="btn btn-primary d-lg-none" onclick="document.getElementById('sidebar').classList.toggle('show')"><i class="bi bi-list"></i></button>
+            </div>
+
+            <div class="tab-content" id="pills-tabContent">
+                
+                <div class="tab-pane fade show active" id="pills-restauracion" role="tabpanel">
+                    <div class="row g-4">
+                        <div class="col-md-6 col-xl-4">
+                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3">
+                                <div class="card-body">
+                                    <div class="bg-primary bg-opacity-10 p-3 rounded-3 d-inline-block mb-3 text-primary fs-4"><i class="bi bi-search"></i></div>
+                                    <h5 class="card-title fw-bold">Diagnóstico Forense</h5>
+                                    <p class="card-text text-muted small">Análisis exhaustivo de <strong>logs de servidor</strong> y búsqueda de inyecciones SQL para identificar el vector de ataque original.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xl-4">
+                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3">
+                                <div class="card-body">
+                                    <div class="bg-warning bg-opacity-10 p-3 rounded-3 d-inline-block mb-3 text-warning fs-4"><i class="bi bi-database-up"></i></div>
+                                    <h5 class="card-title fw-bold">Sanitización de Archivos</h5>
+                                    <p class="card-text text-muted small">Eliminación manual de malware en backups y purga de tablas infectadas en la base de datos.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xl-4">
+                            <div class="card h-100 border-0 shadow-sm rounded-4 p-3 border-bottom border-primary border-4">
+                                <div class="card-body">
+                                    <div class="bg-info bg-opacity-10 p-3 rounded-3 d-inline-block mb-3 text-info fs-4"><i class="bi bi-cloud-arrow-down"></i></div>
+                                    <h5 class="card-title fw-bold">Backups Post-Rescate</h5>
+                                    <p class="card-text text-muted small">Generación de una imagen limpia del sitio (Snapshots) para garantizar un punto de restauración seguro e inmediato.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="pills-seguridad" role="tabpanel">
+                    <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h4 class="fw-bold mb-3">Google reCAPTCHA v3 (Invisible)</h4>
+                                <p class="text-muted">Protección de formularios sin fricción. No requiere que el usuario resuelva acertijos, utiliza IA para analizar el comportamiento.</p>
+                                <ul class="list-group list-group-flush small">
+                                    <li class="list-group-item bg-transparent border-0 px-0"><i class="bi bi-check-circle-fill text-primary me-2"></i>Configuración de Site Key y Secret Key.</li>
+                                    <li class="list-group-item bg-transparent border-0 px-0"><i class="bi bi-check-circle-fill text-primary me-2"></i>Protección de Contacto, Logins y Registros.</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <i class="bi bi-google display-1 text-primary opacity-25"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card border-0 shadow-sm rounded-4 p-4 bg-dark text-white">
+                        <h5 class="fw-bold text-primary"><i class="bi bi-shield-shaded me-2"></i>Web Hardening</h5>
+                        <p class="small text-white-50">Blindaje de infraestructura mediante la ofuscación de rutas administrativas y deshabilitación de editores internos.</p>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="pills-mantenimiento" role="tabpanel">
+                    <div class="row g-4">
+                        <div class="col-lg-6">
+                            <div class="card border-0 shadow-sm rounded-4 h-100">
+                                <div class="card-header bg-transparent py-3 border-0"><h5 class="fw-bold mb-0">Plan Standard</h5></div>
+                                <div class="card-body">
+                                    <ul class="list-group list-group-flush mb-4">
+                                        <li class="list-group-item bg-transparent small px-0"><i class="bi bi-dot me-2 text-primary"></i>Actualización mensual de CMS/Plugins</li>
+                                        <li class="list-group-item bg-transparent small px-0"><i class="bi bi-dot me-2 text-primary"></i>Limpieza de caché y optimización de DB</li>
+                                        <li class="list-group-item bg-transparent small px-0"><i class="bi bi-dot me-2 text-primary"></i>1 hora de soporte técnico incluida</li>
+                                    </ul>
+                                    <button class="btn btn-outline-primary w-100 rounded-pill py-2 fw-bold">Consultar</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="card border-primary shadow rounded-4 h-100">
+                                <div class="card-header bg-primary text-white py-3 border-0 rounded-top-4 d-flex justify-content-between">
+                                    <h5 class="fw-bold mb-0">Plan Continuidad Pro</h5>
+                                    <span class="badge bg-white text-primary">RECOMENDADO</span>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="list-group list-group-flush mb-4">
+                                        <li class="list-group-item bg-transparent small px-0"><i class="bi bi-plus-circle text-primary me-2"></i>Todo lo del Plan Standard</li>
+                                        <li class="list-group-item bg-transparent small px-0"><i class="bi bi-plus-circle text-primary me-2"></i>Backups semanales automatizados</li>
+                                        <li class="list-group-item bg-transparent small px-0"><i class="bi bi-plus-circle text-primary me-2"></i>3 horas de soporte con prioridad</li>
+                                    </ul>
+                                    <button class="btn btn-primary w-100 rounded-pill py-2 fw-bold">Seleccionar Plan</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="pills-accesos" role="tabpanel">
+                    <div class="card border-0 shadow-sm rounded-4">
+                        <div class="card-body p-4">
+                            <h5 class="fw-bold mb-4">Hoja de Ruta de Credenciales</h5>
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Acceso Requerido</th>
+                                            <th>Propósito Operativo</th>
+                                            <th>Estado</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="small">
+                                        <tr><td><strong>Hosting/CPanel</strong></td><td>Gestión de base de datos y archivos raíz.</td><td><span class="badge rounded-pill bg-secondary bg-opacity-10 text-secondary border">Pendiente</span></td></tr>
+                                        <tr><td><strong>Gestor Dominio</strong></td><td>Configuración DNS y despliegue SSL.</td><td><span class="badge rounded-pill bg-secondary bg-opacity-10 text-secondary border">Pendiente</span></td></tr>
+                                        <tr><td><strong>Admin CMS</strong></td><td>Instalación de parches y reCAPTCHA.</td><td><span class="badge rounded-pill bg-secondary bg-opacity-10 text-secondary border">Pendiente</span></td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="alert alert-info mt-3 small border-0 rounded-3">
+                                <i class="bi bi-info-circle-fill me-2"></i>La entrega incluye un reporte final de accesos sugeridos a cambiar post-intervención.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="card mt-5 border-0 shadow-lg rounded-4 overflow-hidden bg-dark text-white">
+                <div class="card-body p-4 p-md-5 d-flex flex-wrap justify-content-between align-items-center">
+                    <div>
+                        <h2 class="fw-bold text-primary mb-1">Intervención 24 Horas</h2>
+                        <p class="mb-0 text-white-50">Despliegue inmediato tras validación de accesos.</p>
+                    </div>
+                    <div class="mt-4 mt-md-0">
+                        <button class="btn btn-primary btn-lg px-5 py-3 rounded-pill fw-bold shadow-sm">Iniciar Rescate Técnico</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
