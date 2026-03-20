@@ -53,9 +53,19 @@
             margin-bottom: 0.25rem;
         }
 
+          /* Mejora el hover de los botones de la sidebar */
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #ffffff !important;
+        }
+
         .nav-link.active {
             background-color: #3b82f6 !important;
             box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.5);
+        }
+
+        .text-success {
+            color: green;
         }
 
         @media (max-width: 992px) {
@@ -76,15 +86,39 @@
             transition: opacity 0.2s ease-in-out;
         }
 
-        /* Mejora el hover de los botones de la sidebar */
-        .nav-link:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-            color: #3b82f6 !important;
-        }
+        .alert-ghost {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-left: 4px solid #64748b;
+    transition: transform 0.2s ease;
+}
+.alert-ghost:hover {
+    transform: translateX(5px);
+}
+.alert-ghost.border-restore { border-left-color: #ef4444; }
+.alert-ghost.border-maintain { border-left-color: #10b981; }
+
+.badge-data {
+    background-color: #f1f5f9;
+    color: #1e293b;
+    font-weight: 700;
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
+    font-family: 'Courier New', Courier, monospace;
+}
+.alert-ghost.border-security { 
+    border-left-color: #3b82f6; /* Azul brillante de seguridad */
+}
+
+.text-security {
+    color: #1e40af; /* Azul oscuro para texto destacado */
+}
+      
     </style>
 </head>
 
 <body>
+    
 
     <section id="login-section">
         <div class="container d-flex justify-content-center">
@@ -127,6 +161,7 @@
     </section>
 
     <div id="dashboard-section">
+        
         <div class="d-flex">
             <aside class="sidebar bg-dark d-flex flex-column p-3 text-white shadow-lg" id="sidebar">
                 <div class="p-3 mb-4">
@@ -171,10 +206,24 @@
                             <i class="bi bi-list"></i>
                         </button>
                     </header>
-
+                    
                     <div class="tab-content" id="pills-tabContent">
 
                         <div class="tab-pane fade show active" id="tab-rest" role="tabpanel">
+
+                            <div class="alert alert-ghost border-restore rounded-4 p-3 mb-4" role="alert">
+    <div class="d-flex align-items-center">
+        <div class="flex-shrink-0 me-3">
+            <i class="bi bi-exclamation-octagon-fill text-danger fs-3"></i>
+        </div>
+        <div>
+            <h6 class="fw-bold mb-1 text-dark">Análisis de Impacto Crítico</h6>
+            <p class="small mb-0 text-muted">
+                Un sitio web offline en el sector comercial de Mendoza pierde, en promedio, <span class="badge-data text-danger">3.5% de conversión</span> por cada hora de inactividad técnica.
+            </p>
+        </div>
+    </div>
+</div>
 
                             <div class="row g-4 text-dark">
                                 <div class="col-md-6 col-lg-4 text-dark text-start">
@@ -228,6 +277,23 @@
                         </div>
 
                         <div class="tab-pane fade" id="tab-sec" role="tabpanel">
+
+                            <div class="alert alert-ghost border-security rounded-4 p-3 mb-4" role="alert">
+    <div class="d-flex align-items-center">
+        <div class="flex-shrink-0 me-3">
+            <div class="bg-primary bg-opacity-10 p-2 rounded-3 text-primary">
+                <i class="bi bi-shield-lock-fill fs-3"></i>
+            </div>
+        </div>
+        <div>
+            <h6 class="fw-bold mb-1 text-dark">Monitoreo de Amenazas Globales</h6>
+            <p class="small mb-0 text-muted">
+                Los sistemas automatizados de escaneo detectan vulnerabilidades en sitios sin blindaje cada <span class="badge-data text-security">39 segundos</span>. Tu propuesta incluye protección proactiva contra inyecciones y fuerza bruta.
+            </p>
+        </div>
+    </div>
+</div>
+                            
                             <div class="row g-4 text-dark">
                                 <div class="col-md-6 col-lg-4 text-dark text-start">
                                     <div class="card card-auth p-4 h-100 border-0 shadow-sm bg-white">
@@ -293,9 +359,25 @@
                                     </div>
                                 </div>
                             </div>
+                            
                         </div>
 
                         <div class="tab-pane fade" id="tab-mant" role="tabpanel">
+
+                            <div class="alert alert-ghost border-maintain rounded-4 p-3 mb-4" role="alert">
+    <div class="d-flex align-items-center">
+        <div class="flex-shrink-0 me-3">
+            <i class="bi bi-shield-shaded text-success fs-3"></i>
+        </div>
+        <div>
+            <h6 class="fw-bold mb-1 text-dark">Eficiencia y Ahorro Operativo</h6>
+            <p class="small mb-0 text-muted">
+                Empresas con mantenimiento preventivo activo reportan una <span class="badge-data text-success">reducción del 70%</span> en incidentes de seguridad críticos durante el primer año.
+            </p>
+        </div>
+    </div>
+</div>
+
                             <div class="row g-4">
                                 <div class="col-md-6 col-lg-6">
                                     <div class="card card-auth p-4 h-100 border-0 shadow-sm bg-white">
@@ -434,7 +516,6 @@
             </main>
         </div>
     </div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
