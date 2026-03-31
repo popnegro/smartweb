@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WP Audit Express - Soporte $0</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        .audit-card { border-radius: 12px; border: none; transition: 0.3s; }
+        .bg-gradient-wp { background: linear-gradient(45deg, #21759b, #0073aa); }
+        .loader { display: none; }
+    </style>
+</head>
+<body class="bg-light">
+
+<div class="bg-gradient-wp text-white py-5 shadow-sm">
+    <div class="container text-center">
+        <h1 class="fw-bold"><i class="bi bi-shield-check"></i> Auditor de WordPress</h1>
+        <p>Detecta fallos de carga y seguridad en segundos.</p>
+        
+        <div class="row justify-content-center mt-4">
+            <div class="col-md-7">
+                <div class="input-group input-group-lg shadow-lg">
+                    <input type="url" id="siteUrl" class="form-control" placeholder="https://ejemplo.com">
+                    <button class="btn btn-warning fw-bold" onclick="runAudit()">AUDITAR AHORA</button>
+                </div>
+                <div class="loader mt-3" id="loader">
+                    <div class="spinner-border text-light" role="status"></div>
+                    <p class="small mt-2">Analizando cabeceras y scripts...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container my-5" id="reportArea" style="display:none;">
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card audit-card shadow-sm h-100 text-center p-4">
+                <div class="card-body">
+                    <h6 class="text-muted fw-bold">PUNTUACIÓN DE SALUD</h6>
+                    <div class="display-1 fw-bold text-danger" id="score">0</div>
+                    <p id="healthLabel" class="badge bg-danger fs-6"></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card audit-card shadow-sm h-100">
+                <div class="card-header bg-white fw-bold py-3">Hallazgos Detectados</div>
+                <div class="list-group list-group-flush" id="issueList">
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="alert alert-primary mt-5 p-4 rounded-4 shadow-sm d-flex justify-content-between align-items-center">
+        <div>
+            <h4 class="fw-bold mb-1">¿Necesitas reparar estos fallos?</h4>
+            <p class="mb-0">Tu sitio WordPress está perdiendo velocidad y seguridad.</p>
+        </div>
+        <a href="https://wa.me/TUNUMERO" class="btn btn-primary btn-lg fw-bold">Contactar Soporte</a>
+    </div>
+</div>
+
+<script>
+async function runAudit() {
+    const url = document.getElementById('siteUrl').value;
+    if(!url) return alert("Por favor, ingresa una URL válida.");
+
+    document.getElementById('loader').style.display = 'block';
+    document.getElementById('reportArea').style.display = 'none';
+
+    // Usamos un Proxy de CORS gratuito para leer el HTML del sitio
+    const proxy = "https://api.allorigins.win/get?url=" + encodeURIComponent(url);
+
+    try {
+        const response = await fetch(proxy);
+        const data = await response.json();
+        const html = data.contents;
+        
+        analyzeSite(html, url);
+    } catch (err) {
+        alert("No se pudo acceder al sitio. Verifica que la URL sea correcta.");
+    } finally {
+        document.getElementById('loader').style.display = 'none';
+    }
+}
+
+function analyzeSite(html, url) {
+    const issues = [];
+    let score = 100;
+
+    // 1. Check Version de WP expuesta (Riesgo seguridad)
+    if(html.includes('content="WordPress')) {
+        issues.push({icon: 'bi-bug', text: 'Versión de WordPress expuesta públicamente.', type: 'danger'});
+        score -= 20;
+    }
+
+    // 2. Check de Scripts Pesados o mal cargados
+    const scripts = (html.match(/<script/g) || []).length;
+    if(scripts > 30) {
+        issues.push({icon: 'bi-speedometer2', text: `Demasiados scripts detectados (${scripts}). Afecta la velocidad.`, type: 'warning'});
+        score -= 15;
+    }
+
+    // 3. Check de Plugins comunes con fallos conocidos
+    if(html.includes('elementor')) score -= 5; // Nota técnica de carga
+
+    // Renderizar
+    document.getElementById('reportArea').style.display = 'block';
+    document.getElementById('score').innerText = Math.max(score, 10);
+    document.getElementById('healthLabel').innerText = score > 70 ? "REGULAR" : "CRÍTICO";
+    
+    document.getElementById('issueList').innerHTML = issues.map(i => `
+        <div class="list-group-item d-flex align-items-start p-3">
+            <i class="bi ${i.icon} text-${i.type} fs-4 me-3"></i>
+            <div>
+                <p class="mb-0 fw-bold">${i.text}</p>
+                <small class="text-muted">Impacto en: SEO, Velocidad y Seguridad.</small>
+            </div>
+        </div>
+    `).join('');
+}
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
