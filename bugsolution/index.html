@@ -83,29 +83,57 @@
 </div>
 
 <script>
-    function runAudit() {
-        const urlInput = document.getElementById('siteUrl').value;
-        if (!urlInput) return alert("Por favor, ingresa una URL válida.");
+   function runAudit() {
+    const urlInput = document.getElementById('siteUrl').value;
+    if (!urlInput) return alert("Ingresa una URL");
 
-        document.getElementById('loader').style.display = 'block';
-        document.getElementById('reportArea').style.display = 'none';
+    document.getElementById('loader').style.display = 'block';
+    document.getElementById('reportArea').style.display = 'none';
 
-        // TÉCNICA JSONP: Esquiva el bloqueo de CORS inyectando un script
-        const callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
-        window[callbackName] = function(data) {
-            delete window[callbackName];
+    // Intentar con AllOrigins (Proxy A)
+    tryAllOrigins(urlInput);
+}
+
+function tryAllOrigins(url) {
+    const callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
+    
+    // Timer de seguridad: si en 10 segundos no responde, saltamos al Proxy B
+    const fallbackTimer = setTimeout(() => {
+        console.warn("Proxy A falló, intentando Proxy B...");
+        tryCorsProxyIo(url);
+    }, 10000);
+
+    window[callbackName] = function(data) {
+        clearTimeout(fallbackTimer);
+        delete window[callbackName];
+        if (data.contents) {
+            analyzeSite(data.contents, url);
             document.getElementById('loader').style.display = 'none';
-            if (data.contents) {
-                analyzeSite(data.contents, urlInput);
-            } else {
-                alert("No se pudo leer el sitio. Verifica si la URL es correcta.");
-            }
-        };
+        } else {
+            tryCorsProxyIo(url); // Reintento si el contenido viene vacío
+        }
+    };
 
-        const script = document.createElement('script');
-        script.src = `https://api.allorigins.win/get?url=${encodeURIComponent(urlInput)}&callback=${callbackName}`;
-        document.body.appendChild(script);
+    const script = document.createElement('script');
+    script.src = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}&callback=${callbackName}`;
+    script.onerror = () => tryCorsProxyIo(url); // Si hay error de red (QUIC), saltar al B
+    document.body.appendChild(script);
+}
+
+async function tryCorsProxyIo(url) {
+    // Proxy B: corsproxy.io (No usa infraestructura de Google, evita el error QUIC)
+    const proxyB = `https://corsproxy.io/?${encodeURIComponent(url)}`;
+    
+    try {
+        const response = await fetch(proxyB);
+        const html = await response.text();
+        analyzeSite(html, url);
+    } catch (err) {
+        alert("Error crítico: No se pudo acceder al sitio con ningún servidor.");
+    } finally {
+        document.getElementById('loader').style.display = 'none';
     }
+}
 
     function analyzeSite(html, url) {
         const issues = [];
