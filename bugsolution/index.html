@@ -1,2 +1,85 @@
 <!DOCTYPE html>
-<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>WP Audit Engine | SmartWeb</title><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css"><style>:root{--wp:#0073aa;--bg:#f6f7f7}body{background:var(--bg);font-family:sans-serif}.hero{background:#1d2327;color:#fff;padding:60px 0;border-bottom:4px solid #72aee6}.audit-card{border:none;border-radius:8px;box-shadow:0 2px 4px rgba(0,0,0,.05)}.loader{display:none}.pulse{animation:p 2s infinite}@keyframes p{0%,100%{opacity:1}50%{opacity:.5}}.issue-item{transition:.2s;border-left:4px solid transparent}.issue-item:hover{background:#f0f6fb;border-left-color:var(--wp)}#timer{color:#ffc107;font-weight:700}</style></head><body><div class="hero text-center"><div class="container"><h1 class="fw-bold"><i class="bi bi-cpu"></i> WP Audit Engine</h1><p class="lead opacity-75">Diagnóstico técnico de mantenimiento WordPress.</p><div class="row justify-content-center mt-4"><div class="col-md-6"><div class="input-group shadow-lg"><input type="url" id="siteUrl" class="form-control form-control-lg border-0" placeholder="https://ejemplo.com"><button class="btn btn-primary px-4 fw-bold" onclick="initAudit()">ANALIZAR</button></div><div id="loader" class="loader mt-4 text-white"><div class="spinner-border text-primary"></div><p class="mt-2 small pulse">Escaneando sitio... Tiempo: <span id="timer">0s</span></p><p class="text-white-50 small">Conexión Segura (Anti-CORS/QUIC)</p></div></div></div></div></div><div class="container my-5" id="reportArea" style="display:none"><div class="row g-4"><div class="col-md-4"><div class="card audit-card p-4 text-center"><h6 class="text-muted fw-bold small">PUNTUACIÓN</h6><div class="display-2 fw-bold my-2" id="scoreDisplay">0</div><div id="healthBadge" class="badge rounded-pill p-2 px-3 fs-6"></div><hr><div class="text-start small text-muted"><p class="mb-1"><i class="bi bi-check2 text-success me-2"></i>Seguridad</p><p class="mb-1"><i class="bi bi-check2 text-success me-2"></i>Scripts</p><p class="mb-0"><i class="bi bi-check2 text-success me-2"></i>WPO</p></div></div></div><div class="col-md-8"><div class="card audit-card h-100"><div class="card-header bg-white py-3 border-0"><h5 class="mb-0 fw-bold">Hallazgos Técnicos</h5></div><div class="list-group list-group-flush" id="issueList"></div></div></div></div><div class="alert mt-5 p-4 border-0 shadow-sm d-md-flex align-items-center justify-content-between bg-white" style="border-right:6px solid #2271b1!important"><div><h5 class="fw-bold mb-1">¿Necesitas optimizar este sitio?</h5><p class="text-muted mb-0 small">Se han detectado vulnerabilidades y cuellos de botella.</p></div><a href="https://wa.me/549XXXXXXXXXX" class="btn btn-primary fw-bold shadow">Contactar Soporte</a></div></div><script>const l=document.getElementById('loader'),r=document.getElementById('reportArea'),tD=document.getElementById('timer');let tI;function initAudit(){const i=document.getElementById('siteUrl').value;if(!i)return alert("Ingresa una URL");let u=i.trim().replace(/\/$/,"");if(!/^https?:\/\//i.test(u))u='https://'+u;l.style.display='block';r.style.display='none';clearInterval(tI);let s=0;tD.innerText="0s";tI=setInterval(()=>{s++;tD.innerText=s+"s"},1000);const n='wp_'+Math.floor(Math.random()*1e5);const tO=setTimeout(()=>{stop();l.style.display='none';alert("Error de conexión (Timeout). El sitio podría tener un Firewall fuerte.")},20000);window[n]=d=>{stop();clearTimeout(tO);if(d&&d.contents)process(d.contents,u);else{alert("El sitio bloqueó el escaneo");l.style.display='none'}const e=document.getElementById(n);if(e)e.remove();delete window[n]};const sc=document.createElement('script');sc.id=n;sc.src=`https://api.allorigins.win/get?url=${encodeURIComponent(u)}&callback=${n}&_=${Date.now()}`;sc.onerror=()=>{stop();clearTimeout(tO);l.style.display='none';alert("Error de Protocolo de Red (QUIC/Block). Intenta nuevamente.")};document.body.appendChild(sc)}function stop(){clearInterval(tI)}function process(h,u){l.style.display='none';r.style.display='block';let s=100,i=[];const t=h.toLowerCase();const isW=t.includes('wp-content')||t.includes('wp-includes')||t.includes('wordpress');if(isW){if(t.includes('content="wordpress')||t.includes('wp-json')){s-=25;i.push({t:"Huella Digital Expuesta",d:"La versión de WordPress es visible para atacantes.",v:"danger",c:"bi-shield-slash"})}const sc=(h.match(/<script/g)||[]).length;if(sc>35){s-=20;i.push({t:"Sobrecarga de Scripts",d:`Se detectaron ${sc} scripts. Afecta el rendimiento móvil.`,v:"warning",c:"bi-speedometer2"})}if(!u.startsWith('https')){s-=40;i.push({t:"Inseguro (No SSL)",d:"El sitio no cifra los datos de los usuarios.",v:"danger",c:"bi-lock-fill"})}if(t.includes('elementor')||t.includes('divi')){s-=10;i.push({t:"Constructor Visual",d:"Uso de maquetadores que ralentizan la carga.",v:"info",c:"bi-layers"})}}else{i.push({t:"CMS Protegido",d:"No se detectan rastros públicos de WordPress.",v:"success",c:"bi-check-circle-fill"})}render(s,i)}function render(s,i){const d=document.getElementById('scoreDisplay'),b=document.getElementById('healthBadge');d.innerText=Math.max(s,10);if(s>80){d.className="display-2 fw-bold text-success";b.innerText="SITIO SALUDABLE";b.className="badge bg-success"}else if(s>50){d.className="display-2 fw-bold text-warning";b.innerText="NECESITA MEJORAS";b.className="badge bg-warning text-dark"}else{d.className="display-2 fw-bold text-danger";b.innerText="RIESGO CRÍTICO";b.className="badge bg-danger"}document.getElementById('issueList').innerHTML=i.map(x=>`<div class="list-group-item issue-item d-flex align-items-start p-4 border-0 border-bottom"><i class="bi ${x.c} text-${x.v} fs-3 me-3"></i><div><h6 class="fw-bold mb-1">${x.t}</h6><p class="text-muted small mb-0">${x.d}</p></div></div>`).join('')}</script></body></html>
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>WP Audit Engine | SmartWeb</title><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css"><style>:root{--wp:#0073aa;--bg:#f6f7f7}body{background:var(--bg);font-family:sans-serif}.hero{background:#1d2327;color:#fff;padding:60px 0;border-bottom:4px solid #72aee6}.audit-card{border:none;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,.08)}.loader{display:none}.pulse{animation:p 2s infinite}@keyframes p{0%,100%{opacity:1}50%{opacity:.5}}#timer{color:#ffc107;font-weight:700}</style></head><body><div class="hero text-center"><div class="container"><h1 class="fw-bold"><i class="bi bi-shield-lock"></i> WP Audit Engine</h1><p class="lead opacity-75">Diagnóstico técnico y seguridad de cabeceras.</p><div class="row justify-content-center mt-4"><div class="col-md-6"><div class="input-group shadow-lg"><input type="url" id="siteUrl" class="form-control form-control-lg border-0" placeholder="https://ejemplo.com"><button class="btn btn-primary px-4 fw-bold" onclick="initAudit()">ANALIZAR</button></div><div id="loader" class="loader mt-4 text-white"><div class="spinner-border text-primary"></div><p class="mt-2 small pulse">Escaneando protocolos... <span id="timer">0s</span></p></div></div></div></div></div><div class="container my-5" id="reportArea" style="display:none"><div class="row g-4"><div class="col-md-4"><div class="card audit-card p-4 text-center"><h6 class="text-muted fw-bold small">HEALTH SCORE</h6><div class="display-2 fw-bold my-2" id="scoreDisplay">0</div><div id="healthBadge" class="badge rounded-pill p-2 px-3 fs-6"></div><hr><div class="text-start small" id="secChecks"></div></div></div><div class="col-md-8"><div class="card audit-card h-100"><div class="card-header bg-white py-3 border-0"><h5 class="mb-0 fw-bold">Hallazgos Técnicos</h5></div><div class="list-group list-group-flush" id="issueList"></div></div></div></div></div><script>
+const l=document.getElementById('loader'), r=document.getElementById('reportArea'), tD=document.getElementById('timer');
+let tI, retryCount = 0;
+
+function initAudit() {
+    const input = document.getElementById('siteUrl').value;
+    if (!input) return alert("Ingresa una URL");
+    let u = input.trim().replace(/\/$/, ""); 
+    if (!/^https?:\/\//i.test(u)) u = 'https://' + u;
+
+    l.style.display = 'block'; r.style.display = 'none';
+    clearInterval(tI); let s = 0; tD.innerText = "0s";
+    tI = setInterval(() => { s++; tD.innerText = s + "s" }, 1000);
+
+    execQuery(u);
+}
+
+function execQuery(u) {
+    const n = 'wp_' + Math.floor(Math.random() * 1e5);
+    const tO = setTimeout(() => { clean(n); alert("Timeout de red."); }, 25000);
+
+    window[n] = (d) => {
+        clean(n, tO); retryCount = 0;
+        if (d && d.contents) process(d.contents, u);
+        else l.style.display = 'none';
+    };
+
+    const sc = document.createElement('script');
+    sc.id = n;
+    // ROTACIÓN DE PROXY: Si retryCount > 0, cambia la fuente del proxy
+    const proxy = (retryCount === 0) 
+        ? `https://api.allorigins.win/get?url=${encodeURIComponent(u)}&callback=${n}&_=${Date.now()}`
+        : `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(u)}&callback=${n}`; 
+
+    sc.src = proxy;
+    sc.onerror = () => {
+        clean(n, tO);
+        if (retryCount < 1) {
+            retryCount++;
+            console.warn("Proxy 1 falló, rotando a Proxy de Respaldo...");
+            setTimeout(() => execQuery(u), 500);
+        } else {
+            retryCount = 0;
+            alert("Error de protocolo persistente. El sitio destino bloquea conexiones externas.");
+        }
+    };
+    document.body.appendChild(sc);
+}
+
+function clean(id, tId) {
+    clearInterval(tI); if(tId) clearTimeout(tId);
+    l.style.display = 'none'; const e = document.getElementById(id); 
+    if (e) e.remove(); delete window[id];
+}
+
+function process(h, u) {
+    r.style.display = 'block'; let s = 100, i = []; const t = h.toLowerCase();
+    const sec = {csp: t.includes('content-security-policy'), xf: t.includes('x-frame-options')};
+    
+    if(!sec.csp) { s-=15; i.push({t:"Sin CSP", d:"Riesgo de inyección de código.", v:"danger", i:"bi-shield-slash"}); }
+    if(t.includes('wp-content')) {
+        if(t.includes('content="wordpress')) { s-=20; i.push({t:"Versión Visible", d:"Vulnerabilidad de información.", v:"danger", i:"bi-eye"}); }
+    } else { i.push({t:"Seguridad Activa", d:"CMS oculto o protegido.", v:"success", i:"bi-check-all"}); }
+    
+    render(s, i, sec, u);
+}
+
+function render(s, i, sec, u) {
+    const d = document.getElementById('scoreDisplay'), b = document.getElementById('healthBadge');
+    d.innerText = Math.max(s, 10);
+    b.innerText = s > 80 ? "SITIO SEGURO" : (s > 50 ? "MEJORABLE" : "RIESGO ALTO");
+    b.className = `badge rounded-pill p-2 px-3 fs-6 ${s>80?'bg-success':(s>50?'bg-warning text-dark':'bg-danger')}`;
+    
+    document.getElementById('secChecks').innerHTML = `
+        <p class="mb-1"><i class="bi bi-circle-fill ${sec.csp?'text-success':'text-danger'} me-2 small"></i> CSP Policy</p>
+        <p class="mb-0"><i class="bi bi-circle-fill ${u.startsWith('https')?'text-success':'text-danger'} me-2 small"></i> SSL HSTS</p>`;
+    
+    document.getElementById('issueList').innerHTML = i.map(x => `
+        <div class="list-group-item d-flex align-items-start p-4 border-0 border-bottom">
+            <i class="bi ${x.i} text-${x.v} fs-3 me-3"></i>
+            <div><h6 class="fw-bold mb-1">${x.t}</h6><p class="text-muted small mb-0">${x.d}</p></div>
+        </div>`).join('');
+}
+</script></body></html>
