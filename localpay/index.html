@@ -3,73 +3,272 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard CobroAuto</title>
+    <title>LocalPay | Documentación Técnica PMV</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    
     <style>
-        .card-stats { border-left: 5px solid #009ee3; border-radius: 12px; }
-        .badge-approved { background-color: #e6f4ea; color: #1e7e34; border: 1px solid #c3e6cb; }
+        :root {
+            --sidebar-width: 300px;
+            --primary-blue: #2563eb;
+            --bg-light: #f8fafc;
+            --border-color: #e2e8f0;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
+
+        /* SIDEBAR NAV */
+        .sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background: #ffffff;
+            border-right: 1px solid var(--border-color);
+            padding: 1.5rem;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .nav-group-title {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #94a3b8;
+            letter-spacing: 0.05rem;
+            margin: 1.5rem 0 0.5rem 0.5rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-muted);
+            text-decoration: none;
+            padding: 0.6rem 0.8rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            background: #f1f5f9;
+            color: var(--primary-blue);
+        }
+
+        .nav-link.active {
+            background: #eff6ff;
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+
+        .role-badge {
+            font-size: 0.65rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-left: auto;
+        }
+
+        .badge-cajero { background: #e2e8f0; color: #475569; }
+        .badge-admin { background: #dcfce7; color: #166534; }
+        .badge-owner { background: #dbeafe; color: #1e40af; }
+
+        /* MAIN CONTENT */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            padding: 4rem;
+            max-width: 1100px;
+        }
+
+        .doc-section {
+            background: white;
+            padding: 3rem;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            margin-bottom: 3rem;
+        }
+
+        .feature-card {
+            border-left: 4px solid var(--primary-blue);
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 0 12px 12px 0;
+            margin: 1.5rem 0;
+        }
+
+        code {
+            color: #ef4444;
+            background: #fee2e2;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        .permission-table th { background: #f1f5f9; font-size: 0.85rem; }
+
+        @media (max-width: 992px) {
+            .sidebar { width: 100%; height: auto; position: relative; }
+            .main-content { margin-left: 0; padding: 1.5rem; }
+        }
     </style>
 </head>
-<body class="bg-light">
-    <nav class="navbar navbar-white bg-white shadow-sm mb-4">
-        <div class="container">
-            <span class="navbar-brand fw-bold text-primary">COBROAUTO PMV</span>
-        </div>
-    </nav>
+<body>
 
-    <div class="container">
-        <div class="row mb-4">
-            <div class="col-md-4">
-                <div class="card card-stats shadow-sm p-3">
-                    <small class="text-muted">TOTAL HOY</small>
-                    <h2 id="totalVentas" class="fw-bold">$0</h2>
-                </div>
-            </div>
+<aside class="sidebar">
+    <div class="brand">
+        <div class="bg-primary text-white p-2 rounded-3">
+            <i class="bi bi-lightning-charge-fill"></i>
         </div>
-
-        <div class="card shadow-sm border-0">
-            <div class="table-responsive">
-                <table class="table align-middle mb-0">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Fecha</th><th>ID Pago</th><th>Monto</th><th>Estado</th><th>Comprobante</th>
-                        </tr>
-                    </thead>
-                    <tbody id="paymentRows">
-                        </tbody>
-                </table>
-            </div>
+        <div>
+            <h6 class="m-0 fw-bold">LocalPay Docs</h6>
+            <small class="text-muted">v1.0 (PMV)</small>
         </div>
     </div>
 
-    <script>
-        const CSV_URL = 'TU_URL_DE_GOOGLE_SHEETS_CSV_AQUÍ';
+    <nav>
+        <a href="#intro" class="nav-link active"><i class="bi bi-map"></i> Introducción</a>
+        
+        <div class="nav-group-title">Nivel 1: El Núcleo</div>
+        <a href="#qr" class="nav-link"><i class="bi bi-qr-code"></i> QR Dinámico <span class="role-badge badge-cajero">C</span></a>
+        <a href="#semaforo" class="nav-link"><i class="bi bi-broadcast"></i> Semáforo Real-time <span class="role-badge badge-cajero">C</span></a>
+        <a href="#comprobante-mp" class="nav-link">
+            <i class="bi bi-patch-check"></i> Comprobante Oficial MP
+            <span class="role-badge badge-cajero">C</span>
+        </a>
 
-        async function updateDashboard() {
-            try {
-                const res = await fetch(CSV_URL);
-                const text = await res.text();
-                const rows = text.split('\n').slice(1);
-                let total = 0;
+        <div class="nav-group-title">Nivel 2: Cliente</div>
+        <a href="#pdf" class="nav-link"><i class="bi bi-file-earmark-pdf"></i> Comprobante PDF <span class="role-badge badge-cajero">C</span></a>
+        <a href="#wa" class="nav-link"><i class="bi bi-whatsapp"></i> Envío WhatsApp <span class="role-badge badge-cajero">C</span></a>
 
-                document.getElementById('paymentRows').innerHTML = rows.filter(r => r.trim()).reverse().map(row => {
-                    const [fecha, id, monto] = row.split(',');
-                    total += parseFloat(monto) || 0;
-                    return `<tr>
-                        <td>${fecha}</td>
-                        <td><code>${id}</code></td>
-                        <td class="fw-bold">$${monto}</td>
-                        <td><span class="badge rounded-pill badge-approved">Aprobado</span></td>
-                        <td><a href="https://www.mercadopago.com.ar/payments/${id.trim()}/ticket" target="_blank" class="btn btn-sm btn-outline-danger">Ver Ticket</a></td>
-                    </tr>`;
-                }).join('');
-                document.getElementById('totalVentas').innerText = `$${total.toLocaleString('es-AR')}`;
-            } catch (e) { console.error("Error", e); }
-        }
+        <div class="nav-group-title">Nivel 3: Gestión Local</div>
+        <a href="#caja" class="nav-link"><i class="bi bi-calculator"></i> Calculadora Egresos <span class="role-badge badge-admin">A</span></a>
+        <a href="#permisos" class="nav-link"><i class="bi bi-shield-lock"></i> Gestión de Roles <span class="role-badge badge-owner">O</span></a>
 
-        setInterval(updateDashboard, 30000);
-        updateDashboard();
-    </script>
+        <div class="nav-group-title">Nivel 4: Cierre</div>
+        <a href="#cierre" class="nav-link"><i class="bi bi-flag"></i> Cierre de Caja Z <span class="role-badge badge-admin">A</span></a>
+    </nav>
+</aside>
+
+<main class="main-content">
+    
+    <section id="intro" class="doc-section">
+        <h1 class="fw-bold display-6 mb-3">Introducción</h1>
+        <p class="lead text-muted">LocalPay es una solución de cobro ágil diseñada para el comercio de cercanía, optimizando la validación de pagos digitales y la gestión operativa diaria.</p>
+        <hr class="my-5">
+        <h4>Objetivos del Proyecto</h4>
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="p-3 border rounded-3 mb-3">
+                    <i class="bi bi-shield-check text-primary fs-4"></i>
+                    <h6 class="mt-2 fw-bold">Antifraude</h6>
+                    <small>Validación interna sin depender de la pantalla del cliente.</small>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="p-3 border rounded-3 mb-3">
+                    <i class="bi bi-speedometer2 text-primary fs-4"></i>
+                    <h6 class="mt-2 fw-bold">Velocidad</h6>
+                    <small>Feedback visual y sonoro en menos de 2 segundos.</small>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="permisos" class="doc-section">
+        <h2 class="fw-bold mb-4">Gestión de Roles y Permisos</h2>
+        <p>El sistema adapta la interfaz dinámicamente según el nivel de responsabilidad del usuario logueado.</p>
+
+        <div class="table-responsive mt-4">
+            <table class="table permission-table border">
+                <thead>
+                    <tr>
+                        <th>Módulo</th>
+                        <th class="text-center">Cajero</th>
+                        <th class="text-center">Admin</th>
+                        <th class="text-center">Owner</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Cobro (QR + Semáforo)</td>
+                        <td class="text-center text-success"><i class="bi bi-check-circle-fill"></i></td>
+                        <td class="text-center text-success"><i class="bi bi-check-circle-fill"></i></td>
+                        <td class="text-center text-success"><i class="bi bi-check-circle-fill"></i></td>
+                    </tr>
+                    <tr>
+                        <td>Registro de Egresos</td>
+                        <td class="text-center text-danger"><i class="bi bi-x-circle-fill"></i></td>
+                        <td class="text-center text-success"><i class="bi bi-check-circle-fill"></i></td>
+                        <td class="text-center text-success"><i class="bi bi-check-circle-fill"></i></td>
+                    </tr>
+                    <tr>
+                        <td>Cierre de Caja Z</td>
+                        <td class="text-center text-danger"><i class="bi bi-x-circle-fill"></i></td>
+                        <td class="text-center text-success"><i class="bi bi-check-circle-fill"></i></td>
+                        <td class="text-center text-success"><i class="bi bi-check-circle-fill"></i></td>
+                    </tr>
+                    <tr>
+                        <td>Configuración API</td>
+                        <td class="text-center text-danger"><i class="bi bi-x-circle-fill"></i></td>
+                        <td class="text-center text-danger"><i class="bi bi-x-circle-fill"></i></td>
+                        <td class="text-center text-success"><i class="bi bi-check-circle-fill"></i></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="feature-card">
+            <h6><i class="bi bi-lightbulb me-2"></i>Lógica de Seguridad</h6>
+            <p class="m-0 small">Los permisos se validan en el <b>Backend (Middleware)</b> mediante tokens JWT. La ocultación de botones en el frontend es puramente estética para mejorar la UX.</p>
+        </div>
+    </section>
+
+    <section id="semaforo" class="doc-section">
+        <h2 class="fw-bold mb-4">Semáforo Real-time (Webhooks)</h2>
+        <p>Utiliza la tecnología de Notificaciones IPN de Mercado Pago para disparar el cambio de estado visual.</p>
+        
+        <div class="alert alert-dark p-4 mt-4">
+            <h6 class="fw-bold text-white"><i class="bi bi-code-slash me-2"></i>Endpoint del Webhook</h6>
+            <code>POST /api/webhooks/v1/payments</code>
+        </div>
+
+        <h5 class="mt-5">Estados Visuales del Sistema</h5>
+        <div class="row g-3 mt-2">
+            <div class="col-4 text-center">
+                <div class="p-4 rounded-3 border bg-light text-muted fw-bold">GRIS<br><small>Pendiente</small></div>
+            </div>
+            <div class="col-4 text-center text-success">
+                <div class="p-4 rounded-3 border border-success bg-success bg-opacity-10 fw-bold">VERDE<br><small>Aprobado</small></div>
+            </div>
+            <div class="col-4 text-center text-danger">
+                <div class="p-4 rounded-3 border border-danger bg-danger bg-opacity-10 fw-bold">ROJO<br><small>Rechazado</small></div>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
