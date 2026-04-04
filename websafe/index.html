@@ -3,75 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SafeWeb AI | Auditoría Profesional</title>
+    <title>SafeWeb AI | Auditoría 360° Profesional</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap');
-        body { font-family: 'Inter', sans-serif; background: #f8fafc; }
-        .glass-dark { background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .gradient-text { background: linear-gradient(90deg, #60a5fa, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .card-shadow { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08); }
+        body { font-family: 'Inter', sans-serif; }
+        .glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); }
+        .gradient-bg { background: radial-gradient(circle at top right, #1e293b, #0f172a); }
     </style>
 </head>
-<body class="antialiased">
+<body class="bg-slate-50 text-slate-900 antialiased">
 
-<header class="bg-[#0f172a] text-white py-24 relative overflow-hidden">
-    <div class="container mx-auto px-4 text-center relative z-10">
-        <h1 class="text-6xl md:text-8xl font-black mb-6 tracking-tighter italic">SafeWeb<span class="gradient-text">AI</span></h1>
-        <p class="text-xl text-slate-400 mb-12 font-light">Auditoría blindada con IA y métricas oficiales de Google.</p>
+<header class="gradient-bg text-white py-24 px-4 relative overflow-hidden">
+    <div class="container mx-auto text-center relative z-10">
+        <h1 class="text-6xl md:text-8xl font-black mb-4 tracking-tighter italic">SafeWeb<span class="text-blue-500">AI</span></h1>
+        <p class="text-xl text-slate-400 max-w-2xl mx-auto mb-12">Auditoría híbrida: Autoridad de Dominio, Rendimiento Real y Plan de Acción con IA.</p>
         
-        <div class="max-w-4xl mx-auto">
-            <div class="flex flex-col md:flex-row shadow-2xl rounded-[2.5rem] overflow-hidden bg-white p-2 focus-within:ring-8 focus-within:ring-blue-500/20 transition-all">
-                <input type="url" id="siteUrl" class="flex-grow p-6 text-slate-800 text-xl outline-none" placeholder="https://ejemplo.com">
-                <button onclick="runSecureAudit()" class="bg-blue-600 hover:bg-blue-700 text-white font-black px-12 py-6 transition-all uppercase tracking-widest rounded-[2rem]">
-                    Analizar Sitio
-                </button>
-            </div>
-            
-            <div id="loader" class="hidden mt-12">
-                <div class="flex flex-col items-center">
-                    <div class="w-12 h-12 border-4 border-blue-500/20 border-t-blue-500 rounded-full animate-spin mb-4"></div>
-                    <p class="text-xs font-black tracking-[0.3em] uppercase text-blue-400 animate-pulse">Consultando Seguridad Híbrida...</p>
-                </div>
-            </div>
+        <div class="max-w-4xl mx-auto flex flex-col md:flex-row gap-3 bg-white p-3 rounded-[2.5rem] shadow-2xl">
+            <input type="url" id="siteUrl" class="flex-grow p-5 text-slate-800 text-xl outline-none rounded-full px-8" placeholder="https://tu-cliente.com">
+            <button onclick="startAudit()" class="bg-blue-600 hover:bg-blue-700 text-white font-black px-12 py-5 rounded-[2rem] transition-all uppercase tracking-widest active:scale-95">
+                Auditar Ahora
+            </button>
+        </div>
+        
+        <div id="loader" class="hidden mt-12 flex flex-col items-center animate-pulse">
+            <div class="w-10 h-10 border-4 border-blue-500/20 border-t-blue-500 rounded-full animate-spin mb-4"></div>
+            <p class="text-xs font-black uppercase tracking-widest text-blue-400">Escaneando Infraestructura...</p>
         </div>
     </div>
 </header>
 
-<main class="container mx-auto px-4 -mt-10 mb-20 hidden" id="reportArea">
+<main id="reportArea" class="container mx-auto px-4 -mt-12 mb-20 hidden">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
         <aside class="lg:col-span-4">
-            <div class="bg-white rounded-[3rem] p-12 text-center card-shadow border border-slate-100 sticky top-10">
-                <h2 class="text-slate-400 font-bold uppercase tracking-widest text-[10px] mb-10">Health Score</h2>
-                <div id="score" class="text-[9rem] leading-none font-black mb-8 tracking-tighter">0</div>
-                <div id="healthLabel" class="inline-block px-10 py-3 rounded-full text-[10px] font-black uppercase tracking-widest mb-10"></div>
+            <div class="bg-white rounded-[3rem] p-12 text-center shadow-xl border border-slate-100 sticky top-10">
+                <p class="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 mb-8 italic">Overall Health Index</p>
+                <div id="mainScore" class="text-[10rem] font-black leading-none tracking-tighter mb-6">0</div>
+                <div id="healthStatus" class="inline-block px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-widest mb-10"></div>
                 
-                <div class="pt-8 border-t border-slate-50 space-y-4">
-                    <div class="flex justify-between text-[10px] font-bold text-slate-400 uppercase">
-                        <span>Seguridad Técnica</span>
-                        <span id="sec-perc">0%</span>
+                <div class="space-y-6 pt-10 border-t border-slate-50">
+                    <div class="flex justify-between text-xs font-bold text-slate-500 uppercase">
+                        <span>Autoridad OPR</span>
+                        <span id="oprVal">0.00</span>
                     </div>
                     <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-                        <div id="sec-bar" class="bg-blue-600 h-full transition-all duration-1000" style="width: 0%"></div>
+                        <div id="oprBar" class="bg-purple-500 h-full transition-all duration-1000" style="width: 0%"></div>
                     </div>
                 </div>
             </div>
         </aside>
 
         <section class="lg:col-span-8">
-            <div id="ai-container" class="mb-8 p-10 bg-slate-900 text-white rounded-[3rem] shadow-2xl relative overflow-hidden">
-                <h4 class="text-blue-400 font-black uppercase tracking-widest text-[10px] mb-4 flex items-center gap-2">
-                    <i class="bi bi-robot"></i> Recomendación de la IA
-                </h4>
-                <p id="ai-text" class="text-xl font-light italic leading-relaxed opacity-90"></p>
+            <div class="bg-slate-900 text-white p-12 rounded-[3.5rem] shadow-2xl mb-8 relative overflow-hidden">
+                <div class="absolute -top-24 -right-24 w-64 h-64 bg-blue-500/20 blur-[80px] rounded-full"></div>
+                <h3 class="text-blue-400 font-black uppercase tracking-widest text-[10px] mb-6 flex items-center gap-2">
+                    <i class="bi bi-robot text-lg"></i> Estrategia Generada por IA
+                </h3>
+                <div id="aiPlan" class="text-lg md:text-xl font-light leading-relaxed whitespace-pre-line opacity-90"></div>
             </div>
 
-            <div class="bg-white rounded-[3rem] shadow-xl border border-slate-100 overflow-hidden" id="issueList"></div>
+            <div class="bg-white rounded-[3.5rem] shadow-lg border border-slate-100 overflow-hidden" id="logs">
+                <div class="p-10 border-b border-slate-50 bg-slate-50/50">
+                    <h4 class="font-black text-slate-800 uppercase tracking-tighter">Hallazgos Técnicos</h4>
+                </div>
+                <div id="issuesList" class="divide-y divide-slate-50"></div>
+            </div>
 
-            <div class="mt-8 bg-blue-600 rounded-[3rem] p-12 text-white flex justify-between items-center shadow-2xl">
-                <p class="text-2xl font-bold">¿Necesitas ayuda profesional?</p>
-                <a href="https://wa.me/TUNUMERO" class="bg-white text-blue-600 px-8 py-4 rounded-2xl font-black hover:bg-yellow-400 hover:text-slate-900 transition-all">WHATSAPP</a>
+            <div class="mt-8 bg-blue-600 rounded-[3rem] p-12 text-white flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl">
+                <div>
+                    <h5 class="text-3xl font-black mb-2 leading-none">¿Ejecutamos el plan?</h5>
+                    <p class="opacity-80 font-light">Solicita presupuesto para corregir estos puntos hoy mismo.</p>
+                </div>
+                <a href="https://wa.me/TUNUMERO" class="bg-white text-blue-600 px-10 py-5 rounded-2xl font-black text-lg hover:bg-yellow-400 hover:text-slate-900 transition-all shadow-xl">
+                    WHATSAPP DIRECTO
+                </a>
             </div>
         </section>
     </div>
@@ -80,74 +87,101 @@
 <script>
 const WORKER_URL = "https://websafe-proxy.smartwebmendoza.workers.dev/?url=";
 
-async function runSecureAudit() {
-    const site = document.getElementById('siteUrl').value;
-    if(!site) return alert("Ingresa una URL");
+async function startAudit() {
+    const urlInput = document.getElementById('siteUrl');
+    const btn = document.querySelector('button[onclick="startAudit()"]');
+    const url = urlInput.value.trim();
     
+    if(!url) return alert("Ingresa una URL válida");
+
+    // UI Feedback: Deshabilitar entrada
     document.getElementById('loader').classList.remove('hidden');
     document.getElementById('reportArea').classList.add('hidden');
+    btn.disabled = true;
+    btn.classList.add('opacity-50', 'cursor-not-allowed');
 
     try {
-        const res = await fetch(`${WORKER_URL}${encodeURIComponent(site)}`);
-        const data = await res.json();
+        const res = await fetch(`${WORKER_URL}${encodeURIComponent(url)}`);
+        if (!res.ok) throw new Error(`Status: ${res.status}`);
         
+        const data = await res.json();
         if(data.error) throw new Error(data.error);
-        renderResults(data);
+        
+        renderData(data);
     } catch(e) {
-        alert("Error de conexión con el servidor seguro.");
+        console.error(e);
+        alert("Error de conexión: El Worker no responde o la URL es inaccesible.");
+    } finally {
+        // Restaurar botón
         document.getElementById('loader').classList.add('hidden');
+        btn.disabled = false;
+        btn.classList.remove('opacity-50', 'cursor-not-allowed');
     }
 }
 
-function renderResults(data) {
-    document.getElementById('loader').classList.add('hidden');
+function renderData(data) {
     document.getElementById('reportArea').classList.remove('hidden');
+
+    // 1. Mostrar IA - Convertimos saltos de línea y limpiamos Markdown básico
+    const cleanPlan = data.aiPlan.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>').replace(/\n/g, '<br>');
+    document.getElementById('aiPlan').innerHTML = cleanPlan;
+
+    // 2. Score y OPR
+    document.getElementById('oprVal').innerText = (data.pageRank || 0).toFixed(2);
+    document.getElementById('oprBar').style.width = `${((data.pageRank || 0)/10)*100}%`;
+
+    // Lógica de Score Ponderado
+    const finalScore = Math.round((data.gScore * 0.4) + (data.pageRank * 10 * 0.3) + (data.hasHsts ? 30 : 5));
+    const scoreEl = document.getElementById('mainScore');
     
-    // IA
-    document.getElementById('ai-text').innerText = data.aiAdvice;
-
-    // Cálculos de issues
-    const issues = [];
-    let secPts = 40;
+    // Animación simple de conteo
+    animateNumber(scoreEl, 0, finalScore, 1000);
     
-    // Google Performance
-    issues.push({
-        text: `Google Score: ${Math.round(data.gScore)}/100`,
-        desc: 'Métrica oficial de rendimiento y velocidad Lighthouse.',
-        hex: data.gScore > 80 ? '#10b981' : '#f59e0b',
-        icon: 'bi-speedometer'
-    });
+    scoreEl.className = `text-[10rem] font-black leading-none tracking-tighter mb-6 transition-colors duration-500 ${
+        finalScore > 70 ? 'text-emerald-500' : finalScore > 40 ? 'text-amber-500' : 'text-red-500'
+    }`;
 
-    // Headers
-    if(!data.securityHeaders.hsts) { issues.push({text:'Sin HSTS', desc:'Riesgo de intercepción de datos.', hex:'#ef4444', icon:'bi-lock'}); secPts -= 20; }
-    if(!data.securityHeaders.csp) { issues.push({text:'Sin CSP', desc:'Vulnerable a inyecciones XSS.', hex:'#ef4444', icon:'bi-shield-x'}); secPts -= 20; }
+    const label = document.getElementById('healthStatus');
+    label.innerText = finalScore > 70 ? 'Salud Óptima' : finalScore > 40 ? 'Atención Requerida' : 'Riesgo Crítico';
+    label.style.background = finalScore > 70 ? '#dcfce7' : finalScore > 40 ? '#fef3c7' : '#fee2e2';
+    label.style.color = finalScore > 70 ? '#166534' : finalScore > 40 ? '#92400e' : '#991b1b';
 
-    const finalScore = Math.round((data.gScore * 0.5) + (secPts * 1.5));
-    
-    // Render UI
-    const scoreEl = document.getElementById('score');
-    scoreEl.innerText = finalScore;
-    scoreEl.style.color = finalScore > 70 ? '#10b981' : '#ef4444';
-    
-    const label = document.getElementById('healthLabel');
-    label.innerText = finalScore > 70 ? 'Salud Óptima' : 'Riesgo Detectado';
-    label.style.background = finalScore > 70 ? '#dcfce7' : '#fee2e2';
-    label.style.color = finalScore > 70 ? '#166534' : '#991b1b';
+    // 3. Hallazgos
+    const issues = [
+        { title: 'Rendimiento Google', val: `${Math.round(data.gScore)}/100`, desc: 'Velocidad de carga y experiencia de usuario según Lighthouse.', icon: 'bi-lightning', hex: data.gScore > 70 ? '#10b981' : '#f59e0b' },
+        { title: 'Autoridad OPR', val: `${(data.pageRank || 0).toFixed(2)}/10`, desc: 'Relevancia del dominio basada en Open PageRank.', icon: 'bi-trophy', hex: '#8b5cf6' },
+        { title: 'Cifrado HSTS', val: data.hasHsts ? 'ACTIVO' : 'FALTA', desc: 'Protección contra ataques de degradación de protocolo.', icon: 'bi-shield-lock', hex: data.hasHsts ? '#10b981' : '#ef4444' }
+    ];
 
-    document.getElementById('sec-perc').innerText = `${Math.max(0, (secPts/40)*100)}%`;
-    document.getElementById('sec-bar').style.width = `${Math.max(0, (secPts/40)*100)}%`;
-
-    document.getElementById('issueList').innerHTML = issues.map(i => `
-        <div class="flex items-center p-10 border-b border-slate-50 last:border-0 hover:bg-slate-50 transition-all">
-            <div class="w-16 h-16 rounded-2xl mr-8 flex items-center justify-center text-3xl" style="background: ${i.hex}15; color: ${i.hex}">
+    document.getElementById('issuesList').innerHTML = issues.map(i => `
+        <div class="flex items-center p-10 hover:bg-slate-50 transition-all">
+            <div class="w-16 h-16 rounded-2xl mr-8 flex items-center justify-center text-3xl shrink-0" style="background: ${i.hex}15; color: ${i.hex}">
                 <i class="bi ${i.icon}"></i>
             </div>
             <div>
-                <h4 class="font-black text-xl text-slate-800">${i.text}</h4>
-                <p class="text-slate-500 font-light">${i.desc}</p>
+                <h4 class="font-black text-xl text-slate-800">${i.title}: <span style="color: ${i.hex}">${i.val}</span></h4>
+                <p class="text-slate-500 font-light text-lg leading-snug">${i.desc}</p>
             </div>
         </div>
     `).join('');
+
+    setTimeout(() => {
+        window.scrollTo({ top: document.getElementById('reportArea').offsetTop - 50, behavior: 'smooth' });
+    }, 100);
+}
+
+// Función auxiliar para animar el score
+function animateNumber(obj, start, end, duration) {
+    let startTimestamp = null;
+    const step = (timestamp) => {
+        if (!startTimestamp) startTimestamp = timestamp;
+        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+        obj.innerHTML = Math.floor(progress * (end - start) + start);
+        if (progress < 1) {
+            window.requestAnimationFrame(step);
+        }
+    };
+    window.requestAnimationFrame(step);
 }
 </script>
 </body>
