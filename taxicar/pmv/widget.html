@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self'; 
+    script-src 'self' 'unsafe-inline' https://maps.googleapis.com https://cdn.jsdelivr.net; 
+    style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com; 
+    img-src 'self' data: https://maps.gstatic.com https://maps.googleapis.com https://*.googleusercontent.com; 
+    font-src 'self' https://cdn.jsdelivr.net https://fonts.gstatic.com; 
+    connect-src 'self' https://maps.googleapis.com https://cdn.jsdelivr.net; 
+    frame-src 'self' https://popnegro.github.io https://wa.me;">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <title>TaxiGo Mendoza</title>
+    <link rel="preconnect" href="https://maps.googleapis.com">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        :root{--y:#ffc107;--g:#1f9d49;--b:#f8f9fa}body{height:100dvh;margin:0;overflow:hidden;font-family:system-ui,-apple-system,sans-serif;background:#000}main{height:100%;display:flex;flex-direction:column;background:#fff}.m-w{flex:1;position:relative;background:#eee;min-height:250px}#map{height:100%;width:100%}.m-l{position:absolute;inset:0;background:#f8f9fa;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10;transition:opacity .6s}.f-c{padding:20px 20px 30px;border-radius:24px 24px 0 0;margin-top:-24px;z-index:100;background:#fff;box-shadow:0 -10px 30px rgba(0,0,0,.1);max-height:70%;overflow-y:auto}.i-g{background:var(--b);border:1px solid #ddd;border-radius:14px;padding:2px 12px;display:flex;align-items:center;margin-bottom:10px;height:50px}.i-g input{border:none;background:transparent;width:100%;outline:none;font-size:15px;padding-left:8px}.p-p{background:var(--b);border-radius:15px;padding:12px 15px;margin:10px 0;border:1px solid #eee}.bd{font-size:.65rem;font-weight:800;padding:4px 10px;border-radius:50px;text-transform:uppercase;margin-bottom:5px;display:inline-block}.btn-m{background:var(--g);color:#fff;border:none;width:100%;height:60px;border-radius:15px;font-weight:800;font-size:1.1rem;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 20px rgba(31,157,73,.2);transition:.3s}.btn-m:disabled{background:#ccc;box-shadow:none;opacity:.6}#d-o{position:fixed;inset:0;background:rgba(255,255,255,.95);z-index:2000;display:none;flex-direction:column;align-items:center;justify-content:center;padding:30px;text-align:center}.sp{animation:spin 1s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+    </style>
+</head>
+<body>
+<main>
+    <div id="d-o"><div class="spinner-border text-warning mb-3" style="width:3rem;height:3rem"></div><h4 class="fw-bold">Enviando pedido...</h4><p class="text-muted small">Conectando con la Central Mendoza</p></div>
+    <div class="m-w"><div id="map-spinner" class="m-l"><div class="spinner-border text-warning mb-2"></div></div><div id="map"></div></div>
+    <div class="f-c">
+        <div class="i-g"><i class="bi bi-geo-alt-fill text-danger"></i><input type="text" id="origen" placeholder="¿Dónde te buscamos?" autocomplete="off"><button type="button" class="border-0 bg-transparent text-primary" onclick="obtenerGPS(!0)"><i class="bi bi-crosshair fs-5"></i></button></div>
+        <div class="i-g"><i class="bi bi-flag-fill text-primary"></i><input type="text" id="destino" placeholder="¿A dónde vas?" autocomplete="off"></div>
+        <div class="i-g"><i class="bi bi-person-fill text-secondary"></i><input type="text" id="user-name" placeholder="Tu nombre"></div>
+        <div class="p-p"><div id="tarifa-tipo" class="bd bg-primary text-white">TARIFA DIURNA</div><div class="d-flex justify-content-between align-items-center"><span class="text-secondary small fw-bold">ESTIMADO:</span><h3 id="precio-txt" class="m-0 fw-bold">$ 0</h3></div></div>
+        <button id="btn-pedido" onclick="validarYEnviar()" class="btn-m" disabled><i class="bi bi-whatsapp"></i> PEDIR TAXI AHORA</button>
+    </div>
+</main>
+<script>
+    // PROTECCIÓN ANTI-CLICKJACKING (Frame Buster)
+(function() {
+    const sitiosAutorizados = [
+        "popnegro.github.io",
+        "localhost" // Solo para tus pruebas
+    ];
+    
+    if (window.top !== window.self) {
+        try {
+            const parentUrl = window.parent.location.hostname;
+            if (!sitiosAutorizados.includes(parentUrl)) {
+                // Si el sitio padre no está en la lista, redirigir o alertar
+                window.top.location = window.self.location;
+            }
+        } catch (e) {
+            // Si hay error de origen cruzado, significa que no es un sitio autorizado
+            window.top.location = window.self.location;
+        }
+    }
+})();
+</script>
+<script>
+const CONFIG={API_KEY:"AIzaSyAmTzHBhtQ4E8BG6DL0xdrEOYdZmQEBXkI",NUMERO_WA:"5492616706710",TARIFAS:{bajada:1450,ficha:820,nocturno:1.2},HORA_NOC:{ini:22,fin:6},LIMITES_MENDOZA:{sw:{lat:-37.57,lng:-70.36},ne:{lat:-31.98,lng:-66.52}}};let map,directionsService,directionsRenderer,geocoder,marker,precioActual=0;function initApp(){const e={lat:-32.8895,lng:-68.8458};map=new google.maps.Map(document.getElementById("map"),{zoom:15,center:e,disableDefaultUI:!0,gestureHandling:"greedy"}),directionsService=new google.maps.DirectionsService,directionsRenderer=new google.maps.DirectionsRenderer({map:map}),geocoder=new google.maps.Geocoder,marker=new google.maps.Marker({map:map,animation:google.maps.Animation.DROP});const t=new google.maps.LatLngBounds(CONFIG.LIMITES_MENDOZA.sw,CONFIG.LIMITES_MENDOZA.ne),n={bounds:t,componentRestrictions:{country:"ar"},fields:["geometry","formatted_address"],strictBounds:!0},a=new google.maps.places.Autocomplete(document.getElementById("origen"),n),o=new google.maps.places.Autocomplete(document.getElementById("destino"),n);a.addListener("place_changed",(()=>{const e=a.getPlace();e.geometry&&(map.panTo(e.geometry.location),marker.setPosition(e.geometry.location)),calcularRuta()})),o.addListener("place_changed",calcularRuta),document.getElementById("map-spinner").style.opacity="0",obtenerGPS(!1)}function obtenerGPS(e){navigator.geolocation&&navigator.geolocation.getCurrentPosition((e=>{const t={lat:e.coords.latitude,lng:e.coords.longitude};new google.maps.LatLngBounds(CONFIG.LIMITES_MENDOZA.sw,CONFIG.LIMITES_MENDOZA.ne).contains(t)&&(map.setCenter(t),marker.setPosition(t),geocoder.geocode({location:t},((e,t)=>{"OK"===t&&e[0]&&(document.getElementById("origen").value=e[0].formatted_address)})))}),(t=>{e&&alert("Activa el GPS para localizarte.")}),{enableHighAccuracy:!0,timeout:5e3,maximumAge:0})}function calcularRuta(){const e=document.getElementById("origen").value,t=document.getElementById("destino").value;e&&t&&directionsService.route({origin:e,destination:t,travelMode:"DRIVING"},((e,n)=>{"OK"===n&&(new google.maps.LatLngBounds(CONFIG.LIMITES_MENDOZA.sw,CONFIG.LIMITES_MENDOZA.ne).contains(e.routes[0].legs[0].end_location)?(directionsRenderer.setDirections(e),(()=>{const n=e.routes[0].legs[0].distance.value/1e3,a=(new Date).getHours(),o=a>=CONFIG.HORA_NOC.ini||a<CONFIG.HORA_NOC.fin,r=o?CONFIG.TARIFAS.nocturno:1;document.getElementById("tarifa-tipo").innerText=o?"TARIFA NOCTURNA (+20%)":"TARIFA ESTÁNDAR",document.getElementById("tarifa-tipo").className=o?"bd bg-dark text-white":"bd bg-primary text-white",precioActual=Math.round(CONFIG.TARIFAS.bajada*r+n*CONFIG.TARIFAS.ficha*r),document.getElementById("precio-txt").innerText=`$ ${precioActual.toLocaleString("es-AR")}`,document.getElementById("btn-pedido").disabled=!1})()):(alert("Servicio solo en Mendoza."),document.getElementById("destino").value=""))}))}function validarYEnviar(){const e=document.getElementById("user-name").value.trim(),t=document.getElementById("origen").value,n=document.getElementById("destino").value;if(e.length<2)return void alert("Ingresa tu nombre");document.getElementById("d-o").style.display="flex";const a=`http://googleusercontent.com/maps.google.com/6{encodeURIComponent(t)}&destination=${encodeURIComponent(n)}&travelmode=driving`,o=`*NUEVO PEDIDO TAXIGO*%0A👤 *Pasajero:* ${e}%0A📍 *Origen:* ${t}%0A🏁 *Destino:* ${n}%0A💰 *Estimado:* $${precioActual}%0A%0A🗺️ *Ruta:* ${a}`,r=`https://wa.me/${CONFIG.NUMERO_WA}?text=${o}`;setTimeout((()=>{const e=window.open(r,"_blank");e||(window.location.href=r),document.getElementById("d-o").style.display="none"}),1500)}const s=document.createElement("script");s.src=`https://maps.googleapis.com/maps/api/js?key=${CONFIG.API_KEY}&libraries=places&callback=initApp`,s.async=!0,s.defer=!0,document.head.appendChild(s);</script>
+</body>
+</html>

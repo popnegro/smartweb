@@ -1,0 +1,73 @@
+/* --- Estilos Generales --- */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f7f6;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.container, .admin-container {
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 500px;
+}
+
+h1 { color: #2c3e50; text-align: center; }
+
+/* --- Formularios e Inputs --- */
+input, select, button {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-sizing: border-box; /* Importante para que el padding no rompa el diseño */
+}
+
+button {
+    background-color: #27ae60;
+    color: white;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+button:hover { background-color: #219150; }
+
+/* --- Mapa --- */
+#map {
+    height: 250px;
+    width: 100%;
+    margin-top: 20px;
+    border-radius: 8px;
+    background: #e0e0e0;
+}
+
+/* --- Tabla de Administración --- */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+/* --- Estilos para Botones Admin --- */
+button.danger { background-color: #e74c3c; }
+button.danger:hover { background-color: #c0392b; }
+
+/* --- Login --- */
+#login-container {
+    text-align: center;
+    padding: 40px;
+}

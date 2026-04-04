@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+    <title>TaxiGo Mendoza | El Futuro de tu Central de Taxis</title>
+
+    <meta name="description"
+        content="Transforma tu flota de taxis en una plataforma digital inteligente. Sin apps, vía WhatsApp, con tarifador real de Mendoza.">
+        <meta name="referrer" content="no-referrer-when-downgrade">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --taxi-yellow: #ffc107;
+            --wa-green: #1f9d49;
+            --dark-bg: #0a0a0a;
+            --card-glass: rgba(255, 255, 255, 0.03);
+            --border-glass: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dark-bg);
+            color: #ffffff;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* --- NAVIGATION --- */
+        .navbar {
+            background: rgba(10, 10, 10, 0.85);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--border-glass);
+            padding: 1rem 0;
+            z-index: 1050;
+        }
+
+        .logo-brand {
+            font-weight: 900;
+            letter-spacing: -1.5px;
+            font-size: 1.8rem;
+            text-decoration: none;
+        }
+
+        /* --- HERO SECTION --- */
+        .hero-area {
+            padding: 140px 0 80px;
+            background: radial-gradient(circle at 90% 10%, rgba(255, 193, 7, 0.08), transparent 40%);
+        }
+
+        /* --- WIDGET CONTAINER --- */
+        .widget-frame {
+            background: #fff;
+            border-radius: 40px;
+            overflow: hidden;
+            box-shadow: 0 50px 100px rgba(0, 0, 0, 0.8);
+            max-width: 400px;
+            margin: auto;
+            border: 10px solid #1a1a1a;
+            position: relative;
+        }
+
+        .widget-iframe {
+            width: 100%;
+            height: 680px;
+            border: none;
+            display: block;
+        }
+
+        /* --- FEATURES --- */
+        .feature-card {
+            background: var(--card-glass);
+            border: 1px solid var(--border-glass);
+            border-radius: 28px;
+            padding: 40px;
+            height: 100%;
+            transition: 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .feature-card:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: var(--taxi-yellow);
+            transform: translateY(-10px);
+        }
+
+        .icon-circle {
+            width: 65px;
+            height: 65px;
+            background: rgba(255, 193, 7, 0.1);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--taxi-yellow);
+            font-size: 1.6rem;
+            margin-bottom: 25px;
+        }
+
+        /* --- ROADMAP --- */
+        .roadmap-section {
+            padding: 100px 0;
+            background: #0e0e0e;
+        }
+
+        .step-node {
+            position: relative;
+            padding-left: 50px;
+            margin-bottom: 45px;
+        }
+
+        .step-node::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 28px;
+            height: 28px;
+            background: var(--taxi-yellow);
+            border-radius: 50%;
+            z-index: 2;
+            border: 4px solid #0e0e0e;
+        }
+
+        .step-node::after {
+            content: "";
+            position: absolute;
+            left: 13px;
+            top: 28px;
+            width: 2px;
+            height: calc(100% + 15px);
+            background: var(--border-glass);
+        }
+
+        .step-node:last-child::after {
+            display: none;
+        }
+
+        /* --- PLANES --- */
+        .plan-featured {
+            background: rgba(255, 193, 7, 0.05) !important;
+            border-color: var(--taxi-yellow) !important;
+            transform: scale(1.03);
+        }
+
+        /* --- FAQ CUSTOM --- */
+        .custom-faq .accordion-item {
+            border-color: var(--border-glass);
+        }
+
+        .custom-faq .accordion-button:not(.collapsed) {
+            color: var(--taxi-yellow);
+            box-shadow: none;
+        }
+
+        .custom-faq .accordion-button::after {
+            filter: invert(1);
+        }
+
+        .custom-faq .accordion-button:focus {
+            box-shadow: none;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            padding: 80px 0 40px;
+            border-top: 1px solid var(--border-glass);
+            background: #050505;
+        }
+
+        .footer-link {
+            color: #888;
+            text-decoration: none;
+            transition: 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .footer-link:hover {
+            color: var(--taxi-yellow);
+        }
+
+        .btn-cta-main {
+            background: var(--taxi-yellow);
+            color: #000;
+            font-weight: 800;
+            padding: 16px 35px;
+            border-radius: 50px;
+            text-decoration: none;
+            display: inline-block;
+            transition: 0.3s;
+            border: none;
+        }
+
+        .btn-cta-main:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 193, 7, 0.3);
+            color: #000;
+        }
+
+        @media (max-width: 991px) {
+            .hero-area {
+                text-align: center;
+            }
+
+            .widget-frame {
+                margin-top: 50px;
+            }
+
+            .plan-featured {
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg fixed-top" role="navigation">
+        <div class="container">
+            <a class="navbar-brand logo-brand text-warning" href="#">TAXI<span class="text-white">GO</span></a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Menu">
+                <i class="bi bi-list text-white fs-1"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto gap-lg-4">
+                    <li class="nav-item"><a class="nav-link text-white small fw-bold" href="#beneficios">BENEFICIOS</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link text-white small fw-bold" href="#roadmap">PROCESO</a></li>
+                    <li class="nav-item"><a class="nav-link text-white small fw-bold" href="#planes">PLANES</a></li>
+                    <li class="nav-item"><a class="nav-link text-white small fw-bold" href="#faq">FAQ</a></li>
+                    <li class="nav-item mt-2 mt-lg-0">
+                        <a class="btn btn-warning btn-sm rounded-pill px-4 fw-bold"
+                            href="https://wa.me/5492616706710">DEMO EN VIVO</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero-area">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-7">
+                    <span class="badge bg-warning text-dark mb-3 px-3 py-2 rounded-pill fw-bold">TECNOLOGÍA MENDOZA
+                        2026</span>
+                    <h1 class="display-3 fw-black mb-4" style="font-weight: 900; letter-spacing: -2px;">
+                        Tu flota en el <span class="text-warning">bolsillo</span> del pasajero.
+                    </h1>
+                    <p class="lead text-secondary mb-5 fs-4">
+                        Elimina la fricción. Permite que tus clientes pidan un taxi en 10 segundos vía WhatsApp, con
+                        tarifa exacta y ubicación GPS real. <strong>Sin descargar nada.</strong>
+                    </p>
+                    <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start">
+                        <a href="#planes" class="btn-cta-main">VER PLANES</a>
+                        <a href="#beneficios" class="btn btn-outline-light rounded-pill px-4 py-3 fw-bold">Saber más</a>
+                    </div>
+                </div>
+
+                <div class="col-lg-5">
+                 <div class="widget-frame">
+    <iframe 
+        src="https://popnegro.github.io/mitaxi/widget.html" 
+        class="widget-iframe" 
+        loading="lazy"
+        allow="geolocation"
+        /* Estos permisos permiten que el clic en el botón abra WhatsApp fuera del frame */
+        sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation"
+    ></iframe>
+</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="beneficios" class="py-5" style="background: #000;">
+        <div class="container py-5">
+            <div class="row mb-5 text-center text-lg-start">
+                <div class="col-lg-6">
+                    <h2 class="display-5 fw-bold mb-4">Por qué <span class="text-warning">TaxiGo</span></h2>
+                    <p class="text-secondary">Solucionamos los problemas de las centrales tradicionales con tecnología
+                        ágil.</p>
+                </div>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="icon-circle"><i class="bi bi-geo-fill"></i></div>
+                        <h4 class="fw-bold mb-3">SEO Local Activo</h4>
+                        <p class="text-muted small">Aparece primero cuando busquen taxi en Mendoza. Captamos al turista
+                            y al mendocino en el momento de necesidad.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="icon-circle"><i class="bi bi-currency-exchange"></i></div>
+                        <h4 class="fw-bold mb-3">Tarifas 100% Reales</h4>
+                        <p class="text-muted small">Cálculo exacto (bajada y ficha) oficial de la provincia.
+                            Transparencia total que genera confianza y fidelidad.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="icon-circle"><i class="bi bi-lightning-charge-fill"></i></div>
+                        <h4 class="fw-bold mb-3">Conversión Instantánea</h4>
+                        <p class="text-muted small">¿Sabías que el 80% no descarga una App nueva para un viaje corto?
+                            TaxiGo elimina esa barrera por completo.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="roadmap" class="roadmap-section">
+        <div class="container">
+            <div class="row justify-content-center mb-5 text-center">
+                <div class="col-lg-8">
+                    <h2 class="display-5 fw-bold mb-3">El Viaje del Usuario</h2>
+                    <p class="text-muted">Simple, rápido y efectivo.</p>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-6">
+                    <div class="step-node">
+                        <h5 class="fw-bold text-warning">01. Acceso QR o Web</h5>
+                        <p class="text-secondary small">El pasajero entra al widget desde Google o escaneando un código
+                            en hoteles y comercios de Mendoza.</p>
+                    </div>
+                    <div class="step-node">
+                        <h5 class="fw-bold text-warning">02. Cotización GPS</h5>
+                        <p class="text-secondary small">El sistema detecta la ubicación. El usuario elige destino y ve
+                            el precio estimado en tiempo real.</p>
+                    </div>
+                    <div class="step-node">
+                        <h5 class="fw-bold text-warning">03. Confirmación WA</h5>
+                        <p class="text-secondary small">Se genera un pedido estructurado que llega a tu central con
+                            todos los datos y el mapa de ruta.</p>
+                    </div>
+                    <div class="step-node">
+                        <h5 class="fw-bold text-warning">04. Viaje Seguro</h5>
+                        <p class="text-secondary small">Asignas el móvil y el pasajero recibe la confirmación. Sin
+                            esperas telefónicas innecesarias.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="implementacion" class="py-5" style="background: linear-gradient(180deg, #0a0a0a 0%, #0e0e0e 100%);">
+        <div class="container py-5">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold mb-3">Implementación <span class="text-warning">Express</span></h2>
+                <p class="text-secondary">Tu central digitalizada y operando en tiempo récord.</p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-lg-3 col-md-6">
+                    <div class="feature-card text-center">
+                        <div class="icon-circle mx-auto mb-4">
+                            <span class="fw-black fs-4">1</span>
+                        </div>
+                        <h5 class="fw-bold mb-3">Alta de Flota</h5>
+                        <p class="small text-muted">Configuramos tu número de WhatsApp central y el nombre de tu empresa
+                            en el sistema.</p>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="feature-card text-center">
+                        <div class="icon-circle mx-auto mb-4">
+                            <span class="fw-black fs-4">2</span>
+                        </div>
+                        <h5 class="fw-bold mb-3">Customización</h5>
+                        <p class="small text-muted">Personalizamos los colores y el logo del Widget para que coincidan
+                            con tu identidad actual.</p>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="feature-card text-center">
+                        <div class="icon-circle mx-auto mb-4">
+                            <span class="fw-black fs-4">3</span>
+                        </div>
+                        <h5 class="fw-bold mb-3">Capacitación</h5>
+                        <p class="small text-muted">Breve inducción a los operadores sobre cómo recibir los mensajes
+                            estructurados de Maps.</p>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="feature-card text-center border-warning">
+                        <div class="icon-circle mx-auto mb-4 bg-warning text-dark">
+                            <i class="bi bi-rocket-takeoff-fill"></i>
+                        </div>
+                        <h5 class="fw-bold mb-3">Lanzamiento</h5>
+                        <p class="small text-muted">Entrega de Landing Page y códigos QR para colocar en vehículos y
+                            puntos estratégicos.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-5 p-4 rounded-4 border border-glass text-center" style="background: rgba(255,193,7,0.02);">
+                <p class="mb-0 text-secondary">
+                    <i class="bi bi-clock-history text-warning me-2"></i>
+                    Tiempo estimado de entrega: <strong>24 a 48 horas hábiles.</strong>
+                </p>
+            </div>
+        </div>
+    </section>
+    <section id="planes" class="py-5" style="background: radial-gradient(circle at bottom, #1a1a1a, #0a0a0a);">
+        <div class="container py-5">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold mb-3">Inversión <span class="text-warning">Inteligente</span></h2>
+                <p class="text-secondary">Sin costos ocultos. Elige el plan que mejor se adapte a tu flota.</p>
+            </div>
+            <div class="row g-4 justify-content-center align-items-center">
+                <div class="col-md-5 col-lg-4">
+                    <div class="feature-card d-flex flex-column border-secondary">
+                        <h4 class="fw-bold mb-1">Plan Individual</h4>
+                        <p class="small text-muted mb-3">Para choferes independientes.</p>
+                        <h2 class="fw-bold mb-4">$ 12.500 <span class="fs-6 text-muted fw-normal">/ mes</span></h2>
+                        <ul class="list-unstyled flex-grow-1 mb-4 small">
+                            <li class="mb-2"><i class="bi bi-check2 text-warning me-2"></i> Widget Personal</li>
+                            <li class="mb-2"><i class="bi bi-check2 text-warning me-2"></i> Tarifador Mendoza</li>
+                            <li class="mb-2"><i class="bi bi-check2 text-warning me-2"></i> Botón WA Directo</li>
+                        </ul>
+                        <a href="https://wa.me/5492616706710?text=Hola!%20Me%20interesa%20el%20Plan%20Individual"
+                            class="btn btn-outline-light rounded-pill py-3 fw-bold">ELEGIR PLAN</a>
+                    </div>
+                </div>
+                <div class="col-md-5 col-lg-4">
+                    <div class="feature-card d-flex flex-column plan-featured shadow-lg">
+                        <div
+                            class="badge bg-warning text-dark rounded-pill px-3 py-1 mb-3 align-self-start fw-bold small">
+                            RECOMENDADO</div>
+                        <h4 class="fw-bold mb-1">Plan Central</h4>
+                        <p class="small text-muted mb-3">Empresas con múltiples unidades.</p>
+                        <h2 class="fw-bold mb-4">$ 45.000 <span class="fs-6 text-muted fw-normal">/ mes</span></h2>
+                        <ul class="list-unstyled flex-grow-1 mb-4 small">
+                            <li class="mb-2"><i class="bi bi-check-all text-warning me-2"></i> Gestión Multi-chofer</li>
+                            <li class="mb-2"><i class="bi bi-check-all text-warning me-2"></i> Landing Page de Marca
+                            </li>
+                            <li class="mb-2"><i class="bi bi-check-all text-warning me-2"></i> Panel de Estadísticas
+                            </li>
+                            <li class="mb-2"><i class="bi bi-check-all text-warning me-2"></i> Soporte Prioritario</li>
+                        </ul>
+                        <a href="https://wa.me/5492616706710?text=Hola!%20Me%20interesa%20el%20Plan%20Central"
+                            class="btn btn-warning rounded-pill py-3 fw-bold shadow">SOLICITAR DEMO</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="faq" class="py-5" style="background: #000;">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="text-center mb-5">
+                        <h2 class="display-5 fw-bold mb-3">Preguntas <span class="text-warning">Frecuentes</span></h2>
+                        <p class="text-muted">Todo lo que necesitas saber antes de empezar.</p>
+                    </div>
+                    <div class="accordion accordion-flush custom-faq" id="accordionFAQ">
+                        <div class="accordion-item bg-transparent">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed bg-transparent text-white fw-bold py-4"
+                                    type="button" data-bs-toggle="collapse" data-bs-target="#f1">¿Deben descargar una
+                                    aplicación?</button>
+                            </h2>
+                            <div id="f1" class="accordion-collapse collapse" data-bs-parent="#accordionFAQ">
+                                <div class="accordion-body text-secondary pb-4">No. El cliente accede vía link o QR. La
+                                    interfaz carga al instante y el pedido se procesa vía WhatsApp.</div>
+                            </div>
+                        </div>
+                        <div class="accordion-item bg-transparent">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed bg-transparent text-white fw-bold py-4"
+                                    type="button" data-bs-toggle="collapse" data-bs-target="#f2">¿Cómo se actualizan las
+                                    tarifas?</button>
+                            </h2>
+                            <div id="f2" class="accordion-collapse collapse" data-bs-parent="#accordionFAQ">
+                                <div class="accordion-body text-secondary pb-4">Actualizamos el tarifador remotamente
+                                    cada vez que se autorizan aumentos en Mendoza. Tu sistema siempre está al día.</div>
+                            </div>
+                        </div>
+                        <div class="accordion-item bg-transparent">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed bg-transparent text-white fw-bold py-4"
+                                    type="button" data-bs-toggle="collapse" data-bs-target="#f3">¿Puedo usar mi propia
+                                    marca?</button>
+                            </h2>
+                            <div id="f3" class="accordion-collapse collapse" data-bs-parent="#accordionFAQ">
+                                <div class="accordion-body text-secondary pb-4">Sí. En el Plan Central personalizamos
+                                    colores, logos y nombres para que la solución sea 100% de tu empresa.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="row g-5 mb-5">
+                <div class="col-lg-4 text-center text-lg-start">
+                    <a class="logo-brand text-warning mb-4 d-block" href="#">TAXI<span class="text-white">GO</span></a>
+                    <p class="text-secondary small">Potenciando el transporte mendocino con tecnología de proximidad.
+                        Simple. Seguro. Local.</p>
+                </div>
+                <div class="col-lg-4 text-center text-lg-start">
+                    <h6 class="fw-bold mb-4">MENDOZA</h6>
+                    <p class="footer-link d-block mb-1">info@taxigo.com.ar</p>
+                    <p class="footer-link d-block">+54 9 261 6706710</p>
+                </div>
+                <div class="col-lg-4 text-center text-lg-start">
+                    <h6 class="fw-bold mb-4">SÍGUENOS</h6>
+                    <div class="d-flex gap-3 justify-content-center justify-content-lg-start">
+                        <a href="#" class="text-white fs-5"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="text-white fs-5"><i class="bi bi-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="pt-4 border-top border-secondary text-center">
+                <p class="text-muted small">© 2026 TaxiGo Mendoza. Desarrollado por Luis Grasso.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                const navbarCollapse = document.getElementById('navbarNav');
+                if (navbarCollapse.classList.contains('show')) {
+                    new bootstrap.Collapse(navbarCollapse).hide();
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

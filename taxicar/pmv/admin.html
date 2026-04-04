@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - Panel de Control</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="admin-container">
+        <h1>Panel de Administración</h1>
+        <table id="pedidos-table">
+            <thead><tr><th>Nombre</th><th>Destino</th><th>Acciones</th></tr></thead>
+            <tbody id="lista-pedidos"></tbody>
+        </table>
+        <select id="selector-mensajes">
+            <option value="Tu taxi está en camino.">En camino</option>
+            <option value="Tu taxi ha llegado.">Llegó</option>
+        </select>
+        <button onclick="exportarCSV()">Descargar Historial (CSV)</button>
+    </div>
+    <script src="admin.js"></script>
+</body>
+</html>
