@@ -3,82 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SafeWeb AI | Auditoría 360° Profesional</title>
+    <title>SafeWeb AI | Auditoría Profesional</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-        .glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); }
-        .gradient-bg { background: radial-gradient(circle at top right, #1e293b, #0f172a); }
+        body { font-family: 'Inter', sans-serif; background: #f8fafc; }
+        .gradient-dark { background: radial-gradient(circle at top right, #1e293b, #0f172a); }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900 antialiased">
+<body>
 
-<header class="gradient-bg text-white py-24 px-4 relative overflow-hidden">
-    <div class="container mx-auto text-center relative z-10">
-        <h1 class="text-6xl md:text-8xl font-black mb-4 tracking-tighter italic">SafeWeb<span class="text-blue-500">AI</span></h1>
-        <p class="text-xl text-slate-400 max-w-2xl mx-auto mb-12">Auditoría híbrida: Autoridad de Dominio, Rendimiento Real y Plan de Acción con IA.</p>
-        
-        <div class="max-w-4xl mx-auto flex flex-col md:flex-row gap-3 bg-white p-3 rounded-[2.5rem] shadow-2xl">
-            <input type="url" id="siteUrl" class="flex-grow p-5 text-slate-800 text-xl outline-none rounded-full px-8" placeholder="https://tu-cliente.com">
-            <button onclick="startAudit()" class="bg-blue-600 hover:bg-blue-700 text-white font-black px-12 py-5 rounded-[2rem] transition-all uppercase tracking-widest active:scale-95">
-                Auditar Ahora
-            </button>
-        </div>
-        
-        <div id="loader" class="hidden mt-12 flex flex-col items-center animate-pulse">
-            <div class="w-10 h-10 border-4 border-blue-500/20 border-t-blue-500 rounded-full animate-spin mb-4"></div>
-            <p class="text-xs font-black uppercase tracking-widest text-blue-400">Escaneando Infraestructura...</p>
-        </div>
+<header class="gradient-dark text-white py-20 px-4 text-center">
+    <h1 class="text-6xl font-black mb-4 italic italic">SafeWeb<span class="text-blue-500">AI</span></h1>
+    <p class="text-slate-400 mb-10 text-lg">Auditoría con IA: Velocidad, Autoridad y Seguridad.</p>
+    
+    <div class="max-w-3xl mx-auto flex flex-col md:flex-row gap-2 bg-white p-2 rounded-3xl shadow-2xl">
+        <input type="url" id="siteUrl" class="flex-grow p-4 text-slate-800 outline-none px-6 text-lg" placeholder="https://ejemplo.com">
+        <button onclick="startAudit()" id="btnMain" class="bg-blue-600 hover:bg-blue-700 text-white font-black px-10 py-4 rounded-2xl transition-all uppercase tracking-widest">
+            Analizar
+        </button>
+    </div>
+    
+    <div id="loader" class="hidden mt-10 animate-pulse text-blue-400 font-bold tracking-widest text-xs">
+        <i class="bi bi-cpu text-2xl mb-2 block"></i> PROCESANDO MÉTRICAS...
     </div>
 </header>
 
-<main id="reportArea" class="container mx-auto px-4 -mt-12 mb-20 hidden">
+<main id="reportArea" class="container mx-auto px-4 -mt-10 mb-20 hidden">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         <aside class="lg:col-span-4">
-            <div class="bg-white rounded-[3rem] p-12 text-center shadow-xl border border-slate-100 sticky top-10">
-                <p class="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 mb-8 italic">Overall Health Index</p>
-                <div id="mainScore" class="text-[10rem] font-black leading-none tracking-tighter mb-6">0</div>
-                <div id="healthStatus" class="inline-block px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-widest mb-10"></div>
+            <div class="bg-white rounded-[2.5rem] p-10 text-center shadow-xl border border-slate-100 sticky top-10">
+                <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-6">Health Index</p>
+                <div id="mainScore" class="text-9xl font-black leading-none tracking-tighter mb-6">0</div>
+                <div id="healthStatus" class="inline-block px-6 py-2 rounded-full text-[10px] font-black uppercase mb-10"></div>
                 
-                <div class="space-y-6 pt-10 border-t border-slate-50">
-                    <div class="flex justify-between text-xs font-bold text-slate-500 uppercase">
+                <div class="pt-8 border-t space-y-4">
+                    <div class="flex justify-between text-[10px] font-bold text-slate-400 uppercase">
                         <span>Autoridad OPR</span>
                         <span id="oprVal">0.00</span>
                     </div>
                     <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-                        <div id="oprBar" class="bg-purple-500 h-full transition-all duration-1000" style="width: 0%"></div>
+                        <div id="oprBar" class="bg-purple-500 h-full transition-all duration-1000"></div>
                     </div>
                 </div>
             </div>
         </aside>
 
         <section class="lg:col-span-8">
-            <div class="bg-slate-900 text-white p-12 rounded-[3.5rem] shadow-2xl mb-8 relative overflow-hidden">
-                <div class="absolute -top-24 -right-24 w-64 h-64 bg-blue-500/20 blur-[80px] rounded-full"></div>
-                <h3 class="text-blue-400 font-black uppercase tracking-widest text-[10px] mb-6 flex items-center gap-2">
-                    <i class="bi bi-robot text-lg"></i> Estrategia Generada por IA
+            <div class="bg-slate-900 rounded-[3rem] p-10 shadow-2xl mb-8">
+                <h3 class="text-blue-400 font-black uppercase tracking-widest text-[10px] mb-8 flex items-center gap-2">
+                    <i class="bi bi-robot text-lg"></i> Plan de Acción Personalizado (IA)
                 </h3>
-                <div id="aiPlan" class="text-lg md:text-xl font-light leading-relaxed whitespace-pre-line opacity-90"></div>
+                <div id="aiPlanContainer" class="space-y-4">
+                    </div>
             </div>
 
-            <div class="bg-white rounded-[3.5rem] shadow-lg border border-slate-100 overflow-hidden" id="logs">
-                <div class="p-10 border-b border-slate-50 bg-slate-50/50">
-                    <h4 class="font-black text-slate-800 uppercase tracking-tighter">Hallazgos Técnicos</h4>
+            <div class="bg-white rounded-[2.5rem] shadow-lg overflow-hidden border border-slate-100" id="issuesList">
                 </div>
-                <div id="issuesList" class="divide-y divide-slate-50"></div>
-            </div>
-
-            <div class="mt-8 bg-blue-600 rounded-[3rem] p-12 text-white flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl">
-                <div>
-                    <h5 class="text-3xl font-black mb-2 leading-none">¿Ejecutamos el plan?</h5>
-                    <p class="opacity-80 font-light">Solicita presupuesto para corregir estos puntos hoy mismo.</p>
-                </div>
-                <a href="https://wa.me/TUNUMERO" class="bg-white text-blue-600 px-10 py-5 rounded-2xl font-black text-lg hover:bg-yellow-400 hover:text-slate-900 transition-all shadow-xl">
-                    WHATSAPP DIRECTO
-                </a>
+            
+            <div class="mt-8 bg-blue-600 p-10 rounded-[2.5rem] text-white flex justify-between items-center shadow-2xl">
+                <h4 class="text-2xl font-bold">¿Listo para mejorar?</h4>
+                <a href="https://wa.me/TUNUMERO" class="bg-white text-blue-600 px-8 py-4 rounded-xl font-black hover:bg-yellow-400 hover:text-black transition-all">WHATSAPP</a>
             </div>
         </section>
     </div>
@@ -88,100 +75,74 @@
 const WORKER_URL = "https://websafe-proxy.smartwebmendoza.workers.dev/?url=";
 
 async function startAudit() {
-    const urlInput = document.getElementById('siteUrl');
-    const btn = document.querySelector('button[onclick="startAudit()"]');
-    const url = urlInput.value.trim();
-    
-    if(!url) return alert("Ingresa una URL válida");
+    const url = document.getElementById('siteUrl').value;
+    if(!url) return alert("URL necesaria");
 
-    // UI Feedback: Deshabilitar entrada
     document.getElementById('loader').classList.remove('hidden');
     document.getElementById('reportArea').classList.add('hidden');
-    btn.disabled = true;
-    btn.classList.add('opacity-50', 'cursor-not-allowed');
+    document.getElementById('btnMain').disabled = true;
 
     try {
         const res = await fetch(`${WORKER_URL}${encodeURIComponent(url)}`);
-        if (!res.ok) throw new Error(`Status: ${res.status}`);
-        
         const data = await res.json();
         if(data.error) throw new Error(data.error);
-        
-        renderData(data);
+        renderResults(data);
     } catch(e) {
-        console.error(e);
-        alert("Error de conexión: El Worker no responde o la URL es inaccesible.");
+        alert("Error en el servidor. Verifica las API Keys.");
     } finally {
-        // Restaurar botón
         document.getElementById('loader').classList.add('hidden');
-        btn.disabled = false;
-        btn.classList.remove('opacity-50', 'cursor-not-allowed');
+        document.getElementById('btnMain').disabled = false;
     }
 }
 
-function renderData(data) {
+function renderResults(data) {
     document.getElementById('reportArea').classList.remove('hidden');
 
-    // 1. Mostrar IA - Convertimos saltos de línea y limpiamos Markdown básico
-    const cleanPlan = data.aiPlan.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>').replace(/\n/g, '<br>');
-    document.getElementById('aiPlan').innerHTML = cleanPlan;
+    // 1. Renderizar Plan de Acción (3 pasos)
+    const lines = data.aiPlan.split('\n').filter(l => l.includes('|'));
+    let html = '';
+    lines.slice(0,3).forEach((line, i) => {
+        const [tit, desc, imp] = line.split('|');
+        html += `
+            <div class="flex gap-6 p-6 bg-slate-800/50 rounded-3xl border border-white/5 group hover:border-blue-500/30 transition-all">
+                <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center font-black flex-shrink-0">${i+1}</div>
+                <div>
+                    <h5 class="text-blue-400 font-black text-xs uppercase mb-1">${tit}</h5>
+                    <p class="text-slate-300 text-lg font-light mb-2">${desc}</p>
+                    <span class="text-[9px] font-black bg-emerald-500/10 text-emerald-400 px-3 py-1 rounded-full uppercase tracking-tighter italic">Impacto: ${imp}</span>
+                </div>
+            </div>`;
+    });
+    document.getElementById('aiPlanContainer').innerHTML = html || '<p class="text-slate-400">Analizando detalles...</p>';
 
     // 2. Score y OPR
     document.getElementById('oprVal').innerText = (data.pageRank || 0).toFixed(2);
-    document.getElementById('oprBar').style.width = `${((data.pageRank || 0)/10)*100}%`;
+    document.getElementById('oprBar').style.width = `${(data.pageRank/10)*100}%`;
 
-    // Lógica de Score Ponderado
     const finalScore = Math.round((data.gScore * 0.4) + (data.pageRank * 10 * 0.3) + (data.hasHsts ? 30 : 5));
     const scoreEl = document.getElementById('mainScore');
-    
-    // Animación simple de conteo
-    animateNumber(scoreEl, 0, finalScore, 1000);
-    
-    scoreEl.className = `text-[10rem] font-black leading-none tracking-tighter mb-6 transition-colors duration-500 ${
-        finalScore > 70 ? 'text-emerald-500' : finalScore > 40 ? 'text-amber-500' : 'text-red-500'
-    }`;
+    scoreEl.innerText = finalScore;
+    scoreEl.style.color = finalScore > 70 ? '#10b981' : (finalScore > 40 ? '#f59e0b' : '#ef4444');
 
     const label = document.getElementById('healthStatus');
-    label.innerText = finalScore > 70 ? 'Salud Óptima' : finalScore > 40 ? 'Atención Requerida' : 'Riesgo Crítico';
-    label.style.background = finalScore > 70 ? '#dcfce7' : finalScore > 40 ? '#fef3c7' : '#fee2e2';
-    label.style.color = finalScore > 70 ? '#166534' : finalScore > 40 ? '#92400e' : '#991b1b';
+    label.innerText = finalScore > 70 ? 'Salud Óptima' : 'Riesgo Detectado';
+    label.style.background = finalScore > 70 ? '#dcfce7' : '#fee2e2';
+    label.style.color = finalScore > 70 ? '#166534' : '#991b1b';
 
     // 3. Hallazgos
-    const issues = [
-        { title: 'Rendimiento Google', val: `${Math.round(data.gScore)}/100`, desc: 'Velocidad de carga y experiencia de usuario según Lighthouse.', icon: 'bi-lightning', hex: data.gScore > 70 ? '#10b981' : '#f59e0b' },
-        { title: 'Autoridad OPR', val: `${(data.pageRank || 0).toFixed(2)}/10`, desc: 'Relevancia del dominio basada en Open PageRank.', icon: 'bi-trophy', hex: '#8b5cf6' },
-        { title: 'Cifrado HSTS', val: data.hasHsts ? 'ACTIVO' : 'FALTA', desc: 'Protección contra ataques de degradación de protocolo.', icon: 'bi-shield-lock', hex: data.hasHsts ? '#10b981' : '#ef4444' }
+    const items = [
+        { t: 'Velocidad Google', v: `${Math.round(data.gScore)}/100`, i: 'bi-lightning', c: data.gScore > 70 ? '#10b981' : '#f59e0b' },
+        { t: 'Autoridad OPR', v: `${(data.pageRank || 0).toFixed(2)}/10`, i: 'bi-trophy', c: '#8b5cf6' },
+        { t: 'Seguridad HSTS', v: data.hasHsts ? 'OK' : 'FALTA', i: 'bi-shield-lock', c: data.hasHsts ? '#10b981' : '#ef4444' }
     ];
 
-    document.getElementById('issuesList').innerHTML = issues.map(i => `
-        <div class="flex items-center p-10 hover:bg-slate-50 transition-all">
-            <div class="w-16 h-16 rounded-2xl mr-8 flex items-center justify-center text-3xl shrink-0" style="background: ${i.hex}15; color: ${i.hex}">
-                <i class="bi ${i.icon}"></i>
-            </div>
-            <div>
-                <h4 class="font-black text-xl text-slate-800">${i.title}: <span style="color: ${i.hex}">${i.val}</span></h4>
-                <p class="text-slate-500 font-light text-lg leading-snug">${i.desc}</p>
-            </div>
-        </div>
-    `).join('');
+    document.getElementById('issuesList').innerHTML = items.map(x => `
+        <div class="flex items-center p-8 border-b last:border-0 hover:bg-slate-50 transition-all">
+            <div class="w-12 h-12 rounded-xl mr-6 flex items-center justify-center text-xl" style="background: ${x.c}15; color: ${x.c}"><i class="bi ${x.i}"></i></div>
+            <h4 class="font-bold text-slate-800">${x.t}: <span style="color: ${x.c}">${x.v}</span></h4>
+        </div>`).join('');
 
-    setTimeout(() => {
-        window.scrollTo({ top: document.getElementById('reportArea').offsetTop - 50, behavior: 'smooth' });
-    }, 100);
-}
-
-// Función auxiliar para animar el score
-function animateNumber(obj, start, end, duration) {
-    let startTimestamp = null;
-    const step = (timestamp) => {
-        if (!startTimestamp) startTimestamp = timestamp;
-        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-        obj.innerHTML = Math.floor(progress * (end - start) + start);
-        if (progress < 1) {
-            window.requestAnimationFrame(step);
-        }
-    };
-    window.requestAnimationFrame(step);
+    window.scrollTo({ top: document.getElementById('reportArea').offsetTop - 50, behavior: 'smooth' });
 }
 </script>
 </body>
