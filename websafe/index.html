@@ -3,148 +3,439 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SafeWeb AI | Reporte Profesional</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <title>WebSafe by SmartWeb | Protección Activa para tu WordPress</title>
+    
+    <meta name="description" content="Auditoría y Mantenimiento Preventivo para empresas con WordPress. Evita hackeos, lentitud y pérdida de datos.">
+    <meta property="og:title" content="Tu WordPress es vulnerable sin mantenimiento preventivo | WebSafe">
+    <meta property="og:description" content="Detecta y corrige fallos de seguridad antes de que afecten a tu negocio.">
+    <meta property="og:image" content="https://popnegro.github.io/smartweb/websafe/og-websafe.jpg"> <meta property="og:url" content="https://popnegro.github.io/smartweb/websafe/">
+
+    <link rel="icon" type="image/png" href="https://popnegro.github.io/smartweb/favicon.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
-        body { font-family: 'Inter', sans-serif; background: #f1f5f9; }
-        .hero-gradient { background: radial-gradient(circle at top right, #1e293b, #0f172a); }
-        .card-dash { background: white; border-radius: 2.5rem; box-shadow: 0 10px 30px -10px rgba(0,0,0,0.05); }
+        :root {
+            /* Paleta Assertiva/SmartWeb */
+            --color-primary: #001e41; /* Azul profundo */
+            --color-secondary: #0098c8; /* Azul brillante */
+            --color-accent: #0dcaf0; /* Cyan light */
+            --color-danger: #d50000; /* Rojo alerta */
+            
+            /* Neutros */
+            --color-dark: #1a1a1a;
+            --color-white: #ffffff;
+            --color-gray-light: #f8f9fa;
+            --color-muted: #8c98a2;
+            
+            /* UI */
+            --font-main: "Noto Sans", sans-serif;
+            --transition: all .3s cubic-bezier(.4,0,.2,1);
+            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        /* 1. Reset & Base */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: var(--font-main);
+            color: var(--color-dark);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        a { text-decoration: none; transition: var(--transition); }
+        ul { list-style: none; }
+        img { max-width: 100%; height: auto; }
+
+        /* 2. Layout Utilities */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .section { padding: 5rem 0; }
+        .text-center { text-align: center; }
+        .text-secondary { color: var(--color-secondary); }
+
+        /* 3. Components */
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: 2px solid transparent;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background-color: var(--color-secondary);
+            color: var(--color-white);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--color-accent);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,152,200,0.3);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border-color: var(--color-white);
+            color: var(--color-white);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--color-white);
+            color: var(--color-primary);
+        }
+
+        /* 4. Header */
+        .header {
+            background-color: var(--color-primary);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-white);
+        }
+        
+        .logo span { color: var(--color-secondary); }
+
+        /* 5. Hero Section ( Above the Fold ) */
+        .hero {
+            background: linear-gradient(135deg, var(--color-primary) 0%, #002d62 100%);
+            color: var(--color-white);
+            padding: 10rem 0 7rem;
+            position: relative;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: url('data:image/svg+xml,<svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h20v20H0z" fill="%23fff" fill-opacity=".01"/></svg>');
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-tag {
+            display: inline-block;
+            background-color: rgba(213,0,0,0.2);
+            color: #ff8a8a;
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(213,0,0,0.3);
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            line-height: 1.2;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero h1 span { color: #f88a8a; } /* Agitación del dolor */
+
+        .hero p {
+            font-size: 1.25rem;
+            color: #b0c4de;
+            margin-bottom: 2.5rem;
+            font-weight: 400;
+        }
+
+        /* 6. Puntos de Dolor (Agitación) */
+        .pain-points {
+            background-color: var(--color-gray-light);
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2.5rem;
+            margin-top: 4rem;
+        }
+
+        .pain-card {
+            background-color: var(--color-white);
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.03);
+            transition: var(--transition);
+            border: 1px solid #eee;
+        }
+
+        .pain-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--color-secondary);
+        }
+
+        .icon-box {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--color-danger);
+        }
+
+        .pain-card h3 {
+            font-size: 1.35rem;
+            margin-bottom: 1rem;
+            color: var(--color-primary);
+        }
+
+        /* 7. La Solución (WebSafe) */
+        .solution {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+        }
+
+        .solution h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            margin-top: 4rem;
+        }
+
+        .sol-list li {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+
+        .check-icon {
+            color: var(--color-accent);
+            margin-right: 1rem;
+            font-size: 1.2rem;
+            margin-top: 3px;
+        }
+
+        .sol-list h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .sol-list p {
+            color: #b0c4de;
+            font-size: 0.95rem;
+        }
+
+        /* 8. Sección CTA / Formulario */
+        .cta-section {
+            background-color: var(--color-white);
+        }
+
+        .form-box {
+            max-width: 600px;
+            margin: 4rem auto 0;
+            padding: 3rem;
+            background-color: var(--color-gray-light);
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid #eee;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--color-primary);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-family: var(--font-main);
+            font-size: 1rem;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--color-secondary);
+            box-shadow: 0 0 0 3px rgba(0,152,200,0.1);
+        }
+
+        /* 9. Footer */
+        .footer {
+            background-color: #111;
+            color: var(--color-muted);
+            padding: 3rem 0;
+            font-size: 0.9rem;
+        }
+
+        /* 10. Responsive */
+        @media (max-width: 992px) {
+            .hero h1 { font-size: 2.5rem; }
+            .grid-3 { grid-template-columns: 1fr; gap: 1.5rem; }
+            .grid-2 { grid-template-columns: 1fr; gap: 2rem; }
+        }
+
+        @media (max-width: 576px) {
+            .hero h1 { font-size: 2rem; }
+            .hero p { font-size: 1.1rem; }
+            .section { padding: 3rem 0; }
+            .form-box { padding: 2rem 1.5rem; }
+        }
+
     </style>
 </head>
-<body class="antialiased text-slate-900">
+<body>
 
-<header class="hero-gradient text-white py-24 px-4 text-center relative overflow-hidden">
-    <h1 class="text-7xl font-black mb-4 italic tracking-tighter">SafeWeb<span class="text-blue-500">AI</span></h1>
-    <p class="text-slate-400 mb-12 uppercase tracking-[0.4em] text-[10px] font-bold">Inteligencia Artificial aplicada a Auditoría Web</p>
-    
-    <div class="max-w-3xl mx-auto flex flex-col md:flex-row gap-3 bg-white/10 p-3 rounded-[3rem] backdrop-blur-md">
-        <input type="url" id="siteUrl" class="flex-grow p-5 bg-white text-slate-900 outline-none px-8 rounded-[2.5rem] text-lg" placeholder="https://ejemplo.com">
-        <button onclick="startAudit()" id="btnMain" class="bg-blue-600 hover:bg-blue-700 text-white font-black px-12 py-5 rounded-[2.5rem] transition-all uppercase tracking-widest active:scale-95 shadow-xl">
-            Auditar
-        </button>
-    </div>
-</header>
+    <header class="header">
+        <div class="container">
+            <a href="#" class="logo">Smart<span>Web</span></a>
+            <a href="#auditoria" class="btn btn-outline btn-sm">Auditoría Gratis</a>
+        </div>
+    </header>
 
-<main id="reportArea" class="container mx-auto px-4 -mt-16 mb-20 hidden">
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
-        
-        <aside class="lg:col-span-4">
-            <div class="card-dash p-10 text-center sticky top-10 border border-slate-200">
-                <div id="mainScore" class="text-9xl font-black tracking-tighter mb-4 leading-none">0</div>
-                <div id="healthStatus" class="inline-block px-8 py-2.5 rounded-full text-[10px] font-black uppercase mb-10 tracking-widest border"></div>
-                
-                <div class="max-w-[220px] mx-auto mb-10">
-                    <canvas id="radarChart"></canvas>
+    <section class="hero text-center">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-tag">ATENCIÓN EMPRESAS CON WORDPRESS</div>
+                <h1>Tu sitio web es el activo más vulnerable si no tiene <span>Mantenimiento Preventivo</span></h1>
+                <p>Detectamos y corregimos fallos silenciosos de seguridad, velocidad y SEO antes de que afecten a tu negocio y reputación en Mendoza.</p>
+                <a href="#auditoria" class="btn btn-primary">Verificar mi Seguridad Ahora</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="section pain-points">
+        <div class="container">
+            <h2 class="text-center">El 90% de los hackeos en WordPress ocurren por abandonarlo</h2>
+            <p class="text-center text-muted">No hacer nada es el mayor riesgo para tu empresa.</p>
+            
+            <div class="grid-3">
+                <div class="pain-card text-center">
+                    <div class="icon-box">✕</div>
+                    <h3>Infección por Malware</h3>
+                    <p>Google pondrá una pantalla roja de advertencia a tus clientes y tu competencia se quedará con el tráfico.</p>
                 </div>
-
-                <div class="flex justify-between border-t pt-8 text-left">
-                    <div><p class="text-[9px] uppercase font-bold text-slate-400">Plataforma</p><p id="cmsVal" class="font-black text-blue-600 uppercase text-xs">-</p></div>
-                    <div><p class="text-[9px] uppercase font-bold text-slate-400">Respuesta</p><p id="ttfbVal" class="font-black text-slate-700 text-xs">- ms</p></div>
+                <div class="pain-card text-center">
+                    <div class="icon-box">✕</div>
+                    <h3>Pérdida de Datos</h3>
+                    <p>Un plugin desactualizado puede romper tu sitio en segundos. ¿Tienes backups diarios y reales?</p>
+                </div>
+                <div class="pain-card text-center">
+                    <div class="icon-box">✕</div>
+                    <h3>Lentitud y Caída de SEO</h3>
+                    <p>WordPress se vuelve pesado sin limpieza. Perderás posiciones en Google y clientes por la espera.</p>
                 </div>
             </div>
-        </aside>
+        </div>
+    </section>
 
-        <section class="lg:col-span-8">
-            <div class="bg-slate-900 rounded-[3.5rem] p-12 shadow-2xl mb-10 text-white relative">
-                <h3 class="text-blue-400 font-black uppercase tracking-[0.3em] text-[10px] mb-12 flex items-center gap-3">
-                    <i class="bi bi-robot text-xl"></i> Hoja de Ruta Estratégica (IA)
-                </h3>
-                <div id="aiPlanContainer" class="space-y-6"></div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10" id="issuesList"></div>
-
-            <div class="bg-blue-600 p-12 rounded-[3.5rem] text-white flex flex-col md:flex-row justify-between items-center gap-8 shadow-2xl">
-                <div><h4 class="text-3xl font-black mb-2 italic">¿Corregimos estos errores?</h4><p class="opacity-80">Solicita una consultoría para implementar estas mejoras.</p></div>
-                <a href="https://wa.me/TUNUMERO" class="bg-white text-blue-600 px-12 py-6 rounded-[2.5rem] font-black text-xl hover:bg-yellow-400 transition-all shadow-xl uppercase tracking-widest">WhatsApp</a>
-            </div>
-        </section>
-    </div>
-</main>
-
-<script>
-const WORKER_URL = "https://websafe-proxy.smartwebmendoza.workers.dev/?url=";
-let radarChart = null;
-
-async function startAudit() {
-    const url = document.getElementById('siteUrl').value;
-    if(!url) return;
-    const btn = document.getElementById('btnMain');
-    btn.disabled = true; btn.innerText = "PROCESANDO...";
-    document.getElementById('reportArea').classList.add('hidden');
-
-    try {
-        const res = await fetch(`${WORKER_URL}${encodeURIComponent(url)}`);
-        const data = await res.json();
-        renderResults(data);
-    } catch(e) { alert("Error en el servidor"); }
-    finally { btn.disabled = false; btn.innerText = "Auditar"; }
-}
-
-function renderResults(data) {
-    document.getElementById('reportArea').classList.remove('hidden');
-    document.getElementById('cmsVal').innerText = data.cms;
-    document.getElementById('ttfbVal').innerText = data.serverSpeed + ' ms';
-
-    // 1. Radar Chart
-    if(radarChart) radarChart.destroy();
-    radarChart = new Chart(document.getElementById('radarChart'), {
-        type: 'radar',
-        data: {
-            labels: ['Carga', 'Ranking', 'Seguridad'],
-            datasets: [{
-                data: [data.gScore, data.pageRank * 10, data.hasHsts ? 100 : 20],
-                backgroundColor: 'rgba(59, 130, 246, 0.2)', borderColor: '#3b82f6', borderWidth: 3, pointRadius: 0
-            }]
-        },
-        options: { scales: { r: { min: 0, max: 100, ticks: { display: false }, grid: { color: '#f1f5f9' } } }, plugins: { legend: { display: false } } }
-    });
-
-    // 2. IA Plan Render (3 Consejos forzados)
-    const lines = data.aiPlan.split('\n').map(l => l.trim()).filter(l => l.includes('|')).slice(0, 3);
-    document.getElementById('aiPlanContainer').innerHTML = lines.map((line, i) => {
-        let [tit, desc, imp] = line.split('|').map(p => p.trim().replace(/^[-.*0-9]+\s*/, ''));
-        return `
-            <div class="p-8 bg-white/5 rounded-3xl border border-white/5 group hover:border-blue-500/20 transition-all flex gap-6 items-start">
-                <div class="text-4xl font-black text-blue-500/20 leading-none">${(i+1).toString().padStart(2, '0')}</div>
-                <div class="flex-grow">
-                    <h5 class="text-blue-400 font-black text-[10px] uppercase mb-2 tracking-widest">${tit || 'Mejora'}</h5>
-                    <p class="text-slate-300 text-lg font-light mb-4">${desc || '-'}</p>
-                    <span class="text-[9px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest ${imp?.toLowerCase().includes('alto')?'bg-emerald-500/20 text-emerald-400':'bg-blue-500/20 text-blue-400'}">Impacto: ${imp || 'Alto'}</span>
+    <section class="section solution">
+        <div class="container">
+            <h2 class="text-center">WebSafe by SmartWeb</h2>
+            <p class="text-center">Protección Activa y Mantenimiento Profesional desde Mendoza.</p>
+            
+            <div class="grid-2">
+                <div>
+                    <img src="https://popnegro.github.io/smartweb/websafe/solution-image.jpg" alt="Seguridad WordPress" style="border-radius:12px; box-shadow:var(--shadow-md);">
+                    </div>
+                <div>
+                    <ul class="sol-list">
+                        <li>
+                            <span class="check-icon">✓</span>
+                            <div>
+                                <h4>Backups Diarios Externos</h4>
+                                <p>Tus datos seguros fuera del servidor, listos para restaurar ante cualquier emergencia.</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="check-icon">✓</span>
+                            <div>
+                                <h4>Actualizaciones Auditadas</h4>
+                                <p>No solo hacemos clic en "actualizar". Verificamos compatibilidad de themes y plugins.</p>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="check-icon">✓</span>
+                            <div>
+                                <h4>Seguridad y Limpieza</h4>
+                                <p>Firewall activo, escaneo de malware y optimización de base de datos para máxima velocidad.</p>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
-            </div>`;
-    }).join('');
+            </div>
+        </div>
+    </section>
 
-    // 3. Score & Health
-    const finalScore = Math.round((data.gScore * 0.4) + (data.pageRank * 10 * 0.3) + (data.hasHsts ? 30 : 5));
-    const scoreEl = document.getElementById('mainScore');
-    scoreEl.innerText = finalScore;
-    scoreEl.style.color = finalScore > 70 ? '#10b981' : (finalScore > 40 ? '#f59e0b' : '#ef4444');
-    
-    const label = document.getElementById('healthStatus');
-    label.innerText = finalScore > 70 ? 'ÓPTIMO' : (finalScore > 40 ? 'RIESGO' : 'CRÍTICO');
-    label.className = `inline-block px-8 py-2.5 rounded-full text-[11px] font-black uppercase mb-10 tracking-widest border ${finalScore > 70 ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-red-50 text-red-600 border-red-100'}`;
+    <section id="auditoria" class="section cta-section">
+        <div class="container">
+            <h2 class="text-center">Solicita tu Auditoría Preventiva Gratuita</h2>
+            <p class="text-center text-muted">Analizaremos tu WordPress y te enviaremos un reporte de vulnerabilidades críticas sin compromiso.</p>
+            
+            <div class="form-box">
+                <form action="https://formspree.io/f/tu-endpoint" method="POST"> <div class="form-group">
+                        <label for="name">Nombre / Empresa</label>
+                        <input type="text" id="name" name="name" class="form-control" required placeholder="Ej: Assertiva / Luis G.">
+                    </div>
+                    <div class="form-group">
+                        <label for="url">URL de tu sitio WordPress</label>
+                        <input type="url" id="url" name="url" class="form-control" required placeholder="Ej: https://tusitio.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Corporativo</label>
+                        <input type="email" id="email" name="email" class="form-control" required placeholder="donde enviaremos el reporte">
+                    </div>
+                    <div class="text-center" style="margin-top: 2rem;">
+                        <button type="submit" class="btn btn-primary">Auditar mi Sitio Gratis</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
 
-    // 4. Hallazgos cards
-    const items = [
-        { t: 'Google Speed', v: `${Math.round(data.gScore)}/100`, i: 'bi-lightning', c: data.gScore > 70 ? '#10b981' : '#f59e0b' },
-        { t: 'Autoridad OPR', v: `${data.pageRank.toFixed(2)}/10`, i: 'bi-trophy', c: '#8b5cf6' },
-        { t: 'SEO Imágenes', v: `${data.seoImages}%`, i: 'bi-image', c: data.seoImages > 80 ? '#10b981' : '#f59e0b' },
-        { t: 'Marketing Tags', v: data.analytics ? 'SI' : 'NO', i: 'bi-graph-up', c: data.analytics ? '#10b981' : '#ef4444' },
-        { t: 'Compresión', v: data.compression ? 'ACTIVA' : 'FALTA', i: 'bi-box', c: data.compression ? '#10b981' : '#ef4444' },
-        { t: 'Social Graph', v: data.socialReady ? 'LISTO' : 'ERROR', i: 'bi-share', c: data.socialReady ? '#10b981' : '#f59e0b' }
-    ];
-    document.getElementById('issuesList').innerHTML = items.map(x => `
-        <div class="card-dash p-8 flex items-center gap-6 border border-slate-100">
-            <div class="w-16 h-16 rounded-3xl flex items-center justify-center text-2xl" style="background: ${x.c}10; color: ${x.c}"><i class="bi ${x.i}"></i></div>
-            <div><p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">${x.t}</p><p class="text-xl font-black" style="color: ${x.c}">${x.v}</p></div>
-        </div>`).join('');
+    <footer class="footer text-center">
+        <div class="container">
+            <p>SmartWeb Mendoza | Especialistas en Infraestructura y SEO con 19 años de experiencia.</p>
+            <p style="margin-top: 0.5rem; font-size: 0.8rem;">© 2026 SmartWeb. Todos los derechos reservados.</p>
+        </div>
+    </footer>
 
-    window.scrollTo({ top: document.getElementById('reportArea').offsetTop - 50, behavior: 'smooth' });
-}
-</script>
 </body>
 </html>
