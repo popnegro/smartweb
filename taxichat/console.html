@@ -1,27 +1,24 @@
 <!DOCTYPE html>
-<html lang="es" class="scroll-smooth">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TaxiGO | Silver Admin Console</title>
+    <title>TaxiGO | Silver OS Enterprise</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lucide@0.372.0/dist/umd/lucide.min.js"></script>
+    
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
 
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        silver: {
-                            50: '#F9FAFB', 100: '#F3F4F6', 200: '#E5E7EB',
-                            300: '#D1D5DB', 400: '#9CA3AF', 500: '#6B7280',
-                            600: '#4B5563', 700: '#374151', 800: '#1F2937',
-                            900: '#111827', black: '#0A0A0A'
-                        }
+                        silver: { 50: '#F9FAFB', 100: '#F3F4F6', 200: '#E5E7EB', 300: '#D1D5DB', 400: '#9CA3AF', 500: '#6B7280', 600: '#4B5563', 700: '#374151', 800: '#1F2937', 900: '#111827', black: '#0A0A0A' }
                     }
                 }
             }
@@ -29,150 +26,261 @@
     </script>
 
     <style>
-        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
-        .view-hidden { display: none; }
-        /* Estética de mapa Silver */
-        .leaflet-container { filter: grayscale(1) contrast(1.1); border-radius: 1.5rem; border: 1px solid #E5E7EB; }
-        /* Animación suave para stats */
-        .stat-card { transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
-        .stat-card:hover { transform: translateY(-4px); border-color: #0A0A0A; }
+        body { font-family: 'Inter', sans-serif; background: #F3F4F6; min-height: 100vh; margin: 0; }
+        .view-hidden { display: none !important; }
+        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        input:focus { border-color: #0A0A0A !important; outline: none; box-shadow: 0 0 0 4px rgba(0,0,0,0.01); }
+        #map { height: 220px; width: 100%; border-radius: 2rem; z-index: 10; border: 1px solid #E5E7EB; background: #F9FAFB; }
+        .suggestions-box { position: absolute; left: 0; right: 0; top: 100%; margin-top: 8px; background: white; border: 1px solid #E5E7EB; border-radius: 1.5rem; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); z-index: 500; overflow: hidden; }
+        .suggestion-item { padding: 12px 24px; cursor: pointer; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid #F3F4F6; }
+        .suggestion-item:last-child { border-bottom: none; }
+        .suggestion-item:hover { background: #F9FAFB; }
     </style>
 </head>
-<body class="bg-white text-silver-900 antialiased">
+<body class="antialiased p-4 md:p-8">
 
-    <nav class="fixed top-0 w-full bg-white/90 backdrop-blur-xl z-[100] px-6 py-4 border-b border-silver-100">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-silver-black flex items-center justify-center rounded-xl shadow-lg">
-                    <i data-lucide="layout-dashboard" class="text-white w-5 h-5"></i>
-                </div>
-                <span class="text-xl font-[900] tracking-tighter uppercase italic">Console <span class="text-silver-400 font-normal">CENTER</span></span>
-            </div>
-            <button onclick="localStorage.clear(); location.reload();" class="text-[10px] font-black uppercase tracking-widest text-silver-400 hover:text-silver-900 transition-colors">
-                Reiniciar Métricas
-            </button>
-        </div>
+    <nav class="fixed bottom-6 right-6 flex gap-2 z-[200]">
+        <button onclick="switchView('widget')" class="bg-white border border-silver-200 px-5 py-2.5 rounded-full shadow-xl text-[10px] font-black uppercase tracking-widest active:scale-95 transition-all">Cliente</button>
+        <button onclick="switchView('admin')" class="bg-silver-black text-white px-5 py-2.5 rounded-full shadow-xl text-[10px] font-black uppercase tracking-widest active:scale-95 transition-all">Operador</button>
     </nav>
 
-    <main class="min-h-screen pt-32 pb-12 px-6 max-w-7xl mx-auto">
-        
-        <div class="mb-12 space-y-2">
-            <div class="inline-flex items-center gap-2 bg-silver-100 px-4 py-1.5 rounded-full">
-                <span class="w-1.5 h-1.5 bg-silver-black rounded-full animate-pulse"></span>
-                <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-silver-600">Live Analytics Mendoza</span>
-            </div>
-            <h1 class="text-4xl md:text-6xl font-black tracking-tighter uppercase italic text-silver-black">
-                Panel de <span class="text-silver-300">Control.</span>
-            </h1>
-        </div>
+    <main id="view-widget" class="max-w-md mx-auto bg-white border border-silver-200 shadow-2xl rounded-[3rem] overflow-hidden fade-in">
+        <header class="bg-silver-black px-8 py-6 text-white flex justify-between items-center">
+            <span class="text-[10px] font-black uppercase tracking-widest italic italic">TaxiGO Mendoza</span>
+            <div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+        </header>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-            
-            <div class="stat-card p-8 bg-white border border-silver-200 rounded-[2.5rem] shadow-sm">
-                <div class="flex justify-between items-start mb-4">
-                    <p class="text-[10px] font-black uppercase text-silver-400 tracking-widest">Cotizaciones</p>
-                    <i data-lucide="calculator" class="w-4 h-4 text-silver-300"></i>
+        <div class="p-8">
+            <section id="step-1" class="space-y-6">
+                <div id="google-auth-container">
+                    <div id="g_id_onload" 
+                         data-client_id="1011921659701-gec72ehvlu7c1a12e3stour6joc0pg7o.apps.googleusercontent.com" 
+                         data-callback="handleCredentialResponse"></div>
+                    <div class="g_id_signin" data-type="standard" data-shape="pill" data-theme="outline" data-width="350"></div>
+                    <div class="flex items-center gap-4 my-5 opacity-20"><hr class="flex-1"><span class="text-[8px] font-black uppercase tracking-widest">O manual</span><hr class="flex-1"></div>
                 </div>
-                <h4 id="stat-quotes" class="text-6xl font-black italic tracking-tighter">142</h4>
-            </div>
 
-            <div class="stat-card p-8 bg-white border border-silver-200 rounded-[2.5rem] shadow-sm">
-                <div class="flex justify-between items-start mb-4">
-                    <p class="text-[10px] font-black uppercase text-silver-400 tracking-widest">Pedidos WA</p>
-                    <i data-lucide="message-circle" class="w-4 h-4 text-emerald-500"></i>
+                <div id="user-badge" class="view-hidden p-4 bg-silver-50 rounded-2xl border border-silver-100 flex items-center gap-3">
+                    <img id="user-img" src="" class="w-10 h-10 rounded-full grayscale border border-white">
+                    <p id="user-name-label" class="text-xs font-bold text-silver-900"></p>
                 </div>
-                <h4 id="stat-wa" class="text-6xl font-black italic tracking-tighter text-silver-black">86</h4>
-            </div>
 
-            <div class="stat-card p-8 bg-silver-black text-white rounded-[2.5rem] shadow-2xl">
-                <div class="flex justify-between items-start mb-4">
-                    <p class="text-[10px] font-black uppercase text-silver-400 tracking-widest">Conversión</p>
-                    <i data-lucide="trending-up" class="w-4 h-4 text-silver-400"></i>
-                </div>
-                <h4 id="stat-conversion" class="text-6xl font-black italic tracking-tighter">60%</h4>
-            </div>
-
-            <div class="stat-card p-8 bg-silver-50 border border-silver-200 rounded-[2.5rem] shadow-sm">
-                <div class="flex justify-between items-start mb-4">
-                    <p class="text-[10px] font-black uppercase text-silver-400 tracking-widest">Volumen Est.</p>
-                    <i data-lucide="dollar-sign" class="w-4 h-4 text-silver-400"></i>
-                </div>
-                <h4 id="stat-cash" class="text-5xl font-black italic tracking-tighter text-silver-black">$54k</h4>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div class="lg:col-span-2 bg-white border border-silver-200 rounded-[2.5rem] overflow-hidden p-2">
-                <div id="map-dashboard" class="h-[450px] w-full"></div>
-            </div>
-            
-            <div class="bg-white border border-silver-200 rounded-[2.5rem] p-8">
-                <h3 class="text-xs font-black uppercase tracking-widest text-silver-400 mb-6">Móviles Activos</h3>
-                <div class="space-y-6">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-4">
-                            <div class="w-10 h-10 bg-silver-50 rounded-full flex items-center justify-center border border-silver-100">
-                                <i data-lucide="car" class="w-4 h-4 text-silver-900"></i>
-                            </div>
-                            <div>
-                                <p class="text-sm font-black uppercase tracking-tighter">Móvil #101</p>
-                                <p class="text-[10px] font-bold text-emerald-500 uppercase">Disponible</p>
-                            </div>
-                        </div>
-                        <span class="text-[10px] font-black text-silver-300">2 min</span>
-                    </div>
+                <div class="space-y-4">
+                    <input type="text" id="custName" placeholder="Tu nombre" class="w-full px-6 py-4 bg-silver-50 border border-silver-200 rounded-2xl font-bold text-sm">
                     
-                    <div class="flex items-center justify-between opacity-50">
-                        <div class="flex items-center gap-4">
-                            <div class="w-10 h-10 bg-silver-50 rounded-full flex items-center justify-center border border-silver-100">
-                                <i data-lucide="car" class="w-4 h-4 text-silver-400"></i>
-                            </div>
-                            <div>
-                                <p class="text-sm font-black uppercase tracking-tighter">Móvil #204</p>
-                                <p class="text-[10px] font-bold text-silver-400 uppercase">En Viaje</p>
-                            </div>
-                        </div>
-                        <span class="text-[10px] font-black text-silver-300">15 min</span>
+                    <div class="relative">
+                        <input type="text" id="custOrigin" oninput="searchLoc(this.value, 'origin')" placeholder="Origen (Calle y altura)" class="w-full px-6 py-4 bg-silver-50 border border-silver-200 rounded-2xl font-bold text-sm pr-14">
+                        <button id="btn-gps" onclick="detectLocation()" class="absolute right-2 top-2 bottom-2 bg-silver-black text-white px-3 rounded-xl flex items-center justify-center transition-all">
+                            <i data-lucide="locate-fixed" class="w-4 h-4"></i>
+                        </button>
+                        <div id="origin-suggestions" class="suggestions-box hidden"></div>
+                    </div>
+
+                    <div class="relative">
+                        <input type="text" id="custDest" oninput="searchLoc(this.value, 'dest')" placeholder="¿A dónde vas?" class="w-full px-6 py-4 bg-silver-50 border border-silver-200 rounded-2xl font-bold text-sm">
+                        <div id="dest-suggestions" class="suggestions-box hidden"></div>
                     </div>
                 </div>
+                
+                <button onclick="calculateRoute()" class="w-full bg-silver-black text-white py-5 font-black uppercase text-xs tracking-[0.2em] rounded-2xl flex items-center justify-center gap-3 active:scale-95 transition-all">
+                    Cotizar Viaje <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                </button>
+            </section>
+
+            <section id="step-2" class="view-hidden fade-in space-y-6">
+                <div id="map"></div>
+                <div class="p-8 bg-silver-50 rounded-[2.5rem] border border-silver-100 text-center">
+                    <p class="text-[10px] font-black uppercase text-silver-400 tracking-widest mb-1">Tarifa Mendoza</p>
+                    <h3 id="display-price" class="text-5xl font-black italic tracking-tighter text-silver-900">$0</h3>
+                    <p id="route-text" class="text-[9px] font-bold text-silver-400 uppercase mt-2">Cálculo estimado</p>
+                </div>
+                <button onclick="confirmOrder()" class="w-full bg-emerald-500 text-white py-5 font-black uppercase text-xs tracking-widest rounded-2xl shadow-xl flex items-center justify-center gap-3">
+                    Confirmar Pedido <i data-lucide="check" class="w-5 h-5"></i>
+                </button>
+                <button onclick="resetApp()" class="w-full text-[10px] font-black text-silver-300 uppercase underline">Modificar</button>
+            </section>
+
+            <section id="step-3" class="view-hidden fade-in py-12 text-center space-y-6">
+                <div class="w-20 h-20 bg-emerald-50 text-emerald-500 rounded-full flex items-center justify-center mx-auto shadow-sm"><i data-lucide="check" class="w-10 h-10"></i></div>
+                <h2 class="text-3xl font-black uppercase italic tracking-tighter text-silver-900">Pedido Enviado</h2>
+                <button onclick="resetApp()" class="px-10 py-4 bg-silver-100 text-silver-900 rounded-full font-black text-[10px] uppercase tracking-widest">Nuevo Pedido</button>
+            </section>
+        </div>
+    </main>
+
+    <main id="view-admin" class="max-w-6xl mx-auto view-hidden fade-in space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-white p-8 rounded-[2.5rem] border border-silver-200 shadow-sm">
+                <p class="text-[10px] font-black text-silver-400 uppercase tracking-widest mb-1">Viajes Activos</p>
+                <h2 id="active-count" class="text-5xl font-black italic tracking-tighter text-silver-900">0</h2>
             </div>
+            <div class="bg-silver-black text-white p-8 rounded-[2.5rem] shadow-sm">
+                <p class="text-[10px] font-black text-silver-500 uppercase tracking-widest mb-1">Caja Estimada</p>
+                <h2 id="total-cash" class="text-5xl font-black italic tracking-tighter text-white">$0</h2>
+            </div>
+        </div>
+        <div class="bg-white border border-silver-200 rounded-[3rem] overflow-hidden">
+            <table class="w-full text-left">
+                <tbody id="orders-list"></tbody>
+            </table>
         </div>
     </main>
 
     <script>
-        // Inicializar Iconos
-        lucide.createIcons();
+        const $ = (id) => document.getElementById(id);
+        const toggleView = (id, show) => $(id).classList[show ? 'remove' : 'add']('view-hidden');
+        
+        let state = { order: {}, coords: { origin: null, dest: null }, user: null };
+        let leafMap;
 
-        // Lógica de Mapa (Adaptada al estilo Dark/Grayscale del widget)
-        function initDashboardMap() {
-            const map = L.map('map-dashboard', { 
-                zoomControl: false, 
-                attributionControl: false 
-            }).setView([-32.8895, -68.8458], 13);
+        document.addEventListener('DOMContentLoaded', () => lucide.createIcons());
 
-            // Capa de mapa clara (como la del widget público)
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png').addTo(map);
-            
-            const mockDrivers = [
-                { id: 101, pos: [-32.889, -68.845], status: 'free' },
-                { id: 204, pos: [-32.882, -68.855], status: 'busy' },
-                { id: 305, pos: [-32.895, -68.835], status: 'free' }
-            ];
+        // 1. Google Login
+        function handleCredentialResponse(response) {
+            const payload = JSON.parse(atob(response.credential.split('.')[1]));
+            state.user = payload;
+            $('custName').value = payload.name;
+            toggleView('google-auth-container', false);
+            toggleView('user-badge', true);
+            $('user-img').src = payload.picture;
+            $('user-name-label').innerText = payload.name;
+        }
 
-            mockDrivers.forEach(drv => {
-                // Marcador personalizado estilo minimalista
-                L.circleMarker(drv.pos, {
-                    radius: 8,
-                    fillColor: drv.status === 'free' ? '#10b981' : '#9ca3af',
-                    color: '#FFF',
-                    weight: 3,
-                    fillOpacity: 1
-                }).addTo(map).bindTooltip(`<b class="uppercase text-[10px]">Móvil #${drv.id}</b>`);
+        // 2. Geolocalización (Opcional)
+        async function detectLocation() {
+            const btn = $('btn-gps');
+            btn.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i>';
+            lucide.createIcons();
+
+            navigator.geolocation.getCurrentPosition(async (pos) => {
+                const { latitude, longitude } = pos.coords;
+                state.coords.origin = [latitude, longitude];
+                try {
+                    const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18`);
+                    const data = await res.json();
+                    $('custOrigin').value = data.address.road ? `${data.address.road} ${data.address.house_number || ''}, ${data.address.city || 'Mendoza'}` : "Ubicación detectada";
+                    btn.innerHTML = '<i data-lucide="check" class="w-4 h-4 text-emerald-500"></i>';
+                } catch (e) {
+                    $('custOrigin').value = "GPS detectado correctamente";
+                }
+                setTimeout(() => { btn.innerHTML = '<i data-lucide="locate-fixed" class="w-4 h-4"></i>'; lucide.createIcons(); }, 2000);
+            }, () => {
+                alert("No pudimos acceder al GPS. Por favor escribe tu dirección manualmente.");
+                btn.innerHTML = '<i data-lucide="locate-fixed" class="w-4 h-4"></i>';
+                lucide.createIcons();
             });
         }
 
-        // Cargar mapa al iniciar
-        window.onload = initDashboardMap;
+        // 3. Autocompletado Libre (Para ambos campos)
+        let timer;
+        function searchLoc(query, type) {
+            const box = $(type === 'origin' ? 'origin-suggestions' : 'dest-suggestions');
+            if (query.length < 3) { box.classList.add('hidden'); return; }
+            
+            clearTimeout(timer);
+            timer = setTimeout(async () => {
+                const res = await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&lat=-32.8895&lon=-68.8458&limit=5`);
+                const data = await res.json();
+                renderSuggs(data.features, type);
+            }, 300);
+        }
+
+        function renderSuggs(features, type) {
+            const box = $(type === 'origin' ? 'origin-suggestions' : 'dest-suggestions');
+            box.innerHTML = '';
+            if (!features.length) { box.classList.add('hidden'); return; }
+            
+            features.forEach(f => {
+                const div = document.createElement('div');
+                div.className = 'suggestion-item';
+                div.innerText = `${f.properties.name || ''} ${f.properties.street || ''}, ${f.properties.city || 'Mendoza'}`;
+                div.onclick = () => {
+                    $(type === 'origin' ? 'custOrigin' : 'custDest').value = div.innerText;
+                    state.coords[type] = [f.geometry.coordinates[1], f.geometry.coordinates[0]];
+                    box.classList.add('hidden');
+                };
+                box.appendChild(div);
+            });
+            box.classList.remove('hidden');
+        }
+
+        // 4. Ruta y Precio
+        function calculateRoute() {
+            if (!state.coords.origin || !state.coords.dest) return alert("Por favor selecciona las direcciones de la lista o usa el GPS.");
+            
+            const dist = getDist(state.coords.origin, state.coords.dest);
+            const price = Math.round(1500 + (dist * 650));
+
+            state.order = {
+                name: $('custName').value || "Invitado",
+                origin: $('custOrigin').value,
+                dest: $('custDest').value,
+                price: price,
+                img: state.user?.picture || null
+            };
+
+            $('display-price').innerText = `$${price}`;
+            toggleView('step-1', false);
+            toggleView('step-2', true);
+
+            setTimeout(() => {
+                if (leafMap) leafMap.remove();
+                leafMap = L.map('map', { attributionControl: false }).setView(state.coords.origin, 14);
+                L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png').addTo(leafMap);
+                L.marker(state.coords.origin).addTo(leafMap);
+                L.marker(state.coords.dest).addTo(leafMap);
+                const poly = L.polyline([state.coords.origin, state.coords.dest], { color: '#000', weight: 4 }).addTo(leafMap);
+                leafMap.fitBounds(poly.getBounds(), { padding: [40, 40] });
+            }, 300);
+        }
+
+        function getDist(p1, p2) {
+            const R = 6371;
+            const dLat = (p2[0]-p1[0]) * Math.PI / 180;
+            const dLon = (p2[1]-p1[1]) * Math.PI / 180;
+            const a = Math.sin(dLat/2)**2 + Math.cos(p1[0]*Math.PI/180)*Math.cos(p2[0]*Math.PI/180)*Math.sin(dLon/2)**2;
+            return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        }
+
+        function confirmOrder() {
+            const db = JSON.parse(localStorage.getItem('taxi_db')) || [];
+            db.unshift({ ...state.order, id: Date.now() });
+            localStorage.setItem('taxi_db', JSON.stringify(db));
+            toggleView('step-2', false);
+            toggleView('step-3', true);
+        }
+
+        function renderOrders() {
+            const db = JSON.parse(localStorage.getItem('taxi_db')) || [];
+            const list = $('orders-list');
+            list.innerHTML = '';
+            let total = 0;
+            db.forEach(o => {
+                total += o.price;
+                list.innerHTML += `<tr class="border-b border-silver-100">
+                    <td class="px-8 py-5 flex items-center gap-3"><img src="${o.img || 'https://ui-avatars.com/api/?name='+o.name}" class="w-8 h-8 rounded-full grayscale"><span class="font-bold text-sm">${o.name}</span></td>
+                    <td class="px-8 py-5 text-[10px] text-silver-500">${o.origin}</td>
+                    <td class="px-8 py-5 text-right font-black italic">$${o.price}</td>
+                </tr>`;
+            });
+            $('active-count').innerText = db.length;
+            $('total-cash').innerText = `$${total.toLocaleString()}`;
+        }
+
+        function switchView(view) {
+            toggleView('view-widget', view === 'widget');
+            toggleView('view-admin', view === 'admin');
+            if(view === 'admin') renderOrders();
+        }
+
+        function resetApp() { location.reload(); }
+        document.addEventListener('click', (e) => { 
+            if (!e.target.closest('.relative')) {
+                $('origin-suggestions').classList.add('hidden');
+                $('dest-suggestions').classList.add('hidden');
+            }
+        });
     </script>
 </body>
 </html>
