@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TaxiGO | Uber Base Real-Time</title>
+    <title>TaxiGO | Uber Base Production</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/lucide@0.372.0/dist/umd/lucide.min.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="icon" href="data:,">
 
     <script>
         tailwind.config = {
@@ -24,9 +24,6 @@
                         'uber-gray-600': '#6B6B6B',
                         'uber-gray-800': '#333333',
                         'uber-green': '#05A357'
-                    },
-                    fontFamily: {
-                        base: ['Inter', 'system-ui', 'sans-serif']
                     }
                 }
             }
@@ -35,178 +32,181 @@
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
-        body { font-family: 'Inter', sans-serif; background: #F6F6F6; color: #000000; }
+        body { font-family: 'Inter', sans-serif; background: #F6F6F6; color: #000000; overflow-x: hidden; }
         
         .uber-card { background: #FFFFFF; border: 1px solid #EEEEEE; border-radius: 0; }
-        .uber-input { border: 2px solid #EEEEEE; transition: all 0.2s; border-radius: 0; background: #F6F6F6; font-size: 16px; }
-        .uber-input:focus { border-color: #000000; background: #FFFFFF; outline: none; }
-        .uber-btn-primary { background: #000000; color: #FFFFFF; transition: opacity 0.2s; border-radius: 0; }
-        .uber-btn-primary:hover { opacity: 0.9; }
-        .uber-btn-primary:disabled { background: #6B6B6B; cursor: not-time; }
-        .uber-btn-secondary { background: #EEEEEE; color: #000000; border-radius: 0; }
+        .uber-input { border: 2px solid #EEEEEE; transition: all 0.2s; border-radius: 0; background: #F6F6F6; outline: none; }
+        .uber-input:focus { border-color: #000000; background: #FFFFFF; }
         
-        #map { height: 250px; width: 100%; z-index: 10; background: #F6F6F6; border: 1px solid #EEE; }
-        .suggestions-box { position: absolute; left: 0; right: 0; top: 100%; background: white; border: 1px solid #EEE; z-index: 500; box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
-        .suggestion-item { padding: 12px 16px; cursor: pointer; border-bottom: 1px solid #F6F6F6; }
+        .uber-btn-primary { background: #000000; color: #FFFFFF; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s; border-radius: 0; }
+        .uber-btn-primary:hover:not(:disabled) { background: #333; }
+        .uber-btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+        
+        #map { height: 280px; width: 100%; border: 1px solid #EEE; z-index: 10; }
+        .suggestions-box { position: absolute; left: 0; right: 0; top: 100%; background: white; border: 1px solid #EEE; z-index: 500; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        .suggestion-item { padding: 12px 16px; cursor: pointer; border-bottom: 1px solid #F6F6F6; font-size: 14px; }
         .suggestion-item:hover { background: #F6F6F6; }
 
         .view-hidden { display: none !important; }
-        .status-pending { background: #FFEFD2; color: #735100; padding: 4px 12px; font-weight: 500; font-size: 12px; text-transform: uppercase; }
-        .status-active { background: #E2EBFF; color: #1E40AF; padding: 4px 12px; font-weight: 500; font-size: 12px; text-transform: uppercase; }
-        .status-done { background: #E3F2ED; color: #065F46; padding: 4px 12px; font-weight: 500; font-size: 12px; text-transform: uppercase; }
-    
+        .status-pending { background: #FFEFD2; color: #735100; padding: 4px 10px; font-size: 11px; font-weight: 700; border: none; cursor: pointer; }
+        .status-active { background: #E2EBFF; color: #1E40AF; padding: 4px 10px; font-size: 11px; font-weight: 700; border: none; cursor: pointer; }
+        .status-done { background: #E3F2ED; color: #065F46; padding: 4px 10px; font-size: 11px; font-weight: 700; border: none; cursor: pointer; }
+        
         .loader { animation: spin 1s linear infinite; }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     </style>
 </head>
 <body class="antialiased">
 
-    <nav class="bg-uber-black text-white px-8 py-4 flex justify-between items-center sticky top-0 z-[100]">
-        <div class="flex items-center gap-6">
-            <span class="text-xl font-bold tracking-tighter">TaxiGO <span class="text-uber-blue text-xs">LIVE</span></span>
-            <div class="hidden md:flex gap-4 text-xs font-medium uppercase tracking-widest text-uber-gray-600">
-                <button onclick="switchView('widget')" class="hover:text-white transition-colors">Solicitar</button>
-                <button onclick="switchView('admin')" class="hover:text-white transition-colors">Consola Operador</button>
+    <nav class="bg-uber-black text-white px-8 py-5 flex justify-between items-center sticky top-0 z-[1000]">
+        <div class="flex items-center gap-8">
+            <span class="text-xl font-bold tracking-tighter uppercase italic">TaxiGO</span>
+            <div class="flex gap-6 text-[10px] font-bold uppercase tracking-[2px] text-uber-gray-600">
+                <button onclick="switchView('widget')" class="hover:text-white transition-colors">Cliente</button>
+                <button onclick="switchView('admin')" class="hover:text-white transition-colors">Operador</button>
             </div>
         </div>
-        <div class="flex items-center gap-4">
-            <span class="text-[10px] bg-uber-gray-800 px-2 py-1 uppercase font-bold">Mendoza</span>
+        <div id="connection-badge" class="flex items-center gap-2">
+            <div class="w-2 h-2 rounded-full bg-red-500 transition-colors duration-500"></div>
+            <span class="text-[9px] font-bold uppercase text-gray-400">Estado: Desconectado</span>
         </div>
     </nav>
 
-    <main id="view-widget" class="max-w-xl mx-auto mt-12 px-4 fade-in">
-        <div class="uber-card p-8 md:p-12 shadow-sm">
-            
-            <div class="flex gap-1 mb-8">
+    <main id="view-widget" class="max-w-xl mx-auto py-12 px-4">
+        <div class="uber-card p-10 shadow-lg">
+            <div class="flex gap-1 mb-10">
                 <div id="bar-1" class="h-1 flex-1 bg-uber-black"></div>
-                <div id="bar-2" class="h-1 flex-1 bg-uber-gray-100"></div>
-                <div id="bar-3" class="h-1 flex-1 bg-uber-gray-100"></div>
+                <div id="bar-2" class="h-1 flex-1 bg-uber-gray-100 transition-colors duration-500"></div>
+                <div id="bar-3" class="h-1 flex-1 bg-uber-gray-100 transition-colors duration-500"></div>
             </div>
 
             <section id="step-1" class="space-y-6">
-                <h1 class="text-3xl font-bold tracking-tight mb-8">¿A dónde vamos hoy?</h1>
+                <h2 class="text-3xl font-bold tracking-tighter mb-8">Pide tu móvil</h2>
                 <div class="space-y-4">
-                    <div>
-                        <label class="text-xs font-bold uppercase text-uber-gray-600 block mb-2">Pasajero</label>
-                        <input type="text" id="custName" placeholder="Nombre completo" class="uber-input w-full p-4">
-                    </div>
-                    
+                    <input type="text" id="custName" placeholder="Tu nombre completo" class="uber-input w-full p-4">
                     <div class="relative">
-                        <label class="text-xs font-bold uppercase text-uber-gray-600 block mb-2">Punto de partida</label>
-                        <input type="text" id="custOrigin" oninput="searchLoc(this.value, 'origin')" placeholder="Dirección de origen" class="uber-input w-full p-4 pr-12">
-                        <button onclick="detectLocation()" class="absolute right-4 bottom-4 text-uber-blue"><i data-lucide="map-pin" class="w-5 h-5"></i></button>
+                        <input type="text" id="custOrigin" oninput="searchLoc(this.value, 'origin')" placeholder="Dirección de recogida" class="uber-input w-full p-4 pr-12">
+                        <button onclick="detectLocation()" class="absolute right-4 top-1/2 -translate-y-1/2 text-uber-blue"><i data-lucide="map-pin" class="w-5 h-5"></i></button>
                         <div id="origin-suggestions" class="suggestions-box hidden"></div>
                     </div>
-
                     <div class="relative">
-                        <label class="text-xs font-bold uppercase text-uber-gray-600 block mb-2">Destino</label>
-                        <input type="text" id="custDest" oninput="searchLoc(this.value, 'dest')" placeholder="Dirección de destino" class="uber-input w-full p-4">
+                        <input type="text" id="custDest" oninput="searchLoc(this.value, 'dest')" placeholder="¿A dónde vas?" class="uber-input w-full p-4">
                         <div id="dest-suggestions" class="suggestions-box hidden"></div>
                     </div>
                 </div>
-                <button onclick="calculateRoute()" class="uber-btn-primary w-full p-5 font-bold uppercase tracking-widest text-sm mt-4">Calcular Tarifa</button>
+                <button onclick="calculateRoute()" class="uber-btn-primary w-full p-5 mt-4">Calcular Tarifa</button>
             </section>
 
             <section id="step-2" class="view-hidden space-y-6">
-                <div id="map" class="mb-6"></div>
-                <div class="flex justify-between items-end border-b pb-6">
+                <div id="map"></div>
+                <div class="flex justify-between items-center py-4 border-b">
                     <div>
-                        <p class="text-xs font-bold text-uber-gray-600 uppercase mb-1">Costo estimado</p>
+                        <p class="text-[10px] font-bold text-gray-500 uppercase">Tarifa Estándar Estimada</p>
                         <h2 id="display-price" class="text-4xl font-bold">$0</h2>
                     </div>
-                    <div class="text-right text-uber-blue font-medium text-sm">Tarifa Mendoza</div>
+                    <div class="text-uber-blue font-bold text-xs">Mendoza, AR</div>
                 </div>
-                
-                <div class="space-y-4">
-                    <label class="text-xs font-bold uppercase text-uber-gray-600 block">Tu WhatsApp</label>
-                    <input type="tel" id="custPhone" oninput="validatePhone(this.value)" placeholder="Ej: 2615555555" class="uber-input w-full p-4 text-xl font-bold">
-                    <p id="phone-error" class="text-xs text-red-600 font-medium hidden">Ingresa 10 dígitos (sin 0 ni 15)</p>
+                <div class="space-y-2">
+                    <label class="text-[10px] font-bold uppercase text-gray-500">Tu WhatsApp (10 dígitos)</label>
+                    <input type="tel" id="custPhone" oninput="validatePhone(this.value)" placeholder="261XXXXXXX" class="uber-input w-full p-4 text-xl font-bold">
+                    <p id="phone-error" class="text-[10px] text-red-600 font-bold hidden uppercase">Formato inválido: Se requieren 10 dígitos</p>
                 </div>
-
                 <div class="flex gap-4">
-                    <button onclick="location.reload()" class="uber-btn-secondary flex-1 p-5 font-bold uppercase text-sm">Volver</button>
-                    <button id="btn-confirm" onclick="confirmOrder()" class="uber-btn-primary flex-[2] p-5 font-bold uppercase text-sm flex items-center justify-center gap-2">
-                        <span id="text-confirm">Confirmar Taxi</span>
-                        <i id="loader-confirm" data-lucide="loader-2" class="w-5 h-5 loader hidden"></i>
+                    <button onclick="location.reload()" class="bg-gray-100 flex-1 p-5 font-bold uppercase text-[10px] tracking-wider">Atrás</button>
+                    <button id="btn-confirm" onclick="confirmOrder()" class="uber-btn-primary flex-[2] p-5 text-xs flex items-center justify-center gap-3">
+                        <span id="text-confirm">Confirmar Pedido</span>
+                        <i id="loader-confirm" data-lucide="loader-2" class="w-4 h-4 loader hidden"></i>
                     </button>
                 </div>
             </section>
 
-            <section id="step-3" class="view-hidden py-12 text-center">
-                <div class="bg-uber-green w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 text-white">
-                    <i data-lucide="check" class="w-8 h-8"></i>
+            <section id="step-3" class="view-hidden py-16 text-center">
+                <div class="w-20 h-20 bg-uber-green text-white rounded-full flex items-center justify-center mx-auto mb-8 shadow-xl">
+                    <i data-lucide="check" class="w-10 h-10"></i>
                 </div>
-                <h2 class="text-3xl font-bold mb-2">¡Pedido enviado!</h2>
-                <p class="text-uber-gray-600 mb-8">Un operador se pondrá en contacto contigo a la brevedad.</p>
-                <button onclick="location.reload()" class="uber-btn-primary px-8 py-4 font-bold uppercase text-xs">Realizar otro pedido</button>
+                <h2 class="text-3xl font-bold mb-4">Móvil Solicitado</h2>
+                <p class="text-gray-600 mb-10 text-sm">El operador procesará tu pedido y te contactará por WhatsApp en segundos.</p>
+                <button onclick="location.reload()" class="uber-btn-primary px-10 py-4 text-xs">Realizar otro pedido</button>
             </section>
         </div>
     </main>
 
-    <main id="view-admin" class="view-hidden px-8 py-12">
-        <div class="max-w-7xl mx-auto">
-            <div class="flex justify-between items-end mb-10">
-                <h1 class="text-4xl font-bold tracking-tight">Logística Live</h1>
-                <div class="text-xs text-uber-gray-600">Actualización en tiempo real activa</div>
+    <main id="view-admin" class="view-hidden p-8 max-w-7xl mx-auto">
+        <div class="flex justify-between items-end mb-12">
+            <h1 class="text-5xl font-bold tracking-tighter uppercase italic">Logística Live</h1>
+            <div class="text-right">
+                <p class="text-[10px] font-bold text-gray-500 uppercase">Recaudación (Finalizados)</p>
+                <h3 id="total-cash" class="text-3xl font-bold text-uber-blue">$0</h3>
             </div>
+        </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-12">
-                <div class="uber-card p-6">
-                    <p class="text-xs font-bold text-uber-gray-600 uppercase mb-2">Viajes Activos</p>
-                    <h3 id="active-count" class="text-4xl font-bold">0</h3>
-                </div>
-                <div class="uber-card p-6 border-l-4 border-l-uber-blue">
-                    <p class="text-xs font-bold text-uber-gray-600 uppercase mb-2">Recaudación (Done)</p>
-                    <h3 id="total-cash" class="text-4xl font-bold text-uber-blue">$0</h3>
-                </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <div class="uber-card p-8 border-l-4 border-l-black">
+                <p class="text-[10px] font-bold text-gray-500 uppercase mb-2">Pedidos Totales</p>
+                <h4 id="active-count" class="text-5xl font-bold">0</h4>
             </div>
+            <div class="uber-card p-8 bg-white">
+                <p class="text-[10px] font-bold text-gray-500 uppercase mb-2">Estado Sistema</p>
+                <h4 id="system-status" class="text-2xl font-bold text-uber-green uppercase tracking-tighter italic">Sincronizado</h4>
+            </div>
+        </div>
 
-            <div class="uber-card overflow-hidden">
-                <table class="w-full text-left">
-                    <thead>
-                        <tr class="bg-uber-gray-50 border-b border-uber-gray-100 text-[10px] font-bold uppercase tracking-widest text-uber-gray-600">
-                            <th class="px-6 py-4">Pasajero</th>
-                            <th class="px-6 py-4">Estado</th>
-                            <th class="px-6 py-4">Origen / Destino</th>
-                            <th class="px-6 py-4">Tarifa</th>
-                            <th class="px-6 py-4 text-center">Acción</th>
-                        </tr>
-                    </thead>
-                    <tbody id="orders-list" class="divide-y divide-uber-gray-100">
-                        </tbody>
-                </table>
-            </div>
+        <div class="uber-card overflow-hidden">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-uber-gray-50 border-b-2 border-uber-black text-[10px] font-bold uppercase text-uber-gray-600 tracking-widest">
+                        <th class="px-8 py-5">Pasajero / Hora</th>
+                        <th class="px-8 py-5">Estado</th>
+                        <th class="px-8 py-5">Ruta</th>
+                        <th class="px-8 py-5 text-right">Tarifa</th>
+                        <th class="px-8 py-5 text-center">Gestión</th>
+                    </tr>
+                </thead>
+                <tbody id="orders-list" class="divide-y divide-gray-100"></tbody>
+            </table>
         </div>
     </main>
 
     <script>
+        // --- VARIABLES DE ESTADO ---
         const $ = (id) => document.getElementById(id);
         const toggleView = (id, show) => $(id).classList[show ? 'remove' : 'add']('view-hidden');
         let state = { currentPrice: 0, coords: { origin: null, dest: null } };
-        let leafMap, searchController = null;
+        let leafMap;
 
-        // --- 7. CONFIGURACIÓN DE SUPABASE ---
-        // REEMPLAZA ESTO CON TUS CREDENCIALES
+        // --- 1. CONFIGURACIÓN SUPABASE (CAMBIAR AQUÍ) ---
         const SUPABASE_URL = 'https://xynkbghmcioavfmvfwkm.supabase.co';
-        const SUPABASE_KEY = 'sb_publishable_rocZCAajVOY6xw7HDI05Bw_QBxSKw5Y';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh5bmtiZ2htY2lvYXZmbXZmd2ttIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU3MjY5OTIsImV4cCI6MjA5MTMwMjk5Mn0.HQb8_GfKpxzniW_JNp1ZXI9KvwhlSa17Lq2IfkVrVQs';
         
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        // Inicialización del cliente con nombre único
+        const taxiSupabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // --- Lógica de Inicialización ---
+        // --- 2. CICLO DE VIDA ---
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
-            detectLocation();
-            // Si estamos en admin, iniciamos Realtime
-            if(!$('view-admin').classList.contains('view-hidden')) initAdminRealtime();
+            checkConnection();
         });
 
-        function switchView(v) { 
-            toggleView('view-widget', v === 'widget'); 
-            toggleView('view-admin', v === 'admin'); 
-            if(v === 'admin') initAdminRealtime(); 
+        async function checkConnection() {
+            try {
+                // Intento simple para verificar credenciales
+                const { error } = await taxiSupabase.from('pedidos').select('id').limit(1);
+                if(!error) {
+                    $('connection-badge').querySelector('div').classList.replace('bg-red-500', 'bg-uber-green');
+                    $('connection-badge').querySelector('span').innerText = 'Estado: Online';
+                } else {
+                    console.error("Supabase Error:", error.message);
+                }
+            } catch (e) { console.error("Fallo de conexión"); }
         }
 
-        // --- Mantenemos tus Funciones de Mapas y Búsqueda: Intactas ---
+        function switchView(v) {
+            toggleView('view-widget', v === 'widget');
+            toggleView('view-admin', v === 'admin');
+            if(v === 'admin') initAdminRealtime();
+        }
+
+        // --- 3. LÓGICA DE GEODATOS ---
         async function detectLocation() {
             const input = $('custOrigin');
             if (!navigator.geolocation) return;
@@ -216,46 +216,51 @@
                 try {
                     const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18`);
                     const data = await res.json();
-                    input.value = `${data.address.road || 'Mi ubicación'}`;
+                    input.value = data.address.road || data.display_name.split(',')[0] || 'Ubicación Actual';
                 } catch (e) { input.value = "Ubicación detectada"; }
             });
         }
 
-        function searchLoc(query, type) {
+        async function searchLoc(query, type) {
             const box = $(type === 'origin' ? 'origin-suggestions' : 'dest-suggestions');
-            if (query.length < 3) { box.classList.add('hidden'); return; }
+            if (query.length < 3) return box.classList.add('hidden');
 
-            clearTimeout(window.searchTimer);
-            window.searchTimer = setTimeout(async () => {
-                const res = await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&bbox=-69.0,-33.1,-68.5,-32.7&limit=5`);
+            try {
+                const res = await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&bbox=-69.0,-33.1,-68.5,-32.7&limit=4`);
                 const data = await res.json();
+                
                 box.innerHTML = '';
                 data.features.forEach(f => {
                     const div = document.createElement('div');
-                    div.className = 'suggestion-item text-sm';
-                    div.innerHTML = `<p class="font-bold">${f.properties.name || f.properties.street}</p><p class="text-[10px] text-gray-500">${f.properties.city || 'Mendoza'}</p>`;
+                    div.className = 'suggestion-item';
+                    const name = f.properties.name || f.properties.street || "Dirección";
+                    const house = f.properties.housenumber ? ` ${f.properties.housenumber}` : '';
+                    div.innerText = `${name}${house}`;
                     div.onclick = () => {
-                        $(type === 'origin' ? 'custOrigin' : 'custDest').value = f.properties.name || f.properties.street;
+                        $(type === 'origin' ? 'custOrigin' : 'custDest').value = div.innerText;
                         state.coords[type] = [f.geometry.coordinates[1], f.geometry.coordinates[0]];
                         box.classList.add('hidden');
                     };
                     box.appendChild(div);
                 });
                 box.classList.remove('hidden');
-            }, 300);
+            } catch(e) {}
         }
 
         function calculateRoute() {
-            if (!$('custName').value || !state.coords.origin || !state.coords.dest) return alert("Por favor completa los datos.");
+            if (!$('custName').value || !state.coords.origin || !state.coords.dest) {
+                return alert("Por favor, completa tu nombre y selecciona direcciones de la lista desplegable.");
+            }
             
-            const R = 6371;
-            const dLat = (state.coords.dest[0]-state.coords.origin[0]) * Math.PI / 180;
-            const dLon = (state.coords.dest[1]-state.coords.origin[1]) * Math.PI / 180;
+            // Haversine simple para costo aproximado
+            const R = 6371; 
+            const dLat = (state.coords.dest[0]-state.coords.origin[0]) * Math.PI/180;
+            const dLon = (state.coords.dest[1]-state.coords.origin[1]) * Math.PI/180;
             const a = Math.sin(dLat/2)**2 + Math.cos(state.coords.origin[0]*Math.PI/180)*Math.cos(state.coords.dest[0]*Math.PI/180)*Math.sin(dLon/2)**2;
             const dist = R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 
-            state.currentPrice = Math.max(1200, Math.round(800 + (dist * 650)));
-            $('display-price').innerText = `$${state.currentPrice}`;
+            state.currentPrice = Math.max(1200, Math.round(800 + (dist * 700)));
+            $('display-price').innerText = `$${state.currentPrice.toLocaleString('es-AR')}`;
             
             toggleView('step-1', false);
             toggleView('step-2', true);
@@ -263,163 +268,118 @@
 
             setTimeout(() => {
                 if (leafMap) leafMap.remove();
-                leafMap = L.map('map', { attributionControl: false, zoomControl: false }).setView(state.coords.origin, 14);
+                leafMap = L.map('map', { zoomControl: false, attributionControl: false }).setView(state.coords.origin, 14);
                 L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png').addTo(leafMap);
-                const poly = L.polyline([state.coords.origin, state.coords.dest], { color: '#000', weight: 3 }).addTo(leafMap);
-                leafMap.fitBounds(poly.getBounds(), { padding: [30, 30] });
-            }, 200);
+                const poly = L.polyline([state.coords.origin, state.coords.dest], { color: '#000', weight: 4 }).addTo(leafMap);
+                leafMap.fitBounds(poly.getBounds(), { padding: [40, 40] });
+            }, 300);
         }
 
         function validatePhone(p) {
-            const clean = p.replace(/\D/g, '');
+            const clean = p.replace(/\D/g, '').substring(0, 10);
             $('custPhone').value = clean;
-            const isValid = clean.length === 10;
-            $('phone-error').classList.toggle('hidden', isValid || clean.length === 0);
-            return isValid;
+            const valid = clean.length === 10;
+            $('phone-error').classList.toggle('hidden', valid || clean.length === 0);
+            return valid;
         }
 
-        // --- 8. NUEVA LÓGICA CLIENTE: INSERTAR EN SUPABASE ---
+        // --- 4. ACCIONES DE BASE DE DATOS ---
         async function confirmOrder() {
             if (!validatePhone($('custPhone').value)) return;
 
-            // Feedback visual de carga
             $('btn-confirm').disabled = true;
             $('text-confirm').classList.add('hidden');
             $('loader-confirm').classList.remove('hidden');
 
-            const payload = { 
-                nombre: $('custName').value, 
-                telefono: "549" + $('custPhone').value, 
-                origen: $('custOrigin').value, 
-                destino: $('custDest').value, 
-                precio: state.currentPrice, 
-                estado: 'pending' 
-            };
-
-            const { data, error } = await supabase
-                .from('pedidos')
-                .insert([payload]);
-
-            // Restaurar botón
-            $('btn-confirm').disabled = false;
-            $('text-confirm').classList.remove('hidden');
-            $('loader-confirm').classList.add('hidden');
+            const { error } = await taxiSupabase.from('pedidos').insert([{
+                nombre: $('custName').value,
+                telefono: "549" + $('custPhone').value,
+                origen: $('custOrigin').value,
+                destino: $('custDest').value,
+                precio: state.currentPrice,
+                estado: 'pending'
+            }]);
 
             if (error) {
-                console.error("Error Supabase:", error);
-                alert("Hubo un error al enviar el pedido. Intenta nuevamente.");
-                return;
+                alert("Error al enviar pedido: " + error.message);
+                $('btn-confirm').disabled = false;
+                $('text-confirm').classList.remove('hidden');
+                $('loader-confirm').classList.add('hidden');
+            } else {
+                toggleView('step-2', false);
+                toggleView('step-3', true);
+                $('bar-3').classList.replace('bg-uber-gray-100', 'bg-uber-black');
             }
-
-            toggleView('step-2', false);
-            toggleView('step-3', true);
-            $('bar-3').classList.replace('bg-uber-gray-100', 'bg-uber-black');
         }
 
-
-        // --- 9. NUEVA LÓGICA OPERADOR: REAL-TIME CON SUPABASE ---
-        let isRealtimeInitialized = false;
+        // --- 5. LÓGICA DE OPERADOR (REALTIME) ---
+        let isRealtimeStarted = false;
 
         async function initAdminRealtime() {
-            if(isRealtimeInitialized) return;
-
-            // 1. Carga inicial de datos
+            if(isRealtimeStarted) return;
             await fetchOrders();
 
-            // 2. Suscribirse a cambios en tiempo real
-            supabase
-                .channel('schema-db-changes')
-                .on(
-                    'postgres_changes',
-                    { event: '*', schema: 'public', table: 'pedidos' },
-                    (payload) => {
-                        console.log('Cambio detectado:', payload);
-                        fetchOrders(); // Recargamos la tabla completa ante cualquier cambio
-                    }
-                )
+            // Suscripción a cambios
+            taxiSupabase.channel('custom-all-channel')
+                .on('postgres_changes', { event: '*', schema: 'public', table: 'pedidos' }, () => {
+                    fetchOrders();
+                })
                 .subscribe();
             
-            isRealtimeInitialized = true;
+            isRealtimeStarted = true;
         }
 
-        // Función para leer datos de Supabase
         async function fetchOrders() {
-            const list = $('orders-list');
-            
-            const { data: pedidos, error } = await supabase
+            const { data: pedidos, error } = await taxiSupabase
                 .from('pedidos')
                 .select('*')
                 .order('created_at', { ascending: false });
 
-            if(error) {
-                list.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-red-600">Error cargando datos.</td></tr>`;
-                return;
-            }
-
-            renderOrdersTable(pedidos);
+            if (!error) renderOrdersTable(pedidos);
         }
 
-        // Mantenemos tu diseño de renderizado de tabla, solo cambiamos el origen de datos
         function renderOrdersTable(pedidos) {
             const list = $('orders-list');
-            let totalCash = 0;
+            let cash = 0; 
             list.innerHTML = '';
 
-            if(pedidos.length === 0) {
-                list.innerHTML = `<tr><td colspan="5" class="p-10 text-center text-uber-gray-600 text-sm">No hay pedidos registrados.</td></tr>`;
-            }
-
             pedidos.forEach(o => {
-                if(o.estado === 'done') totalCash += o.precio;
+                if(o.estado === 'done') cash += o.precio;
+                const hora = new Date(o.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                 
-                // Formateo de fecha para el diseño
-                const date = new Date(o.created_at);
-                const timeStr = date.toLocaleTimeString([], {hour: '2px', minute:'2px'});
-
                 list.innerHTML += `
-                <tr class="hover:bg-uber-gray-50 transition-colors">
-                    <td class="px-6 py-4">
-                        <div class="font-bold text-sm">${o.nombre}</div>
-                        <div class="text-[10px] text-uber-gray-600">${timeStr}</div>
+                <tr class="hover:bg-gray-50 transition-colors">
+                    <td class="px-8 py-5">
+                        <p class="font-bold text-sm uppercase">${o.nombre}</p>
+                        <p class="text-[10px] text-gray-500 font-bold">${hora}</p>
                     </td>
-                    <td class="px-6 py-4">
-                        <button onclick="toggleStatus(${o.id}, '${o.estado}')" class="status-${o.estado} uppercase tracking-tighter transition-opacity hover:opacity-80">
+                    <td class="px-8 py-5">
+                        <button onclick="updateStatus(${o.id}, '${o.estado}')" class="status-${o.estado} uppercase">
                             ${o.estado}
                         </button>
                     </td>
-                    <td class="px-6 py-4">
-                        <div class="text-xs text-uber-gray-600 font-medium">De: ${o.origen}</div>
-                        <div class="text-xs text-uber-gray-800 font-bold">A: ${o.destino}</div>
+                    <td class="px-8 py-5 text-[11px]">
+                        <p class="text-gray-400">Desde: ${o.origen}</p>
+                        <p class="font-bold uppercase">Hacia: ${o.destino}</p>
                     </td>
-                    <td class="px-6 py-4 font-bold">$${o.precio.toLocaleString('es-AR')}</td>
-                    <td class="px-6 py-4 text-center">
-                        <button onclick="window.open('https://wa.me/${o.telefono}?text=TaxiGO Live: Hola ${o.nombre}, móvil asignado.', '_blank')" class="text-uber-blue hover:text-uber-black transition-colors">
+                    <td class="px-8 py-5 text-right font-bold text-sm">$${o.precio.toLocaleString('es-AR')}</td>
+                    <td class="px-8 py-5 text-center">
+                        <button onclick="window.open('https://wa.me/${o.telefono}?text=Hola ${o.nombre}, soy el operador de TaxiGO. Tu móvil está en camino.')" class="text-uber-blue hover:text-black transition-colors">
                             <i data-lucide="message-square" class="w-5 h-5 mx-auto"></i>
                         </button>
                     </td>
                 </tr>`;
             });
-            
+
+            $('active-count').innerText = pedidos.length;
+            $('total-cash').innerText = `$${cash.toLocaleString('es-AR')}`;
             lucide.createIcons();
-            $('active-count').innerText = pedidos.filter(x => x.estado !== 'done').length;
-            $('total-cash').innerText = `$${totalCash.toLocaleString('es-AR')}`;
         }
 
-        // NUEVA LÓGICA: ACTUALIZAR ESTADO EN SUPABASE
-        async function toggleStatus(id, currentStatus) {
-            const cycle = { pending: 'active', active: 'done', done: 'pending' };
-            const nextStatus = cycle[currentStatus];
-
-            const { error } = await supabase
-                .from('pedidos')
-                .update({ estado: nextStatus })
-                .eq('id', id);
-
-            if(error) {
-                console.error("Error actualizando estado:", error);
-                alert("No se pudo actualizar el estado.");
-            }
-            // No hace falta llamar a renderOrders, Realtime lo hará por nosotros
+        async function updateStatus(id, current) {
+            const next = { pending: 'active', active: 'done', done: 'pending' };
+            await taxiSupabase.from('pedidos').update({ estado: next[current] }).eq('id', id);
+            // La tabla se actualizará sola gracias al canal Realtime
         }
     </script>
 </body>
