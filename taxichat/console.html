@@ -8,8 +8,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/lucide@0.372.0/dist/umd/lucide.min.js"></script>
     
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
-    
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
@@ -26,103 +24,125 @@
     </script>
 
     <style>
-        body { font-family: 'Inter', sans-serif; background: #F3F4F6; min-height: 100vh; margin: 0; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap');
+        body { font-family: 'Inter', sans-serif; background: #F3F4F6; min-height: 100vh; margin: 0; overflow-x: hidden; }
         .view-hidden { display: none !important; }
-        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        .fade-in { animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        input:focus { border-color: #0A0A0A !important; outline: none; box-shadow: 0 0 0 4px rgba(0,0,0,0.01); }
+        
         #map { height: 220px; width: 100%; border-radius: 2rem; z-index: 10; border: 1px solid #E5E7EB; background: #F9FAFB; }
         .suggestions-box { position: absolute; left: 0; right: 0; top: 100%; margin-top: 8px; background: white; border: 1px solid #E5E7EB; border-radius: 1.5rem; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); z-index: 500; overflow: hidden; }
-        .suggestion-item { padding: 12px 24px; cursor: pointer; font-size: 0.875rem; font-weight: 600; border-bottom: 1px solid #F3F4F6; }
-        .suggestion-item:last-child { border-bottom: none; }
-        .suggestion-item:hover { background: #F9FAFB; }
+        .suggestion-item { padding: 12px 20px; cursor: pointer; border-bottom: 1px solid #F3F4F6; transition: all 0.2s; display: flex; align-items: center; gap: 12px; }
+        .suggestion-item:hover { background: #F9FAFB; padding-left: 24px; color: #10B981; }
+        
+        .loader-spin { animation: spin 0.8s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        
+        .step-active { background-color: #10B981 !important; transform: scale(1.3); box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
+        .status-pending { background: #FEF3C7; color: #92400E; }
+        .status-active { background: #DBEAFE; color: #1E40AF; }
+        .status-done { background: #D1FAE5; color: #065F46; }
     </style>
 </head>
 <body class="antialiased p-4 md:p-8">
 
     <nav class="fixed bottom-6 right-6 flex gap-2 z-[200]">
-        <button onclick="switchView('widget')" class="bg-white border border-silver-200 px-5 py-2.5 rounded-full shadow-xl text-[10px] font-black uppercase tracking-widest active:scale-95 transition-all">Cliente</button>
-        <button onclick="switchView('admin')" class="bg-silver-black text-white px-5 py-2.5 rounded-full shadow-xl text-[10px] font-black uppercase tracking-widest active:scale-95 transition-all">Operador</button>
+        <button onclick="switchView('widget')" class="bg-white border border-silver-200 px-6 py-3 rounded-full shadow-2xl text-[10px] font-black uppercase tracking-widest active:scale-95 transition-all">Cliente</button>
+        <button onclick="switchView('admin')" class="bg-silver-black text-white px-6 py-3 rounded-full shadow-2xl text-[10px] font-black uppercase tracking-widest active:scale-95 transition-all">Operador</button>
     </nav>
 
-    <main id="view-widget" class="max-w-md mx-auto bg-white border border-silver-200 shadow-2xl rounded-[3rem] overflow-hidden fade-in">
-        <header class="bg-silver-black px-8 py-6 text-white flex justify-between items-center">
-            <span class="text-[10px] font-black uppercase tracking-widest italic italic">TaxiGO Mendoza</span>
-            <div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+    <main id="view-widget" class="max-w-md mx-auto bg-white border border-silver-200 shadow-2xl rounded-[3.5rem] overflow-hidden fade-in">
+        <header class="bg-silver-black px-10 pt-10 pb-8 text-white relative">
+            <div class="flex justify-between items-center mb-8">
+                <div class="flex flex-col">
+                    <span class="text-[10px] font-black uppercase tracking-[0.3em] italic text-emerald-500">TaxiGO</span>
+                    <span class="text-[8px] font-bold uppercase tracking-widest text-silver-500">Mendoza · Argentina</span>
+                </div>
+                <span id="step-label" class="text-[9px] font-black uppercase bg-silver-800 px-3 py-1 rounded-full">Ruta</span>
+            </div>
+            <div class="relative h-[2px] w-full bg-silver-900 rounded-full">
+                <div id="step-progress-bar" class="absolute top-0 left-0 h-full bg-emerald-500 transition-all duration-500" style="width: 33%"></div>
+            </div>
+            <div class="flex justify-between mt-[-5px] relative z-10">
+                <div id="dot-1" class="w-2.5 h-2.5 rounded-full bg-silver-800 step-active border-2 border-silver-black"></div>
+                <div id="dot-2" class="w-2.5 h-2.5 rounded-full bg-silver-800 border-2 border-silver-black"></div>
+                <div id="dot-3" class="w-2.5 h-2.5 rounded-full bg-silver-800 border-2 border-silver-black"></div>
+            </div>
         </header>
 
-        <div class="p-8">
+        <div class="p-10">
             <section id="step-1" class="space-y-6">
-                <div id="google-auth-container">
-                    <div id="g_id_onload" 
-                         data-client_id="1011921659701-gec72ehvlu7c1a12e3stour6joc0pg7o.apps.googleusercontent.com" 
-                         data-callback="handleCredentialResponse"></div>
-                    <div class="g_id_signin" data-type="standard" data-shape="pill" data-theme="outline" data-width="350"></div>
-                    <div class="flex items-center gap-4 my-5 opacity-20"><hr class="flex-1"><span class="text-[8px] font-black uppercase tracking-widest">O manual</span><hr class="flex-1"></div>
-                </div>
-
-                <div id="user-badge" class="view-hidden p-4 bg-silver-50 rounded-2xl border border-silver-100 flex items-center gap-3">
-                    <img id="user-img" src="" class="w-10 h-10 rounded-full grayscale border border-white">
-                    <p id="user-name-label" class="text-xs font-bold text-silver-900"></p>
-                </div>
-
                 <div class="space-y-4">
-                    <input type="text" id="custName" placeholder="Tu nombre" class="w-full px-6 py-4 bg-silver-50 border border-silver-200 rounded-2xl font-bold text-sm">
+                    <input type="text" id="custName" placeholder="Tu nombre" class="w-full px-6 py-4 bg-silver-50 border border-silver-100 rounded-2xl font-bold text-sm">
                     
                     <div class="relative">
-                        <input type="text" id="custOrigin" oninput="searchLoc(this.value, 'origin')" placeholder="Origen (Calle y altura)" class="w-full px-6 py-4 bg-silver-50 border border-silver-200 rounded-2xl font-bold text-sm pr-14">
-                        <button id="btn-gps" onclick="detectLocation()" class="absolute right-2 top-2 bottom-2 bg-silver-black text-white px-3 rounded-xl flex items-center justify-center transition-all">
-                            <i data-lucide="locate-fixed" class="w-4 h-4"></i>
-                        </button>
+                        <input type="text" id="custOrigin" oninput="searchLoc(this.value, 'origin')" placeholder="Origen" class="w-full px-6 py-4 bg-silver-50 border border-silver-100 rounded-2xl font-bold text-sm pr-14">
+                        <div id="origin-loader" class="absolute right-12 top-1/2 -translate-y-1/2 hidden"><i data-lucide="loader-2" class="w-4 h-4 text-emerald-500 loader-spin"></i></div>
+                        <button onclick="detectLocation()" class="absolute right-2 top-2 bottom-2 bg-silver-black text-white px-3 rounded-xl hover:bg-emerald-500 transition-all"><i data-lucide="locate-fixed" class="w-4 h-4"></i></button>
                         <div id="origin-suggestions" class="suggestions-box hidden"></div>
                     </div>
 
                     <div class="relative">
-                        <input type="text" id="custDest" oninput="searchLoc(this.value, 'dest')" placeholder="¿A dónde vas?" class="w-full px-6 py-4 bg-silver-50 border border-silver-200 rounded-2xl font-bold text-sm">
+                        <input type="text" id="custDest" oninput="searchLoc(this.value, 'dest')" placeholder="¿A dónde vas?" class="w-full px-6 py-4 bg-silver-50 border border-silver-100 rounded-2xl font-bold text-sm pr-14">
+                        <div id="dest-loader" class="absolute right-4 top-1/2 -translate-y-1/2 hidden"><i data-lucide="loader-2" class="w-4 h-4 text-emerald-500 loader-spin"></i></div>
                         <div id="dest-suggestions" class="suggestions-box hidden"></div>
                     </div>
                 </div>
-                
-                <button onclick="calculateRoute()" class="w-full bg-silver-black text-white py-5 font-black uppercase text-xs tracking-[0.2em] rounded-2xl flex items-center justify-center gap-3 active:scale-95 transition-all">
-                    Cotizar Viaje <i data-lucide="chevron-right" class="w-4 h-4"></i>
-                </button>
+                <button onclick="calculateRoute()" class="w-full bg-silver-black text-white py-5 font-black uppercase text-[10px] tracking-[0.2em] rounded-2xl active:scale-95 shadow-xl transition-all">Cotizar Viaje</button>
             </section>
 
             <section id="step-2" class="view-hidden fade-in space-y-6">
                 <div id="map"></div>
                 <div class="p-8 bg-silver-50 rounded-[2.5rem] border border-silver-100 text-center">
-                    <p class="text-[10px] font-black uppercase text-silver-400 tracking-widest mb-1">Tarifa Mendoza</p>
+                    <span class="text-[8px] font-black uppercase text-silver-400 tracking-widest block mb-1">Tarifa Mendoza</span>
                     <h3 id="display-price" class="text-5xl font-black italic tracking-tighter text-silver-900">$0</h3>
-                    <p id="route-text" class="text-[9px] font-bold text-silver-400 uppercase mt-2">Cálculo estimado</p>
                 </div>
-                <button onclick="confirmOrder()" class="w-full bg-emerald-500 text-white py-5 font-black uppercase text-xs tracking-widest rounded-2xl shadow-xl flex items-center justify-center gap-3">
-                    Confirmar Pedido <i data-lucide="check" class="w-5 h-5"></i>
-                </button>
-                <button onclick="resetApp()" class="w-full text-[10px] font-black text-silver-300 uppercase underline">Modificar</button>
+                <div class="space-y-3">
+                    <input type="tel" id="custPhone" oninput="validatePhone(this.value)" placeholder="WhatsApp (261XXXXXXX)" class="w-full px-6 py-4 bg-white border border-silver-200 rounded-2xl font-bold text-sm shadow-sm transition-all text-center">
+                    <p id="phone-error" class="text-[9px] text-center font-bold text-red-500 uppercase hidden italic">10 dígitos sin 0 ni 15</p>
+                </div>
+                <button onclick="confirmOrder()" class="w-full bg-emerald-500 text-white py-5 font-black uppercase text-[10px] tracking-widest rounded-2xl shadow-xl active:scale-95 transition-all">Confirmar Pedido</button>
             </section>
 
             <section id="step-3" class="view-hidden fade-in py-12 text-center space-y-6">
-                <div class="w-20 h-20 bg-emerald-50 text-emerald-500 rounded-full flex items-center justify-center mx-auto shadow-sm"><i data-lucide="check" class="w-10 h-10"></i></div>
-                <h2 class="text-3xl font-black uppercase italic tracking-tighter text-silver-900">Pedido Enviado</h2>
-                <button onclick="resetApp()" class="px-10 py-4 bg-silver-100 text-silver-900 rounded-full font-black text-[10px] uppercase tracking-widest">Nuevo Pedido</button>
+                <div class="w-24 h-24 bg-emerald-50 text-emerald-500 rounded-full flex items-center justify-center mx-auto"><i data-lucide="check-circle" class="w-12 h-12"></i></div>
+                <h2 class="text-3xl font-black uppercase italic tracking-tighter text-silver-900">Enviado</h2>
+                <button onclick="location.reload()" class="px-12 py-5 bg-silver-black text-white rounded-2xl font-black text-[10px] uppercase tracking-widest">Nuevo Viaje</button>
             </section>
         </div>
     </main>
 
-    <main id="view-admin" class="max-w-6xl mx-auto view-hidden fade-in space-y-6">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="bg-white p-8 rounded-[2.5rem] border border-silver-200 shadow-sm">
-                <p class="text-[10px] font-black text-silver-400 uppercase tracking-widest mb-1">Viajes Activos</p>
-                <h2 id="active-count" class="text-5xl font-black italic tracking-tighter text-silver-900">0</h2>
+    <main id="view-admin" class="max-w-6xl mx-auto view-hidden fade-in space-y-8">
+        <div class="flex justify-between items-end">
+            <div>
+                <h1 class="text-4xl font-black italic tracking-tighter text-silver-900 uppercase">Logística Mendoza</h1>
             </div>
-            <div class="bg-silver-black text-white p-8 rounded-[2.5rem] shadow-sm">
-                <p class="text-[10px] font-black text-silver-500 uppercase tracking-widest mb-1">Caja Estimada</p>
-                <h2 id="total-cash" class="text-5xl font-black italic tracking-tighter text-white">$0</h2>
+            <button onclick="localStorage.removeItem('taxi_db'); renderOrders();" class="text-[9px] font-black uppercase text-red-500 border border-red-100 px-4 py-2 rounded-full">Reset</button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-white p-10 rounded-[3rem] border border-silver-200 shadow-sm text-center">
+                <p class="text-[10px] font-black text-silver-400 uppercase tracking-widest mb-2">Viajes Activos</p>
+                <h2 id="active-count" class="text-6xl font-black italic text-silver-black">0</h2>
+            </div>
+            <div class="bg-silver-black text-white p-10 rounded-[3rem] shadow-2xl col-span-2 text-center">
+                <p class="text-[10px] font-black text-silver-500 uppercase tracking-widest mb-2">Recaudación Total</p>
+                <h2 id="total-cash" class="text-6xl font-black italic text-white">$0</h2>
             </div>
         </div>
-        <div class="bg-white border border-silver-200 rounded-[3rem] overflow-hidden">
+
+        <div class="bg-white border border-silver-200 rounded-[3.5rem] overflow-hidden">
             <table class="w-full text-left">
-                <tbody id="orders-list"></tbody>
+                <thead class="bg-silver-50 text-[10px] font-black text-silver-400 uppercase tracking-widest">
+                    <tr>
+                        <th class="px-10 py-6">Pasajero</th>
+                        <th class="px-10 py-6">Estado</th>
+                        <th class="px-10 py-6">Ruta</th>
+                        <th class="px-10 py-6 text-right">Tarifa</th>
+                        <th class="px-10 py-6 text-center">WhatsApp</th>
+                    </tr>
+                </thead>
+                <tbody id="orders-list" class="divide-y divide-silver-100"></tbody>
             </table>
         </div>
     </main>
@@ -130,157 +150,153 @@
     <script>
         const $ = (id) => document.getElementById(id);
         const toggleView = (id, show) => $(id).classList[show ? 'remove' : 'add']('view-hidden');
-        
-        let state = { order: {}, coords: { origin: null, dest: null }, user: null };
-        let leafMap;
+        let state = { currentPrice: 0, coords: { origin: null, dest: null } };
+        let leafMap, searchController = null;
 
-        document.addEventListener('DOMContentLoaded', () => lucide.createIcons());
+        // --- INICIO ---
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            detectLocation(); // Forzar ubicación al cargar
+        });
 
-        // 1. Google Login
-        function handleCredentialResponse(response) {
-            const payload = JSON.parse(atob(response.credential.split('.')[1]));
-            state.user = payload;
-            $('custName').value = payload.name;
-            toggleView('google-auth-container', false);
-            toggleView('user-badge', true);
-            $('user-img').src = payload.picture;
-            $('user-name-label').innerText = payload.name;
+        function switchView(v) { 
+            toggleView('view-widget', v === 'widget'); 
+            toggleView('view-admin', v === 'admin'); 
+            if(v === 'admin') renderOrders(); 
         }
 
-        // 2. Geolocalización (Opcional)
         async function detectLocation() {
-            const btn = $('btn-gps');
-            btn.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i>';
-            lucide.createIcons();
-
+            const input = $('custOrigin');
+            if (!navigator.geolocation) return;
+            
+            input.placeholder = "Localizando...";
             navigator.geolocation.getCurrentPosition(async (pos) => {
                 const { latitude, longitude } = pos.coords;
                 state.coords.origin = [latitude, longitude];
                 try {
                     const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18`);
                     const data = await res.json();
-                    $('custOrigin').value = data.address.road ? `${data.address.road} ${data.address.house_number || ''}, ${data.address.city || 'Mendoza'}` : "Ubicación detectada";
-                    btn.innerHTML = '<i data-lucide="check" class="w-4 h-4 text-emerald-500"></i>';
-                } catch (e) {
-                    $('custOrigin').value = "GPS detectado correctamente";
-                }
-                setTimeout(() => { btn.innerHTML = '<i data-lucide="locate-fixed" class="w-4 h-4"></i>'; lucide.createIcons(); }, 2000);
-            }, () => {
-                alert("No pudimos acceder al GPS. Por favor escribe tu dirección manualmente.");
-                btn.innerHTML = '<i data-lucide="locate-fixed" class="w-4 h-4"></i>';
-                lucide.createIcons();
-            });
+                    input.value = `${data.address.road || ''} ${data.address.housenumber || ''}, ${data.address.city || 'Mendoza'}`.trim();
+                } catch (e) { input.value = "Ubicación detectada por GPS"; }
+            }, null, { enableHighAccuracy: true });
         }
 
-        // 3. Autocompletado Libre (Para ambos campos)
-        let timer;
         function searchLoc(query, type) {
             const box = $(type === 'origin' ? 'origin-suggestions' : 'dest-suggestions');
-            if (query.length < 3) { box.classList.add('hidden'); return; }
+            const loader = $(type === 'origin' ? 'origin-loader' : 'dest-loader');
             
-            clearTimeout(timer);
-            timer = setTimeout(async () => {
-                const res = await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&lat=-32.8895&lon=-68.8458&limit=5`);
-                const data = await res.json();
-                renderSuggs(data.features, type);
-            }, 300);
+            if (query.length < 3) { box.classList.add('hidden'); state.coords[type] = null; return; }
+
+            if (searchController) searchController.abort();
+            searchController = new AbortController();
+            loader.classList.remove('hidden');
+
+            clearTimeout(window.searchTimer);
+            window.searchTimer = setTimeout(async () => {
+                try {
+                    // BBox Mendoza estricto para evitar error 400
+                    const bbox = "-69.0,-33.1,-68.5,-32.7";
+                    const url = `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&bbox=${bbox}&limit=5&lang=es`;
+                    const res = await fetch(url, { signal: searchController.signal });
+                    const data = await res.json();
+                    
+                    box.innerHTML = '';
+                    data.features.forEach(f => {
+                        const p = f.properties;
+                        const label = `${p.name || p.street || ''} ${p.housenumber || ''}, ${p.city || 'Mendoza'}`.trim();
+                        const div = document.createElement('div');
+                        div.className = 'suggestion-item';
+                        div.innerHTML = `<div class="flex flex-col"><span class="text-sm font-black">${p.name || p.street}</span><span class="text-[9px] uppercase font-bold text-silver-400">${p.city || 'Mendoza'}</span></div>`;
+                        div.onclick = () => {
+                            $(type === 'origin' ? 'custOrigin' : 'custDest').value = label;
+                            state.coords[type] = [f.geometry.coordinates[1], f.geometry.coordinates[0]];
+                            box.classList.add('hidden');
+                        };
+                        box.appendChild(div);
+                    });
+                    box.classList.remove('hidden');
+                    loader.classList.add('hidden');
+                    lucide.createIcons();
+                } catch (e) { if(e.name !== 'AbortError') loader.classList.add('hidden'); }
+            }, 400);
         }
 
-        function renderSuggs(features, type) {
-            const box = $(type === 'origin' ? 'origin-suggestions' : 'dest-suggestions');
-            box.innerHTML = '';
-            if (!features.length) { box.classList.add('hidden'); return; }
-            
-            features.forEach(f => {
-                const div = document.createElement('div');
-                div.className = 'suggestion-item';
-                div.innerText = `${f.properties.name || ''} ${f.properties.street || ''}, ${f.properties.city || 'Mendoza'}`;
-                div.onclick = () => {
-                    $(type === 'origin' ? 'custOrigin' : 'custDest').value = div.innerText;
-                    state.coords[type] = [f.geometry.coordinates[1], f.geometry.coordinates[0]];
-                    box.classList.add('hidden');
-                };
-                box.appendChild(div);
-            });
-            box.classList.remove('hidden');
-        }
-
-        // 4. Ruta y Precio
         function calculateRoute() {
-            if (!state.coords.origin || !state.coords.dest) return alert("Por favor selecciona las direcciones de la lista o usa el GPS.");
+            if (!$('custName').value || !state.coords.origin || !state.coords.dest) return alert("Completa todos los datos y selecciona direcciones de la lista.");
             
-            const dist = getDist(state.coords.origin, state.coords.dest);
-            const price = Math.round(1500 + (dist * 650));
+            const R = 6371;
+            const p1 = state.coords.origin, p2 = state.coords.dest;
+            const dLat = (p2[0]-p1[0]) * Math.PI / 180, dLon = (p2[1]-p1[1]) * Math.PI / 180;
+            const a = Math.sin(dLat/2)**2 + Math.cos(p1[0]*Math.PI/180)*Math.cos(p2[0]*Math.PI/180)*Math.sin(dLon/2)**2;
+            const dist = R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 
-            state.order = {
-                name: $('custName').value || "Invitado",
-                origin: $('custOrigin').value,
-                dest: $('custDest').value,
-                price: price,
-                img: state.user?.picture || null
-            };
-
-            $('display-price').innerText = `$${price}`;
+            state.currentPrice = Math.max(2000, Math.round(1500 + (dist * 750)));
+            $('display-price').innerText = `$${state.currentPrice.toLocaleString('es-AR')}`;
+            
             toggleView('step-1', false);
             toggleView('step-2', true);
+            $('step-progress-bar').style.width = "66%";
+            $('dot-2').classList.add('step-active');
 
             setTimeout(() => {
                 if (leafMap) leafMap.remove();
-                leafMap = L.map('map', { attributionControl: false }).setView(state.coords.origin, 14);
+                leafMap = L.map('map', { attributionControl: false, zoomControl: false }).setView(state.coords.origin, 14);
                 L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png').addTo(leafMap);
-                L.marker(state.coords.origin).addTo(leafMap);
-                L.marker(state.coords.dest).addTo(leafMap);
-                const poly = L.polyline([state.coords.origin, state.coords.dest], { color: '#000', weight: 4 }).addTo(leafMap);
+                const poly = L.polyline([state.coords.origin, state.coords.dest], { color: '#0A0A0A', weight: 4, dashArray: '5, 10' }).addTo(leafMap);
                 leafMap.fitBounds(poly.getBounds(), { padding: [40, 40] });
             }, 300);
         }
 
-        function getDist(p1, p2) {
-            const R = 6371;
-            const dLat = (p2[0]-p1[0]) * Math.PI / 180;
-            const dLon = (p2[1]-p1[1]) * Math.PI / 180;
-            const a = Math.sin(dLat/2)**2 + Math.cos(p1[0]*Math.PI/180)*Math.cos(p2[0]*Math.PI/180)*Math.sin(dLon/2)**2;
-            return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        function validatePhone(p) {
+            let clean = p.replace(/\D/g, '');
+            if (clean.startsWith('0')) clean = clean.substring(1);
+            if (clean.length === 12 && clean.startsWith('26115')) clean = '261' + clean.substring(5);
+            $('custPhone').value = clean;
+            const isValid = clean.length === 10;
+            $('phone-error').classList.toggle('hidden', isValid || clean.length === 0);
+            return isValid;
         }
 
         function confirmOrder() {
+            if (!validatePhone($('custPhone').value)) return;
             const db = JSON.parse(localStorage.getItem('taxi_db')) || [];
-            db.unshift({ ...state.order, id: Date.now() });
+            db.unshift({ id: Date.now(), name: $('custName').value, phone: "549" + $('custPhone').value, origin: $('custOrigin').value, dest: $('custDest').value, price: state.currentPrice, status: 'pending' });
             localStorage.setItem('taxi_db', JSON.stringify(db));
             toggleView('step-2', false);
             toggleView('step-3', true);
+            $('step-progress-bar').style.width = "100%";
+            $('dot-3').classList.add('step-active');
         }
 
         function renderOrders() {
             const db = JSON.parse(localStorage.getItem('taxi_db')) || [];
             const list = $('orders-list');
-            list.innerHTML = '';
-            let total = 0;
+            let total = 0; list.innerHTML = '';
             db.forEach(o => {
-                total += o.price;
-                list.innerHTML += `<tr class="border-b border-silver-100">
-                    <td class="px-8 py-5 flex items-center gap-3"><img src="${o.img || 'https://ui-avatars.com/api/?name='+o.name}" class="w-8 h-8 rounded-full grayscale"><span class="font-bold text-sm">${o.name}</span></td>
-                    <td class="px-8 py-5 text-[10px] text-silver-500">${o.origin}</td>
-                    <td class="px-8 py-5 text-right font-black italic">$${o.price}</td>
+                if(o.status === 'done') total += o.price;
+                list.innerHTML += `<tr class="text-xs">
+                    <td class="px-10 py-6 font-black">${o.name}</td>
+                    <td class="px-10 py-6"><button onclick="toggleStatus(${o.id})" class="px-2 py-1 rounded-full status-${o.status} uppercase font-black text-[8px]">${o.status}</button></td>
+                    <td class="px-10 py-6 text-silver-400">A: ${o.dest.substring(0,20)}...</td>
+                    <td class="px-10 py-6 text-right font-black">$${o.price.toLocaleString()}</td>
+                    <td class="px-10 py-6 text-center">
+                        <button onclick="window.open('https://wa.me/${o.phone}?text=TaxiGO: Hola ${o.name}, móvil asignado.', '_blank')" class="text-emerald-500"><i data-lucide="message-circle"></i></button>
+                    </td>
                 </tr>`;
             });
-            $('active-count').innerText = db.length;
-            $('total-cash').innerText = `$${total.toLocaleString()}`;
+            $('active-count').innerText = db.filter(x => x.status !== 'done').length;
+            $('total-cash').innerText = `$${total.toLocaleString('es-AR')}`;
+            lucide.createIcons();
         }
 
-        function switchView(view) {
-            toggleView('view-widget', view === 'widget');
-            toggleView('view-admin', view === 'admin');
-            if(view === 'admin') renderOrders();
+        function toggleStatus(id) {
+            const db = JSON.parse(localStorage.getItem('taxi_db'));
+            const idx = db.findIndex(x => x.id === id);
+            const cycle = { pending: 'active', active: 'done', done: 'pending' };
+            db[idx].status = cycle[db[idx].status];
+            localStorage.setItem('taxi_db', JSON.stringify(db));
+            renderOrders();
         }
-
-        function resetApp() { location.reload(); }
-        document.addEventListener('click', (e) => { 
-            if (!e.target.closest('.relative')) {
-                $('origin-suggestions').classList.add('hidden');
-                $('dest-suggestions').classList.add('hidden');
-            }
-        });
     </script>
 </body>
 </html>
