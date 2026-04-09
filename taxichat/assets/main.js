@@ -45,6 +45,13 @@ function applyBranding() {
     document.title = `${CURRENT_AGENCY.name} | Mendoza`;
     document.documentElement.style.setProperty('--primary', CURRENT_AGENCY.color);
     document.querySelectorAll('.agency-name').forEach(el => el.innerText = CURRENT_AGENCY.name);
+    // Actualizar nombre de agencia en el footer
+    document.querySelectorAll('.agency-name').forEach(el => {
+        el.innerText = CURRENT_AGENCY.name;
+    });
+
+    // Cambiar favicon o colores si fuera necesario
+    console.log(`Branding aplicado para: ${CURRENT_AGENCY.name}`);
 }
 
 async function getLocation() {
@@ -129,4 +136,25 @@ function changeStep(s) {
 function renderPartners() {
     const html = CURRENT_AGENCY.partners.map(p => `<div class="logo-item">${p}</div>`).join('');
     document.querySelectorAll('.animate-marquee').forEach(el => el.innerHTML = html);
+}
+
+function switchTab(type) {
+    const isUser = type === 'usuarios';
+    const tabU = document.getElementById('tab-usuarios');
+    const tabE = document.getElementById('tab-empresas');
+    const btnU = document.getElementById('btn-usuarios');
+    const btnE = document.getElementById('btn-empresas');
+
+    // Toggle de visibilidad
+    tabU.classList.toggle('hidden', !isUser);
+    tabE.classList.toggle('hidden', isUser);
+
+    // Estilos de botones (Metropolitan Style)
+    if (isUser) {
+        btnU.className = "px-10 py-4 rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all duration-300 bg-white shadow-xl text-black";
+        btnE.className = "px-10 py-4 rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all duration-300 text-slate-500";
+    } else {
+        btnE.className = "px-10 py-4 rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all duration-300 bg-white shadow-xl text-black";
+        btnU.className = "px-10 py-4 rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all duration-300 text-slate-500";
+    }
 }
