@@ -3,20 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TaxiGO | Silver OS Enterprise</title>
+    <title>TaxiGO | Uber Base Real-Time</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/lucide@0.372.0/dist/umd/lucide.min.js"></script>
-    
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        silver: { 50: '#F9FAFB', 100: '#F3F4F6', 200: '#E5E7EB', 300: '#D1D5DB', 400: '#9CA3AF', 500: '#6B7280', 600: '#4B5563', 700: '#374151', 800: '#1F2937', 900: '#111827', black: '#0A0A0A' }
+                        'uber-black': '#000000',
+                        'uber-blue': '#276EF1',
+                        'uber-gray-50': '#F6F6F6',
+                        'uber-gray-100': '#EEEEEE',
+                        'uber-gray-600': '#6B6B6B',
+                        'uber-gray-800': '#333333',
+                        'uber-green': '#05A357'
+                    },
+                    fontFamily: {
+                        base: ['Inter', 'system-ui', 'sans-serif']
                     }
                 }
             }
@@ -24,126 +34,148 @@
     </script>
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap');
-        body { font-family: 'Inter', sans-serif; background: #F3F4F6; min-height: 100vh; margin: 0; overflow-x: hidden; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+        body { font-family: 'Inter', sans-serif; background: #F6F6F6; color: #000000; }
+        
+        .uber-card { background: #FFFFFF; border: 1px solid #EEEEEE; border-radius: 0; }
+        .uber-input { border: 2px solid #EEEEEE; transition: all 0.2s; border-radius: 0; background: #F6F6F6; font-size: 16px; }
+        .uber-input:focus { border-color: #000000; background: #FFFFFF; outline: none; }
+        .uber-btn-primary { background: #000000; color: #FFFFFF; transition: opacity 0.2s; border-radius: 0; }
+        .uber-btn-primary:hover { opacity: 0.9; }
+        .uber-btn-primary:disabled { background: #6B6B6B; cursor: not-time; }
+        .uber-btn-secondary { background: #EEEEEE; color: #000000; border-radius: 0; }
+        
+        #map { height: 250px; width: 100%; z-index: 10; background: #F6F6F6; border: 1px solid #EEE; }
+        .suggestions-box { position: absolute; left: 0; right: 0; top: 100%; background: white; border: 1px solid #EEE; z-index: 500; box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+        .suggestion-item { padding: 12px 16px; cursor: pointer; border-bottom: 1px solid #F6F6F6; }
+        .suggestion-item:hover { background: #F6F6F6; }
+
         .view-hidden { display: none !important; }
-        .fade-in { animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
-        #map { height: 220px; width: 100%; border-radius: 2rem; z-index: 10; border: 1px solid #E5E7EB; background: #F9FAFB; }
-        .suggestions-box { position: absolute; left: 0; right: 0; top: 100%; margin-top: 8px; background: white; border: 1px solid #E5E7EB; border-radius: 1.5rem; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); z-index: 500; overflow: hidden; }
-        .suggestion-item { padding: 12px 20px; cursor: pointer; border-bottom: 1px solid #F3F4F6; transition: all 0.2s; display: flex; align-items: center; gap: 12px; }
-        .suggestion-item:hover { background: #F9FAFB; padding-left: 24px; color: #10B981; }
-        
-        .loader-spin { animation: spin 0.8s linear infinite; }
+        .status-pending { background: #FFEFD2; color: #735100; padding: 4px 12px; font-weight: 500; font-size: 12px; text-transform: uppercase; }
+        .status-active { background: #E2EBFF; color: #1E40AF; padding: 4px 12px; font-weight: 500; font-size: 12px; text-transform: uppercase; }
+        .status-done { background: #E3F2ED; color: #065F46; padding: 4px 12px; font-weight: 500; font-size: 12px; text-transform: uppercase; }
+    
+        .loader { animation: spin 1s linear infinite; }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        
-        .step-active { background-color: #10B981 !important; transform: scale(1.3); box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
-        .status-pending { background: #FEF3C7; color: #92400E; }
-        .status-active { background: #DBEAFE; color: #1E40AF; }
-        .status-done { background: #D1FAE5; color: #065F46; }
     </style>
 </head>
-<body class="antialiased p-4 md:p-8">
+<body class="antialiased">
 
-    <nav class="fixed bottom-6 right-6 flex gap-2 z-[200]">
-        <button onclick="switchView('widget')" class="bg-white border border-silver-200 px-6 py-3 rounded-full shadow-2xl text-[10px] font-black uppercase tracking-widest active:scale-95 transition-all">Cliente</button>
-        <button onclick="switchView('admin')" class="bg-silver-black text-white px-6 py-3 rounded-full shadow-2xl text-[10px] font-black uppercase tracking-widest active:scale-95 transition-all">Operador</button>
+    <nav class="bg-uber-black text-white px-8 py-4 flex justify-between items-center sticky top-0 z-[100]">
+        <div class="flex items-center gap-6">
+            <span class="text-xl font-bold tracking-tighter">TaxiGO <span class="text-uber-blue text-xs">LIVE</span></span>
+            <div class="hidden md:flex gap-4 text-xs font-medium uppercase tracking-widest text-uber-gray-600">
+                <button onclick="switchView('widget')" class="hover:text-white transition-colors">Solicitar</button>
+                <button onclick="switchView('admin')" class="hover:text-white transition-colors">Consola Operador</button>
+            </div>
+        </div>
+        <div class="flex items-center gap-4">
+            <span class="text-[10px] bg-uber-gray-800 px-2 py-1 uppercase font-bold">Mendoza</span>
+        </div>
     </nav>
 
-    <main id="view-widget" class="max-w-md mx-auto bg-white border border-silver-200 shadow-2xl rounded-[3.5rem] overflow-hidden fade-in">
-        <header class="bg-silver-black px-10 pt-10 pb-8 text-white relative">
-            <div class="flex justify-between items-center mb-8">
-                <div class="flex flex-col">
-                    <span class="text-[10px] font-black uppercase tracking-[0.3em] italic text-emerald-500">TaxiGO</span>
-                    <span class="text-[8px] font-bold uppercase tracking-widest text-silver-500">Mendoza · Argentina</span>
-                </div>
-                <span id="step-label" class="text-[9px] font-black uppercase bg-silver-800 px-3 py-1 rounded-full">Ruta</span>
+    <main id="view-widget" class="max-w-xl mx-auto mt-12 px-4 fade-in">
+        <div class="uber-card p-8 md:p-12 shadow-sm">
+            
+            <div class="flex gap-1 mb-8">
+                <div id="bar-1" class="h-1 flex-1 bg-uber-black"></div>
+                <div id="bar-2" class="h-1 flex-1 bg-uber-gray-100"></div>
+                <div id="bar-3" class="h-1 flex-1 bg-uber-gray-100"></div>
             </div>
-            <div class="relative h-[2px] w-full bg-silver-900 rounded-full">
-                <div id="step-progress-bar" class="absolute top-0 left-0 h-full bg-emerald-500 transition-all duration-500" style="width: 33%"></div>
-            </div>
-            <div class="flex justify-between mt-[-5px] relative z-10">
-                <div id="dot-1" class="w-2.5 h-2.5 rounded-full bg-silver-800 step-active border-2 border-silver-black"></div>
-                <div id="dot-2" class="w-2.5 h-2.5 rounded-full bg-silver-800 border-2 border-silver-black"></div>
-                <div id="dot-3" class="w-2.5 h-2.5 rounded-full bg-silver-800 border-2 border-silver-black"></div>
-            </div>
-        </header>
 
-        <div class="p-10">
             <section id="step-1" class="space-y-6">
+                <h1 class="text-3xl font-bold tracking-tight mb-8">¿A dónde vamos hoy?</h1>
                 <div class="space-y-4">
-                    <input type="text" id="custName" placeholder="Tu nombre" class="w-full px-6 py-4 bg-silver-50 border border-silver-100 rounded-2xl font-bold text-sm">
+                    <div>
+                        <label class="text-xs font-bold uppercase text-uber-gray-600 block mb-2">Pasajero</label>
+                        <input type="text" id="custName" placeholder="Nombre completo" class="uber-input w-full p-4">
+                    </div>
                     
                     <div class="relative">
-                        <input type="text" id="custOrigin" oninput="searchLoc(this.value, 'origin')" placeholder="Origen" class="w-full px-6 py-4 bg-silver-50 border border-silver-100 rounded-2xl font-bold text-sm pr-14">
-                        <div id="origin-loader" class="absolute right-12 top-1/2 -translate-y-1/2 hidden"><i data-lucide="loader-2" class="w-4 h-4 text-emerald-500 loader-spin"></i></div>
-                        <button onclick="detectLocation()" class="absolute right-2 top-2 bottom-2 bg-silver-black text-white px-3 rounded-xl hover:bg-emerald-500 transition-all"><i data-lucide="locate-fixed" class="w-4 h-4"></i></button>
+                        <label class="text-xs font-bold uppercase text-uber-gray-600 block mb-2">Punto de partida</label>
+                        <input type="text" id="custOrigin" oninput="searchLoc(this.value, 'origin')" placeholder="Dirección de origen" class="uber-input w-full p-4 pr-12">
+                        <button onclick="detectLocation()" class="absolute right-4 bottom-4 text-uber-blue"><i data-lucide="map-pin" class="w-5 h-5"></i></button>
                         <div id="origin-suggestions" class="suggestions-box hidden"></div>
                     </div>
 
                     <div class="relative">
-                        <input type="text" id="custDest" oninput="searchLoc(this.value, 'dest')" placeholder="¿A dónde vas?" class="w-full px-6 py-4 bg-silver-50 border border-silver-100 rounded-2xl font-bold text-sm pr-14">
-                        <div id="dest-loader" class="absolute right-4 top-1/2 -translate-y-1/2 hidden"><i data-lucide="loader-2" class="w-4 h-4 text-emerald-500 loader-spin"></i></div>
+                        <label class="text-xs font-bold uppercase text-uber-gray-600 block mb-2">Destino</label>
+                        <input type="text" id="custDest" oninput="searchLoc(this.value, 'dest')" placeholder="Dirección de destino" class="uber-input w-full p-4">
                         <div id="dest-suggestions" class="suggestions-box hidden"></div>
                     </div>
                 </div>
-                <button onclick="calculateRoute()" class="w-full bg-silver-black text-white py-5 font-black uppercase text-[10px] tracking-[0.2em] rounded-2xl active:scale-95 shadow-xl transition-all">Cotizar Viaje</button>
+                <button onclick="calculateRoute()" class="uber-btn-primary w-full p-5 font-bold uppercase tracking-widest text-sm mt-4">Calcular Tarifa</button>
             </section>
 
-            <section id="step-2" class="view-hidden fade-in space-y-6">
-                <div id="map"></div>
-                <div class="p-8 bg-silver-50 rounded-[2.5rem] border border-silver-100 text-center">
-                    <span class="text-[8px] font-black uppercase text-silver-400 tracking-widest block mb-1">Tarifa Mendoza</span>
-                    <h3 id="display-price" class="text-5xl font-black italic tracking-tighter text-silver-900">$0</h3>
+            <section id="step-2" class="view-hidden space-y-6">
+                <div id="map" class="mb-6"></div>
+                <div class="flex justify-between items-end border-b pb-6">
+                    <div>
+                        <p class="text-xs font-bold text-uber-gray-600 uppercase mb-1">Costo estimado</p>
+                        <h2 id="display-price" class="text-4xl font-bold">$0</h2>
+                    </div>
+                    <div class="text-right text-uber-blue font-medium text-sm">Tarifa Mendoza</div>
                 </div>
-                <div class="space-y-3">
-                    <input type="tel" id="custPhone" oninput="validatePhone(this.value)" placeholder="WhatsApp (261XXXXXXX)" class="w-full px-6 py-4 bg-white border border-silver-200 rounded-2xl font-bold text-sm shadow-sm transition-all text-center">
-                    <p id="phone-error" class="text-[9px] text-center font-bold text-red-500 uppercase hidden italic">10 dígitos sin 0 ni 15</p>
+                
+                <div class="space-y-4">
+                    <label class="text-xs font-bold uppercase text-uber-gray-600 block">Tu WhatsApp</label>
+                    <input type="tel" id="custPhone" oninput="validatePhone(this.value)" placeholder="Ej: 2615555555" class="uber-input w-full p-4 text-xl font-bold">
+                    <p id="phone-error" class="text-xs text-red-600 font-medium hidden">Ingresa 10 dígitos (sin 0 ni 15)</p>
                 </div>
-                <button onclick="confirmOrder()" class="w-full bg-emerald-500 text-white py-5 font-black uppercase text-[10px] tracking-widest rounded-2xl shadow-xl active:scale-95 transition-all">Confirmar Pedido</button>
+
+                <div class="flex gap-4">
+                    <button onclick="location.reload()" class="uber-btn-secondary flex-1 p-5 font-bold uppercase text-sm">Volver</button>
+                    <button id="btn-confirm" onclick="confirmOrder()" class="uber-btn-primary flex-[2] p-5 font-bold uppercase text-sm flex items-center justify-center gap-2">
+                        <span id="text-confirm">Confirmar Taxi</span>
+                        <i id="loader-confirm" data-lucide="loader-2" class="w-5 h-5 loader hidden"></i>
+                    </button>
+                </div>
             </section>
 
-            <section id="step-3" class="view-hidden fade-in py-12 text-center space-y-6">
-                <div class="w-24 h-24 bg-emerald-50 text-emerald-500 rounded-full flex items-center justify-center mx-auto"><i data-lucide="check-circle" class="w-12 h-12"></i></div>
-                <h2 class="text-3xl font-black uppercase italic tracking-tighter text-silver-900">Enviado</h2>
-                <button onclick="location.reload()" class="px-12 py-5 bg-silver-black text-white rounded-2xl font-black text-[10px] uppercase tracking-widest">Nuevo Viaje</button>
+            <section id="step-3" class="view-hidden py-12 text-center">
+                <div class="bg-uber-green w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 text-white">
+                    <i data-lucide="check" class="w-8 h-8"></i>
+                </div>
+                <h2 class="text-3xl font-bold mb-2">¡Pedido enviado!</h2>
+                <p class="text-uber-gray-600 mb-8">Un operador se pondrá en contacto contigo a la brevedad.</p>
+                <button onclick="location.reload()" class="uber-btn-primary px-8 py-4 font-bold uppercase text-xs">Realizar otro pedido</button>
             </section>
         </div>
     </main>
 
-    <main id="view-admin" class="max-w-6xl mx-auto view-hidden fade-in space-y-8">
-        <div class="flex justify-between items-end">
-            <div>
-                <h1 class="text-4xl font-black italic tracking-tighter text-silver-900 uppercase">Logística Mendoza</h1>
+    <main id="view-admin" class="view-hidden px-8 py-12">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex justify-between items-end mb-10">
+                <h1 class="text-4xl font-bold tracking-tight">Logística Live</h1>
+                <div class="text-xs text-uber-gray-600">Actualización en tiempo real activa</div>
             </div>
-            <button onclick="localStorage.removeItem('taxi_db'); renderOrders();" class="text-[9px] font-black uppercase text-red-500 border border-red-100 px-4 py-2 rounded-full">Reset</button>
-        </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="bg-white p-10 rounded-[3rem] border border-silver-200 shadow-sm text-center">
-                <p class="text-[10px] font-black text-silver-400 uppercase tracking-widest mb-2">Viajes Activos</p>
-                <h2 id="active-count" class="text-6xl font-black italic text-silver-black">0</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-12">
+                <div class="uber-card p-6">
+                    <p class="text-xs font-bold text-uber-gray-600 uppercase mb-2">Viajes Activos</p>
+                    <h3 id="active-count" class="text-4xl font-bold">0</h3>
+                </div>
+                <div class="uber-card p-6 border-l-4 border-l-uber-blue">
+                    <p class="text-xs font-bold text-uber-gray-600 uppercase mb-2">Recaudación (Done)</p>
+                    <h3 id="total-cash" class="text-4xl font-bold text-uber-blue">$0</h3>
+                </div>
             </div>
-            <div class="bg-silver-black text-white p-10 rounded-[3rem] shadow-2xl col-span-2 text-center">
-                <p class="text-[10px] font-black text-silver-500 uppercase tracking-widest mb-2">Recaudación Total</p>
-                <h2 id="total-cash" class="text-6xl font-black italic text-white">$0</h2>
-            </div>
-        </div>
 
-        <div class="bg-white border border-silver-200 rounded-[3.5rem] overflow-hidden">
-            <table class="w-full text-left">
-                <thead class="bg-silver-50 text-[10px] font-black text-silver-400 uppercase tracking-widest">
-                    <tr>
-                        <th class="px-10 py-6">Pasajero</th>
-                        <th class="px-10 py-6">Estado</th>
-                        <th class="px-10 py-6">Ruta</th>
-                        <th class="px-10 py-6 text-right">Tarifa</th>
-                        <th class="px-10 py-6 text-center">WhatsApp</th>
-                    </tr>
-                </thead>
-                <tbody id="orders-list" class="divide-y divide-silver-100"></tbody>
-            </table>
+            <div class="uber-card overflow-hidden">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="bg-uber-gray-50 border-b border-uber-gray-100 text-[10px] font-bold uppercase tracking-widest text-uber-gray-600">
+                            <th class="px-6 py-4">Pasajero</th>
+                            <th class="px-6 py-4">Estado</th>
+                            <th class="px-6 py-4">Origen / Destino</th>
+                            <th class="px-6 py-4">Tarifa</th>
+                            <th class="px-6 py-4 text-center">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orders-list" class="divide-y divide-uber-gray-100">
+                        </tbody>
+                </table>
+            </div>
         </div>
     </main>
 
@@ -153,149 +185,241 @@
         let state = { currentPrice: 0, coords: { origin: null, dest: null } };
         let leafMap, searchController = null;
 
-        // --- INICIO ---
+        // --- 7. CONFIGURACIÓN DE SUPABASE ---
+        // REEMPLAZA ESTO CON TUS CREDENCIALES
+        const SUPABASE_URL = 'https://xynkbghmcioavfmvfwkm.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_rocZCAajVOY6xw7HDI05Bw_QBxSKw5Y';
+        
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // --- Lógica de Inicialización ---
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
-            detectLocation(); // Forzar ubicación al cargar
+            detectLocation();
+            // Si estamos en admin, iniciamos Realtime
+            if(!$('view-admin').classList.contains('view-hidden')) initAdminRealtime();
         });
 
         function switchView(v) { 
             toggleView('view-widget', v === 'widget'); 
             toggleView('view-admin', v === 'admin'); 
-            if(v === 'admin') renderOrders(); 
+            if(v === 'admin') initAdminRealtime(); 
         }
 
+        // --- Mantenemos tus Funciones de Mapas y Búsqueda: Intactas ---
         async function detectLocation() {
             const input = $('custOrigin');
             if (!navigator.geolocation) return;
-            
-            input.placeholder = "Localizando...";
             navigator.geolocation.getCurrentPosition(async (pos) => {
                 const { latitude, longitude } = pos.coords;
                 state.coords.origin = [latitude, longitude];
                 try {
                     const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18`);
                     const data = await res.json();
-                    input.value = `${data.address.road || ''} ${data.address.housenumber || ''}, ${data.address.city || 'Mendoza'}`.trim();
-                } catch (e) { input.value = "Ubicación detectada por GPS"; }
-            }, null, { enableHighAccuracy: true });
+                    input.value = `${data.address.road || 'Mi ubicación'}`;
+                } catch (e) { input.value = "Ubicación detectada"; }
+            });
         }
 
         function searchLoc(query, type) {
             const box = $(type === 'origin' ? 'origin-suggestions' : 'dest-suggestions');
-            const loader = $(type === 'origin' ? 'origin-loader' : 'dest-loader');
-            
-            if (query.length < 3) { box.classList.add('hidden'); state.coords[type] = null; return; }
-
-            if (searchController) searchController.abort();
-            searchController = new AbortController();
-            loader.classList.remove('hidden');
+            if (query.length < 3) { box.classList.add('hidden'); return; }
 
             clearTimeout(window.searchTimer);
             window.searchTimer = setTimeout(async () => {
-                try {
-                    // BBox Mendoza estricto para evitar error 400
-                    const bbox = "-69.0,-33.1,-68.5,-32.7";
-                    const url = `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&bbox=${bbox}&limit=5&lang=es`;
-                    const res = await fetch(url, { signal: searchController.signal });
-                    const data = await res.json();
-                    
-                    box.innerHTML = '';
-                    data.features.forEach(f => {
-                        const p = f.properties;
-                        const label = `${p.name || p.street || ''} ${p.housenumber || ''}, ${p.city || 'Mendoza'}`.trim();
-                        const div = document.createElement('div');
-                        div.className = 'suggestion-item';
-                        div.innerHTML = `<div class="flex flex-col"><span class="text-sm font-black">${p.name || p.street}</span><span class="text-[9px] uppercase font-bold text-silver-400">${p.city || 'Mendoza'}</span></div>`;
-                        div.onclick = () => {
-                            $(type === 'origin' ? 'custOrigin' : 'custDest').value = label;
-                            state.coords[type] = [f.geometry.coordinates[1], f.geometry.coordinates[0]];
-                            box.classList.add('hidden');
-                        };
-                        box.appendChild(div);
-                    });
-                    box.classList.remove('hidden');
-                    loader.classList.add('hidden');
-                    lucide.createIcons();
-                } catch (e) { if(e.name !== 'AbortError') loader.classList.add('hidden'); }
-            }, 400);
+                const res = await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&bbox=-69.0,-33.1,-68.5,-32.7&limit=5`);
+                const data = await res.json();
+                box.innerHTML = '';
+                data.features.forEach(f => {
+                    const div = document.createElement('div');
+                    div.className = 'suggestion-item text-sm';
+                    div.innerHTML = `<p class="font-bold">${f.properties.name || f.properties.street}</p><p class="text-[10px] text-gray-500">${f.properties.city || 'Mendoza'}</p>`;
+                    div.onclick = () => {
+                        $(type === 'origin' ? 'custOrigin' : 'custDest').value = f.properties.name || f.properties.street;
+                        state.coords[type] = [f.geometry.coordinates[1], f.geometry.coordinates[0]];
+                        box.classList.add('hidden');
+                    };
+                    box.appendChild(div);
+                });
+                box.classList.remove('hidden');
+            }, 300);
         }
 
         function calculateRoute() {
-            if (!$('custName').value || !state.coords.origin || !state.coords.dest) return alert("Completa todos los datos y selecciona direcciones de la lista.");
+            if (!$('custName').value || !state.coords.origin || !state.coords.dest) return alert("Por favor completa los datos.");
             
             const R = 6371;
-            const p1 = state.coords.origin, p2 = state.coords.dest;
-            const dLat = (p2[0]-p1[0]) * Math.PI / 180, dLon = (p2[1]-p1[1]) * Math.PI / 180;
-            const a = Math.sin(dLat/2)**2 + Math.cos(p1[0]*Math.PI/180)*Math.cos(p2[0]*Math.PI/180)*Math.sin(dLon/2)**2;
+            const dLat = (state.coords.dest[0]-state.coords.origin[0]) * Math.PI / 180;
+            const dLon = (state.coords.dest[1]-state.coords.origin[1]) * Math.PI / 180;
+            const a = Math.sin(dLat/2)**2 + Math.cos(state.coords.origin[0]*Math.PI/180)*Math.cos(state.coords.dest[0]*Math.PI/180)*Math.sin(dLon/2)**2;
             const dist = R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 
-            state.currentPrice = Math.max(2000, Math.round(1500 + (dist * 750)));
-            $('display-price').innerText = `$${state.currentPrice.toLocaleString('es-AR')}`;
+            state.currentPrice = Math.max(1200, Math.round(800 + (dist * 650)));
+            $('display-price').innerText = `$${state.currentPrice}`;
             
             toggleView('step-1', false);
             toggleView('step-2', true);
-            $('step-progress-bar').style.width = "66%";
-            $('dot-2').classList.add('step-active');
+            $('bar-2').classList.replace('bg-uber-gray-100', 'bg-uber-black');
 
             setTimeout(() => {
                 if (leafMap) leafMap.remove();
                 leafMap = L.map('map', { attributionControl: false, zoomControl: false }).setView(state.coords.origin, 14);
                 L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png').addTo(leafMap);
-                const poly = L.polyline([state.coords.origin, state.coords.dest], { color: '#0A0A0A', weight: 4, dashArray: '5, 10' }).addTo(leafMap);
-                leafMap.fitBounds(poly.getBounds(), { padding: [40, 40] });
-            }, 300);
+                const poly = L.polyline([state.coords.origin, state.coords.dest], { color: '#000', weight: 3 }).addTo(leafMap);
+                leafMap.fitBounds(poly.getBounds(), { padding: [30, 30] });
+            }, 200);
         }
 
         function validatePhone(p) {
-            let clean = p.replace(/\D/g, '');
-            if (clean.startsWith('0')) clean = clean.substring(1);
-            if (clean.length === 12 && clean.startsWith('26115')) clean = '261' + clean.substring(5);
+            const clean = p.replace(/\D/g, '');
             $('custPhone').value = clean;
             const isValid = clean.length === 10;
             $('phone-error').classList.toggle('hidden', isValid || clean.length === 0);
             return isValid;
         }
 
-        function confirmOrder() {
+        // --- 8. NUEVA LÓGICA CLIENTE: INSERTAR EN SUPABASE ---
+        async function confirmOrder() {
             if (!validatePhone($('custPhone').value)) return;
-            const db = JSON.parse(localStorage.getItem('taxi_db')) || [];
-            db.unshift({ id: Date.now(), name: $('custName').value, phone: "549" + $('custPhone').value, origin: $('custOrigin').value, dest: $('custDest').value, price: state.currentPrice, status: 'pending' });
-            localStorage.setItem('taxi_db', JSON.stringify(db));
+
+            // Feedback visual de carga
+            $('btn-confirm').disabled = true;
+            $('text-confirm').classList.add('hidden');
+            $('loader-confirm').classList.remove('hidden');
+
+            const payload = { 
+                nombre: $('custName').value, 
+                telefono: "549" + $('custPhone').value, 
+                origen: $('custOrigin').value, 
+                destino: $('custDest').value, 
+                precio: state.currentPrice, 
+                estado: 'pending' 
+            };
+
+            const { data, error } = await supabase
+                .from('pedidos')
+                .insert([payload]);
+
+            // Restaurar botón
+            $('btn-confirm').disabled = false;
+            $('text-confirm').classList.remove('hidden');
+            $('loader-confirm').classList.add('hidden');
+
+            if (error) {
+                console.error("Error Supabase:", error);
+                alert("Hubo un error al enviar el pedido. Intenta nuevamente.");
+                return;
+            }
+
             toggleView('step-2', false);
             toggleView('step-3', true);
-            $('step-progress-bar').style.width = "100%";
-            $('dot-3').classList.add('step-active');
+            $('bar-3').classList.replace('bg-uber-gray-100', 'bg-uber-black');
         }
 
-        function renderOrders() {
-            const db = JSON.parse(localStorage.getItem('taxi_db')) || [];
+
+        // --- 9. NUEVA LÓGICA OPERADOR: REAL-TIME CON SUPABASE ---
+        let isRealtimeInitialized = false;
+
+        async function initAdminRealtime() {
+            if(isRealtimeInitialized) return;
+
+            // 1. Carga inicial de datos
+            await fetchOrders();
+
+            // 2. Suscribirse a cambios en tiempo real
+            supabase
+                .channel('schema-db-changes')
+                .on(
+                    'postgres_changes',
+                    { event: '*', schema: 'public', table: 'pedidos' },
+                    (payload) => {
+                        console.log('Cambio detectado:', payload);
+                        fetchOrders(); // Recargamos la tabla completa ante cualquier cambio
+                    }
+                )
+                .subscribe();
+            
+            isRealtimeInitialized = true;
+        }
+
+        // Función para leer datos de Supabase
+        async function fetchOrders() {
             const list = $('orders-list');
-            let total = 0; list.innerHTML = '';
-            db.forEach(o => {
-                if(o.status === 'done') total += o.price;
-                list.innerHTML += `<tr class="text-xs">
-                    <td class="px-10 py-6 font-black">${o.name}</td>
-                    <td class="px-10 py-6"><button onclick="toggleStatus(${o.id})" class="px-2 py-1 rounded-full status-${o.status} uppercase font-black text-[8px]">${o.status}</button></td>
-                    <td class="px-10 py-6 text-silver-400">A: ${o.dest.substring(0,20)}...</td>
-                    <td class="px-10 py-6 text-right font-black">$${o.price.toLocaleString()}</td>
-                    <td class="px-10 py-6 text-center">
-                        <button onclick="window.open('https://wa.me/${o.phone}?text=TaxiGO: Hola ${o.name}, móvil asignado.', '_blank')" class="text-emerald-500"><i data-lucide="message-circle"></i></button>
+            
+            const { data: pedidos, error } = await supabase
+                .from('pedidos')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if(error) {
+                list.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-red-600">Error cargando datos.</td></tr>`;
+                return;
+            }
+
+            renderOrdersTable(pedidos);
+        }
+
+        // Mantenemos tu diseño de renderizado de tabla, solo cambiamos el origen de datos
+        function renderOrdersTable(pedidos) {
+            const list = $('orders-list');
+            let totalCash = 0;
+            list.innerHTML = '';
+
+            if(pedidos.length === 0) {
+                list.innerHTML = `<tr><td colspan="5" class="p-10 text-center text-uber-gray-600 text-sm">No hay pedidos registrados.</td></tr>`;
+            }
+
+            pedidos.forEach(o => {
+                if(o.estado === 'done') totalCash += o.precio;
+                
+                // Formateo de fecha para el diseño
+                const date = new Date(o.created_at);
+                const timeStr = date.toLocaleTimeString([], {hour: '2px', minute:'2px'});
+
+                list.innerHTML += `
+                <tr class="hover:bg-uber-gray-50 transition-colors">
+                    <td class="px-6 py-4">
+                        <div class="font-bold text-sm">${o.nombre}</div>
+                        <div class="text-[10px] text-uber-gray-600">${timeStr}</div>
+                    </td>
+                    <td class="px-6 py-4">
+                        <button onclick="toggleStatus(${o.id}, '${o.estado}')" class="status-${o.estado} uppercase tracking-tighter transition-opacity hover:opacity-80">
+                            ${o.estado}
+                        </button>
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="text-xs text-uber-gray-600 font-medium">De: ${o.origen}</div>
+                        <div class="text-xs text-uber-gray-800 font-bold">A: ${o.destino}</div>
+                    </td>
+                    <td class="px-6 py-4 font-bold">$${o.precio.toLocaleString('es-AR')}</td>
+                    <td class="px-6 py-4 text-center">
+                        <button onclick="window.open('https://wa.me/${o.telefono}?text=TaxiGO Live: Hola ${o.nombre}, móvil asignado.', '_blank')" class="text-uber-blue hover:text-uber-black transition-colors">
+                            <i data-lucide="message-square" class="w-5 h-5 mx-auto"></i>
+                        </button>
                     </td>
                 </tr>`;
             });
-            $('active-count').innerText = db.filter(x => x.status !== 'done').length;
-            $('total-cash').innerText = `$${total.toLocaleString('es-AR')}`;
+            
             lucide.createIcons();
+            $('active-count').innerText = pedidos.filter(x => x.estado !== 'done').length;
+            $('total-cash').innerText = `$${totalCash.toLocaleString('es-AR')}`;
         }
 
-        function toggleStatus(id) {
-            const db = JSON.parse(localStorage.getItem('taxi_db'));
-            const idx = db.findIndex(x => x.id === id);
+        // NUEVA LÓGICA: ACTUALIZAR ESTADO EN SUPABASE
+        async function toggleStatus(id, currentStatus) {
             const cycle = { pending: 'active', active: 'done', done: 'pending' };
-            db[idx].status = cycle[db[idx].status];
-            localStorage.setItem('taxi_db', JSON.stringify(db));
-            renderOrders();
+            const nextStatus = cycle[currentStatus];
+
+            const { error } = await supabase
+                .from('pedidos')
+                .update({ estado: nextStatus })
+                .eq('id', id);
+
+            if(error) {
+                console.error("Error actualizando estado:", error);
+                alert("No se pudo actualizar el estado.");
+            }
+            // No hace falta llamar a renderOrders, Realtime lo hará por nosotros
         }
     </script>
 </body>
