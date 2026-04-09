@@ -1,0 +1,65 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap');
+
+:root {
+    --primary: #facc15;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+.bg-primary { background-color: var(--primary); }
+.text-primary { color: var(--primary); }
+
+.step-hidden { display: none; }
+
+/* Marquee Animation */
+@keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+}
+
+.animate-marquee {
+    animation: marquee 30s linear infinite;
+}
+
+.logo-item {
+    font-size: 2rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    font-style: italic;
+    letter-spacing: -0.05em;
+    color: #0f172a;
+    opacity: 0.2;
+    transition: all 0.4s;
+}
+
+.logo-item:hover { opacity: 1; color: var(--primary); transform: scale(1.1); }
+
+/* Mapa */
+#map {
+    width: 100%;
+    height: 250px;
+    border-radius: 2rem;
+    border: 4px solid black;
+    z-index: 10;
+}
+
+/* Fade In */
+.animate-fade-in {
+    animation: fadeIn 0.8s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Custom Markers */
+.custom-marker {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid white;
+    background: black;
+}
