@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taxi Widget Cliente - Mendoza</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmTzHBhtQ4E8BG6DL0xdrEOYdZmQEBXkI&libraries=places,geocoding"></script>
+    <style>
+        :root { --primary: #FFD600; --dark: #1A1A1A; --radius: 12px; }
+        body { font-family: 'Inter', system-ui, sans-serif; margin: 0; padding: 10px; background: transparent; }
+        .widget-card { background: white; padding: 20px; border-radius: var(--radius); box-shadow: 0 8px 30px rgba(0,0,0,0.12); border: 1px solid #eee; }
+        h2 { font-size: 1.1rem; margin-bottom: 15px; color: var(--dark); text-align: center; font-weight: 800; }
+        .input-group { margin-bottom: 15px; position: relative; }
+        label { font-size: 0.7rem; font-weight: 700; color: #888; display: block; margin-bottom: 4px; text-transform: uppercase; }
+        input { width: 100%; padding: 12px; border: 2px solid #f2f2f2; border-radius: 8px; box-sizing: border-box; font-size: 14px; outline: none; }
+        input:focus { border-color: var(--primary); }
+        .gps-btn { position: absolute; right: 10px; top: 28px; background: none; border: none; cursor: pointer; font-size: 18px; }
+        #price-estimate { display: none; background: #fdfdfd; border: 2px dashed #eee; padding: 15px; border-radius: 8px; margin-bottom: 15px; text-align: center; }
+        .price-value { font-size: 1.6rem; font-weight: 900; color: var(--dark); display: block; }
+        #passenger-area { display: none; animation: fadeIn 0.3s ease-out; }
+        button { width: 100%; padding: 15px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 14px; }
+        .btn-calc { background: #f0f0f0; color: #333; margin-bottom: 10px; }
+        .btn-order { background: var(--dark); color: white; }
+        #status-box { display: none; padding: 20px; border-radius: 8px; text-align: center; font-size: 0.95rem; }
+        .pending { background: #fff8e1; border: 1px solid #ffe082; color: #856404; }
+        .confirmed { background: #e8f5e9; border: 1px solid #a5d6a7; color: #1b5e20; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<div class="widget-card">
+    <h2>SOLICITAR TRASLADO</h2>
+    
+    <div id="booking-ui">
+        <div class="input-group">
+            <label>Punto de Recogida</label>
+            <input type="text" id="origin" placeholder="📍 ¿Dónde te buscamos?">
+            <button class="gps-btn" onclick="getGPS()">🎯</button>
+        </div>
+
+        <div class="input-group">
+            <label>Destino</label>
+            <input type="text" id="destination" placeholder="🏁 ¿A dónde vas?">
+        </div>
+
+        <div id="price-estimate">
+            <small id="route-details" style="color:#888"></small>
+            <span class="price-value" id="estimated-total">$0</span>
+        </div>
+
+        <div id="passenger-area" class="input-group">
+            <label>Nombre del Pasajero</label>
+            <input type="text" id="passenger_name" placeholder="Tu nombre">
+        </div>
+
+        <button class="btn-calc" id="btn-calc" onclick="calculate()">Calcular Tarifa</button>
+        <button class="btn-order" id="btn-order" style="display:none" onclick="request()">Confirmar Viaje</button>
+    </div>
+
+    <div id="status-box">
+        <div id="status-text"></div>
+    </div>
+</div>
+
+<script>
+    const MENDOZA_BOUNDS = { north: -32.75, south: -33.10, west: -68.95, east: -68.70 };
+    let fare = 0;
+
+    function init() {
+        const opts = { componentRestrictions: { country: "ar" }, bounds: MENDOZA_BOUNDS, strictBounds: true };
+        new google.maps.places.Autocomplete(document.getElementById('origin'), opts);
+        new google.maps.places.Autocomplete(document.getElementById('destination'), opts);
+        getGPS();
+    }
+
+    function getGPS() {
+        if (!navigator.geolocation) return;
+        navigator.geolocation.getCurrentPosition(async (pos) => {
+            const geocoder = new google.maps.Geocoder();
+            const { results } = await geocoder.geocode({ location: { lat: pos.coords.latitude, lng: pos.coords.longitude } });
+            if (results[0]) document.getElementById('origin').value = results[0].formatted_address;
+        });
+    }
+
+    async function calculate() {
+        const o = document.getElementById('origin').value;
+        const d = document.getElementById('destination').value;
+        if(!o || !d) return alert("Completa los campos");
+
+        const service = new google.maps.DistanceMatrixService();
+        service.getDistanceMatrix({ origins: [o], destinations: [d], travelMode: 'DRIVING' }, (res, status) => {
+            if (status === 'OK' && res.rows[0].elements[0].status === "OK") {
+                const el = res.rows[0].elements[0];
+                const kms = parseFloat(el.distance.text.replace(',', '.'));
+                fare = (1200 + (kms * 115)).toFixed(0); // Tarifa Mendoza
+
+                document.getElementById('route-details').innerText = `${el.distance.text} • ${el.duration.text}`;
+                document.getElementById('estimated-total').innerText = `$${fare}`;
+                document.getElementById('price-estimate').style.display = 'block';
+                document.getElementById('passenger-area').style.display = 'block';
+                document.getElementById('btn-calc').style.display = 'none';
+                document.getElementById('btn-order').style.display = 'block';
+            }
+        });
+    }
+
+    function request() {
+        const name = document.getElementById('passenger_name').value;
+        if(!name) return alert("Ingresa tu nombre");
+
+        const payload = {
+            id: Date.now(),
+            passenger: name,
+            origin: document.getElementById('origin').value,
+            dest: document.getElementById('destination').value,
+            price: fare
+        };
+
+        document.getElementById('booking-ui').style.display = 'none';
+        const box = document.getElementById('status-box');
+        box.style.display = 'block';
+        box.className = 'pending';
+        document.getElementById('status-text').innerText = "Esperando confirmación de central...";
+
+        window.parent.postMessage({ type: "NEW_ORDER", payload }, "*");
+    }
+
+    window.addEventListener("message", (e) => {
+        if (e.data.type === "DISPATCH_CONFIRM") {
+            const box = document.getElementById('status-box');
+            box.className = 'confirmed';
+            document.getElementById('status-text').innerHTML = `<strong>¡Confirmado!</strong><br>${e.data.message}`;
+        }
+    });
+
+    window.onload = init;
+</script>
+</body>
+</html>
