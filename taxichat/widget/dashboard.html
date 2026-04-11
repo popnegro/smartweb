@@ -3,55 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Despacho Mendoza - Dashboard</title>
+    <title>Despacho - Dashboard White-Label</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Configuración personalizada para extender el tema si lo necesitas
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#0f172a',
+                            card: '#1e293b',
+                            accent: '#fbbf24', // Este color se puede inyectar dinámicamente
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        :root { --bg: #0f172a; --card: #1e293b; --accent: #fbbf24; --text: #f8fafc; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
-        @media (min-width: 1024px) { body { flex-direction: row; } }
-        .main-panel { flex: 1; padding: 20px; overflow-y: auto; }
-        .side-panel { width: 100%; background: #cbd5e1; padding: 15px; border-top: 5px solid var(--accent); }
-        @media (min-width: 1024px) { .side-panel { width: 420px; border-top: none; border-left: 5px solid var(--accent); } }
-        .stat-card { background: var(--card); padding: 15px; border-radius: 12px; border: 1px solid #334155; margin-bottom: 20px; }
-        .order-card { background: var(--card); border: 1px solid #334155; border-radius: 8px; margin-bottom: 10px; padding: 15px; }
-        iframe { width: 100%; height: 550px; border: none; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        /* Estilizamos el scrollbar para mantener la estética dark */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
     </style>
 </head>
-<body>
+<body class="bg-brand-dark text-slate-50 h-screen flex flex-col lg:flex-row overflow-hidden font-sans">
 
-<div class="main-panel">
-    <h1>🚖 Central Despacho Vercel</h1>
-    <div id="stats" class="stat-card">Pedidos hoy: <span id="count">0</span></div>
-    <div id="list"></div>
-</div>
+    <main class="flex-1 p-6 overflow-y-auto">
+        <header class="mb-8">
+            <h1 class="text-2xl font-black flex items-center gap-3">
+                <span class="text-3xl">🚖</span> Central Despacho
+            </h1>
+        </header>
 
-<div class="side-panel">
-    <iframe src="/widget" id="w-frame"></iframe>
-</div>
+        <section id="stats" class="bg-brand-card border border-slate-700 p-4 rounded-xl mb-6 shadow-sm">
+            <p class="text-slate-400 text-sm font-bold uppercase tracking-wider">Pedidos hoy</p>
+            <span id="count" class="text-3xl font-black text-brand-accent">0</span>
+        </section>
 
-<script>
-    window.addEventListener("message", (e) => {
-        if (e.data.type === "NEW_ORDER") {
-            const p = e.data.payload;
-            const container = document.getElementById('list');
-            const card = document.createElement('div');
-            card.className = 'order-card';
-            card.innerHTML = `
-                <strong>${p.passenger}</strong><br>
-                <small>De: ${p.origin}<br>A: ${p.dest}</small><br>
-                <input type="text" id="in-${p.id}" placeholder="Móvil..." style="margin-top:10px">
-                <button onclick="send('${p.id}', '${p.passenger}')">Asignar</button>
-            `;
-            container.prepend(card);
+        <div id="list" class="space-y-4">
+            </div>
+    </main>
+
+    <aside class="w-full lg:w-[420px] bg-slate-200 p-4 border-t-4 lg:border-t-0 lg:border-l-4 border-brand-accent">
+       
+    </aside>
+
+    <script>
+        let counter = 0;
+
+        window.addEventListener("message", (e) => {
+            if (e.data.type === "NEW_ORDER") {
+                const p = e.data.payload;
+                counter++;
+                document.getElementById('count').innerText = counter;
+
+                const container = document.getElementById('list');
+                const card = document.createElement('div');
+                
+                // Clases de Tailwind para la card dinámica
+                card.className = "bg-brand-card border border-slate-700 p-5 rounded-xl shadow-lg transition-all hover:border-brand-accent group animate-fade-in";
+                
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <h3 class="font-bold text-lg text-white">${p.passenger}</h3>
+                            <p class="text-xs text-slate-400 uppercase font-semibold">Ruta solicitada</p>
+                        </div>
+                        <span class="bg-slate-800 text-brand-accent text-[10px] px-2 py-1 rounded font-bold">NUEVO</span>
+                    </div>
+                    
+                    <div class="text-sm text-slate-300 space-y-1 mb-4">
+                        <p><span class="text-brand-accent">📍</span> ${p.origin}</p>
+                        <p><span class="text-brand-accent">🏁</span> ${p.dest}</p>
+                    </div>
+
+                    <div class="flex gap-2">
+                        <input type="text" id="in-${p.id}" 
+                            placeholder="Móvil y tiempo..." 
+                            class="flex-1 bg-brand-dark border border-slate-600 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-brand-accent transition-colors">
+                        
+                        <button onclick="send('${p.id}', '${p.passenger}')" 
+                            class="bg-brand-accent text-brand-dark font-bold px-4 py-2 rounded-lg text-sm hover:brightness-110 active:scale-95 transition-all">
+                            Asignar
+                        </button>
+                    </div>
+                `;
+                container.prepend(card);
+            }
+        });
+
+        function send(id, name) {
+            const input = document.getElementById(`in-${id}`);
+            const msg = input.value;
+            
+            if(!msg) return alert("Ingresa los datos del móvil");
+
+            document.getElementById('w-frame').contentWindow.postMessage({
+                type: "DISPATCH_CONFIRM",
+                message: msg
+            }, "*");
+
+            // Feedback visual de asignación
+            const card = input.closest('.bg-brand-card');
+            card.classList.add('opacity-50', 'grayscale-[0.5]');
+            input.disabled = true;
+            input.placeholder = "Asignado con éxito";
+            input.value = "";
         }
-    });
-
-    function send(id, name) {
-        const msg = document.getElementById(`in-${id}`).value;
-        document.getElementById('w-frame').contentWindow.postMessage({
-            type: "DISPATCH_CONFIRM",
-            message: msg
-        }, "*");
-    }
-</script>
+    </script>
 </body>
 </html>
