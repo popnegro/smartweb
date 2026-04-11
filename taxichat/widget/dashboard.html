@@ -3,76 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Despacho Mendoza - UX Pro</title>
+    <title>Despacho Mendoza - Dashboard</title>
     <style>
-        :root { --bg: #0f172a; --card: #1e293b; --accent: #fbbf24; --text: #f8fafc; --radius: 12px; }
+        :root { --bg: #0f172a; --card: #1e293b; --accent: #fbbf24; --text: #f8fafc; }
         * { box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
-
         @media (min-width: 1024px) { body { flex-direction: row; } }
 
         .main-panel { flex: 1; padding: 20px; overflow-y: auto; }
-        .side-panel { width: 100%; background: #cbd5e1; padding: 15px; border-top: 4px solid var(--accent); }
-        @media (min-width: 1024px) { .side-panel { width: 420px; border-top: none; border-left: 4px solid var(--accent); } }
+        .side-panel { width: 100%; background: #cbd5e1; padding: 15px; border-top: 5px solid var(--accent); }
+        @media (min-width: 1024px) { .side-panel { width: 420px; border-top: none; border-left: 5px solid var(--accent); } }
 
-        h1 { font-size: 1.5rem; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
         .metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
-        .stat-card { background: var(--card); padding: 15px; border-radius: var(--radius); border: 1px solid #334155; }
+        .stat-card { background: var(--card); padding: 15px; border-radius: 12px; border: 1px solid #334155; }
         .stat-card div { font-size: 1.6rem; font-weight: bold; color: var(--accent); }
 
-        /* Estilos de Tabla (Desktop) */
-        .orders-container { width: 100%; border-radius: var(--radius); overflow: hidden; }
-        table { width: 100%; border-collapse: collapse; display: none; background: var(--card); }
+        /* Estilos Tabla Desktop */
+        table { width: 100%; border-collapse: collapse; background: var(--card); display: none; border-radius: 12px; overflow: hidden; }
         @media (min-width: 768px) { table { display: table; } }
         th { background: #334155; padding: 15px; text-align: left; font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; }
-        td { padding: 15px; border-bottom: 1px solid #334155; vertical-align: middle; }
+        td { padding: 15px; border-bottom: 1px solid #334155; vertical-align: top; }
 
-        /* Estilos de Cards (Mobile Collapse) */
+        /* Estilos Cards Mobile (Collapse) */
         .mobile-list { display: flex; flex-direction: column; gap: 12px; }
         @media (min-width: 768px) { .mobile-list { display: none; } }
-
-        .order-card { background: var(--card); border-radius: var(--radius); border: 1px solid #334155; overflow: hidden; transition: 0.3s; }
+        .order-card { background: var(--card); border-radius: 12px; border: 1px solid #334155; overflow: hidden; }
         .order-header { padding: 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-        .order-header .info { display: flex; flex-direction: column; }
-        .order-header .passenger-name { font-weight: bold; font-size: 1.1rem; }
-        .order-header .price-tag { color: #22c55e; font-weight: 800; font-size: 1.1rem; }
-        
-        .order-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; background: #161e2e; }
+        .order-content { max-height: 0; overflow: hidden; transition: 0.3s ease-out; background: #161e2e; }
         .order-card.active .order-content { max-height: 500px; padding: 15px; border-top: 1px solid #334155; }
-        .order-card.active { border-color: var(--accent); box-shadow: 0 0 15px rgba(251, 191, 36, 0.1); }
 
-        .map-link { color: #38bdf8; text-decoration: none; font-size: 0.85rem; display: block; margin: 10px 0; }
-        .reply-box { display: flex; gap: 10px; margin-top: 10px; }
-        .reply-input { background: #0f172a; border: 1px solid #475569; color: white; padding: 12px; border-radius: 8px; flex: 1; }
-        .btn-send { background: var(--accent); border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; }
-
-        iframe { width: 100%; height: 500px; border: none; border-radius: var(--radius); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .badge { font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; margin-top: 4px; width: fit-content; }
-        .badge-new { background: #fbbf24; color: #000; }
-        .badge-done { background: #22c55e; color: #fff; }
+        .reply-box { display: flex; gap: 8px; margin-top: 10px; }
+        .reply-input { background: #0f172a; border: 1px solid #475569; color: white; padding: 10px; border-radius: 8px; flex: 1; }
+        .btn-send { background: var(--accent); border: none; padding: 10px 15px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        iframe { width: 100%; height: 500px; border: none; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .badge { font-size: 0.6rem; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; background: var(--accent); color: #000; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div class="main-panel">
-    <h1>🚖 Despacho Mendoza</h1>
+    <h1>🚖 Central Despacho</h1>
     <div class="metrics">
-        <div class="stat-card"><small>VIAJES</small><div id="t-orders">0</div></div>
+        <div class="stat-card"><small>PEDIDOS</small><div id="t-orders">0</div></div>
         <div class="stat-card"><small>TOTAL</small><div id="t-rev">$0</div></div>
     </div>
 
-    <table id="desktop-table">
-        <thead>
-            <tr><th>Pasajero</th><th>Ruta</th><th>Precio</th><th>Acción</th></tr>
-        </thead>
+    <table id="dt-table">
+        <thead><tr><th>Pasajero</th><th>Ruta</th><th>Tarifa</th><th>Acción</th></tr></thead>
         <tbody id="list-desktop"></tbody>
     </table>
 
-    <div id="list-mobile" class="mobile-list">
-        </div>
+    <div id="list-mobile" class="mobile-list"></div>
 </div>
 
-
+<div class="side-panel">
+    <iframe src="widget.html" id="w-frame"></iframe>
+</div>
 
 <script>
     let rev = 0; let count = 0;
@@ -83,101 +69,43 @@
             count++; rev += parseInt(p.price);
             document.getElementById('t-orders').innerText = count;
             document.getElementById('t-rev').innerText = `$${rev.toLocaleString()}`;
-            
-            renderDesktop(p);
-            renderMobile(p);
+            renderOrder(p);
         }
     });
 
-    function renderDesktop(p) {
-        const tbody = document.getElementById('list-desktop');
+    function renderOrder(p) {
+        const qO = encodeURIComponent(p.origin);
+        const qD = encodeURIComponent(p.dest);
+        const mapUrl = `https://www.google.com/maps/dir/?api=1&origin=${qO}&destination=${qD}`;
+
+        // Render Desktop
+        const dtBody = document.getElementById('list-desktop');
         const row = document.createElement('tr');
         row.id = `dt-${p.id}`;
-        row.innerHTML = `
-            <td><strong>${p.passenger}</strong></td>
-            <td><small>📍 ${p.origin}<br>🏁 ${p.dest}</small></td>
-            <td><strong style="color:#22c55e">$${p.price}</strong></td>
-            <td>
-                <div class="reply-box" id="act-dt-${p.id}">
-                    <input type="text" class="reply-input" id="in-dt-${p.id}" placeholder="Móvil...">
-                    <button class="btn-send" onclick="send('${p.id}', '${p.passenger}', 'dt')">OK</button>
-                </div>
-            </td>
-        `;
-        tbody.prepend(row);
-    }
+        row.innerHTML = `<td><strong>${p.passenger}</strong></td><td><small>📍 ${p.origin}<br>🏁 ${p.dest}</small><br><a href="${mapUrl}" target="_blank" style="color:#38bdf8; font-size:0.7rem">Ver Mapa</a></td><td>$${p.price}</td><td><div class="reply-box" id="act-dt-${p.id}"><input type="text" class="reply-input" id="in-dt-${p.id}" placeholder="Móvil..."><button class="btn-send" onclick="send('${p.id}', '${p.passenger}', 'dt')">OK</button></div></td>`;
+        dtBody.prepend(row);
 
-    function renderMobile(p) {
-        const container = document.getElementById('list-mobile');
+        // Render Mobile
+        const mbList = document.getElementById('list-mobile');
         const card = document.createElement('div');
         card.className = 'order-card';
         card.id = `mb-${p.id}`;
-        
-        const qO = encodeURIComponent(p.origin);
-        const qD = encodeURIComponent(p.dest);
-
-        card.innerHTML = `
-            <div class="order-header" onclick="toggleCard('${p.id}')">
-                <div class="info">
-                    <span class="passenger-name">${p.passenger}</span>
-                    <span id="badge-mb-${p.id}" class="badge badge-new">Pendiente</span>
-                </div>
-                <span class="price-tag">$${p.price}</span>
-            </div>
-            <div class="order-content">
-                <div style="font-size: 0.9rem; color: #94a3b8;">
-                    <strong>Recogida:</strong> ${p.origin}<br><br>
-                    <strong>Destino:</strong> ${p.dest}
-                </div>
-                <a href="https://www.google.com/maps/dir/?api=1&origin=${qO}&destination=${qD}" target="_blank" class="map-link">🗺️ Abrir Navegador GPS</a>
-                <div class="reply-box" id="act-mb-${p.id}">
-                    <input type="text" class="reply-input" id="in-mb-${p.id}" placeholder="Ej: Móvil 10 en 3 min">
-                    <button class="btn-send" onclick="send('${p.id}', '${p.passenger}', 'mb')">Enviar</button>
-                </div>
-            </div>
-        `;
-        container.prepend(card);
+        card.innerHTML = `<div class="order-header" onclick="toggleCard('${p.id}')"><div><span style="font-weight:bold">${p.passenger}</span><br><span class="badge" id="badge-${p.id}">Pendiente</span></div><span style="color:#22c55e;font-weight:bold">$${p.price}</span></div><div class="order-content">📍 ${p.origin}<br>🏁 ${p.dest}<br><a href="${mapUrl}" target="_blank" style="color:#38bdf8;display:block;margin:10px 0">Abrir GPS</a><div class="reply-box" id="act-mb-${p.id}"><input type="text" class="reply-input" id="in-mb-${p.id}" placeholder="Móvil..."><button class="btn-send" onclick="send('${p.id}', '${p.passenger}', 'mb')">Enviar</button></div></div>`;
+        mbList.prepend(card);
     }
 
     function toggleCard(id) {
-        const card = document.getElementById(`mb-${id}`);
-        // Cerrar otras cards abiertas
-        document.querySelectorAll('.order-card').forEach(c => {
-            if(c !== card) c.classList.remove('active');
-        });
-        card.classList.toggle('active');
+        document.getElementById(`mb-${id}`).classList.toggle('active');
     }
 
     function send(id, name, type) {
-        const input = document.getElementById(`in-${type}-${id}`);
-        const msg = input.value;
-        if(!msg) return alert("Escribe los datos del móvil");
-
-        // Enviar mensaje al Widget
-        document.getElementById('w-frame').contentWindow.postMessage({
-            type: "DISPATCH_CONFIRM",
-            message: `Hola ${name}, ${msg}`
-        }, "*");
-
-        // Actualizar UI Desktop
-        const actDt = document.getElementById(`act-dt-${id}`);
-        if(actDt) actDt.innerHTML = `<span style="color:#22c55e">✓ ${msg}</span>`;
-
-        // Actualizar UI Mobile
-        const actMb = document.getElementById(`act-mb-${id}`);
-        if(actMb) actMb.innerHTML = `<div style="color:#22c55e; font-weight:bold; padding:10px; text-align:center">✓ ASIGNADO: ${msg}</div>`;
-        
-        const badge = document.getElementById(`badge-mb-${id}`);
-        if(badge) {
-            badge.innerText = "Asignado";
-            badge.className = "badge badge-done";
-        }
-        
-        // Cerrar card después de enviar
-        setTimeout(() => {
-            const card = document.getElementById(`mb-${id}`);
-            if(card) card.classList.remove('active');
-        }, 1000);
+        const msg = document.getElementById(`in-${type}-${id}`).value;
+        if(!msg) return alert("Ingresa datos");
+        document.getElementById('w-frame').contentWindow.postMessage({ type: "DISPATCH_CONFIRM", message: `Hola ${name}, ${msg}` }, "*");
+        document.getElementById(`act-dt-${id}`).innerHTML = `<span style="color:#22c55e">✓ ${msg}</span>`;
+        document.getElementById(`act-mb-${id}`).innerHTML = `<span style="color:#22c55e">✓ ${msg}</span>`;
+        const badge = document.getElementById(`badge-${id}`);
+        if(badge) { badge.innerText = "Asignado"; badge.style.background = "#22c55e"; badge.style.color = "#fff"; }
     }
 </script>
 </body>
