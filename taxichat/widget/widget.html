@@ -2,124 +2,58 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Taxi Mendoza - Widget</title>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmTzHBhtQ4E8BG6DL0xdrEOYdZmQEBXkI&libraries=places,geocoding"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taxi Widget</title>
     <style>
-        :root { --primary: #FFD600; --dark: #111827; --radius: 16px; }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'Inter', -apple-system, sans-serif; margin: 0; padding: 10px; background: transparent; }
-        .widget-card { width: 100%; max-width: 400px; background: white; padding: 20px; border-radius: var(--radius); box-shadow: 0 10px 25px rgba(0,0,0,0.1); border: 1px solid #f0f0f0; margin: auto; }
-        h2 { font-size: 1.1rem; margin-bottom: 20px; color: var(--dark); text-align: center; font-weight: 800; text-transform: uppercase; }
-        .input-group { margin-bottom: 16px; position: relative; }
-        label { font-size: 0.7rem; font-weight: 700; color: #6b7280; display: block; margin-bottom: 6px; text-transform: uppercase; }
-        input { width: 100%; padding: 14px; border: 2px solid #f3f4f6; border-radius: 12px; font-size: 16px; outline: none; background: #f9fafb; transition: 0.2s; }
-        input:focus { border-color: var(--primary); background: #fff; }
-        .gps-btn { position: absolute; right: 8px; top: 28px; background: white; border: none; cursor: pointer; font-size: 20px; height: 40px; width: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
-        #price-estimate { display: none; background: #fffbeb; border: 2px dashed #fef3c7; padding: 16px; border-radius: 12px; margin-bottom: 20px; text-align: center; }
-        .price-value { font-size: 1.8rem; font-weight: 900; color: var(--dark); display: block; }
-        #passenger-area { display: none; margin-bottom: 15px; }
-        button.main-btn { width: 100%; padding: 16px; border: none; border-radius: 12px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: 0.2s; }
-        .btn-calc { background: #f3f4f6; color: var(--dark); margin-bottom: 10px; }
-        .btn-order { background: var(--dark); color: white; }
-        #status-box { display: none; padding: 20px; border-radius: 12px; text-align: center; font-weight: 600; line-height: 1.4; }
-        .pending { background: #fff8e1; color: #856404; border: 1px solid #ffe082; }
-        .confirmed { background: #ecfdf5; color: #065f46; border: 2px solid #10b981; }
+        body { font-family: sans-serif; padding: 20px; background: #fff; }
+        .input-group { margin-bottom: 10px; }
+        input { width: 100%; padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 8px; }
+        button { width: 100%; padding: 15px; background: #000; color: #fff; border: none; border-radius: 8px; cursor: pointer; }
     </style>
 </head>
 <body>
-
-<div class="widget-card">
-    <h2>Pedir Taxi</h2>
-    <div id="booking-ui">
-        <div class="input-group">
-            <label>Recogida</label>
-            <input type="text" id="origin" placeholder="¿Dónde estás?" autocomplete="off" inputmode="text" autocapitalize="words">
-            <button class="gps-btn" onclick="getGPS()" type="button">🎯</button>
-        </div>
-        <div class="input-group">
-            <label>Destino</label>
-            <input type="text" id="destination" placeholder="¿A dónde vas?" autocomplete="off" inputmode="text" autocapitalize="words">
-        </div>
-        <div id="price-estimate">
-            <span id="route-details" style="font-size:0.8rem; color:#92400e"></span>
-            <span class="price-value" id="estimated-total">$0</span>
-        </div>
-        <div id="passenger-area" class="input-group">
-            <label>Nombre Pasajero</label>
-            <input type="text" id="passenger_name" placeholder="Tu nombre" inputmode="text" autocapitalize="words">
-        </div>
-        <button class="main-btn btn-calc" id="btn-calc" onclick="calculate()">Calcular Tarifa</button>
-        <button class="main-btn btn-order" id="btn-order" style="display:none" onclick="sendOrder()">Confirmar Viaje</button>
+    <div id="ui">
+        <div class="input-group"><input type="text" id="origin" placeholder="Origen"></div>
+        <div class="input-group"><input type="text" id="destination" placeholder="Destino"></div>
+        <div class="input-group"><input type="text" id="passenger_name" placeholder="Tu nombre"></div>
+        <button onclick="enviar()">Confirmar Pedido</button>
     </div>
-    <div id="status-box"></div>
-</div>
+    <div id="status"></div>
 
-<script>
-    const MENDOZA_BOUNDS = { north: -32.75, south: -33.10, west: -68.95, east: -68.70 };
-    let finalFare = 0;
+    <script>
+        // Cargar Maps dinámicamente desde el backend de Vercel
+        async function init() {
+            const res = await fetch('/api/config');
+            const { mapsKey } = await res.json();
+            
+            const script = document.createElement('script');
+            script.src = `https://maps.googleapis.com/maps/api/js?key=${mapsKey}&libraries=places`;
+            script.onload = () => {
+                new google.maps.places.Autocomplete(document.getElementById('origin'));
+                new google.maps.places.Autocomplete(document.getElementById('destination'));
+            };
+            document.head.appendChild(script);
+        }
 
-    function init() {
-        const opts = { componentRestrictions: { country: "ar" }, bounds: MENDOZA_BOUNDS, strictBounds: true };
-        new google.maps.places.Autocomplete(document.getElementById('origin'), opts);
-        new google.maps.places.Autocomplete(document.getElementById('destination'), opts);
-        getGPS();
-    }
+        function enviar() {
+            const payload = {
+                id: Date.now(),
+                passenger: document.getElementById('passenger_name').value,
+                origin: document.getElementById('origin').value,
+                dest: document.getElementById('destination').value
+            };
+            window.parent.postMessage({ type: "NEW_ORDER", payload }, "*");
+            document.getElementById('ui').style.display = 'none';
+            document.getElementById('status').innerText = "Enviando...";
+        }
 
-    function getGPS() {
-        if (!navigator.geolocation) return;
-        const btn = document.querySelector('.gps-btn');
-        btn.innerText = "⌛";
-        navigator.geolocation.getCurrentPosition(async (pos) => {
-            const geocoder = new google.maps.Geocoder();
-            try {
-                const { results } = await geocoder.geocode({ location: { lat: pos.coords.latitude, lng: pos.coords.longitude } });
-                if (results[0]) document.getElementById('origin').value = results[0].formatted_address;
-            } catch (e) { console.error(e); }
-            btn.innerText = "🎯";
-        }, () => { btn.innerText = "🎯"; }, { enableHighAccuracy: true });
-    }
-
-    async function calculate() {
-        const o = document.getElementById('origin').value;
-        const d = document.getElementById('destination').value;
-        if(!o || !d) return alert("Ingresa origen y destino");
-        const service = new google.maps.DistanceMatrixService();
-        service.getDistanceMatrix({ origins: [o], destinations: [d], travelMode: 'DRIVING' }, (res, status) => {
-            if (status === 'OK' && res.rows[0].elements[0].status === "OK") {
-                const data = res.rows[0].elements[0];
-                const kms = parseFloat(data.distance.text.replace(',', '.'));
-                finalFare = (1200 + (kms * 115)).toFixed(0);
-                document.getElementById('route-details').innerText = `${data.distance.text} • ${data.duration.text}`;
-                document.getElementById('estimated-total').innerText = `$${finalFare}`;
-                document.getElementById('price-estimate').style.display = 'block';
-                document.getElementById('passenger-area').style.display = 'block';
-                document.getElementById('btn-calc').style.display = 'none';
-                document.getElementById('btn-order').style.display = 'block';
+        window.addEventListener("message", (e) => {
+            if (e.data.type === "DISPATCH_CONFIRM") {
+                document.getElementById('status').innerText = "Asignado: " + e.data.message;
             }
         });
-    }
 
-    function sendOrder() {
-        const name = document.getElementById('passenger_name').value;
-        if(!name) return alert("Ingresa tu nombre");
-        const payload = { id: Date.now(), passenger: name, origin: document.getElementById('origin').value, dest: document.getElementById('destination').value, price: finalFare };
-        document.getElementById('booking-ui').style.display = 'none';
-        const box = document.getElementById('status-box');
-        box.style.display = 'block';
-        box.className = 'pending';
-        box.innerText = "Esperando que el operador asigne un móvil...";
-        window.parent.postMessage({ type: "NEW_ORDER", payload }, "*");
-    }
-
-    window.addEventListener("message", (e) => {
-        if (e.data.type === "DISPATCH_CONFIRM") {
-            const box = document.getElementById('status-box');
-            box.className = 'confirmed';
-            box.innerHTML = `<strong>¡Viaje Confirmado!</strong><br>${e.data.message}`;
-        }
-    });
-    window.onload = init;
-</script>
+        init();
+    </script>
 </body>
 </html>
