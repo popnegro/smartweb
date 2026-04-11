@@ -3,68 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel de Despacho Mendoza</title>
+    <title>Panel de Despacho - Mendoza</title>
     <style>
         :root { --bg: #0f172a; --card: #1e293b; --accent: #fbbf24; --text: #f8fafc; }
-        
         * { box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; display: flex; flex-direction: column; height: 100vh; }
 
         @media (min-width: 1024px) { body { flex-direction: row; } }
 
-        .panel { flex: 1; padding: 25px; overflow-y: auto; }
-        .sidebar { width: 100%; background: #cbd5e1; padding: 15px; border-top: 5px solid var(--accent); }
-        @media (min-width: 1024px) { .sidebar { width: 420px; border-top: none; border-left: 5px solid var(--accent); } }
+        .main-panel { flex: 1; padding: 20px; overflow-y: auto; }
+        .side-panel { width: 100%; background: #cbd5e1; padding: 15px; border-top: 4px solid var(--accent); }
+        @media (min-width: 1024px) { .side-panel { width: 420px; border-top: none; border-left: 4px solid var(--accent); } }
 
         .metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
-        .stat { background: var(--card); padding: 15px; border-radius: 12px; border: 1px solid #334155; }
-        .stat small { color: #94a3b8; font-size: 0.7rem; font-weight: bold; }
-        .stat div { font-size: 1.5rem; font-weight: bold; color: var(--accent); }
+        .stat-card { background: var(--card); padding: 15px; border-radius: 12px; border: 1px solid #334155; }
+        .stat-card small { color: #94a3b8; font-size: 0.7rem; font-weight: bold; }
+        .stat-card div { font-size: 1.6rem; font-weight: bold; color: var(--accent); }
 
-        /* Responsive Table */
         table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: 12px; overflow: hidden; }
-        th { background: #334155; padding: 15px; text-align: left; font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; }
+        th { background: #334155; padding: 15px; text-align: left; font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; }
         td { padding: 15px; border-bottom: 1px solid #334155; vertical-align: top; }
 
         @media (max-width: 768px) {
             table, thead, tbody, th, td, tr { display: block; }
             thead { display: none; }
-            tr { margin-bottom: 15px; border: 1px solid #334155; border-radius: 12px; }
-            td { padding-left: 50%; position: relative; border: none; border-bottom: 1px solid #334155; }
-            td:before { content: attr(data-label); position: absolute; left: 15px; font-weight: bold; color: var(--accent); font-size: 0.7rem; }
-            td:last-child { border: none; }
+            tr { margin-bottom: 15px; border: 1px solid #334155; border-radius: 12px; padding: 10px; position: relative; }
+            td { padding: 8px 0; border: none; border-bottom: 1px dotted #334155; padding-left: 35%; position: relative; font-size: 0.9rem; }
+            td:before { content: attr(data-label); position: absolute; left: 0; font-weight: bold; color: var(--accent); font-size: 0.65rem; text-transform: uppercase; }
+            td:last-child { border: none; padding-left: 0; }
         }
 
-        .map-link { text-decoration: none; display: block; margin-bottom: 5px; font-size: 0.85rem; transition: 0.2s; }
-        .map-link:hover { opacity: 0.8; }
+        .map-link { color: #38bdf8; text-decoration: none; font-size: 0.8rem; display: block; margin-top: 5px; }
+        .reply-box { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+        .reply-input { background: #0f172a; border: 1px solid #475569; color: white; padding: 10px; border-radius: 8px; flex: 1; min-width: 140px; }
+        .btn-send { background: var(--accent); border: none; padding: 10px 15px; border-radius: 8px; font-weight: bold; cursor: pointer; color: #000; }
 
-        .reply-box { display: flex; gap: 8px; flex-wrap: wrap; }
-        .reply-input { background: #0f172a; border: 1px solid #475569; color: white; padding: 10px; border-radius: 6px; flex: 1; min-width: 150px; }
-        .btn-send { background: var(--accent); border: none; padding: 10px 15px; border-radius: 6px; font-weight: bold; cursor: pointer; }
-
-        iframe { width: 100%; height: 500px; border: none; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        iframe { width: 100%; height: 550px; border: none; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
     </style>
 </head>
 <body>
 
-<div class="panel">
-    <h1>🚖 Despacho Mendoza</h1>
+<div class="main-panel">
+    <h1>🚕 Central de Despacho Mendoza</h1>
     <div class="metrics">
-        <div class="stat"><small>PEDIDOS</small><div id="t-orders">0</div></div>
-        <div class="stat"><small>CAJA</small><div id="t-rev">$0</div></div>
+        <div class="stat-card"><small>VIAJES HOY</small><div id="t-orders">0</div></div>
+        <div class="stat-card"><small>EST. CAJA</small><div id="t-rev">$0</div></div>
     </div>
 
     <table>
         <thead>
-            <tr><th>Pasajero</th><th>Ruta y Mapa</th><th>Precio</th><th>Despacho</th></tr>
+            <tr><th>Pasajero</th><th>Ruta</th><th>Tarifa</th><th>Acción</th></tr>
         </thead>
         <tbody id="list"></tbody>
     </table>
 </div>
 
-<div class="sidebar">
-    <p style="text-align: center; color: #1e293b; font-weight: bold; font-size: 0.8rem; margin-bottom: 10px;">VISTA DEL CLIENTE</p>
-    <iframe src="widget-two.html" id="w-frame"></iframe>
+<div class="side-panel">
+    <p style="text-align: center; color: #334155; font-weight: bold; font-size: 0.75rem; margin-bottom: 10px;">VISTA CLIENTE (Móvil)</p>
+    <iframe src="widget.html" id="w-frame"></iframe>
 </div>
 
 <script>
@@ -76,47 +72,41 @@
             count++; rev += parseInt(p.price);
             document.getElementById('t-orders').innerText = count;
             document.getElementById('t-rev').innerText = `$${rev.toLocaleString()}`;
-            renderPedido(p);
+            
+            const row = document.createElement('tr');
+            row.id = `row-${p.id}`;
+            const qO = encodeURIComponent(p.origin);
+            const qD = encodeURIComponent(p.dest);
+
+            row.innerHTML = `
+                <td data-label="Pasajero"><strong style="font-size:1rem; color:#fff">${p.passenger}</strong></td>
+                <td data-label="Ruta">
+                    <span style="font-size:0.85rem">📍 ${p.origin}</span><br>
+                    <span style="font-size:0.85rem">🏁 ${p.dest}</span>
+                    <a href="https://www.google.com/maps/dir/?api=1&origin=${qO}&destination=${qD}" target="_blank" class="map-link">🗺️ Abrir ruta en Google Maps</a>
+                </td>
+                <td data-label="Tarifa"><strong style="color:#22c55e">$${p.price}</strong></td>
+                <td data-label="Acción">
+                    <div class="reply-box" id="act-${p.id}">
+                        <input type="text" class="reply-input" id="in-${p.id}" placeholder="Móvil 22 en 5 min">
+                        <button class="btn-send" onclick="send('${p.id}', '${p.passenger}')">Asignar</button>
+                    </div>
+                </td>
+            `;
+            document.getElementById('list').prepend(row);
         }
     });
 
-    function renderPedido(p) {
-        const list = document.getElementById('list');
-        const row = document.createElement('tr');
-        row.id = `row-${p.id}`;
-        
-        const qO = encodeURIComponent(p.origin);
-        const qD = encodeURIComponent(p.dest);
-        
-        row.innerHTML = `
-            <td data-label="Pasajero"><strong>${p.passenger}</strong></td>
-            <td data-label="Ruta">
-                <a href="https://www.google.com/maps/search/?api=1&query=${qO}" target="_blank" class="map-link" style="color:var(--accent)">📍 Origen: ${p.origin}</a>
-                <a href="https://www.google.com/maps/search/?api=1&query=${qD}" target="_blank" class="map-link" style="color:#94a3b8">🏁 Destino: ${p.dest}</a>
-                <a href="https://www.google.com/maps/dir/?api=1&origin=${qO}&destination=${qD}" target="_blank" class="map-link" style="color:#38bdf8; font-weight:bold; font-size:0.7rem; margin-top:8px">🗺️ VER RUTA COMPLETA</a>
-            </td>
-            <td data-label="Precio"><span style="color:#22c55e; font-weight:bold;">$${p.price}</span></td>
-            <td data-label="Acción">
-                <div class="reply-box" id="act-${p.id}">
-                    <input type="text" class="reply-input" id="in-${p.id}" placeholder="Móvil 22 en camino...">
-                    <button class="btn-send" onclick="send('${p.id}', '${p.passenger}')">Enviar</button>
-                </div>
-            </td>
-        `;
-        list.prepend(row);
-    }
-
     function send(id, name) {
         const msg = document.getElementById(`in-${id}`).value;
-        if(!msg) return alert("Ingresa los datos del taxi");
+        if(!msg) return alert("Escribe los detalles del móvil");
 
-        const fullMsg = `Hola ${name}, ${msg}`;
         document.getElementById('w-frame').contentWindow.postMessage({
             type: "DISPATCH_CONFIRM",
-            message: fullMsg
+            message: `Hola ${name}, ${msg}`
         }, "*");
 
-        document.getElementById(`act-${id}`).innerHTML = `<span style="color:#22c55e; font-weight:bold;">✓ ASIGNADO: ${msg.toUpperCase()}</span>`;
+        document.getElementById(`act-${id}`).innerHTML = `<div style="color:#22c55e; border:1px solid #22c55e; padding:8px; border-radius:6px; text-align:center; font-size:0.8rem; font-weight:bold;">✓ ASIGNADO:<br>${msg.toUpperCase()}</div>`;
     }
 </script>
 </body>
