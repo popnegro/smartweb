@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script src="/core/core.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: { extend: { colors: { primary: 'var(--color-primary)', secondary: 'var(--color-secondary)' }, borderRadius: { 'brand': 'var(--brand-radius)' } } }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer components {
+            .input-field { @apply w-full p-4 bg-white border-2 border-slate-100 rounded-brand outline-none focus:border-primary transition-all; }
+            .btn-action { @apply w-full bg-primary text-secondary font-black py-4 rounded-brand shadow-lg active:scale-95 transition-all; }
+        }
+    </style>
+</head>
+<body class="p-4 bg-transparent antialiased">
+    <div class="w-full max-w-md mx-auto bg-white rounded-brand shadow-2xl p-6 border border-slate-100">
+        <header class="mb-8 text-center">
+            <h2 class="text-2xl font-black italic brand-name uppercase">TaxiGo</h2>
+            <p class="text-slate-400 text-xs font-bold uppercase tracking-widest">Solicitud Inmediata</p>
+        </header>
+
+        <div id="ui" class="space-y-4">
+            <input type="text" id="origin" placeholder="¿Dónde te buscamos?" class="input-field">
+            <input type="text" id="destination" placeholder="¿A dónde vas?" class="input-field">
+            <input type="text" id="passenger" placeholder="Tu nombre" class="input-field border-dashed">
+            <button onclick="pedir()" class="btn-action">Confirmar Pedido</button>
+        </div>
+
+        <div id="status" class="hidden text-center py-10 animate-pulse">
+            <div class="inline-block p-4 rounded-full bg-primary/20 text-3xl mb-4">🚖</div>
+            <h3 id="status-title" class="font-black text-slate-800 uppercase italic">Buscando móvil...</h3>
+            <p id="status-text" class="text-slate-400 text-xs mt-2">Estamos asignando tu unidad</p>
+        </div>
+    </div>
+
+    <script>
+        function pedir() {
+            const p = document.getElementById('passenger').value;
+            if(!p) return alert("Ingresa tu nombre");
+            
+            const payload = {
+                id: Date.now(),
+                passenger: p,
+                origin: document.getElementById('origin').value,
+                dest: document.getElementById('destination').value
+            };
+
+            window.parent.postMessage({ type: "NEW_ORDER", payload }, "*");
+            document.getElementById('ui').classList.add('hidden');
+            document.getElementById('status').classList.remove('hidden');
+        }
+
+        window.addEventListener("message", (e) => {
+            if (e.data.type === "DISPATCH_CONFIRM") {
+                document.getElementById('status-title').innerText = "¡Móvil en camino!";
+                document.getElementById('status-text').innerText = e.data.message;
+                document.getElementById('status').classList.remove('animate-pulse');
+            }
+        });
+    </script>
+</body>
+</html>

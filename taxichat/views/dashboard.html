@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <script src="/core/core.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: { extend: { colors: { primary: 'var(--color-primary)', secondary: 'var(--color-secondary)' }, borderRadius: { 'brand': 'var(--brand-radius)' } } }
+        }
+    </script>
+</head>
+<body class="bg-slate-950 text-white min-h-screen flex">
+    <aside class="w-64 bg-black p-6 border-r border-slate-800">
+        <h1 class="text-xl font-black text-primary brand-name mb-8 uppercase italic">TaxiGo</h1>
+        <div class="bg-slate-900 p-4 rounded-brand border border-slate-800">
+            <p class="text-[10px] font-bold text-slate-500 uppercase">En espera</p>
+            <span id="counter" class="text-3xl font-black text-primary">0</span>
+        </div>
+    </aside>
+
+    <main class="flex-1 p-8 flex flex-col">
+        <div id="list" class="space-y-4 flex-1 overflow-y-auto">
+            </div>
+        
+        <div class="mt-8 h-64 border-t border-slate-800 pt-4">
+            <p class="text-[10px] font-bold text-slate-500 mb-2 uppercase tracking-widest">Simulador de Usuario</p>
+            <iframe src="/views/widget.html" id="w-frame" class="w-full h-full rounded-brand bg-white shadow-2xl"></iframe>
+        </div>
+    </main>
+
+    <script>
+        window.addEventListener("message", (e) => {
+            if (e.data.type === "NEW_ORDER") {
+                const p = e.data.payload;
+                const card = document.createElement('div');
+                card.className = "bg-slate-900 p-6 rounded-brand border border-slate-800 flex justify-between items-center animate-in slide-in-from-right";
+                card.innerHTML = `
+                    <div>
+                        <h3 class="font-black text-lg text-primary">${p.passenger}</h3>
+                        <p class="text-xs text-slate-400">📍 ${p.origin} ➔ 🏁 ${p.dest}</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <input type="text" id="in-${p.id}" placeholder="Móvil..." class="bg-black border border-slate-700 rounded px-3 py-2 text-sm">
+                        <button onclick="confirmar('${p.id}')" class="bg-primary text-secondary px-4 py-2 rounded font-bold text-xs">ASIGNAR</button>
+                    </div>
+                `;
+                document.getElementById('list').prepend(card);
+                document.getElementById('counter').innerText = document.getElementById('list').children.length;
+            }
+        });
+
+        function confirmar(id) {
+            const msg = document.getElementById(`in-${id}`).value;
+            document.getElementById('w-frame').contentWindow.postMessage({
+                type: "DISPATCH_CONFIRM",
+                message: msg
+            }, "*");
+            document.getElementById(`in-${id}`).closest('.bg-slate-900').style.opacity = "0.3";
+        }
+    </script>
+</body>
+</html>
