@@ -34,7 +34,7 @@ const io = new Server(httpServer, {
 
 // 3. Configuración Mercado Pago
 const client = new MercadoPagoConfig({ 
-    accessToken: 'TU_ACCESS_TOKEN_AQUÍ' 
+    accessToken: 'TEST-5984277403676111-112200-cf766a52891e3f69f57b2fa476926819__LB_LA__-183519072' 
 });
 
 // 4. Endpoint para Mercado Pago
