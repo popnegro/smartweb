@@ -38,58 +38,85 @@
 
 <script src="http://localhost:3000/socket.io/socket.io.js"></script>
 <script>
-    const socket = io('http://localhost:3000');
+    // Configuración de servidor (Local vs Producción)
+    const SERVER_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+        ? 'http://localhost:3000'
+        : 'https://tu-backend.vercel.app'; // Cambiar por tu URL real
+
+    const socket = io(SERVER_URL);
     let autocomplete;
 
-    // 1. Cargar nombre desde LocalStorage
-    const nameInput = document.getElementById('userName');
-    nameInput.value = localStorage.getItem('userTaxiName') || '';
-    nameInput.addEventListener('input', () => localStorage.setItem('userTaxiName', nameInput.value));
+    // Ejecutar cuando el HTML esté cargado
+    document.addEventListener('DOMContentLoaded', () => {
+        const nameInput = document.getElementById('userName');
+        if (nameInput) {
+            nameInput.value = localStorage.getItem('userTaxiName') || '';
+            nameInput.addEventListener('input', () => {
+                localStorage.setItem('userTaxiName', nameInput.value);
+            });
+        }
+    });
 
-    // 2. Inicializar Google Maps Places
     function initMaps() {
         const destInput = document.getElementById('destination');
+        if (!destInput) return;
+
         autocomplete = new google.maps.places.Autocomplete(destInput);
         
         autocomplete.addListener('place_changed', () => {
             const place = autocomplete.getPlace();
             if (!place.geometry) return;
-            // Simular tarifa
+            
+            // Simulación de tarifa basada en distancia aleatoria
             const dist = (Math.random() * 8 + 2).toFixed(1);
             const price = (dist * 150 + 400).toFixed(0);
-            document.getElementById('estimate-box').innerHTML = `Distancia: ${dist}km | <span class="price-tag">Est: $${price}</span>`;
+            document.getElementById('estimate-box').innerHTML = 
+                `Distancia: ${dist}km | <span class="price-tag">Est: $${price}</span>`;
         });
 
+        // Autodetectar ubicación para el campo origen
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(p => {
-                document.getElementById('origin').value = `Mi ubicación (${p.coords.latitude.toFixed(4)}, ${p.coords.longitude.toFixed(4)})`;
+                const originInput = document.getElementById('origin');
+                if (originInput) {
+                    originInput.value = `Ubicación actual (${p.coords.latitude.toFixed(4)}, ${p.coords.longitude.toFixed(4)})`;
+                }
             });
         }
     }
 
-    // 3. Enviar Pedido
     function solicitarTaxi() {
-        const user = nameInput.value;
+        const user = document.getElementById('userName').value;
         const dest = document.getElementById('destination').value;
-        if(!user || !dest) return alert("Completa tus datos");
+        
+        if (!user || !dest) {
+            return alert("Por favor, ingresa tu nombre y destino");
+        }
 
         document.getElementById('status-panel').style.display = 'block';
         document.getElementById('btnRequest').disabled = true;
-        document.getElementById('btnRequest').innerText = "PEDIDO ENVIADO";
+        document.getElementById('btnRequest').innerText = "ESPERANDO CHOFER...";
         
-        // Aquí podrías emitir un evento 'nuevo-pedido' si quisieras que aparezca solo en el Dashboard
-        console.log("Pedido solicitado por:", user);
+        // Enviar evento al servidor
+        socket.emit('nuevo-pedido', { 
+            usuario: user, 
+            destino: dest,
+            timestamp: new Date().getTime()
+        });
     }
 
-    // 4. Escuchar respuestas del Dashboard
+    // Escuchar confirmación del Dashboard
     socket.on('confirmacion-cliente', (data) => {
-        document.getElementById('driver-info').innerHTML = `✅ <b>${data.chofer}</b> está en camino.<br>Llega en aproximadamente <b>${data.tiempo} min</b>.`;
+        document.getElementById('driver-info').innerHTML = 
+            `✅ <b>${data.chofer}</b> está en camino.<br>Llega en aproximadamente <b>${data.tiempo} min</b>.`;
     });
 
+    // Escuchar link de pago de Mercado Pago
     socket.on('recibir-pago', (data) => {
         document.getElementById('payment-area').innerHTML = `
-            <p>El operador ha enviado el link de pago:</p>
-            <a href="${data.link}" target="_blank">PAGAR $${data.monto} CON MERCADO PAGO</a>
+            <hr style="border:0; border-top:1px solid #eee; margin:15px 0;">
+            <p>Paga tu viaje de forma segura:</p>
+            <a href="${data.link}" target="_blank">PAGAR $${data.monto}</a>
         `;
     });
 </script>
