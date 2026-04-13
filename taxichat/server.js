@@ -1,14 +1,4 @@
 require('dotenv').config();
-
-// Uso en Mercado Pago
-const client = new MercadoPagoConfig({ 
-    accessToken: process.env.MP_ACCESS_TOKEN 
-});
-
-// Uso en Google Auth
-const clientId = process.env.GOOGLE_CLIENT_ID;
-const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
-
 const express = require('express');
 const { createServer } = require('node:http');
 const { Server } = require('socket.io');
@@ -21,20 +11,19 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+// 2. Configuración Mercado Pago (Usando variables de entorno)
+const client = new MercadoPagoConfig({ 
+    accessToken: process.env.MP_ACCESS_TOKEN 
+});
+
 const httpServer = createServer(app);
 
-// 2. Configuración de Socket.io (Corregida)
+// 3. Configuración de Socket.io
 const io = new Server(httpServer, {
     cors: {
-        // Los orígenes deben estar en un array para permitir múltiples direcciones
         origin: ["http://127.0.0.1:5500", "https://taxichat-nine.vercel.app"],
         methods: ["GET", "POST"]
     }
-});
-
-// 3. Configuración Mercado Pago
-const client = new MercadoPagoConfig({ 
-    accessToken: 'TEST-5984277403676111-112200-cf766a52891e3f69f57b2fa476926819__LB_LA__-183519072' 
 });
 
 // 4. Endpoint para Mercado Pago
@@ -44,13 +33,12 @@ app.post('/create-preference', async (req, res) => {
         const result = await preference.create({
             body: {
                 items: [{
-                    title: req.body.title,
+                    title: req.body.title || "Servicio de Taxi",
                     unit_price: Number(req.body.price),
                     quantity: 1,
                     currency_id: 'ARS' 
                 }],
                 back_urls: {
-                    // Nota: Cambia esto a tu URL de Vercel cuando despliegues el frontend
                     success: "https://taxichat-nine.vercel.app/success.html",
                     failure: "https://taxichat-nine.vercel.app/failure.html",
                 },
@@ -61,7 +49,7 @@ app.post('/create-preference', async (req, res) => {
         res.json({ init_point: result.init_point });
     } catch (error) {
         console.error("Error MP:", error);
-        res.status(500).send("Error al crear preferencia");
+        res.status(500).json({ error: "Error al crear preferencia" });
     }
 });
 
@@ -82,7 +70,7 @@ io.on('connection', (socket) => {
     });
 });
 
-// 6. Encender servidor
+// 6. Encender servidor (Vercel usará process.env.PORT)
 const PORT = process.env.PORT || 3000;
 httpServer.listen(PORT, () => {
     console.log(`✅ Servidor corriendo en el puerto ${PORT}`);
