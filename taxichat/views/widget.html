@@ -2,66 +2,91 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <script src="/core/core.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: { extend: { colors: { primary: 'var(--color-primary)', secondary: 'var(--color-secondary)' }, borderRadius: { 'brand': 'var(--brand-radius)' } } }
-        }
-    </script>
-    <style type="text/tailwindcss">
-        @layer components {
-            .input-field { @apply w-full p-4 bg-white border-2 border-slate-100 rounded-brand outline-none focus:border-primary transition-all; }
-            .btn-action { @apply w-full bg-primary text-secondary font-black py-4 rounded-brand shadow-lg active:scale-95 transition-all; }
-        }
+    <title>Taxi Widget White Label</title>
+    <style>
+        body { font-family: sans-serif; background: #f4f4f4; padding: 20px; }
+        .widget-taxi { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 350px; }
+        input { width: 100%; padding: 10px; margin: 5px 0; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; background: #000; color: white; border: none; cursor: pointer; margin-top: 10px; }
+        .info { font-size: 0.9em; color: #555; margin-top: 10px; }
+        #status-box { margin-top: 15px; padding: 10px; background: #e9ecef; display: none; }
     </style>
 </head>
-<body class="p-4 bg-transparent antialiased">
-    <div class="w-full max-w-md mx-auto bg-white rounded-brand shadow-2xl p-6 border border-slate-100">
-        <header class="mb-8 text-center">
-            <h2 class="text-2xl font-black italic brand-name uppercase">TaxiGo</h2>
-            <p class="text-slate-400 text-xs font-bold uppercase tracking-widest">Solicitud Inmediata</p>
-        </header>
+<body>
 
-        <div id="ui" class="space-y-4">
-            <input type="text" id="origin" placeholder="¿Dónde te buscamos?" class="input-field">
-            <input type="text" id="destination" placeholder="¿A dónde vas?" class="input-field">
-            <input type="text" id="passenger" placeholder="Tu nombre" class="input-field border-dashed">
-            <button onclick="pedir()" class="btn-action">Confirmar Pedido</button>
-        </div>
+<div class="widget-taxi">
+    <h3>Pedir Taxi</h3>
+    <input type="text" id="userName" placeholder="Nombre Completo">
+    <input type="text" id="origin" placeholder="Punto de Origen (Geolocalizando...)" readonly>
+    <input type="text" id="destination" placeholder="¿A dónde vas?">
+    
+    <div id="estimate" class="info"></div>
+    <button onclick="solicitarTaxi()">Pedir Ahora</button>
 
-        <div id="status" class="hidden text-center py-10 animate-pulse">
-            <div class="inline-block p-4 rounded-full bg-primary/20 text-3xl mb-4">🚖</div>
-            <h3 id="status-title" class="font-black text-slate-800 uppercase italic">Buscando móvil...</h3>
-            <p id="status-text" class="text-slate-400 text-xs mt-2">Estamos asignando tu unidad</p>
-        </div>
+    <div id="status-box">
+        <strong>Estado del viaje:</strong>
+        <p id="driver-info">Esperando asignación...</p>
+        <div id="payment-area"></div>
     </div>
+</div>
 
-    <script>
-        function pedir() {
-            const p = document.getElementById('passenger').value;
-            if(!p) return alert("Ingresa tu nombre");
-            
-            const payload = {
-                id: Date.now(),
-                passenger: p,
-                origin: document.getElementById('origin').value,
-                dest: document.getElementById('destination').value
-            };
+<script>
+    // En la parte superior de tu <script>
+const socket = io('http://localhost:3000');
 
-            window.parent.postMessage({ type: "NEW_ORDER", payload }, "*");
-            document.getElementById('ui').classList.add('hidden');
-            document.getElementById('status').classList.remove('hidden');
+    let autocomplete;
+
+    // 1. Cargar persistencia de nombre inmediatamente
+    const nameInput = document.getElementById('userName');
+    nameInput.value = localStorage.getItem('userTaxiName') || '';
+    nameInput.addEventListener('input', () => {
+        localStorage.setItem('userTaxiName', nameInput.value);
+    });
+
+    // 2. Definir solicitarTaxi antes de que se use
+    function solicitarTaxi() {
+        const user = document.getElementById('userName').value;
+        const dest = document.getElementById('destination').value;
+
+        if (!user || !dest) {
+            alert("Por favor, completa tu nombre y destino.");
+            return;
         }
 
-        window.addEventListener("message", (e) => {
-            if (e.data.type === "DISPATCH_CONFIRM") {
-                document.getElementById('status-title').innerText = "¡Móvil en camino!";
-                document.getElementById('status-text').innerText = e.data.message;
-                document.getElementById('status').classList.remove('animate-pulse');
-            }
+        document.getElementById('status-box').style.display = 'block';
+        console.log("Pedido iniciado para:", user, "hacia", dest);
+        alert("Pedido enviado al Dashboard. Espera confirmación.");
+    }
+
+    // 3. Inicializar Google Maps
+    function initMaps() {
+        console.log("Google Maps cargado correctamente.");
+        const inputDestino = document.getElementById('destination');
+        
+        autocomplete = new google.maps.places.Autocomplete(inputDestino);
+        
+        autocomplete.addListener('place_changed', function() {
+            const place = autocomplete.getPlace();
+            if (!place.geometry) return;
+
+            // Simulación de tarifa
+            const randomDist = (Math.random() * 10 + 2).toFixed(2);
+            const tarifa = (randomDist * 150 + 400).toFixed(0);
+            document.getElementById('estimate').innerText = `Distancia: ${randomDist} km | Tarifa: $${tarifa}`;
         });
-    </script>
+
+        // Geolocalización
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(p => {
+                document.getElementById('origin').value = `Ubicación actual (${p.coords.latitude.toFixed(4)})`;
+            }, (err) => console.warn("Error geolocalización:", err.message));
+        }
+    }
+</script>
+
+<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmTzHBhtQ4E8BG6DL0xdrEOYdZmQEBXkI&libraries=places&callback=initMaps">
+</script>
+
 </body>
 </html>
