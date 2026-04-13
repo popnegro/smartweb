@@ -3,75 +3,60 @@ const express = require('express');
 const { createServer } = require('node:http');
 const { Server } = require('socket.io');
 const cors = require('cors');
-const { MercadoPagoConfig, Preference } = require('mercadopago');
+const mongoose = require('mongoose');
+
+// Modelos
+const Empresa = require('./models/Empresa');
+const Viaje = require('./models/Viaje');
 
 const app = express();
-
-// 1. Configuración de Middleware
 app.use(express.json());
 app.use(cors());
+app.use(express.static('public'));
 
-// 2. Configuración Mercado Pago (Usando variables de entorno)
-const client = new MercadoPagoConfig({ 
-    accessToken: process.env.MP_ACCESS_TOKEN 
-});
+mongoose.connect(process.env.MONGO_URI).then(() => console.log("MongoDB Conectado"));
 
 const httpServer = createServer(app);
+const io = new Server(httpServer, { cors: { origin: "*" } });
 
-// 3. Configuración de Socket.io
-const io = new Server(httpServer, {
-    cors: {
-        origin: ["http://127.0.0.1:5500", "https://taxichat-nine.vercel.app"],
-        methods: ["GET", "POST"]
-    }
+// --- API ENDPOINTS ---
+
+// Crear empresa (SuperAdmin)
+app.post('/api/empresas', async (req, res) => {
+    const nueva = new Empresa(req.body);
+    await nueva.save();
+    res.json(nueva);
 });
 
-// 4. Endpoint para Mercado Pago
-app.post('/create-preference', async (req, res) => {
-    try {
-        const preference = new Preference(client);
-        const result = await preference.create({
-            body: {
-                items: [{
-                    title: req.body.title || "Servicio de Taxi",
-                    unit_price: Number(req.body.price),
-                    quantity: 1,
-                    currency_id: 'ARS' 
-                }],
-                back_urls: {
-                    success: "https://taxichat-nine.vercel.app/success.html",
-                    failure: "https://taxichat-nine.vercel.app/failure.html",
-                },
-                auto_return: "approved",
-            }
-        });
-
-        res.json({ init_point: result.init_point });
-    } catch (error) {
-        console.error("Error MP:", error);
-        res.status(500).json({ error: "Error al crear preferencia" });
-    }
+// Obtener config por slug (Marca Blanca)
+app.get('/api/config/:slug', async (req, res) => {
+    const empresa = await Empresa.findOne({ slug: req.params.slug });
+    res.json(empresa);
 });
 
-// 5. Lógica de Sockets
+// Historial filtrado por empresa
+app.get('/api/historial/:empresaId', async (req, res) => {
+    const viajes = await Viaje.find({ empresaId: req.params.empresaId }).sort({ fecha: -1 });
+    res.json(viajes);
+});
+
+// --- SOCKET LOGIC (Multitenancy) ---
 io.on('connection', (socket) => {
-    console.log('📱 Dispositivo conectado:', socket.id);
+    const { empresaId } = socket.handshake.query;
+    if (empresaId) socket.join(empresaId);
 
-    socket.on('asignar-taxi', (data) => {
-        io.emit('confirmacion-cliente', data);
+    socket.on('nuevo-pedido', async (data) => {
+        const viaje = new Viaje({ ...data, empresaId, socketIdCliente: socket.id });
+        await viaje.save();
+        io.to(empresaId).emit('notificar-operador', viaje);
     });
 
-    socket.on('enviar-link-pago', (data) => {
-        io.emit('recibir-pago', data);
-    });
-
-    socket.on('disconnect', () => {
-        console.log('❌ Dispositivo desconectado');
+    socket.on('confirmar-viaje', async (data) => {
+        const v = await Viaje.findByIdAndUpdate(data.viajeId, { 
+            chofer: data.chofer, estado: 'confirmado' 
+        }, { new: true });
+        io.to(v.socketIdCliente).emit('confirmacion-cliente', v);
     });
 });
 
-// 6. Encender servidor (Vercel usará process.env.PORT)
-const PORT = process.env.PORT || 3000;
-httpServer.listen(PORT, () => {
-    console.log(`✅ Servidor corriendo en el puerto ${PORT}`);
-});
+httpServer.listen(process.env.PORT, () => console.log("Servidor SaaS listo"));
