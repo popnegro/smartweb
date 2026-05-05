@@ -4,6 +4,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Propuesta Web — Luxus Consultores</title>
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Propuesta Web — Luxus Consultores" />
+  <meta property="og:description" content="Transformando la presencia digital en una herramienta de alto nivel. Propuesta de desarrollo web estratégica para Luxus Consultores." />
+  <meta property="og:image" content="luxus.webp" />
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:title" content="Propuesta Web — Luxus Consultores" />
+  <meta property="twitter:description" content="Transformando la presencia digital en una herramienta de alto nivel. Propuesta de desarrollo web estratégica para Luxus Consultores." />
+  <meta property="twitter:image" content="luxus.webp" />
+
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
   <style>
@@ -31,7 +44,7 @@
       <div class="flex items-center gap-6">
         <!-- Desktop Nav -->
         <nav class="hidden md:flex gap-6 text-xs font-medium uppercase tracking-wider text-gray-600">
-          <a href="#hero-section" class="hover:text-black transition-colors whitespace-nowrap">Inicio</a>
+          <a href="#" class="hover:text-black transition-colors whitespace-nowrap">Inicio</a>
           <a href="#estructura" class="hover:text-black transition-colors whitespace-nowrap">Estructura</a>
           <a href="#objetivos" class="hover:text-black transition-colors whitespace-nowrap">Objetivos</a>
           <a href="#alcance" class="hover:text-black transition-colors whitespace-nowrap">Alcance</a>
@@ -52,7 +65,7 @@
 
     <!-- Mobile Menu Overlay -->
     <div id="mobile-menu" class="hidden fixed inset-0 bg-white flex flex-col items-center justify-center gap-8 text-lg font-medium uppercase tracking-widest text-gray-800 z-40 md:hidden">
-      <a href="#hero-section" class="mobile-link hover:text-black transition-colors">Inicio</a>
+      <a href="#" class="mobile-link hover:text-black transition-colors">Inicio</a>
       <a href="#estructura" class="mobile-link hover:text-black transition-colors">Estructura</a>
       <a href="#objetivos" class="mobile-link hover:text-black transition-colors">Objetivos</a>
       <a href="#alcance" class="mobile-link hover:text-black transition-colors">Alcance</a>
@@ -67,7 +80,7 @@
   <main class="py-10">
     <section id="hero-section" class="max-w-6xl mx-auto px-6 mb-16">
       <h2 class="text-4xl md:text-5xl font-semibold tracking-tight leading-tight md:leading-[1.15] max-w-3xl">Transformando la presencia digital en una herramienta de alto nivel.</h2>
-      <p class="reveal-item opacity-0 translate-y-8 transition-all duration-700 text-xs text-gray-500 mt-4">Propuesta de Desarrollo Web</p>
+      <p class="reveal-item opacity-0 translate-y-8 transition-all duration-700 text-sm text-gray-500 mt-4">Propuesta de Desarrollo Web</p>
     </section>
 
   <!-- SITEMAP / ESTRUCTURA (FLOW UX + OBJETIVOS HORIZONTAL) -->
@@ -269,11 +282,24 @@
 
       <!-- OPCION 1 WORDPRESS -->
       <div class="reveal-item opacity-0 translate-y-8 transition-all duration-700 border rounded-xl p-8 bg-white transition-all hover:shadow-lg">
-        <h3 class="text-xl font-semibold mb-2">Landing Page (WordPress)</h3>
+        <h3 class="text-xl font-semibold mb-2">Landing Page</h3>
         <p class="text-sm text-gray-500 mb-4">Solución flexible, autoadministrable y rápida de implementar</p>
 
-        <p class="reveal-item opacity-0 translate-y-8 transition-all duration-700 text-3xl font-semibold mb-2">USD 750</p>
-        <p class="text-gray-400 text-sm mb-6">(o equivalente en moneda local)</p>
+        <div class="relative group js-tooltip-trigger reveal-item opacity-0 translate-y-8 transition-all duration-700 mb-6 flex flex-col items-center md:items-start">
+          <p class="text-3xl font-semibold mb-2 flex items-center justify-center md:justify-start">
+            USD 275
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2 text-gray-400 cursor-help" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </p>
+          <p class="text-gray-400 text-sm text-center md:text-left">(o equivalente en pesos argentinos, <a href="https://www.bna.com.ar/Personas" target="_blank" rel="noopener noreferrer" class="underline hover:text-gray-600 transition-colors">precio de venta Banco Nación</a>)</p>
+          <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-max max-w-xs p-2 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 group-[.active]:opacity-100 transition-opacity duration-300 pointer-events-none group-[.active]:pointer-events-auto z-10 text-center">
+Forma de pago: 50% al inicio y 50% al finalizar el proyecto
+            <div class="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-x-4 border-x-transparent border-t-4 border-t-gray-800"></div>
+          </div>
+        </div>
+
+        <div class="text-sm text-gray-700 mb-4">Vistas incluidas: <strong>1 página (scroll completo)</strong></div>
 
         <ul class="text-sm text-gray-600 space-y-2 mb-6">
           <li>• Landing page completa en WordPress</li>
@@ -297,12 +323,24 @@
       <div class="reveal-item opacity-0 translate-y-8 transition-all duration-700 border-2 border-black rounded-xl p-8 relative bg-white shadow-xl">
         <div class="absolute -top-3 left-6 bg-black text-white text-xs px-3 py-1 rounded">Recomendado</div>
         
-        <h3 class="text-lg font-semibold mb-2">Sitio Web Estratégico (sin CMS)</h3>
+        <h3 class="text-lg font-semibold mb-2">Sitio Web Estratégico</h3>
         <p class="text-sm text-gray-500 mb-4">Desarrollo a medida con control total sobre performance, estructura y posicionamiento</p>
 
-        <p class="reveal-item opacity-0 translate-y-8 transition-all duration-700 text-3xl font-semibold mb-2">USD 1400</p>
-        <p class="text-gray-400 text-sm mb-6">(o equivalente en moneda local)</p>
+        <div class="relative group js-tooltip-trigger reveal-item opacity-0 translate-y-8 transition-all duration-700 mb-6 flex flex-col items-center md:items-start">
+          <p class="text-3xl font-semibold mb-2 flex items-center justify-center md:justify-start">
+            USD 375
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2 text-gray-400 cursor-help" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </p>
+          <p class="text-gray-400 text-sm text-center md:text-left">(o equivalente en pesos argentinos, <a href="https://www.bna.com.ar/Personas" target="_blank" rel="noopener noreferrer" class="underline hover:text-gray-600 transition-colors">precio de venta Banco Nación</a>)</p>
+          <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-max max-w-xs p-2 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 group-[.active]:opacity-100 transition-opacity duration-300 pointer-events-none group-[.active]:pointer-events-auto z-10 text-center">
+Forma de pago: 50% al inicio y 50% al finalizar el proyecto
+            <div class="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-x-4 border-x-transparent border-t-4 border-t-gray-800"></div>
+          </div>
+        </div>
 
+        <div class="text-sm text-gray-700 mb-4">Vistas incluidas: <strong>6 a 8 páginas</strong></div>
         <ul class="text-sm text-gray-600 space-y-2 mb-6">
           <li>• Desarrollo completo sin CMS (código limpio)</li>
           <li>• Estructura por secciones optimizada</li>
@@ -351,7 +389,7 @@
       </p>
 
       <div class="reveal-item opacity-0 translate-y-8 transition-all duration-700 flex flex-col md:flex-row gap-4 justify-center mb-8">
-        <a href="https://www.mercadopago.com/" target="_blank" class="bg-white text-black px-8 py-4 rounded-lg text-center font-medium hover:bg-gray-200 transition-colors">
+        <a href="https://w.app/quieromiwebhoy" target="_blank" class="bg-white text-black px-8 py-4 rounded-lg text-center font-medium hover:bg-gray-200 transition-colors">
           Hablar por WhatsApp
         </a>
         
@@ -362,8 +400,15 @@
 
   <!-- FOOTER -->
   <footer class="py-12 text-center text-xs text-gray-400 uppercase tracking-widest">
-    Documento de propuesta — 2026
+    Documento de propuesta — v1.0 - Vigencia hasta el 12/05/2026
   </footer>
+
+  <!-- Scroll to Top Button -->
+  <button id="back-to-top" class="hidden md:flex fixed bottom-8 right-8 bg-black text-white p-3 rounded-full shadow-2xl opacity-0 translate-y-10 transition-all duration-300 z-50 pointer-events-none hover:bg-gray-800 group items-center justify-center" aria-label="Volver arriba">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 transition-transform group-hover:-translate-y-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+    </svg>
+  </button>
 
   <script>
     const menuBtn = document.getElementById('menu-btn');
@@ -397,12 +442,22 @@
     });
 
     // Reading Progress Logic
+    const backToTopBtn = document.getElementById('back-to-top');
     window.addEventListener('scroll', () => {
       const progressBar = document.getElementById('progress-bar');
       const winScroll = window.scrollY;
       const height = document.documentElement.scrollHeight - window.innerHeight;
       const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
       progressBar.style.width = scrolled + "%";
+
+      // Show/hide back to top button after 400px of scrolling
+      if (winScroll > 400) {
+        backToTopBtn.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none');
+        backToTopBtn.classList.add('opacity-100', 'translate-y-0', 'pointer-events-auto');
+      } else {
+        backToTopBtn.classList.add('opacity-0', 'translate-y-10', 'pointer-events-none');
+        backToTopBtn.classList.remove('opacity-100', 'translate-y-0', 'pointer-events-auto');
+      }
     });
 
     // Intersection Observer for Cascade Animation
@@ -432,6 +487,29 @@
     revealObserver.observe(document.getElementById('objetivos'));
     revealObserver.observe(document.getElementById('inversion'));
     revealObserver.observe(document.getElementById('contacto'));
+
+    // Smooth Scroll to Top Action
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Tooltip logic for mobile (click to toggle)
+    const tooltipTriggers = document.querySelectorAll('.js-tooltip-trigger');
+    
+    tooltipTriggers.forEach(trigger => {
+      trigger.addEventListener('click', (e) => {
+        const wasActive = trigger.classList.contains('active');
+        tooltipTriggers.forEach(t => t.classList.remove('active'));
+        if (!wasActive) {
+          trigger.classList.add('active');
+        }
+        e.stopPropagation();
+      });
+    });
+
+    document.addEventListener('click', () => {
+      tooltipTriggers.forEach(t => t.classList.remove('active'));
+    });
   </script>
 
 </body>
