@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Propuesta Web — Luxus Consultores</title>
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Propuesta Web — Luxus Consultores" />
+  <meta property="og:description" content="Transformando la presencia digital en una herramienta de alto nivel. Propuesta de desarrollo web estratégica para Luxus Consultores." />
+  <meta property="og:image" content="og-image.webp" />
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:title" content="Propuesta Web — Luxus Consultores" />
+  <meta property="twitter:description" content="Transformando la presencia digital en una herramienta de alto nivel. Propuesta de desarrollo web estratégica para Luxus Consultores." />
+  <meta property="twitter:image" content="og-image.webp" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    h2 { 
+      font-family: 'Playfair Display', serif;
+      letter-spacing: -0.015em;
+      line-height: 1.2;
+    }
+    .no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+  </style>
+</head>
+<body class="bg-white text-gray-900">
+
+  <!-- HEADER -->
+  <header id="main-header" class="border-b border-transparent sticky top-0 bg-white/0 z-50 transition-all duration-300">
+    <div class="max-w-6xl mx-auto px-6 py-6 flex items-center justify-between gap-4">
+      <div class="flex flex-col">
+        <a href="#" class="block">
+          <img src="luxus.webp" alt="Luxus Consultores Logo" class="h-6 w-auto">
+        </a>
+      </div>
+
+      <div class="flex items-center gap-6">
+        <!-- Desktop Nav -->
+        <nav class="hidden md:flex gap-6 text-xs font-medium uppercase tracking-wider text-gray-600">
+          <a href="#" class="hover:text-black transition-colors whitespace-nowrap">Inicio</a>
+          <a href="#estructura" class="hover:text-black transition-colors whitespace-nowrap">Estructura</a>
+          <a href="#objetivos" class="hover:text-black transition-colors whitespace-nowrap">Objetivos</a>
+          <a href="#alcance" class="hover:text-black transition-colors whitespace-nowrap">Alcance</a>
+          <a href="#inversion" class="hover:text-black transition-colors whitespace-nowrap">Inversión</a>
+          <a href="#contacto" class="hover:text-black transition-colors whitespace-nowrap">Contacto</a>
+        </nav>
+
+        <div class="flex items-center gap-4">
+          <!-- Hamburger Button -->
+          <button id="menu-btn" class="md:hidden flex flex-col gap-1.5 z-50 focus:outline-none">
+            <span id="line1" class="w-6 h-0.5 bg-black transition-all duration-300 origin-center"></span>
+            <span id="line2" class="w-6 h-0.5 bg-black transition-all duration-300"></span>
+            <span id="line3" class="w-6 h-0.5 bg-black transition-all duration-300 origin-center"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="hidden fixed inset-0 bg-white flex flex-col items-center justify-center gap-8 text-lg font-medium uppercase tracking-widest text-gray-800 z-40 md:hidden">
+      <a href="#" class="mobile-link hover:text-black transition-colors">Inicio</a>
+      <a href="#estructura" class="mobile-link hover:text-black transition-colors">Estructura</a>
+      <a href="#objetivos" class="mobile-link hover:text-black transition-colors">Objetivos</a>
+      <a href="#alcance" class="mobile-link hover:text-black transition-colors">Alcance</a>
+      <a href="#inversion" class="mobile-link hover:text-black transition-colors">Inversión</a>
+      <a href="#contacto" class="mobile-link hover:text-black transition-colors">Contacto</a>
+    </div>
+
+    <!-- Reading Progress Bar -->
+    <div id="progress-bar" class="absolute bottom-0 left-0 h-[2px] bg-black w-0 transition-all duration-150 ease-out"></div>
+  </header>
+
+  <main class="py-10">
+    <section id="hero-section" class="max-w-6xl mx-auto px-6 mb-16">
+      <h2 class="text-4xl md:text-5xl font-semibold tracking-tight leading-tight md:leading-[1.15] max-w-3xl">Transformando la presencia digital en una herramienta de alto nivel.</h2>
+      <p class="reveal-item opacity-0 translate-y-8 transition-all duration-700 text-sm text-gray-500 mt-4">Propuesta de Desarrollo Web</p>
+    </section>
+
+  <!-- SITEMAP / ESTRUCTURA (FLOW UX + OBJETIVOS HORIZONTAL) -->
+  <section id="estructura" class="max-w-6xl mx-auto px-6 py-14 border-t">
+    <h2 class="text-xl font-semibold mb-10">Estructura del sitio</h2>
+
+    <div class="overflow-x-auto no-scrollbar pb-6">
+      <div id="estructura-container" class="flex items-stretch gap-6 min-w-[1100px]">
+        <!-- STEP -->
+        <div class="reveal-item opacity-0 translate-y-8 transition-all duration-700 flex flex-col items-center w-64">
+          <div class="w-full border rounded-xl px-4 py-3 bg-white shadow-sm text-center font-medium">Inicio</div>
+          <div class="text-xs text-gray-500 mt-3 text-center">
+            Captar atención y comunicar valor en segundos.
+          </div>
+        </div>
+
+        <div class="reveal-item opacity-0 translate-y-8 transition-all duration-700 flex items-center">→</div>
+
+        <div class="reveal-item opacity-0 translate-y-8 transition-all duration-700 flex flex-col items-center w-64">
+          <div class="w-full border rounded-xl px-4 py-3 bg-white shadow-sm text-center font-medium">ADN</div>
+          <div class="text-xs text-gray-500 mt-3 text-center">
+            Construir credibilidad y marco institucional.
+          </div>
+        </div>
+
+        <div class="reveal-item opacity-0 translate-y-8 transition-all duration-700 flex items-center">→</div>
+
+        <div class="reveal-item opacity-0 translate-y-8 transition-all duration-700 flex flex-col items-center w-64">
+          <div class="w-full border rounded-xl px-4 py-3 bg-white shadow-sm text-center font-medium">Hacemos</div>
+          <div class="text-xs text-gray-500 mt-3 text-center">
+            Clarificar propuesta y alcance de trabajo.
+          </div>
+        </div>
+
+        <div class="reveal-item opacity-0 translate-y-8 transition-all duration-700 flex items-center">→</div>
+
+        <div class="reveal-item opacity-0 translate-y-8 transition-all duration-700 flex flex-col items-center w-64">
+          <div class="w-full border rounded-xl px-4 py-3 bg-white shadow-sm text-center font-medium">Servicios</div>
+          <div class="text-xs text-gray-500 mt-3 text-center">
+            Profundizar en capacidades y generar confianza técnica.
+          </div>
+        </div>
+
+        <div class="reveal-item opacity-0 translate-y-8 transition-all duration-700 flex items-center">→</div>
+
+        <div class="reveal-item opacity-0 translate-y-8 transition-all duration-700 flex flex-col items-center w-64">
+          <div class="w-full border rounded-xl px-4 py-3 bg-white shadow-sm text-center font-medium">Sectores</div>
+          <div class="text-xs text-gray-500 mt-3 text-center">
+            Permitir identificación del cliente con el servicio.
+          </div>
+        </div>
+
+        <div class="reveal-item opacity-0 translate-y-8 transition-all duration-700 flex items-center">→</div>
+
+        <div class="reveal-item opacity-0 translate-y-8 transition-all duration-700 flex flex-col items-center w-64">
+          <div class="w-full border rounded-xl px-4 py-3 bg-white shadow-sm text-center font-medium">Metodología</div>
+          <div class="text-xs text-gray-500 mt-3 text-center">
+            Explicar cómo se trabaja y reducir incertidumbre.
+          </div>
+        </div>
+
+        <div class="reveal-item opacity-0 translate-y-8 transition-all duration-700 flex items-center">→</div>
+
+        <div class="reveal-item opacity-0 translate-y-8 transition-all duration-700 flex flex-col items-center w-64">
+          <div class="w-full border rounded-xl px-4 py-3 bg-white shadow-sm text-center font-medium">Diferencial</div>
+          <div class="text-xs text-gray-500 mt-3 text-center">
+            Justificar la elección y convertir interés en decisión.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CAPA DE CONTACTO TRANSVERSAL (Fija respecto al scroll horizontal) -->
+    <div class="reveal-item opacity-0 translate-y-8 transition-all duration-1000 relative py-5 px-8 border-2 border-dashed border-gray-200 rounded-2xl bg-gray-50/50 flex items-center justify-center mt-8">
+      <h4 class="font-bold text-sm uppercase tracking-widest text-black">Contacto & Conversión</h4>
+    </div>
+  </section>
+
+  <!-- CONTEXTO + OBJETIVOS (COMO FEATURES) -->
+  <section id="objetivos" class="max-w-6xl mx-auto px-6 py-14 border-t">
+    <h2 class="reveal-item opacity-0 translate-y-8 transition-all duration-700 text-xl font-semibold mb-8">Contexto y objetivos</h2>
+
+    <div class="grid md:grid-cols-2 gap-6">
+
+      <!-- FEATURE 1 -->
+      <div class="reveal-item opacity-0 translate-y-8 transition-all duration-700 border rounded-xl p-6 hover:border-gray-400 transition-colors">
+        <h3 class="font-semibold mb-2">Ordenar el mensaje</h3>
+        <p class="text-sm text-gray-600">
+          Estructurar la comunicación institucional para que sea clara, coherente y fácil de interpretar.
+        </p>
+      </div>
+
+      <!-- FEATURE 2 -->
+      <div class="reveal-item opacity-0 translate-y-8 transition-all duration-700 border rounded-xl p-6 hover:border-gray-400 transition-colors">
+        <h3 class="font-semibold mb-2">Posicionamiento estratégico</h3>
+        <p class="text-sm text-gray-600">
+          Construir una presencia digital alineada al valor real de la organización.
+        </p>
+      </div>
+
+      <!-- FEATURE 3 -->
+      <div class="reveal-item opacity-0 translate-y-8 transition-all duration-700 border rounded-xl p-6 hover:border-gray-400 transition-colors">
+        <h3 class="font-semibold mb-2">Generación de oportunidades</h3>
+        <p class="text-sm text-gray-600">
+          Transformar el sitio en una herramienta activa para generar reuniones calificadas.
+        </p>
+      </div>
+
+      <!-- FEATURE 4 -->
+      <div class="reveal-item opacity-0 translate-y-8 transition-all duration-700 border rounded-xl p-6 hover:border-gray-400 transition-colors">
+        <h3 class="font-semibold mb-2">Coherencia institucional</h3>
+        <p class="text-sm text-gray-600">
+          Alinear mensaje, tono y estructura con el nivel de decisión de la organización.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ALCANCE (FEATURES PREMIUM) -->
+  <section id="alcance" class="max-w-6xl mx-auto px-6 py-14 border-t">
+    <h2 class="text-xl font-semibold mb-8">Alcance</h2>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+      <!-- FEATURE 1 -->
+      <div class="reveal-item opacity-0 translate-y-8 transition-all duration-700 border rounded-xl p-6 hover:border-gray-400 transition-colors">
+        <h3 class="font-semibold mb-2">Arquitectura orientada a conversión</h3>
+        <p class="text-sm text-gray-600">
+          Estructura diseñada para guiar la lectura, sostener el interés y conducir a la acción.
+        </p>
+      </div>
+
+      <!-- FEATURE 2 -->
+      <div class="reveal-item opacity-0 translate-y-8 transition-all duration-700 border rounded-xl p-6 hover:border-gray-400 transition-colors">
+        <h3 class="font-semibold mb-2">Diseño institucional a medida</h3>
+        <p class="text-sm text-gray-600">
+          Interfaz sobria y precisa, alineada al posicionamiento y nivel de la organización.
+        </p>
+      </div>
+
+      <!-- FEATURE 3 -->
+      <div class="reveal-item opacity-0 translate-y-8 transition-all duration-700 border rounded-xl p-6 hover:border-gray-400 transition-colors">
+        <h3 class="font-semibold mb-2">Desarrollo optimizado</h3>
+        <p class="text-sm text-gray-600">
+          Código liviano, rápido y preparado para rendimiento y escalabilidad.
+        </p>
+      </div>
+
+      <!-- FEATURE 4 -->
+      <div class="reveal-item opacity-0 translate-y-8 transition-all duration-700 border rounded-xl p-6 hover:border-gray-400 transition-colors">
+        <h3 class="font-semibold mb-2">Copy estratégico</h3>
+        <p class="text-sm text-gray-600">
+          Contenido ajustado para claridad, coherencia y generación de valor real.
+        </p>
+      </div>
+
+      <!-- FEATURE 5 -->
+      <div class="reveal-item opacity-0 translate-y-8 transition-all duration-700 border rounded-xl p-6 hover:border-gray-400 transition-colors">
+        <h3 class="font-semibold mb-2">Experiencia responsive</h3>
+        <p class="text-sm text-gray-600">
+          Adaptación total a dispositivos, garantizando lectura y usabilidad en cualquier contexto.
+        </p>
+      </div>
+
+      <!-- FEATURE 6 -->
+      <div class="reveal-item opacity-0 translate-y-8 transition-all duration-700 border rounded-xl p-6 hover:border-gray-400 transition-colors">
+        <h3 class="font-semibold mb-2">Base SEO técnica</h3>
+        <p class="text-sm text-gray-600">
+          Estructura preparada para indexación, visibilidad y crecimiento orgánico.
+        </p>
+      </div>
+
+      <!-- FEATURE 7 -->
+      <div class="reveal-item opacity-0 translate-y-8 transition-all duration-700 border rounded-xl p-6 hover:border-gray-400 transition-colors">
+        <h3 class="font-semibold mb-2">Sistema de contacto</h3>
+        <p class="text-sm text-gray-600">
+          Integración de formulario funcional orientado a captar consultas calificadas.
+        </p>
+      </div>
+
+      <!-- FEATURE 8 -->
+      <div class="reveal-item opacity-0 translate-y-8 transition-all duration-700 border rounded-xl p-6 hover:border-gray-400 transition-colors">
+        <h3 class="font-semibold mb-2">Deploy y puesta online</h3>
+        <p class="text-sm text-gray-600">
+          Publicación optimizada en entorno productivo listo para operar desde el día uno.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- INVERSION (ANCLA POR TIPO DE DESARROLLO) -->
+  <section id="inversion" class="max-w-6xl mx-auto px-6 py-16 border-t">
+    <h2 class="reveal-item opacity-0 translate-y-8 transition-all duration-700 text-xl font-semibold mb-8">Opciones de inversión</h2>
+
+    <div class="grid md:grid-cols-2 gap-8 items-start">
+
+      <!-- OPCION 1 WORDPRESS -->
+      <div class="reveal-item opacity-0 translate-y-8 transition-all duration-700 border border-gray-800 rounded-xl p-8 bg-gray-900 text-white transition-all hover:shadow-lg">
+        <h3 class="text-xl font-semibold mb-2 text-white">Landing Page</h3>
+        <p class="text-sm text-gray-400 mb-4">Solución flexible, autoadministrable y rápida de implementar</p>
+
+        <div class="relative group js-tooltip-trigger reveal-item opacity-0 translate-y-8 transition-all duration-700 mb-6 flex flex-col items-center md:items-start">
+          <p class="text-3xl font-semibold mb-2 flex items-center justify-center md:justify-start">
+            USD 275
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2 text-gray-400 cursor-help" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </p>
+          <p class="text-gray-500 text-sm text-center md:text-left">Forma de pago: 50% al inicio y 50% al finalizar el proyecto</p>
+          <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-max max-w-xs p-2 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 group-[.active]:opacity-100 transition-opacity duration-300 pointer-events-none group-[.active]:pointer-events-auto z-10 text-center">
+            <p class="text-gray-400 text-xs text-center md:text-left">(o equivalente en pesos argentinos, <a href="https://www.bna.com.ar/Personas" target="_blank" rel="noopener noreferrer" class="underline hover:text-white transition-colors">precio de venta Banco Nación</a>)</p>
+            <div class="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-x-4 border-x-transparent border-t-4 border-t-gray-800"></div>
+          </div>
+        </div>
+
+        <div class="text-sm text-gray-300 mb-4">Vistas incluidas: <strong class="text-white">1 página (scroll completo)</strong></div>
+
+        <ul class="text-sm text-gray-400 space-y-2 mb-6">
+          <li>• Landing page completa en WordPress</li>
+          <li>• Uso de constructor visual (editable por el cliente)</li>
+          <li>• Adaptación de contenido base</li>
+          <li>• Diseño responsive</li>
+          <li>• Formulario de contacto</li>
+          <li>• Configuración básica SEO</li>
+        </ul>
+
+        <div class="border-t border-gray-800 pt-4 mt-4 text-sm text-gray-300">
+          <p><strong>Tiempo estimado:</strong> 7 a 10 días hábiles</p>
+        </div>
+
+        <div class="text-sm text-gray-500 mt-4">
+          <p>Ideal para organizaciones que priorizan autonomía y rapidez</p>
+        </div>
+      </div>
+
+      <!-- OPCION 2 CUSTOM (ANCLA) -->
+      <div class="reveal-item opacity-0 translate-y-8 transition-all duration-700 border-2 border-gray-800 rounded-xl p-8 relative bg-black text-white shadow-xl">
+        <div class="absolute -top-3 left-6 bg-white text-black text-xs px-3 py-1 rounded font-bold">Recomendado</div>
+        
+        <h3 class="text-lg font-semibold mb-2 text-white">Sitio Web Estratégico</h3>
+        <p class="text-sm text-gray-400 mb-4">Desarrollo a medida con control total sobre performance, estructura y posicionamiento</p>
+
+        <div class="relative group js-tooltip-trigger reveal-item opacity-0 translate-y-8 transition-all duration-700 mb-6 flex flex-col items-center md:items-start">
+          <p class="text-3xl font-semibold mb-2 flex items-center justify-center md:justify-start">
+            USD 375
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2 text-gray-400 cursor-help" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </p>
+          <p class="text-gray-500 text-sm text-center md:text-left">Forma de pago: 50% al inicio y 50% al finalizar el proyecto</p>
+          <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-max max-w-xs p-2 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 group-[.active]:opacity-100 transition-opacity duration-300 pointer-events-none group-[.active]:pointer-events-auto z-10 text-center">
+            <p class="text-gray-400 text-xs text-center md:text-left">(o equivalente en pesos argentinos, <a href="https://www.bna.com.ar/Personas" target="_blank" rel="noopener noreferrer" class="underline hover:text-white transition-colors">precio de venta Banco Nación</a>)</p>
+            <div class="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-x-4 border-x-transparent border-t-4 border-t-gray-800"></div>
+          </div>
+        </div>
+
+        <div class="text-sm text-gray-300 mb-4">Vistas incluidas: <strong class="text-white">6 a 8 páginas</strong></div>
+        <ul class="text-sm text-gray-400 space-y-2 mb-6">
+          <li>• Desarrollo completo sin CMS (código limpio)</li>
+          <li>• Estructura por secciones optimizada</li>
+          <li>• Diseño UI 100% personalizado</li>
+          <li>• Copy estratégico optimizado para conversión</li>
+          <li>• Mejor performance y velocidad de carga</li>
+          <li>• Mayor control SEO y escalabilidad</li>
+        </ul>
+
+        <div class="border-t border-gray-800 pt-4 mt-4 text-sm text-gray-300">
+          <p><strong>Tiempo estimado:</strong> 12 a 18 días hábiles</p>
+        </div>
+
+        <div class="text-sm text-gray-500 mt-4">
+          <p>Orientado a posicionamiento sólido y percepción premium</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="reveal-item opacity-0 translate-y-8 transition-all duration-700 mt-10 p-6 border border-gray-800 rounded-xl bg-gray-900/50">
+      <p class="text-sm text-gray-300">
+        La diferencia no está solo en la tecnología, sino en el nivel de control, performance y posicionamiento que se puede construir a largo plazo.
+      </p>
+    </div>
+
+  </section>
+
+  </main>
+
+  <!-- DIFERENCIAL + CIERRE + CONTACTO -->
+  <section id="contacto" class="bg-black text-white text-center py-24 px-6">
+    <div class="max-w-3xl mx-auto">
+      <h2 class="reveal-item opacity-0 translate-y-8 transition-all duration-700 text-2xl font-semibold tracking-tight mb-6">
+        No es solo una web.
+        <br>Es cómo la organización decide presentarse.
+      </h2>
+
+      <p class="reveal-item opacity-0 translate-y-8 transition-all duration-700 text-gray-300 mb-6">
+        Este proyecto se aborda como una pieza estratégica: ordenar el mensaje, fortalecer la reputación
+        y construir una presencia pública coherente.
+      </p>
+
+      <p class="reveal-item opacity-0 translate-y-8 transition-all duration-700 text-gray-400 mb-10 text-sm">
+        Trabajamos con una cantidad limitada de proyectos para garantizar criterio, foco y calidad.
+      </p>
+
+      <div class="reveal-item opacity-0 translate-y-8 transition-all duration-700 flex flex-col md:flex-row gap-4 justify-center mb-8">
+        <a href="https://w.app/quieromiwebhoy" target="_blank" class="bg-white text-black px-8 py-4 rounded-lg text-center font-medium hover:bg-gray-200 transition-colors">
+          Hablar por WhatsApp
+        </a>
+        
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="py-12 text-center text-xs text-gray-400 uppercase tracking-widest">
+    SmartWeb - Propuesta vigente hasta el 12/05/2026
+  </footer>
+
+  <!-- Scroll to Top Button -->
+  <button id="back-to-top" class="hidden md:flex fixed bottom-8 right-8 bg-black text-white p-3 rounded-full shadow-2xl opacity-0 translate-y-10 transition-all duration-300 z-50 pointer-events-none hover:bg-gray-800 group items-center justify-center" aria-label="Volver arriba">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 transition-transform group-hover:-translate-y-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+    </svg>
+  </button>
+
+  <script>
+    const menuBtn = document.getElementById('menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const line1 = document.getElementById('line1');
+    const line2 = document.getElementById('line2');
+    const line3 = document.getElementById('line3');
+    const mobileLinks = document.querySelectorAll('.mobile-link');
+
+    menuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+      // Animaciones de la hamburguesa
+      line1.classList.toggle('rotate-45');
+      line1.classList.toggle('translate-y-2');
+      line2.classList.toggle('opacity-0');
+      line3.classList.toggle('-rotate-45');
+      line3.classList.toggle('-translate-y-2');
+      // Evitar scroll al abrir el menú
+      document.body.classList.toggle('overflow-hidden');
+    });
+
+    // Cerrar menú al hacer click en un enlace
+    mobileLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+        line1.classList.remove('rotate-45', 'translate-y-2');
+        line2.classList.remove('opacity-0');
+        line3.classList.remove('-rotate-45', '-translate-y-2');
+        document.body.classList.remove('overflow-hidden');
+      });
+    });
+
+    // Reading Progress Logic
+    const backToTopBtn = document.getElementById('back-to-top');
+    const header = document.getElementById('main-header');
+    window.addEventListener('scroll', () => {
+      const progressBar = document.getElementById('progress-bar');
+      const winScroll = window.scrollY;
+      const height = document.documentElement.scrollHeight - window.innerHeight;
+      const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+      progressBar.style.width = scrolled + "%";
+
+      // Efectos del Header al hacer scroll
+      if (winScroll > 20) {
+        header.classList.add('bg-white/80', 'backdrop-blur-md', 'border-gray-100', 'shadow-sm');
+        header.classList.remove('bg-white/0', 'border-transparent');
+      } else {
+        header.classList.remove('bg-white/80', 'backdrop-blur-md', 'border-gray-100', 'shadow-sm');
+        header.classList.add('bg-white/0', 'border-transparent');
+      }
+
+      // Show/hide back to top button after 400px of scrolling
+      if (winScroll > 400) {
+        backToTopBtn.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none');
+        backToTopBtn.classList.add('opacity-100', 'translate-y-0', 'pointer-events-auto');
+      } else {
+        backToTopBtn.classList.add('opacity-0', 'translate-y-10', 'pointer-events-none');
+        backToTopBtn.classList.remove('opacity-100', 'translate-y-0', 'pointer-events-auto');
+      }
+    });
+
+    // Función genérica para animar elementos con escalonamiento
+    const animateReveal = (container, delay = 0) => {
+      container.querySelectorAll('.reveal-item').forEach((item, i) => {
+        item.style.transitionDelay = `${delay + (i * 100)}ms`;
+        item.classList.remove('opacity-0', 'translate-y-8');
+        item.classList.add('opacity-100', 'translate-y-0');
+      });
+    };
+
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: "0px 0px -50px 0px"
+    };
+
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animateReveal(entry.target);
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    // Observación dinámica de secciones
+    document.querySelectorAll('section, footer, header').forEach(container => {
+      if (container.querySelector('.reveal-item')) revealObserver.observe(container);
+    });
+
+    // Smooth Scroll to Top Action
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Tooltip logic for mobile (click to toggle)
+    const tooltipTriggers = document.querySelectorAll('.js-tooltip-trigger');
+    
+    tooltipTriggers.forEach(trigger => {
+      trigger.addEventListener('click', (e) => {
+        const wasActive = trigger.classList.contains('active');
+        tooltipTriggers.forEach(t => t.classList.remove('active'));
+        if (!wasActive) {
+          trigger.classList.add('active');
+        }
+        e.stopPropagation();
+      });
+    });
+
+    document.addEventListener('click', () => {
+      tooltipTriggers.forEach(t => t.classList.remove('active'));
+    });
+  </script>
+
+</body>
+</html>
