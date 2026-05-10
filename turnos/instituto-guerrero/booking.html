@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sistema Unificado | Gestión de Turnos</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/airbnb.css">
+  <script src="https://unpkg.com/imask"></script>
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .view-transition { transition: all 0.3s ease-in-out; }
+  </style>
+</head>
+<body class="bg-slate-50 min-h-screen">
+
+  <!-- Navegación Superior -->
+  <nav class="bg-white border-b border-slate-200 px-6 py-4 sticky top-0 z-50">
+    <div class="max-w-[1600px] mx-auto flex justify-between items-center">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">G</div>
+        <h1 class="text-xl font-bold text-slate-800 hidden md:block">Guerrero Oftalmología</h1>
+      </div>
+      <div class="flex bg-slate-100 p-1 rounded-xl">
+        <button onclick="switchView('widget')" id="btn-widget" class="px-4 py-2 rounded-lg text-sm font-semibold transition-all bg-white shadow-sm text-indigo-600">
+          Vista Paciente
+        </button>
+        <button onclick="switchView('dashboard')" id="btn-dashboard" class="px-4 py-2 rounded-lg text-sm font-semibold transition-all text-slate-500 hover:text-slate-700">
+          Panel Admin
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="max-w-[1600px] mx-auto p-4 md:p-8">
+    
+    <!-- SECCIÓN WIDGET (RESERVA) -->
+    <section id="view-widget" class="view-transition block">
+      <div class="flex justify-center items-center py-10">
+        <div class="bg-white w-full max-w-md rounded-2xl shadow-xl border border-slate-100 p-8">
+          <header class="mb-8">
+            <h2 class="text-2xl font-bold text-slate-800">Solicitar turno</h2>
+            <p class="text-sm text-slate-500 mt-1">Completa los pasos para agendar tu cita.</p>
+            <div class="mt-6">
+              <div class="flex justify-between text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wider">
+                <span id="progress-text">Paso 1 de 4</span>
+              </div>
+              <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                <div id="progress-bar" class="bg-indigo-600 h-full transition-all duration-500 ease-out" style="width: 25%"></div>
+              </div>
+            </div>
+          </header>
+
+          <div id="step1" class="step block">
+            <div class="mb-6">
+              <label class="block text-sm font-semibold text-slate-700 mb-2">¿Qué servicio necesitás?</label>
+              <select id="tipo" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none">
+                <option value="Consulta general">Consulta general</option>
+                <option value="Cirugía láser">Cirugía láser</option>
+                <option value="Ojo seco">Ojo seco</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-2">Seleccionar hora y fecha</label>
+              <input id="fecha" type="text" placeholder="Elegir fecha..." class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none cursor-pointer" readonly />
+            </div>
+            <button onclick="nextStep(2)" class="mt-6 w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-xl transition-all shadow-lg uppercase">Continuar</button>
+          </div>
+
+          <div id="step2" class="step hidden space-y-4">
+            <input id="nombre" placeholder="Nombre completo*" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none" />
+            <input id="telefono" type="tel" placeholder="Teléfono*" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none" />
+            <textarea id="mensaje" placeholder="Comentarios" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none h-24"></textarea>
+            <button onclick="submitForm()" class="mt-4 w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-xl transition-all shadow-lg uppercase">Continuar</button>
+            <button onclick="nextStep(1)" class="w-full text-slate-400 text-sm font-medium hover:text-slate-600 py-2 text-center">Volver al paso anterior</button>
+          </div>
+
+          <div id="step3" class="step hidden">
+            <h3 class="text-xl font-bold text-slate-800 mb-4">Detalle del turno</h3>
+            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 mb-6 space-y-3">
+              <div>
+                <p class="text-xs font-semibold text-slate-500 uppercase">Servicio</p>
+                <p id="confirm-tipo" class="text-slate-800 font-medium"></p>
+              </div>
+              <div>
+                <p class="text-xs font-semibold text-slate-500 uppercase">Fecha y Hora</p>
+                <p id="confirm-fecha" class="text-slate-800 font-medium"></p>
+              </div>
+              <div>
+                <p class="text-xs font-semibold text-slate-500 uppercase">Nombre</p>
+                <p id="confirm-nombre" class="text-slate-800 font-medium"></p>
+              </div>
+              <div>
+                <p class="text-xs font-semibold text-slate-500 uppercase">Contacto</p>
+                <p id="confirm-contacto" class="text-slate-800 font-medium"></p>
+              </div>
+              <div id="confirm-mensaje-container" class="hidden">
+                <p class="text-xs font-semibold text-slate-500 uppercase">Comentarios</p>
+                <p id="confirm-mensaje" class="text-slate-800 italic"></p>
+              </div>
+            </div>
+            <button onclick="confirmAppointment()" class="mt-4 w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-xl transition-all shadow-lg uppercase">Confirmar</button>
+            <button onclick="nextStep(2)" class="w-full text-slate-400 text-sm font-medium hover:text-slate-600 py-2 text-center">Volver a editar datos</button>
+          </div>
+
+          <div id="step4" class="step hidden text-center py-8">
+            <div class="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
+              <svg class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg>
+            </div>
+            <h3 class="text-2xl font-bold text-slate-800">¡Solicitud enviada!</h3>
+            <p id="success-message-widget" class="text-slate-500 mt-2">Los datos se han guardado en el sistema.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN DASHBOARD (ADMIN) -->
+    <section id="view-dashboard" class="view-transition hidden">
+      <header class="mb-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h2 class="text-3xl font-bold text-slate-800 tracking-tight">Panel de Turnos</h2>
+          <p class="text-slate-500 mt-1">Administración y control de solicitudes entrantes.</p>
+        </div>
+        <div class="bg-white px-6 py-3 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-3">
+          <div class="w-3 h-3 bg-indigo-500 rounded-full animate-pulse"></div>
+          <span class="text-sm font-semibold text-slate-600">Total Pendientes: <span id="total-count" class="text-indigo-600 ml-1">0</span></span>
+        </div>
+      </header>
+
+      <!-- Buscador -->
+      <div class="mb-8 flex flex-col md:flex-row gap-4 items-center">
+        <input type="text" id="search-input" placeholder="Buscar por nombre del paciente..." class="w-full md:flex-1 p-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all shadow-sm" oninput="renderDashboard()">
+        <button onclick="exportToCSV()" class="w-full md:w-auto bg-slate-800 hover:bg-slate-900 text-white font-bold py-3 px-6 rounded-xl transition-all flex items-center justify-center gap-2 shadow-sm">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1M7 10l5 5m0 0l5-5m-5 5V3"></path></svg>
+          Exportar CSV
+        </button>
+        <button onclick="clearHistory()" class="w-full md:w-auto bg-red-50 text-red-600 hover:bg-red-100 border border-red-200 font-bold py-3 px-6 rounded-xl transition-all flex items-center justify-center gap-2 shadow-sm">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+          Limpiar
+        </button>
+      </div>
+
+      <div id="list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <!-- Turnos renderizados aquí -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Contenedor de Notificaciones (Toasts) -->
+  <div id="toast-container" class="fixed bottom-6 right-6 z-[100] flex flex-col gap-3 pointer-events-none"></div>
+
+  <!-- Modal de Confirmación -->
+  <div id="confirm-modal" class="fixed inset-0 z-[110] hidden items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm transition-all duration-300 opacity-0">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 transform transition-all duration-300 scale-95">
+      <div class="w-12 h-12 bg-red-100 text-red-600 rounded-full flex items-center justify-center mb-4">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+      </div>
+      <h3 class="text-xl font-bold text-slate-800 mb-2">¿Confirmar limpieza?</h3>
+      <p class="text-slate-500 text-sm mb-6">Esta acción eliminará permanentemente todos los registros del historial. No se puede deshacer.</p>
+      <div class="flex gap-3">
+        <button onclick="toggleModal(false)" class="flex-1 px-4 py-3 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition-all">
+          Cancelar
+        </button>
+        <button onclick="executeClearHistory()" class="flex-1 px-4 py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition-all shadow-lg shadow-red-100">
+          Eliminar todo
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
+
+  <script>
+    // --- CONFIGURACIÓN ---
+    const CLINIC_WHATSAPP = '5491112345678'; // Número central de la clínica
+
+    // --- ESTADO GLOBAL ---
+    let appointments = JSON.parse(localStorage.getItem('appointmentsData')) || [];
+    let currentStep = 1;
+
+    // --- LÓGICA DE NAVEGACIÓN ---
+    function switchView(view) {
+      const isWidget = view === 'widget';
+      document.getElementById('view-widget').classList.toggle('hidden', !isWidget);
+      document.getElementById('view-dashboard').classList.toggle('hidden', isWidget);
+      
+      // Update buttons
+      const btnW = document.getElementById('btn-widget');
+      const btnD = document.getElementById('btn-dashboard');
+      
+      if(isWidget) {
+        btnW.className = "px-4 py-2 rounded-lg text-sm font-semibold transition-all bg-white shadow-sm text-indigo-600";
+        btnD.className = "px-4 py-2 rounded-lg text-sm font-semibold transition-all text-slate-500 hover:text-slate-700";
+      } else {
+        btnD.className = "px-4 py-2 rounded-lg text-sm font-semibold transition-all bg-white shadow-sm text-indigo-600";
+        btnW.className = "px-4 py-2 rounded-lg text-sm font-semibold transition-all text-slate-500 hover:text-slate-700";
+        renderDashboard();
+      }
+    }
+
+    // --- LÓGICA DEL WIDGET ---
+    const fp = flatpickr("#fecha", {
+      enableTime: true, dateFormat: "d/m/Y H:i", minDate: "today", locale: "es",
+      time_24hr: true, minuteIncrement: 30, minTime: "09:00", maxTime: "18:00",
+      disable: [date => (date.getDay() === 0 || date.getDay() === 6)]
+    });
+
+    const phoneMask = IMask(document.getElementById('telefono'), { mask: '+{54} 9 00 0000 0000' });
+
+    function nextStep(step) {
+      if (step > currentStep && !validateStep(currentStep)) return;
+      document.querySelectorAll('.step').forEach(s => s.classList.replace('block', 'hidden'));
+      document.getElementById('step' + step).classList.replace('hidden', 'block');
+      currentStep = step;
+      updateProgress();
+    }
+
+    function updateProgress() {
+      const percent = (currentStep / 4) * 100; // Ahora hay 4 pasos
+      document.getElementById('progress-text').innerText = `Paso ${currentStep} de 4`;
+      document.getElementById('progress-bar').style.width = `${percent}%`; // Ajustar el ancho de la barra
+    }
+
+    function validateStep(step) {
+      let valid = true;
+      const markError = (id, cond) => {
+        const el = document.getElementById(id);
+        el.classList.toggle('border-red-500', cond);
+        if(cond) valid = false;
+      };
+
+      if(step === 1) markError('fecha', !document.getElementById('fecha').value);
+      if(step === 2) {
+        markError('nombre', !document.getElementById('nombre').value);
+        markError('telefono', !phoneMask.masked.isComplete);
+      }
+      return valid;
+    }
+
+    let currentAppointmentData = {}; // Para almacenar los datos del turno antes de la confirmación
+
+    // Función para mostrar notificaciones visuales (Toasts)
+    function showToast(message, title = "Notificación") {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      
+      // Estilos del Toast usando Tailwind CSS
+      toast.className = "bg-white border border-slate-200 text-slate-800 px-5 py-4 rounded-2xl shadow-2xl shadow-indigo-100 transform transition-all duration-500 translate-y-10 opacity-0 flex items-center gap-4 pointer-events-auto min-w-[320px] max-w-xs";
+      toast.innerHTML = `
+        <div class="bg-green-100 p-2 rounded-full text-green-600">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+        </div>
+        <div class="flex-1">
+          <p class="text-sm font-bold">${title}</p>
+          <p class="text-xs text-slate-500 break-words">${message}</p>
+        </div>
+      `;
+      
+      container.appendChild(toast);
+      setTimeout(() => toast.classList.remove('translate-y-10', 'opacity-0'), 10);
+
+      // Eliminar toasts antiguos si hay muchos
+      if (container.children.length > 3) {
+        container.removeChild(container.children[0]);
+      }
+      
+      setTimeout(() => {
+        toast.classList.add('opacity-0', '-translate-y-4');
+        setTimeout(() => toast.remove(), 500);
+      }, 4000);
+    }
+
+    function submitForm() {
+      if(!validateStep(2)) return;
+      
+      currentAppointmentData = { // Almacenar en la variable global
+        id: Date.now(),
+        nombre: document.getElementById('nombre').value,
+        telefono: document.getElementById('telefono').value,
+        tipo: document.getElementById('tipo').value,
+        disponibilidad: document.getElementById('fecha').value,
+        mensaje: document.getElementById('mensaje').value,
+        estado: 'nuevo'
+      };
+
+      // Rellenar los datos en el step3
+      document.getElementById('confirm-tipo').innerText = currentAppointmentData.tipo;
+      document.getElementById('confirm-fecha').innerText = currentAppointmentData.disponibilidad;
+      document.getElementById('confirm-nombre').innerText = currentAppointmentData.nombre;
+      document.getElementById('confirm-contacto').innerText = currentAppointmentData.telefono;
+      
+      const confirmMensajeContainer = document.getElementById('confirm-mensaje-container');
+      const confirmMensaje = document.getElementById('confirm-mensaje');
+      if (currentAppointmentData.mensaje) {
+        confirmMensaje.innerText = currentAppointmentData.mensaje;
+        confirmMensajeContainer.classList.remove('hidden');
+      } else {
+        confirmMensajeContainer.classList.add('hidden');
+      }
+
+      nextStep(3); // Ir al paso de confirmación
+    }
+
+    function confirmAppointment() {
+      // Mensaje dinámico según horario de atención (Lun-Vie 8-18hs)
+      const now = new Date();
+      const day = now.getDay();
+      const hour = now.getHours();
+      const msgEl = document.getElementById('success-message-widget');
+      const isBusinessHour = (day >= 1 && day <= 5) && (hour >= 8 && hour < 18);
+
+      msgEl.innerText = isBusinessHour 
+        ? "¡Gracias! Un representante se comunicará con vos a la brevedad dentro de nuestro horario de atención."
+        : "Recibimos tu solicitud correctamente. Nos pondremos en contacto con vos al inicio de la próxima jornada laboral.";
+
+      appointments.push(currentAppointmentData);
+      localStorage.setItem('appointmentsData', JSON.stringify(appointments));
+      
+      showToast("Su solicitud ha sido procesada con éxito.", "¡Turno Registrado!");
+      nextStep(4); // Mostrar el mensaje final de éxito
+    }
+
+    // --- LÓGICA DEL DASHBOARD ---
+    const statusStyles = {
+      nuevo: "bg-blue-100 text-blue-700",
+      confirmado: "bg-green-100 text-green-700",
+      cancelado: "bg-red-100 text-red-700"
+    };
+
+    function renderDashboard() {
+      const list = document.getElementById('list');
+      const searchTerm = document.getElementById('search-input')?.value.toLowerCase() || '';
+
+      const filtered = appointments.filter(t => 
+        t.estado !== 'cancelado' && 
+        t.nombre.toLowerCase().includes(searchTerm)
+      );
+
+      document.getElementById('total-count').innerText = appointments.filter(t => t.estado === 'nuevo').length;
+      
+      list.innerHTML = filtered.map(t => `
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col h-full">
+          <div class="flex justify-between items-start mb-4">
+            <div class="min-w-0">
+              <h3 class="font-bold text-slate-800 truncate">${t.nombre}</h3>
+              <p class="text-xs text-indigo-600 font-bold uppercase tracking-tight">${t.tipo}</p>
+            </div>
+            <span class="px-2 py-1 rounded-md text-[10px] font-bold uppercase ${statusStyles[t.estado]}">${t.estado}</span>
+          </div>
+          <div class="text-sm text-slate-600 bg-slate-50 p-3 rounded-xl mb-4 flex-1">
+            <div class="flex items-center mb-2 font-medium">🕒 ${t.disponibilidad}</div>
+            <div class="text-xs border-t pt-2 mt-2 opacity-75">${t.mensaje || 'Sin mensaje adicional'}</div>
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <button onclick="confirmAndWhatsApp(${t.id}, '${t.telefono}', '${t.nombre}', '${t.tipo}', '${t.disponibilidad}')" class="bg-indigo-600 text-white text-xs font-bold py-2 rounded-lg">Confirmar</button>
+            <button onclick="rescheduleAndWhatsApp(${t.id}, '${t.telefono}', '${t.nombre}', '${t.tipo}', '${t.disponibilidad}')" class="bg-slate-100 text-slate-500 hover:bg-amber-50 hover:text-amber-700 text-xs font-bold py-2 rounded-lg transition-colors">Reagendar</button>
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    // Función auxiliar para limpiar el número de teléfono para WhatsApp
+    function cleanPhoneNumber(phoneNumber) {
+      return phoneNumber.replace(/\D/g, ''); // Elimina todos los caracteres no numéricos
+    }
+
+    function confirmAndWhatsApp(id, telefono, nombre, tipo, disponibilidad) {
+      // 1. Actualizar el estado del turno a 'confirmado'
+      const estado = 'confirmado';
+      appointments = appointments.map(t => t.id === id ? { ...t, estado } : t);
+      localStorage.setItem('appointmentsData', JSON.stringify(appointments));
+      renderDashboard();
+
+      // 2. Generar el mensaje de WhatsApp
+      const cleanedPhone = cleanPhoneNumber(telefono);
+      const message = `¡Hola ${nombre}! 👋 Te escribimos de Guerrero Oftalmología para confirmar tu turno para *${tipo}* el día *${disponibilidad}*. ¡Te esperamos!`;
+      const whatsappUrl = `https://wa.me/${cleanedPhone}?text=${encodeURIComponent(message)}`;
+
+      // 3. Abrir WhatsApp
+      window.open(whatsappUrl, '_blank');
+      showToast(`Turno de ${nombre} confirmado y mensaje de WhatsApp enviado.`, "Turno Confirmado");
+    }
+
+    function rescheduleAndWhatsApp(id, telefono, nombre, tipo, disponibilidad) {
+      const cleanedPhone = cleanPhoneNumber(telefono);
+      // Mensaje estructurado para reagendar
+      const message = `Hola ${nombre}! 👋 Te contactamos de Guerrero Oftalmología respecto a tu solicitud de turno para *${tipo}* (${disponibilidad}). Lamentablemente ese horario ya no está disponible. ¿En qué otro momento de la semana podrías venir?`;
+      const whatsappUrl = `https://wa.me/${cleanedPhone}?text=${encodeURIComponent(message)}`;
+      
+      window.open(whatsappUrl, '_blank');
+      showToast(`Solicitud de reagendamiento enviada a ${nombre}.`, "Reagendar Turno");
+    }
+
+    function updateStatus(id, estado) {
+      appointments = appointments.map(t => t.id === id ? { ...t, estado } : t);
+      localStorage.setItem('appointmentsData', JSON.stringify(appointments));
+      renderDashboard();
+    }
+
+    function toggleModal(show) {
+      const modal = document.getElementById('confirm-modal');
+      const content = modal.querySelector('div');
+      if (show) {
+        modal.classList.replace('hidden', 'flex');
+        setTimeout(() => {
+          modal.classList.remove('opacity-0');
+          content.classList.remove('scale-95');
+        }, 10);
+      } else {
+        modal.classList.add('opacity-0');
+        content.classList.add('scale-95');
+        setTimeout(() => modal.classList.replace('flex', 'hidden'), 300);
+      }
+    }
+
+    function clearHistory() {
+      if (appointments.length === 0) {
+        showToast("No hay registros en el historial.", "Información");
+        return;
+      }
+      toggleModal(true);
+    }
+
+    function executeClearHistory() {
+      appointments = [];
+      localStorage.setItem('appointmentsData', JSON.stringify(appointments));
+      renderDashboard();
+      toggleModal(false);
+      showToast("Se ha vaciado el historial correctamente.", "Historial Limpio");
+    }
+
+    function exportToCSV() {
+      const searchTerm = document.getElementById('search-input')?.value.toLowerCase() || '';
+      const filtered = appointments.filter(t => 
+        t.estado !== 'cancelado' && 
+        t.nombre.toLowerCase().includes(searchTerm)
+      );
+
+      if (filtered.length === 0) {
+        showToast("No hay datos para exportar.", "Atención");
+        return;
+      }
+
+      const headers = ["ID", "Nombre", "Telefono", "Tipo", "Fecha_Hora", "Mensaje", "Estado"];
+      const csvRows = [headers.join(',')];
+
+      filtered.forEach(t => {
+        const row = [
+          t.id,
+          `"${t.nombre.replace(/"/g, '""')}"`,
+          `"${t.telefono.replace(/"/g, '""')}"`,
+          `"${t.tipo.replace(/"/g, '""')}"`,
+          `"${t.disponibilidad.replace(/"/g, '""')}"`,
+          `"${(t.mensaje || '').replace(/"/g, '""')}"`,
+          `"${t.estado}"`
+        ];
+        csvRows.push(row.join(','));
+      });
+
+      const csvString = "\uFEFF" + csvRows.join('\n'); // UTF-8 BOM para Excel
+      const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `turnos_${new Date().toISOString().split('T')[0]}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    // Inicializar
+    updateProgress();
+  </script>
+</body>
+</html>

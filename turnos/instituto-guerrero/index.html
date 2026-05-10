@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Instituto Oftalmológico Guerrero | Centro de Alta Complejidad · Mendoza</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: '#0a1628',
+            'navy-mid': '#0f2244',
+            teal: '#0d7377',
+            'teal-light': '#14a0a5',
+            gold: '#c9a84c',
+            'gold-light': '#e8c96b',
+          },
+          fontFamily: {
+            display: ['Cormorant Garamond', 'serif'],
+            body: ['DM Sans', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  
+  <style type="text/tailwindcss">
+    @layer components {
+      .nav-link {
+        @apply text-[10px] tracking-[0.2em] uppercase text-white/70 hover:text-white transition-all relative;
+      }
+      .nav-link::after {
+        @apply content-[''] absolute -bottom-1 left-0 w-0 h-[1px] bg-gold transition-all duration-300;
+      }
+      .nav-link:hover::after { @apply w-full; }
+      
+      .section-container { @apply max-w-7xl mx-auto px-6 md:px-12 py-24 md:py-32; }
+      
+      .btn-primary {
+        @apply bg-teal text-white px-8 py-4 text-[11px] tracking-[0.2em] uppercase rounded-sm transition-all hover:bg-teal-light hover:-translate-y-1;
+      }
+      .btn-outline {
+        @apply border border-white/20 text-white px-8 py-4 text-[11px] tracking-[0.2em] uppercase rounded-sm transition-all hover:border-gold hover:bg-gold/5;
+      }
+
+      .reveal { @apply opacity-0 translate-y-12 transition-all duration-1000 ease-out; }
+      .reveal.active { @apply opacity-100 translate-y-0; }
+    }
+  </style>
+</head>
+
+<body class="bg-navy font-body text-white selection:bg-teal selection:text-white overflow-x-hidden">
+
+  <nav id="mainNav" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500 py-8 px-6 md:px-12">
+    <div class="max-w-[1600px] mx-auto flex justify-between items-center">
+      <div class="flex flex-col">
+        <span class="font-display text-2xl font-medium tracking-tight text-gold">Instituto Guerrero</span>
+        <span class="text-[8px] tracking-[0.4em] uppercase text-white/40">Oftalmología Mendoza</span>
+      </div>
+      
+      <ul class="hidden lg:flex items-center gap-10">
+        <li><a href="#servicios" class="nav-link">Servicios</a></li>
+        <li><a href="#nosotros" class="nav-link">Nosotros</a></li>
+        <li><a href="#cirugias" class="nav-link">Cirugías</a></li>
+        <li><a href="#staff" class="nav-link">Staff</a></li>
+        <li><a href="#ubicacion" class="nav-link">Ubicación</a></li>
+        <li><a href="#contacto" class="btn-primary py-2 px-6">Turnos</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="relative h-screen flex items-center overflow-hidden">
+    <div class="absolute inset-0 z-0 scale-110 animate-[pulse_20s_infinite_alternate]">
+      <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1579154235602-3c4676678234?q=80&w=2070')] bg-cover bg-center brightness-[0.2]"></div>
+    </div>
+    <div class="section-container relative z-10 w-full pt-20">
+      <div class="max-w-4xl space-y-8 animate-[fadeUp_1.2s_ease_both]">
+        <h1 class="font-display text-6xl md:text-9xl font-light leading-[0.9] tracking-tighter">
+          Excelencia en <br> <span class="italic text-gold">microcirugía</span>
+        </h1>
+        <p class="text-lg md:text-2xl text-white/60 font-light max-w-2xl">
+          Tecnología de última generación y trayectoria humana dedicada al cuidado integral de su salud visual.
+        </p>
+        <div class="flex flex-wrap gap-6 pt-6">
+          <a href="#contacto" class="btn-primary">Agendar Consulta</a>
+          <a href="#servicios" class="btn-outline">Tratamientos</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="servicios" class="bg-navy-mid reveal">
+    <div class="section-container">
+      <h2 class="font-display text-4xl md:text-6xl font-light mb-16 underline decoration-gold/30 underline-offset-8">Especialidades</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-white/5 border border-white/5">
+        <div class="bg-navy-mid p-10 hover:bg-teal/5 transition-colors group">
+          <h3 class="font-display text-2xl mb-4 group-hover:text-gold transition-colors">Consulta General</h3>
+          <p class="text-white/50 text-sm">Exámenes preventivos y control de agudeza visual.</p>
+        </div>
+        <div class="bg-navy-mid p-10 hover:bg-teal/5 transition-colors group">
+          <h3 class="font-display text-2xl mb-4 group-hover:text-gold transition-colors">Ojo Seco</h3>
+          <p class="text-white/50 text-sm">Tratamiento avanzado con tecnología LipiView.</p>
+        </div>
+        <div class="bg-navy-mid p-10 hover:bg-teal/5 transition-colors group">
+          <h3 class="font-display text-2xl mb-4 group-hover:text-gold transition-colors">Glaucoma</h3>
+          <p class="text-white/50 text-sm">Detección precoz y seguimiento especializado.</p>
+        </div>
+        <div class="bg-navy-mid p-10 hover:bg-teal/5 transition-colors group">
+          <h3 class="font-display text-2xl mb-4 group-hover:text-gold transition-colors">Estudios</h3>
+          <p class="text-white/50 text-sm">OCT, Campos Visuales y Topografías Corneales.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="nosotros" class="reveal">
+    <div class="section-container grid lg:grid-cols-2 gap-20 items-center">
+      <div class="relative group">
+        <div class="aspect-[4/5] bg-[url('https://images.unsplash.com/photo-1551076805-e1869033e561?q=80&w=1932')] bg-cover bg-center grayscale group-hover:grayscale-0 transition-all duration-1000"></div>
+        <div class="absolute -bottom-8 -right-8 w-64 h-64 border border-gold/20 -z-10"></div>
+      </div>
+      <div class="space-y-8">
+        <span class="text-[10px] tracking-[0.5em] uppercase text-gold">Nuestra Historia</span>
+        <h2 class="font-display text-4xl md:text-6xl font-light">Compromiso con <br> <em class="italic">Mendoza</em></h2>
+        <p class="text-white/60 leading-relaxed text-lg">
+          Bajo la dirección del Dr. Guerrero, nuestro instituto se ha consolidado como el referente regional en patologías de alta complejidad. Combinamos la calidez de la atención personalizada con los estándares quirúrgicos internacionales más exigentes.
+        </p>
+        <div class="grid grid-cols-2 gap-10 pt-8 border-t border-white/5">
+          <div>
+            <div class="font-display text-4xl text-gold">25+</div>
+            <div class="text-[9px] uppercase tracking-widest text-white/40 mt-2">Años de Trayectoria</div>
+          </div>
+          <div>
+            <div class="font-display text-4xl text-gold">15k</div>
+            <div class="text-[9px] uppercase tracking-widest text-white/40 mt-2">Pacientes Anuales</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="cirugias" class="bg-navy-mid reveal">
+    <div class="section-container">
+      <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+        <h2 class="font-display text-4xl md:text-6xl font-light">Centro <em class="text-gold italic">Quirúrgico</em></h2>
+        <p class="text-white/40 max-w-md text-sm italic">Quirófanos equipados con flujo laminar y tecnología láser de femtosegundo.</p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="border border-white/5 p-8 hover:border-gold/30 transition-all">
+          <div class="text-gold mb-6 italic font-display text-3xl">LASIK / PRK</div>
+          <p class="text-white/50 text-sm">Adiós a los anteojos. Cirugía refractiva láser de recuperación ultra-rápida.</p>
+        </div>
+        <div class="border border-white/5 p-8 hover:border-gold/30 transition-all">
+          <div class="text-gold mb-6 italic font-display text-3xl">Cataratas</div>
+          <p class="text-white/50 text-sm">Implante de lentes premium multifocales y tóricos para visión HD.</p>
+        </div>
+        <div class="border border-white/5 p-8 hover:border-gold/30 transition-all">
+          <div class="text-gold mb-6 italic font-display text-3xl">Córnea</div>
+          <p class="text-white/50 text-sm">Trasplantes laminares (DMEK/DSAEK) y anillos intracorneales.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="staff" class="reveal">
+    <div class="section-container text-center">
+      <h2 class="font-display text-4xl md:text-6xl font-light mb-20">Equipo <em class="text-gold italic">Médico</em></h2>
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-12">
+        <div class="space-y-4">
+          <div class="aspect-square bg-white/5 grayscale"></div>
+          <h4 class="font-display text-xl uppercase tracking-wider">Dr. Jorge Guerrero</h4>
+          <p class="text-[9px] text-gold tracking-widest uppercase">Director Médico · Córnea</p>
+        </div>
+        <div class="space-y-4">
+          <div class="aspect-square bg-white/5 grayscale"></div>
+          <h4 class="font-display text-xl uppercase tracking-wider">Dra. Elena Ruiz</h4>
+          <p class="text-[9px] text-gold tracking-widest uppercase">Especialista en Glaucoma</p>
+        </div>
+        <div class="space-y-4">
+          <div class="aspect-square bg-white/5 grayscale"></div>
+          <h4 class="font-display text-xl uppercase tracking-wider">Dr. Marcos Sosa</h4>
+          <p class="text-[9px] text-gold tracking-widest uppercase">Cirugía Refractiva</p>
+        </div>
+        <div class="space-y-4">
+          <div class="aspect-square bg-white/5 grayscale"></div>
+          <h4 class="font-display text-xl uppercase tracking-wider">Staff Técnico</h4>
+          <p class="text-[9px] text-gold tracking-widest uppercase">Instrumentación y Estudios</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contacto" class="bg-navy-mid reveal">
+    <div class="section-container grid lg:grid-cols-2 gap-20">
+      <div class="space-y-8">
+        <h2 class="font-display text-4xl md:text-6xl font-light italic text-gold">Turnos Online</h2>
+        <p class="text-white/60">Complete el formulario y un asesor coordinará su cita vía WhatsApp.</p>
+        
+        <div id="booking-container" class="bg-white/[0.02] border border-white/5 p-8 md:p-12 rounded-sm relative overflow-hidden">
+          <div class="flex justify-between text-[10px] tracking-widest uppercase text-white/30 mb-8">
+            <span id="step-label">Paso 1 de 2</span>
+            <div class="w-32 h-[1px] bg-white/10 overflow-hidden relative">
+              <div id="progress-bar" class="absolute inset-0 bg-gold translate-x-[-50%] transition-transform duration-500"></div>
+            </div>
+          </div>
+
+          <form id="booking-form" class="space-y-6">
+            <div id="step-1" class="space-y-6">
+              <div class="space-y-2">
+                <label class="text-[9px] tracking-widest uppercase text-white/40">Especialidad</label>
+                <select id="b-tipo" class="w-full bg-white/5 border border-white/10 p-4 outline-none focus:border-teal transition-colors">
+                  <option value="Consulta">Consulta General</option>
+                  <option value="Cirugia">Cirugía</option>
+                  <option value="Estudio">Estudios</option>
+                </select>
+              </div>
+              <div class="space-y-2">
+                <label class="text-[9px] tracking-widest uppercase text-white/40">Fecha Sugerida</label>
+                <input type="text" id="b-fecha" class="w-full bg-white/5 border border-white/10 p-4 outline-none focus:border-teal transition-colors cursor-pointer" placeholder="Seleccionar...">
+              </div>
+              <button type="button" onclick="goStep(2)" class="w-full btn-primary">Siguiente →</button>
+            </div>
+
+            <div id="step-2" class="hidden space-y-6">
+              <div class="space-y-2">
+                <label class="text-[9px] tracking-widest uppercase text-white/40">Nombre y Teléfono</label>
+                <input type="text" id="b-nombre" class="w-full bg-white/5 border border-white/10 p-4 outline-none focus:border-teal mb-4" placeholder="Nombre completo">
+                <input type="tel" id="b-telefono" class="w-full bg-white/5 border border-white/10 p-4 outline-none focus:border-teal" placeholder="WhatsApp">
+              </div>
+              <button type="button" onclick="finalize()" class="w-full btn-primary">Confirmar Solicitud</button>
+              <button type="button" onclick="goStep(1)" class="w-full text-[9px] uppercase tracking-widest text-white/30 hover:text-white transition-colors">← Volver</button>
+            </div>
+            
+            <div id="step-3" class="hidden text-center py-10 space-y-4 animate-fade-up">
+              <div class="w-16 h-16 border border-teal text-teal flex items-center justify-center mx-auto rounded-full text-2xl">✓</div>
+              <h3 class="font-display text-2xl">Solicitud Recibida</h3>
+              <p id="success-msg" class="text-sm text-white/50 leading-relaxed"></p>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div id="ubicacion" class="space-y-10">
+        <h2 class="font-display text-4xl md:text-6xl font-light underline decoration-gold/30">Ubicación</h2>
+        <div class="aspect-video bg-white/5 grayscale hover:grayscale-0 transition-all duration-1000 border border-white/5">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3350.217355060481!2d-68.8475253!3d-32.8924191!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x967e09193796d84f%3A0xe2f15a6d5162446!2sMontevideo%2047%2C%20M5500%20Mendoza!5e0!3m2!1ses!2sar!4v1700000000000" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+        <div class="space-y-4">
+          <div class="flex justify-between items-center border-b border-white/5 pb-4">
+            <span class="text-[9px] tracking-widest uppercase text-white/30">Dirección</span>
+            <span class="text-sm">Montevideo 47, Ciudad de Mendoza</span>
+          </div>
+          <div class="flex justify-between items-center border-b border-white/5 pb-4">
+            <span class="text-[9px] tracking-widest uppercase text-white/30">Teléfono</span>
+            <span class="text-sm">0261 429-1142</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="bg-black py-20 border-t border-white/5">
+    <div class="max-w-7xl mx-auto px-6 md:px-12 flex flex-col md:flex-row justify-between items-center gap-10">
+      <div class="text-center md:text-left">
+        <span class="font-display text-xl text-gold">Guerrero Oftalmología</span>
+        <p class="text-[8px] tracking-[0.3em] uppercase text-white/20 mt-2">© 2026 Alta Complejidad Visual</p>
+      </div>
+      <div class="flex gap-8">
+        <a href="#" class="text-[10px] tracking-widest text-white/40 hover:text-white transition-colors">Instagram</a>
+        <a href="#" class="text-[10px] tracking-widest text-white/40 hover:text-white transition-colors">LinkedIn</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
+  <script src="https://unpkg.com/imask"></script>
+
+  <script>
+    /* Navbar transition */
+    window.addEventListener('scroll', () => {
+      const nav = document.getElementById('mainNav');
+      nav.classList.toggle('bg-navy/90', window.scrollY > 50);
+      nav.classList.toggle('backdrop-blur-md', window.scrollY > 50);
+      nav.classList.toggle('py-4', window.scrollY > 50);
+      nav.classList.toggle('border-b', window.scrollY > 50);
+      nav.classList.toggle('border-white/5', window.scrollY > 50);
+    });
+
+    /* Global Reveal Observer */
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('active'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    /* Booking System */
+    flatpickr("#b-fecha", {
+      enableTime: true,
+      dateFormat: "d/m/Y H:i",
+      minDate: "today",
+      locale: "es",
+      disable: [d => (d.getDay() === 0 || d.getDay() === 6)]
+    });
+
+    IMask(document.getElementById('b-telefono'), { mask: '+{54} 000 000 0000' });
+
+    function goStep(n) {
+      document.querySelectorAll('#booking-form > div').forEach(el => el.classList.add('hidden'));
+      document.getElementById('step-' + n).classList.remove('hidden');
+      document.getElementById('step-label').textContent = `Paso ${n} de 2`;
+      document.getElementById('progress-bar').style.transform = `translateX(${n === 1 ? '-50%' : '0%'})`;
+    }
+
+    function finalize() {
+      const isWorkHour = new Date().getHours() >= 8 && new Date().getHours() < 18;
+      const msg = isWorkHour 
+        ? "Gracias. En breve un asesor confirmará su turno por WhatsApp."
+        : "Recibido. Lo contactaremos el próximo día hábil desde las 08:00hs.";
+      
+      document.getElementById('success-msg').textContent = msg;
+      goStep(3);
+      document.getElementById('step-label').parentElement.classList.add('hidden');
+    }
+  </script>
+</body>
+</html>

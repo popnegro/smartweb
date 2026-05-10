@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BookKit · Sistema de Reservas</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=Figtree:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script src="https://unpkg.com/imask"></script>
+  <style>
+    :root {
+      --accent: #F59E0B;
+      --accent-hover: #D97706;
+      --accent-light: rgba(245,158,11,0.12);
+      --accent-ring: rgba(245,158,11,0.25);
+    }
+    body { font-family: 'Figtree', sans-serif; }
+    .font-display { font-family: 'Syne', sans-serif; }
+    @keyframes stepIn {
+      from { opacity: 0; transform: translateX(14px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    .step-anim { animation: stepIn 0.22s ease-out forwards; }
+    .flatpickr-calendar { border-radius: 1rem !important; box-shadow: 0 20px 60px rgba(0,0,0,0.12) !important; border: 1px solid #E2E8F0 !important; }
+    .flatpickr-day.selected, .flatpickr-day.selected:hover { background: var(--accent) !important; border-color: var(--accent) !important; }
+    ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: #F1F5F9; }
+    ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 9px; }
+  </style>
+</head>
+<body class="min-h-screen">
+
+  <!-- ╔══════════════════════════╗ -->
+  <!-- ║          NAV             ║ -->
+  <!-- ╚══════════════════════════╝ -->
+  <nav class="sticky top-0 z-50 shadow-xl bg-gradient-to-br from-slate-900 to-slate-800">
+    <div class="max-w-[1600px] mx-auto px-4 md:px-6 py-3 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-2.5 shrink-0">
+        <div class="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center font-bold text-white text-base">⚡</div>
+        <span class="font-display font-bold text-white text-lg hidden sm:block tracking-tight">BookKit</span>
+      </div>
+
+      <div class="flex bg-white/10 p-1 rounded-xl gap-1" role="tablist" aria-label="Modo de reserva">
+        <button id="mode-taxi" onclick="setMode('taxi')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5">
+          <span>🚖</span><span class="hidden sm:inline">Taxi / Remis</span>
+        </button>
+        <button id="mode-mudanzas" onclick="setMode('mudanzas')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5">
+          <span>📦</span><span class="hidden sm:inline">Mudanzas</span>
+        </button>
+        <button id="mode-buses" onclick="setMode('buses')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5">
+          <span>🚌</span><span class="hidden sm:inline">Buses</span>
+        </button>
+      </div>
+
+      <div class="flex bg-white/10 p-1 rounded-xl" role="tablist" aria-label="Vista">
+        <button id="view-widget-btn" onclick="setView('widget')" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all">Widget</button>
+        <button id="view-dash-btn" onclick="setView('dashboard')" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all">Dashboard</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ╔══════════════════════════╗ -->
+  <!-- ║          MAIN            ║ -->
+  <!-- ╚══════════════════════════╝ -->
+  <main class="max-w-[1600px] mx-auto p-4 md:p-8 min-h-[calc(100vh-64px)] bg-[#F4F6FA]">
+
+    <!-- WIDGET -->
+    <section id="view-widget" class="flex justify-center py-8">
+      <div class="bg-white w-full max-w-md rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
+        <div id="widget-accent-bar" class="h-1.5 bg-[var(--accent)]"></div>
+        <div id="widget-inner" class="p-7">
+          <!-- Generado por JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- DASHBOARD -->
+    <section id="view-dashboard" class="hidden"><!-- Generado por JS --></section>
+
+  </main>
+
+  <!-- Toast Container -->
+  <div id="toast-container" class="fixed bottom-6 right-6 z-[100] flex flex-col gap-3 pointer-events-none"></div>
+
+  <!-- Modal Confirmación -->
+  <div id="confirm-modal" class="fixed inset-0 z-[110] hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm transition-opacity">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 transform transition-transform scale-95 opacity-0 duration-200" id="modal-content">
+      <div class="w-12 h-12 bg-red-100 text-red-500 rounded-full flex items-center justify-center mb-4 text-xl">⚠</div>
+      <h3 class="font-display text-xl font-bold text-slate-800 mb-2">¿Borrar historial?</h3>
+      <p class="text-slate-500 text-sm mb-6">Se eliminarán todos los registros del modo actual. Esta acción no se puede deshacer.</p>
+      <div class="flex gap-3">
+        <button onclick="toggleModal(false)" class="flex-1 px-4 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition-all font-display text-sm">Cancelar</button>
+        <button onclick="executeClear()"     class="flex-1 px-4 py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition-all font-display shadow-lg shadow-red-100">Eliminar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!--   SCRIPTS                               -->
+  <!-- ════════════════════════════════════════ -->
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
+  <script type="module">
+  // Firebase SDK
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { 
+    getFirestore, collection, addDoc, onSnapshot, query, where, 
+    updateDoc, doc, deleteDoc, getDocs, orderBy 
+  } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+  // CONFIGURACIÓN DE FIREBASE (Reemplaza con tus credenciales)
+  const firebaseConfig = {
+    apiKey: "TU_API_KEY",
+    authDomain: "tu-proyecto.firebaseapp.com",
+    projectId: "tu-proyecto",
+    storageBucket: "tu-proyecto.appspot.com",
+    messagingSenderId: "tu-id",
+    appId: "tu-app-id"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db  = getFirestore(app);
+  let unsubscribe = null; // Para limpiar el listener previo
+
+  /* ══════════════════════════════════════════════════════
+     CLASES REUTILIZABLES (Tailwind refactorizado)
+  ══════════════════════════════════════════════════════ */
+  const UI = {
+    input: "w-full px-4 py-3 bg-slate-50 border-1.5 border-slate-200 rounded-xl text-sm text-slate-800 transition-all focus:outline-none focus:border-[var(--accent)] focus:ring-3 focus:ring-[var(--accent-ring)] focus:bg-white",
+    label: "block text-sm font-semibold text-slate-700 mb-1.5",
+    btnPrimary: "font-display font-bold tracking-wide text-white bg-[var(--accent)] hover:bg-[var(--accent-hover)] active:scale-[0.98] transform transition-all shadow-lg shadow-[var(--accent-ring)] py-3.5 rounded-xl text-sm"
+  };
+
+  /* ══════════════════════════════════════════════════════
+     CONFIGURACIONES — agregar un nuevo modo = un objeto más
+  ══════════════════════════════════════════════════════ */
+  const CONFIGS = {
+
+    taxi: {
+      id: 'taxi',
+      name: 'Taxi / Remis',
+      icon: '🚖',
+      accent:      '#F59E0B',
+      accentHover: '#D97706',
+      accentLight: 'rgba(245,158,11,0.12)',
+      accentRing:  'rgba(245,158,11,0.25)',
+      businessName: 'Transfer Mendoza',
+      whatsapp: '5492614000000',         // ← cambiar por número real
+      dashboardTitle: 'Solicitudes de Viaje',
+      step1Label: 'Detalles del viaje',
+      pricing: {
+        base: 1200,
+        multipliers: { 'Traslado urbano': 1, 'Traslado al aeropuerto': 2.5, 'Traslado ejecutivo': 1.8, 'Viaje interurbano': 4.5 }
+      },
+      step2Label: 'Datos de contacto',
+      step1Fields: [
+        { id:'servicio', label:'Tipo de viaje',           type:'select',   options:['Traslado urbano','Traslado al aeropuerto','Traslado ejecutivo','Viaje interurbano'] },
+        { id:'origen',   label:'Punto de origen',         type:'text',     placeholder:'Calle, número, barrio...' },
+        { id:'destino',  label:'Destino',                 type:'text',     placeholder:'Calle, número, barrio...' },
+        { id:'fecha',    label:'Fecha y hora de salida',  type:'datetime' }
+      ],
+      step2Fields: [
+        { id:'nombre',    label:'Nombre completo',            type:'text',     placeholder:'Tu nombre...' },
+        { id:'telefono',  label:'Teléfono',                   type:'tel',      placeholder:'+54 9 261 000-0000' },
+        { id:'pasajeros', label:'Cantidad de pasajeros',       type:'select',   options:['1 pasajero','2 pasajeros','3 pasajeros','4 pasajeros','5+ pasajeros'] },
+        { id:'notas',     label:'Notas adicionales (opcional)',type:'textarea', placeholder:'Número de vuelo, dirección exacta, instrucciones...' }
+      ],
+      summaryMap: [
+        { label:'Servicio',    keys:['servicio'],         icon:'🚖' },
+        { label:'Ruta',        keys:['origen','destino'], icon:'📍', join:' → ' },
+        { label:'Fecha/Hora',  keys:['fecha'],            icon:'🕐' },
+        { label:'Pasajeros',   keys:['pasajeros'],        icon:'👥' }
+      ],
+      cardExtras: (r) => [
+        r.pasajeros ? `<div class="flex gap-1.5"><span>👥</span><span>${r.pasajeros}</span></div>` : ''
+      ],
+      confirmMsg:  (r) => `¡Hola ${r.nombre}! 🚖 Confirmamos tu *${r.servicio}* para el *${r.fecha}*.\nOrigen: ${r.origen} → Destino: ${r.destino}.\n\n¡Te esperamos!`,
+      reschedMsg:  (r) => `Hola ${r.nombre} 👋 te contactamos por tu solicitud del *${r.fecha}*. Ese horario no está disponible. ¿En qué otro momento podemos llevarte?`
+    },
+
+    mudanzas: {
+      id: 'mudanzas',
+      name: 'Mudanzas',
+      icon: '📦',
+      accent:      '#3B82F6',
+      accentHover: '#2563EB',
+      accentLight: 'rgba(59,130,246,0.12)',
+      accentRing:  'rgba(59,130,246,0.25)',
+      businessName: 'MudanzasFlex',
+      whatsapp: '5492614000001',         // ← cambiar por número real
+      dashboardTitle: 'Solicitudes de Mudanza',
+      step1Label: 'Detalles de la mudanza',
+      pricing: {
+        base: 8500,
+        multipliers: { 'Monoambiente': 1, '2 ambientes': 1.6, '3 ambientes': 2.4, '4 ambientes': 3.5, '5+ ambientes / Oficina grande': 5 }
+      },
+      step2Label: 'Datos y detalles',
+      step1Fields: [
+        { id:'servicio', label:'Tipo de mudanza',         type:'select',   options:['Departamento','Casa / PH','Oficina / Local','Solo objetos / cajas'] },
+        { id:'origen',   label:'Dirección de origen',     type:'text',     placeholder:'Calle, número, piso, localidad...' },
+        { id:'destino',  label:'Dirección de destino',    type:'text',     placeholder:'Calle, número, piso, localidad...' },
+        { id:'fecha',    label:'Fecha y hora estimada',   type:'datetime' }
+      ],
+      step2Fields: [
+        { id:'nombre',    label:'Nombre completo',             type:'text',     placeholder:'Tu nombre...' },
+        { id:'telefono',  label:'Teléfono',                    type:'tel',      placeholder:'+54 9 261 000-0000' },
+        { id:'ambientes', label:'Tamaño aproximado',           type:'select',   options:['Monoambiente','2 ambientes','3 ambientes','4 ambientes','5+ ambientes / Oficina grande'] },
+        { id:'notas',     label:'Detalles adicionales (opcional)', type:'textarea', placeholder:'Escaleras, ascensor, objetos especiales, piano...' }
+      ],
+      summaryMap: [
+        { label:'Tipo',       keys:['servicio'],         icon:'📦' },
+        { label:'Ruta',       keys:['origen','destino'], icon:'🏠', join:' → ' },
+        { label:'Fecha',      keys:['fecha'],            icon:'📅' },
+        { label:'Tamaño',     keys:['ambientes'],        icon:'📐' }
+      ],
+      cardExtras: (r) => [
+        r.ambientes ? `<div class="flex gap-1.5"><span>📐</span><span>${r.ambientes}</span></div>` : ''
+      ],
+      confirmMsg:  (r) => `¡Hola ${r.nombre}! 📦 Confirmamos tu mudanza (*${r.servicio}*) para el *${r.fecha}*.\nDesde: ${r.origen} → Hasta: ${r.destino}.\n\n¡Nos ponemos en contacto para coordinar los detalles!`,
+      reschedMsg:  (r) => `Hola ${r.nombre} 👋 te contactamos por tu mudanza del *${r.fecha}*. Necesitamos coordinar algunos detalles. ¿Podés comunicarte con nosotros?`
+    },
+
+    buses: {
+      id: 'buses',
+      name: 'Buses de Media Distancia',
+      icon: '🚌',
+      accent:      '#10B981',
+      accentHover: '#059669',
+      accentLight: 'rgba(16,185,129,0.12)',
+      accentRing:  'rgba(16,185,129,0.25)',
+      businessName: 'InterBus Mendoza',
+      whatsapp: '5492614000002',
+      dashboardTitle: 'Reservas de Pasajes',
+      step1Label: 'Detalles del viaje',
+      pricing: {
+        base: 4500,
+        multipliers: { 'Común': 1, 'Semi-cama': 1.3, 'Cama ejecutivo': 1.8, 'Suite doble': 2.5 }
+      },
+      step1Fields: [
+        { id:'servicio', label:'Categoría del servicio', type:'select',
+          options:['Común','Semi-cama','Cama ejecutivo','Suite doble'] },
+        { id:'origen',   label:'Ciudad de origen',      type:'select',
+          options:['Mendoza','San Rafael','Malargüe','San Juan','Neuquén','Buenos Aires','Córdoba','Rosario','Mar del Plata'] },
+        { id:'destino',  label:'Ciudad de destino',     type:'select',
+          options:['Buenos Aires','Córdoba','Rosario','Mar del Plata','Neuquén','Mendoza','San Rafael','San Juan','Bariloche','Salta'] },
+        { id:'fecha',    label:'Fecha y hora de salida', type:'datetime' }
+      ],
+      step2Label: 'Datos del pasajero',
+      step2Fields: [
+        { id:'nombre',   label:'Nombre y apellido',         type:'text',     placeholder:'Nombre completo...' },
+        { id:'dni',      label:'DNI / Documento',           type:'text',     placeholder:'12.345.678' },
+        { id:'telefono', label:'Teléfono de contacto',      type:'tel',      placeholder:'+54 9 261 000-0000' },
+        { id:'pasajes',  label:'Cantidad de pasajes',       type:'select',   options:['1 pasaje','2 pasajes','3 pasajes','4 pasajes','5+ pasajes (grupo)'] },
+        { id:'notas',    label:'Observaciones (opcional)',  type:'textarea', placeholder:'Equipaje extra, silla de ruedas, mascota, asiento preferido...' }
+      ],
+      summaryMap: [
+        { label:'Categoría', keys:['servicio'],         icon:'🪑' },
+        { label:'Ruta',      keys:['origen','destino'], icon:'🗺',  join:' → ' },
+        { label:'Salida',    keys:['fecha'],            icon:'🕐' },
+        { label:'Pasajes',   keys:['pasajes'],          icon:'🎫' }
+      ],
+      cardExtras: (r) => [
+        r.pasajes ? `<div class="flex gap-1.5"><span>🎫</span><span>${r.pasajes}</span></div>` : '',
+        r.dni     ? `<div class="flex gap-1.5"><span>🪪</span><span class="font-mono">DNI ${r.dni}</span></div>` : ''
+      ],
+      confirmMsg: (r) => `¡Hola ${r.nombre}! 🚌 Confirmamos tu reserva *${r.servicio}* para el *${r.fecha}*.\nRuta: *${r.origen} → ${r.destino}* · ${r.pasajes}\n🪪 DNI ${r.dni}\n\n¡Buen viaje! Presentate en la terminal 30 min antes de la salida.`,
+      reschedMsg: (r) => `Hola ${r.nombre} 👋 te contactamos por tu reserva del *${r.fecha}* (${r.origen} → ${r.destino}). Ese servicio no tiene disponibilidad. ¿Podemos ofrecerte otra fecha u horario?`
+    }
+
+  }; // ← FIN DE CONFIGS — para agregar un modo nuevo: copiar uno de los objetos anteriores y personalizarlo
+
+
+  /* ══════════════════════════════════════════════════════
+     ESTADO GLOBAL
+  ══════════════════════════════════════════════════════ */
+  let activeMode  = 'taxi';
+  let activeView  = 'widget';
+  let currentStep = 1;
+  let formData    = {};
+  let fpInstance  = null;
+  let maskInst    = null;
+  const TOTAL_STEPS = 4;
+
+
+  /* ══════════════════════════════════════════════════════
+     NAVEGACIÓN PRINCIPAL
+  ══════════════════════════════════════════════════════ */
+  function setMode(modeId) {
+    activeMode = modeId;
+    const cfg = CONFIGS[modeId];
+
+    // CSS vars → toda la UI se adapta automáticamente
+    const root = document.documentElement;
+    root.style.setProperty('--accent',       cfg.accent);
+    root.style.setProperty('--accent-hover', cfg.accentHover);
+    root.style.setProperty('--accent-light', cfg.accentLight);
+    root.style.setProperty('--accent-ring',  cfg.accentRing);
+
+    // Actualizar botones de modo
+    Object.keys(CONFIGS).forEach(id => {
+      const btn = document.getElementById(`mode-${id}`);
+      if (!btn) return;
+      const isActive = id === modeId;
+      
+      btn.className = `px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 
+        ${isActive 
+          ? 'bg-[var(--accent)] text-white shadow-lg shadow-[var(--accent-ring)]' 
+          : 'text-white/60 hover:text-white hover:bg-white/5'}`;
+
+      // Update flatpickr accent color dynamically if it exists
+      if(fpInstance) renderWidget(); 
+    });
+
+    // Reiniciar suscripción a datos
+    setupRealtimeListener();
+    if (activeView === 'widget') renderWidget();
+    else renderDashboard();
+  }
+
+  function setView(view) {
+    activeView = view;
+
+    const wSec = document.getElementById('view-widget');
+    const dSec = document.getElementById('view-dashboard');
+
+    // Ocultar todo
+    wSec.classList.add('hidden');
+    dSec.classList.add('hidden');
+
+    if (activeView === 'widget') {
+      renderWidget();
+      wSec.classList.remove('hidden');
+    } else if (activeView === 'dashboard') {
+      renderDashboard();
+      dSec.classList.remove('hidden');
+    }
+
+    updateNavUI();
+  }
+
+  function updateNavUI() {
+    const wBtn = document.getElementById('view-widget-btn');
+    const dBtn = document.getElementById('view-dash-btn');
+    const activeTab = 'bg-white/10 text-white';
+    const inactiveTab = 'text-white/50 hover:text-white/80';
+    
+    wBtn.className = `px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${activeView === 'widget' ? activeTab : inactiveTab}`;
+    dBtn.className = `px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${activeView === 'dashboard' ? activeTab : inactiveTab}`;
+  }
+
+  /* ESCUCHA EN TIEMPO REAL: La clave de Firebase */
+  function setupRealtimeListener() {
+    if (unsubscribe) unsubscribe(); // Cancelar suscripción anterior
+    
+    const q = query(collection(db, "bookings"), where("mode", "==", activeMode), orderBy("id", "desc"));
+    
+    unsubscribe = onSnapshot(q, (snapshot) => {
+      window.currentBookings = snapshot.docs.map(doc => ({ fbId: doc.id, ...doc.data() }));
+      if (activeView === 'dashboard') renderCards();
+    }, (error) => {
+      console.error("Error en listener:", error);
+    });
+  }
+
+
+  /* ══════════════════════════════════════════════════════
+     WIDGET — renderizado dinámico desde config
+  ══════════════════════════════════════════════════════ */
+  function renderWidget() {
+    currentStep = 1;
+    formData    = {};
+
+    // Limpiar instancias previas
+    if (fpInstance) { try { fpInstance.destroy(); } catch(e){} fpInstance = null; }
+    if (maskInst)   { try { maskInst.destroy();   } catch(e){} maskInst   = null; }
+
+    const cfg  = CONFIGS[activeMode];
+    const cont = document.getElementById('widget-inner');
+
+    cont.innerHTML = `
+      <!-- Cabecera del widget -->
+      <header class="mb-7">
+        <div class="flex items-center gap-2 mb-0.5">
+          <span class="text-2xl">${cfg.icon}</span>
+          <h2 class="font-display text-2xl font-bold text-slate-800">${cfg.name}</h2>
+        </div>
+        <p class="text-sm text-slate-400">${cfg.businessName} · Completá los pasos para enviar tu solicitud.</p>
+        <div class="mt-5">
+          <div class="flex justify-between text-xs mb-1.5">
+            <span id="progress-text" class="font-mono text-slate-400">Paso 1 de 4</span>
+            <span id="progress-pct"  class="font-mono font-medium" style="color:var(--accent)">25%</span>
+          </div>
+          <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+            <div id="progress-bar" class="h-full rounded-full bg-[var(--accent)] transition-all duration-500 ease-in-out" style="width:25%"></div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Paso 1: Detalles del servicio -->
+      <div id="step1" class="step-anim">
+        <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-5">${cfg.step1Label}</p>
+        ${cfg.step1Fields.map(renderField).join('')}
+        <button onclick="advanceStep()" class="${UI.btnPrimary} w-full mt-6">Continuar →</button>
+      </div>
+
+      <!-- Paso 2: Datos de contacto -->
+      <div id="step2" class="hidden">
+        <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-5">${cfg.step2Label}</p>
+        ${cfg.step2Fields.map(renderField).join('')}
+        <button onclick="goToConfirm()" class="${UI.btnPrimary} w-full mt-6">Revisar solicitud →</button>
+        <button onclick="moveToStep(1)" class="w-full mt-3 py-2 text-sm font-medium text-slate-400 hover:text-slate-600 transition-colors">← Volver</button>
+      </div>
+      
+      <!-- Paso 3: Confirmación -->
+      <div id="step3" class="hidden">
+        <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-4">Revisá tu solicitud</p>
+        <div id="summary-box" class="bg-slate-50 border border-slate-200 rounded-xl p-4 mb-5 text-sm space-y-3"></div>
+        <div id="payment-area" class="mb-4 hidden"></div>
+        <button onclick="confirmBooking()" class="${UI.btnPrimary} w-full">
+          ✓ Confirmar solicitud
+        </button>
+        <button onclick="moveToStep(2)" class="w-full mt-3 py-2 text-sm font-medium text-slate-400 hover:text-slate-600 transition-colors">← Editar datos</button>
+      </div>
+
+      <!-- Paso 4: Éxito -->
+      <div id="step4" class="hidden text-center py-6">
+        <div class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-5" style="background:var(--accent-light)">
+          <svg class="h-8 w-8 text-[var(--accent)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+          </svg>
+        </div>
+        <h3 class="font-display text-2xl font-bold text-slate-800">¡Solicitud enviada!</h3>
+        <p id="success-msg" class="text-slate-500 mt-2 text-sm leading-relaxed max-w-xs mx-auto"></p>
+        <div id="final-payment-btn" class="mt-5"></div>
+        <button onclick="renderWidget()" class="mt-6 px-6 py-2.5 text-sm font-bold rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-600 transition-all">
+          Nueva solicitud
+        </button>
+      </div>
+    `;
+
+    // Inicializar flatpickr
+    fpInstance = flatpickr('#fecha', {
+      enableTime: true, dateFormat: 'd/m/Y H:i',
+      minDate: 'today', locale: 'es', time_24hr: true,
+      minuteIncrement: 30, minTime: '06:00', maxTime: '22:00'
+    });
+
+    // Inicializar IMask en el campo teléfono
+    const telEl = document.getElementById('telefono');
+    if (telEl) maskInst = IMask(telEl, { mask: '+{54} 9 00 0000-0000' });
+  }
+
+  /* Genera el HTML de un campo a partir de su definición */
+  function renderField(f) {
+    const lbl = `<label class="${UI.label}">${f.label}</label>`;
+
+    if (f.type === 'select') {
+      return `<div class="mb-4">${lbl}
+        <select id="${f.id}" class="${UI.input} appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20stroke%3D%22%236B7280%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%221.5%22%20d%3D%22m6%208%204%204%204-4%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.25rem_1.25rem] bg-[right_0.5rem_center] bg-no-repeat pr-10">
+          ${f.options.map(o => `<option value="${o}">${o}</option>`).join('')}
+        </select></div>`;
+    }
+    if (f.type === 'textarea') {
+      return `<div class="mb-4">${lbl}
+        <textarea id="${f.id}" placeholder="${f.placeholder||''}" class="${UI.input} h-20 resize-none"></textarea></div>`;
+    }
+    if (f.type === 'datetime') {
+      return `<div class="mb-4">${lbl}
+        <input id="${f.id}" type="text" placeholder="Elegir fecha..." class="${UI.input} cursor-pointer" readonly /></div>`;
+    }
+
+    return `<div class="mb-4">${lbl}
+      <div class="relative">
+        <input id="${f.id}" type="${f.type||'text'}" placeholder="${f.placeholder||''}" class="${UI.input} ${f.locate ? 'pr-12' : ''}" />
+        ${f.locate ? `
+          <button onclick="detectLocation('${f.id}')" class="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center rounded-lg hover:bg-slate-200 text-slate-400 transition-colors" title="Obtener ubicación actual">
+            📍
+          </button>
+        ` : ''}
+      </div></div>`;
+  }
+
+
+  /* ══════════════════════════════════════════════════════
+     LÓGICA DE PASOS
+  ══════════════════════════════════════════════════════ */
+  function moveToStep(step) {
+    document.getElementById(`step${currentStep}`).classList.add('hidden');
+    const next = document.getElementById(`step${step}`);
+    next.classList.remove('hidden');
+    next.classList.remove('step-anim');
+    void next.offsetWidth; // reflow para reiniciar animación
+    next.classList.add('step-anim');
+    currentStep = step;
+    updateProgress();
+  }
+
+  function advanceStep() {
+    if (!validateStep(currentStep)) return;
+    moveToStep(currentStep + 1);
+  }
+
+  function updateProgress() {
+    const bar = document.getElementById('progress-bar');
+    const text = document.getElementById('progress-text');
+    const pctText = document.getElementById('progress-pct');
+    const pct = Math.round((currentStep / TOTAL_STEPS) * 100);
+    if(bar) bar.style.width = `${pct}%`;
+    if(text) text.innerText = `Paso ${currentStep} de ${TOTAL_STEPS}`;
+    if(pctText) pctText.innerText = `${pct}%`;
+  }
+
+  /* Validación de campos para el paso actual */
+  function validateStep(step) {
+    const cfg    = CONFIGS[activeMode];
+    const fields = step === 1 ? cfg.step1Fields : cfg.step2Fields;
+    let valid    = true;
+
+    fields.forEach(f => {
+      const el = document.getElementById(f.id);
+      if (!el) return;
+      const isOptional = f.label.toLowerCase().includes('opcional') || f.type === 'textarea';
+      const isEmpty    = !el.value.trim();
+
+      if (!isOptional && isEmpty) {
+        el.classList.add('!border-red-400', '!ring-red-100'); valid = false;
+      } else if (f.type === 'tel' && maskInst && !maskInst.masked.isComplete) {
+        el.classList.add('!border-red-400', '!ring-red-100'); valid = false;
+      } else {
+        el.classList.remove('!border-red-400', '!ring-red-100');
+      }
+    });
+
+    if (!valid) showToast('Completá los campos obligatorios.', 'Campos requeridos', 'error');
+    return valid;
+  }
+
+  /* GEOLOCALIZACIÓN: Obtiene coordenadas y hace reverse geocoding */
+  async function detectLocation(fieldId) {
+    const btn = event.currentTarget;
+    const input = document.getElementById(fieldId);
+    
+    if (!navigator.geolocation) {
+      showToast("Geolocalización no soportada", "Error", "error");
+      return;
+    }
+
+    btn.innerHTML = '<span class="animate-spin text-xs">⏳</span>';
+    btn.disabled = true;
+
+    navigator.geolocation.getCurrentPosition(async (pos) => {
+      const { latitude: lat, longitude: lon } = pos.coords;
+      try {
+        // Usando API gratuita de Nominatim (OpenStreetMap)
+        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
+        const data = await res.json();
+        input.value = data.display_name || `${lat}, ${lon}`;
+        showToast("Ubicación detectada correctamente", "Éxito");
+      } catch (err) {
+        input.value = `${lat}, ${lon}`;
+      } finally {
+        btn.innerHTML = '📍';
+        btn.disabled = false;
+      }
+    }, () => {
+      showToast("No se pudo obtener la ubicación", "Atención", "error");
+      btn.innerHTML = '📍';
+      btn.disabled = false;
+    });
+  }
+
+  /* TARIFA: Cálculo simple basado en config */
+  function calculateTariff(cfg, data) {
+    let total = cfg.pricing.base;
+    
+    // Multiplicador por tipo de servicio
+    if (cfg.pricing.multipliers[data.servicio]) {
+      total *= cfg.pricing.multipliers[data.servicio];
+    }
+
+    // Ajustes adicionales por modo
+    if (cfg.id === 'mudanzas' && data.ambientes) {
+       total = cfg.pricing.base * (cfg.pricing.multipliers[data.ambientes] || 1);
+    }
+    if (cfg.id === 'buses' && data.pasajes) {
+       const cant = parseInt(data.pasajes) || 1;
+       total *= cant;
+    }
+    
+    return Math.round(total);
+  }
+
+  function generatePaymentLink(price, bookingId, mode) {
+    return `https://www.mercadopago.com.ar/checkout/v1/redirect?pref_id=demo&external_reference=${bookingId}&mode=${mode}`; 
+  }
+
+  /* Recolecta datos y muestra el resumen antes de confirmar */
+  function goToConfirm() {
+    if (!validateStep(2)) return;
+
+    const cfg = CONFIGS[activeMode];
+    formData  = { id: Date.now(), estado: 'nuevo', mode: activeMode };
+
+    [...cfg.step1Fields, ...cfg.step2Fields].forEach(f => {
+      const el = document.getElementById(f.id);
+      if (el) formData[f.id] = el.value.trim();
+    });
+
+    // Calcular Tarifa
+    formData.precio = calculateTariff(cfg, formData);
+
+    // Construir caja de resumen
+    const rows = cfg.summaryMap.map(s => {
+      const val = s.keys.length > 1
+        ? s.keys.map(k => formData[k]).filter(Boolean).join(s.join || ' ')
+        : formData[s.keys[0]];
+      if (!val) return '';
+      return `
+        <div>
+          <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400">${s.icon} ${s.label}</p>
+          <p class="font-semibold text-slate-800 mt-0.5">${val}</p>
+        </div>`;
+    }).join('');
+
+    const contactRow = `
+      <div class="border-t border-slate-200 pt-3">
+        <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400">👤 Contacto</p>
+        <p class="font-semibold text-slate-800 mt-0.5">${formData.nombre} · ${formData.telefono}</p>
+      </div>`;
+
+    const notasRow = formData.notas
+      ? `<div><p class="text-[10px] font-bold uppercase tracking-widest text-slate-400">📝 Notas</p>
+         <p class="text-slate-600 italic mt-0.5">${formData.notas}</p></div>` : '';
+    
+    const priceRow = `
+      <div class="pt-3 border-t-2 border-dashed border-slate-200 flex justify-between items-center">
+        <span class="font-bold text-slate-800">Tarifa Estimada:</span>
+        <span class="text-lg font-bold text-[var(--accent)]">$${formData.precio.toLocaleString()}</span>
+      </div>`;
+
+    document.getElementById('summary-box').innerHTML = rows + contactRow + notasRow + priceRow;
+
+    // Mostrar área de pago rápido
+    const payArea = document.getElementById('payment-area');
+    payArea.innerHTML = `
+      <div class="bg-blue-50 border border-blue-100 p-3 rounded-xl flex items-center justify-between">
+        <span class="text-xs text-blue-700 font-medium">Ahorrá tiempo pagando ahora (Simulado):</span>
+        <button onclick="simulateSuccessfulPayment(${formData.id}, '${activeMode}')" class="text-xs font-bold text-white bg-blue-600 px-3 py-1.5 rounded-lg shadow-sm">Pagar online</button>
+      </div>`;
+    payArea.classList.remove('hidden');
+
+    moveToStep(3);
+  }
+
+  /* Confirma y guarda en FIREBASE */
+  async function confirmBooking() {
+    try {
+      await addDoc(collection(db, "bookings"), formData);
+    } catch (e) {
+      showToast("Error al guardar en la nube", "Error", "error");
+      return;
+    }
+    
+    const now  = new Date();
+    const biz  = (now.getDay() >= 1 && now.getDay() <= 6) && (now.getHours() >= 7 && now.getHours() < 21);
+    document.getElementById('success-msg').innerText = biz
+      ? '¡Gracias! Confirmaremos tu solicitud a la brevedad por WhatsApp.'
+      : 'Recibimos tu solicitud. Te contactaremos al inicio del próximo día hábil.';
+
+    // Botón de pago en pantalla final
+    document.getElementById('final-payment-btn').innerHTML = `
+      <a href="${generatePaymentLink(formData.precio, formData.id, activeMode)}" target="_blank" class="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-xl font-bold shadow-lg">
+        💳 Pagar con Mercado Pago ($${formData.precio})
+      </a>`;
+
+    moveToStep(4);
+    showToast(`Solicitud de ${formData.nombre} registrada con éxito.`, '¡Registro exitoso!');
+  }
+
+
+  /* ══════════════════════════════════════════════════════
+     DASHBOARD — panel de operaciones
+  ══════════════════════════════════════════════════════ */
+  function renderDashboard() {
+    const cfg  = CONFIGS[activeMode];
+    const cont = document.getElementById('view-dashboard');
+
+    cont.innerHTML = `
+      <header class="mb-8 flex flex-col md:flex-row md:items-start justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-2 mb-1">
+            <span class="text-3xl">${cfg.icon}</span>
+            <h2 class="font-display text-3xl font-bold text-slate-800">${cfg.dashboardTitle}</h2>
+          </div>
+          <p class="text-slate-400 text-sm">${cfg.businessName} · Panel de operaciones</p>
+        </div>
+        <div class="flex flex-wrap gap-3 items-center">
+          <div class="bg-white px-4 py-2 rounded-xl border border-slate-200 shadow-sm text-sm flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full animate-pulse bg-[var(--accent)]"></span>
+            <span class="font-mono text-slate-500">Pendientes: <strong id="pending-count" class="text-slate-800">0</strong></span>
+          </div>
+          <button onclick="exportCSV()"    class="bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold py-2 px-4 rounded-xl transition-all flex items-center gap-2 shadow-sm">↓ CSV</button>
+          <button onclick="promptClear()"  class="bg-red-50 text-red-500 hover:bg-red-100 border border-red-200 text-xs font-bold py-2 px-4 rounded-xl transition-all">Limpiar</button>
+        </div>
+      </header>
+
+      <div class="mb-6">
+        <input type="text" id="dash-search" oninput="renderCards()"
+          placeholder="Buscar por nombre del cliente..."
+          class="w-full max-w-sm p-3 bg-white border border-slate-200 rounded-xl text-sm outline-none shadow-sm transition-all"
+          style="focus:border-color:var(--accent)" />
+      </div>
+
+      <div id="dash-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"></div>
+
+      <div id="dash-empty" class="hidden text-center py-20">
+        <p class="text-5xl mb-4 opacity-30">${cfg.icon}</p>
+        <p class="font-display text-xl font-bold text-slate-300">Sin solicitudes aún</p>
+        <p class="text-sm text-slate-400 mt-2">Las nuevas solicitudes aparecerán aquí en tiempo real.</p>
+      </div>
+    `;
+
+    renderCards();
+  }
+
+  function renderCards() {
+    const cfg      = CONFIGS[activeMode];
+    const key      = `bookkit_${activeMode}`;
+    const all      = JSON.parse(localStorage.getItem(key)) || [];
+    const term     = (document.getElementById('dash-search')?.value || '').toLowerCase();
+    
+    const statusStyles = {
+      nuevo: 'bg-blue-50 text-blue-600',
+      confirmado: 'bg-green-50 text-green-600',
+    };
+    const filtered = all.filter(r => r.estado !== 'cancelado' && (r.nombre||'').toLowerCase().includes(term));
+    const pending  = all.filter(r => r.estado === 'nuevo').length;
+
+    const countEl  = document.getElementById('pending-count');
+    const grid     = document.getElementById('dash-grid');
+    const emptyEl  = document.getElementById('dash-empty');
+    if (!grid) return;
+
+    if (countEl) countEl.innerText = pending;
+
+    if (filtered.length === 0) {
+      grid.innerHTML = '';
+      emptyEl?.classList.remove('hidden');
+      return;
+    }
+    emptyEl?.classList.add('hidden');
+
+    grid.innerHTML = filtered.map(r => {
+      const extras = (cfg.cardExtras ? cfg.cardExtras(r) : []).filter(Boolean).join('');
+      return `
+        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-200">
+          <div class="h-1 bg-[var(--accent)]"></div>
+          <div class="p-5">
+            <!-- Header de tarjeta -->
+            <div class="flex justify-between items-start mb-3">
+              <div class="min-w-0">
+                <h3 class="font-display font-bold text-slate-800 text-[15px] truncate">${r.nombre}</h3>
+                <p class="text-xs font-bold uppercase tracking-wide mt-0.5 text-[var(--accent)]">${r.servicio}</p>
+              </div>
+              <span class="${statusStyles[r.estado] || 'bg-slate-100 text-slate-500'} px-2 py-0.5 rounded-lg text-[10px] font-bold uppercase font-mono ml-2 shrink-0">${r.estado}</span>
+            </div>
+
+            <!-- Detalles del pedido -->
+            <div class="bg-slate-50 rounded-xl p-3 mb-4 text-xs space-y-1.5 text-slate-600">
+              <div class="flex gap-1.5"><span>📍</span><span class="font-medium">${r.origen} → ${r.destino}</span></div>
+              <div class="flex gap-1.5"><span>🕐</span><span>${r.fecha}</span></div>
+              <div class="flex gap-1.5"><span>💰</span><span class="font-bold text-slate-800">$${r.precio?.toLocaleString()}</span></div>
+              ${extras}
+              ${r.notas ? `<div class="flex gap-1.5 border-t border-slate-200 pt-1.5 mt-1 opacity-60"><span>📝</span><span class="italic">${r.notas}</span></div>` : ''}
+            </div>
+
+            <!-- Acciones -->
+            <div class="grid grid-cols-2 gap-2">
+              <button onclick="confirmRecord('${r.fbId}')" class="${UI.btnPrimary} text-xs py-2.5 rounded-lg">✓ Confirmar</button>
+              <button onclick="reschedRecord('${r.fbId}')" class="bg-slate-100 text-slate-500 hover:bg-amber-50 hover:text-amber-700 text-xs font-bold py-2.5 rounded-lg transition-colors">↻ Reagendar</button>
+            </div>
+            <p class="font-mono text-[10px] text-slate-300 mt-3 text-center">${r.telefono}</p>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+
+  /* ══════════════════════════════════════════════════════
+     ACCIONES DEL DASHBOARD
+  ══════════════════════════════════════════════════════ */
+  function getRecord(fbId) {
+    return (window.currentBookings || []).find(r => r.fbId === fbId);
+  }
+
+  async function updateRecord(fbId, patch) {
+    const docRef = doc(db, "bookings", fbId);
+    await updateDoc(docRef, patch);
+    // No hace falta renderizar manualmente, onSnapshot lo hará por nosotros
+  }
+
+  function confirmRecord(fbId) {
+    const r = getRecord(fbId);
+    if (!r) return;
+    updateRecord(fbId, { estado: 'confirmado' });
+    const msg = CONFIGS[activeMode].confirmMsg(r);
+    window.open(`https://wa.me/${r.telefono.replace(/\D/g,'')}?text=${encodeURIComponent(msg)}`, '_blank');
+    showToast(`Turno de ${r.nombre} confirmado y WA enviado.`, '✓ Confirmado');
+  }
+
+  function reschedRecord(fbId) {
+    const r = getRecord(fbId);
+    if (!r) return;
+    const msg = CONFIGS[activeMode].reschedMsg(r);
+    window.open(`https://wa.me/${r.telefono.replace(/\D/g,'')}?text=${encodeURIComponent(msg)}`, '_blank');
+    showToast(`Solicitud de reagendamiento enviada a ${r.nombre}.`, '↻ Reagendar');
+  }
+
+  function exportCSV() {
+    const list = (window.currentBookings || []).filter(r => r.estado !== 'cancelado');
+    if (!list.length) { showToast('No hay datos para exportar.', 'Atención', 'error'); return; }
+    
+    const headers = ['id','nombre','telefono','servicio','origen','destino','fecha','estado','notas'];
+    const rows    = [headers, ...list.map(r => headers.map(h => `"${(r[h]||'').toString().replace(/"/g,'""')}"`))];
+    const blob    = new Blob(['\uFEFF' + rows.map(r => r.join(',')).join('\n')], { type:'text/csv;charset=utf-8;' });
+    const a       = Object.assign(document.createElement('a'), { href: URL.createObjectURL(blob), download: `${activeMode}_${new Date().toISOString().split('T')[0]}.csv` });
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    showToast(`${list.length} registros exportados.`, 'CSV descargado');
+  }
+
+  function promptClear() {
+    const list = JSON.parse(localStorage.getItem(`bookkit_${activeMode}`)) || [];
+    if (!list.length) { showToast('No hay registros para limpiar.', 'Atención', 'error'); return; }
+    toggleModal(true);
+  }
+
+  function executeClear() {
+    localStorage.removeItem(`bookkit_${activeMode}`);
+    renderCards();
+    toggleModal(false);
+    showToast('Historial limpiado.', 'Listo');
+  }
+
+  /* ══════════════════════════════════════════════════════
+     SIMULACIÓN DE WEBHOOK / PAGO ÉXITO
+  ══════════════════════════════════════════════════════ */
+  function simulateSuccessfulPayment(bookingId, mode) {
+    // Esta función emula el proceso de actualización que dispararía un Webhook real
+    const key = `bookkit_${mode}`;
+    const list = JSON.parse(localStorage.getItem(key)) || [];
+    const updated = list.map(r => r.id === bookingId ? { ...r, estado: 'confirmado' } : r);
+    localStorage.setItem(key, JSON.stringify(updated));
+    
+    showToast("¡Pago confirmado! La reserva ha sido actualizada automáticamente.", "Webhook (Simulado)");
+    if (activeView === 'widget') moveToStep(4);
+    if (activeView === 'dashboard') renderCards();
+  }
+
+
+  /* ══════════════════════════════════════════════════════
+     HELPERS DE UI
+  ══════════════════════════════════════════════════════ */
+  async function toggleModal(show) {
+    const modal = document.getElementById('confirm-modal');
+    const content = document.getElementById('modal-content');
+    if (show) {
+      modal.classList.replace('hidden', 'flex');
+      setTimeout(() => content.classList.replace('scale-95', 'scale-100'), 10);
+      setTimeout(() => content.classList.replace('opacity-0', 'opacity-100'), 10);
+    } else {
+      content.classList.replace('scale-100', 'scale-95');
+      content.classList.replace('opacity-100', 'opacity-0');
+      setTimeout(() => modal.classList.replace('flex', 'hidden'), 200);
+    }
+  }
+
+  function showToast(message, title = 'Notificación', type = 'success') {
+    const container = document.getElementById('toast-container');
+    const isErr     = type === 'error';
+    const t = document.createElement('div');
+    t.className = 'transition-all duration-300 ease-out bg-white border border-slate-200 text-slate-800 px-4 py-3.5 rounded-2xl shadow-2xl flex items-start gap-3 pointer-events-auto min-w-[280px] max-w-xs translate-y-4 opacity-0';
+    t.innerHTML     = `
+      <div class="${isErr ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600'} w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">${isErr ? '✕' : '✓'}</div>
+      <div><p class="text-sm font-bold leading-tight">${title}</p><p class="text-xs text-slate-400 mt-0.5">${message}</p></div>`;
+    container.appendChild(t);
+    setTimeout(() => t.classList.remove('translate-y-4','opacity-0'), 10);
+    if (container.children.length > 3) container.removeChild(container.children[0]);
+    setTimeout(() => { t.classList.add('opacity-0','translate-y-2'); setTimeout(() => t.remove(), 400); }, 4500);
+  }
+
+  /* ══════════════════════════════════════════════════════
+     INIT
+  ══════════════════════════════════════════════════════ */
+  // Exponer funciones al scope global para onclick
+  Object.assign(window, {
+    setMode, setView, advanceStep, moveToStep, detectLocation,
+    goToConfirm, confirmBooking, renderCards, confirmRecord, 
+    reschedRecord, exportCSV, promptClear, executeClear, 
+    toggleModal, simulateSuccessfulPayment, renderWidget, renderDashboard
+  });
+
+  // Iniciar
+  setMode('taxi');
+
+  </script>
+</body>
+</html>
