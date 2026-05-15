@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentación Técnica - Assertiva Risk Advisory</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Sans:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3 { font-family: 'DM Sans', sans-serif; }
+        .sidebar-link:hover { background-color: rgba(0, 152, 200, 0.1); color: #0098c8; }
+        .sidebar-link.active { border-right: 4px solid #0098c8; background-color: rgba(0, 152, 200, 0.05); color: #0098c8; }
+        code { background: #f1f5f9; padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.9em; color: #e11d48; }
+        pre code { background: transparent; color: #f8f8f2; padding: 0; }
+        .glass-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(8px); border: 1px solid rgba(0, 30, 65, 0.1); }
+        /* Estilos para que Mermaid se integre con el diseño */
+        .mermaid { background: white; border-radius: 1rem; padding: 1.5rem; border: 1px solid #e2e8f0; margin-top: 1.5rem; }
+        .mermaid svg { max-width: 100% !important; height: auto !important; }
+        /* Personalización de colores de Mermaid mediante variables */
+        :root {
+            --mermaid-font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 leading-relaxed">
+
+    <!-- Mobile Header -->
+    <header class="lg:hidden bg-[#001e41] text-white p-4 flex justify-between items-center sticky top-0 z-50">
+        <span class="font-bold tracking-tight">Assertiva Docs</span>
+        <button id="menuBtn" class="p-2"><i class="fa-solid fa-bars text-xl"></i></button>
+    </header>
+
+    <div class="max-w-[1440px] mx-auto flex">
+        
+        <!-- Sidebar Navigation -->
+        <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-72 bg-white border-r border-slate-200 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out lg:sticky lg:h-screen lg:top-0">
+            <div class="p-8">
+                <div class="flex items-center gap-3 mb-10">
+                    <div class="w-10 h-10 bg-[#001e41] rounded-lg flex items-center justify-center text-white font-bold">A</div>
+                    <span class="text-xl font-bold tracking-tight text-[#001e41]">Assertiva <span class="text-[#0098c8]">Docs</span></span>
+                </div>
+
+                <nav class="space-y-1">
+                    <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4 px-3">Introducción</p>
+                    <a href="#arquitectura" class="sidebar-link flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors">
+                        <i class="fa-solid fa-sitemap w-6"></i> Arquitectura
+                    </a>
+                    
+                    <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mt-8 mb-4 px-3">Desarrollo</p>
+                    <a href="#scripts" class="sidebar-link flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors">
+                        <i class="fa-brands fa-js w-6 text-yellow-500"></i> Lógica JS
+                    </a>
+                    <a href="#animaciones" class="sidebar-link flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors">
+                        <i class="fa-solid fa-wand-magic-sparkles w-6 text-purple-500"></i> Animaciones
+                    </a>
+                    <a href="#form" class="sidebar-link flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors">
+                        <i class="fa-solid fa-envelope-open-text w-6 text-green-500"></i> Formularios
+                    </a>
+
+                    <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mt-8 mb-4 px-3">Diseño</p>
+                    <a href="#design-system" class="sidebar-link flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors">
+                        <i class="fa-solid fa-palette w-6 text-rose-500"></i> Design System
+                    </a>
+                    <a href="#componentes-ui" class="sidebar-link flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors">
+                        <i class="fa-solid fa-layer-group w-6 text-indigo-500"></i> Componentes UI
+                    </a>
+                    <a href="#tokens-vinculacion" class="sidebar-link flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors">
+                        <i class="fa-solid fa-link w-6 text-cyan-500"></i> Tokens & Vinculación
+                    </a>
+                    <a href="#troubleshooting" class="sidebar-link flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors">
+                        <i class="fa-solid fa-bug w-6 text-red-500"></i> Troubleshooting
+                    </a>
+                    <a href="#mobile" class="sidebar-link flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors">
+                        <i class="fa-solid fa-mobile-screen w-6 text-blue-500"></i> Mobile Strategy
+                    </a>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 px-6 py-12 lg:px-16 lg:py-16 max-w-4xl">
+            
+            <!-- Header Section -->
+            <header class="mb-16">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-[#0098c8] text-xs font-bold mb-4">
+                    <span class="relative flex h-2 w-2">
+                        <span class="animate-ping absolute inline-flex h-full w-2 rounded-full bg-blue-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                    </span>
+                    ODOO 17 REFACTOREO
+                </div>
+                <h1 class="text-4xl lg:text-5xl font-extrabold text-[#001e41] mb-6">Frontend Engineering</h1>
+                <p class="text-xl text-slate-500 max-w-2xl leading-relaxed">
+                    Documentación técnica sobre la implementación de la capa de interactividad avanzada y sistema de diseño para Assertiva Risk Advisory.
+                </p>
+                <div class="mt-8 p-4 rounded-xl bg-white border border-slate-200 flex items-center gap-4">
+                    <span class="p-2 bg-slate-100 rounded text-slate-400"><i class="fa-solid fa-link"></i></span>
+                    <a href="https://assertiva-test17-31505073.dev.odoo.com/" target="_blank" class="text-sm font-medium text-[#0098c8] hover:underline">assertiva-test17-31505073.dev.odoo.com</a>
+                </div>
+            </header>
+
+            <!-- Architecture -->
+            <section id="arquitectura" class="mb-20 scroll-mt-24">
+                <h2 class="text-3xl font-bold text-slate-800 mb-8 flex items-center gap-3">
+                    <span class="text-slate-300">01</span> Arquitectura del Sistema
+                </h2>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="p-6 rounded-2xl bg-white border border-slate-100 shadow-sm">
+                        <div class="text-blue-500 mb-4 text-xl"><i class="fa-solid fa-code"></i></div>
+                        <h4 class="font-bold mb-2">Scripts JS</h4>
+                        <p class="text-sm text-slate-500">Encapsulado en <code>publicWidget.registry</code> para modularidad en Odoo.</p>
+                    </div>
+                    <div class="p-6 rounded-2xl bg-white border border-slate-100 shadow-sm">
+                        <div class="text-purple-500 mb-4 text-xl"><i class="fa-solid fa-layer-group"></i></div>
+                        <h4 class="font-bold mb-2">SCSS Modular</h4>
+                        <p class="text-sm text-slate-500">Uso de variables y mixins para un diseño atómico consistente.</p>
+                    </div>
+                    <div class="p-6 rounded-2xl bg-white border border-slate-100 shadow-sm">
+                        <div class="text-orange-500 mb-4 text-xl"><i class="fa-solid fa-cubes"></i></div>
+                        <h4 class="font-bold mb-2">QWeb Views</h4>
+                        <p class="text-sm text-slate-500">Estructura HTML optimizada con clases de control de animaciones.</p>
+                    </div>
+                </div>
+
+                <!-- Visual Diagram -->
+                <div class="mt-10">
+                    <h4 class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4">Flujo de Ejecución en Odoo</h4>
+                    <div class="mermaid">
+                        graph TD
+                            A[Carga de Página Odoo] --> B{Selector #wrapwrap?}
+                            B -- Sí --> C[Instanciación de AssertivaApp]
+                            B -- No --> D[Idle]
+                            C --> E[initRevealEffect]
+                            C --> F[initIntlTelInput]
+                            C --> G[initParallaxGlow]
+                            F --> H[Validación UI]
+                            H --> I[Envío AJAX a /website/form]
+                    </div>
+                </div>
+            </section>
+
+            <!-- Logic JS -->
+            <section id="scripts" class="mb-20 scroll-mt-24">
+                <h2 class="text-3xl font-bold text-slate-800 mb-8 flex items-center gap-3">
+                    <span class="text-slate-300">02</span> Lógica de Componentes
+                </h2>
+                <div class="prose prose-slate max-w-none">
+                    <p class="text-slate-600 mb-6 italic">Implementación en <code>scripts.js</code>:</p>
+                    <div class="bg-slate-900 rounded-2xl p-6 shadow-2xl overflow-x-auto mb-8">
+                        <pre class="text-sm font-mono"><code class="language-javascript">publicWidget.registry.AssertivaApp = publicWidget.Widget.extend({
+    selector: '#wrapwrap',
+    start: function () {
+        this.initRevealEffect();
+        this.initIntlTelInput();
+        // ... motor de inicialización
+    }
+});</code></pre>
+                    </div>
+                    
+                    <div class="space-y-8">
+                        <div class="flex gap-6">
+                            <div class="shrink-0 w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-bold">1</div>
+                            <div>
+                                <h4 class="text-xl font-bold mb-2">Validación de Identidad Telefónica</h4>
+                                <p class="text-slate-600">Integración con <code>intl-tel-input</code> y <code>Inputmask</code>. Incluye geolocalización por IP y formateo estándar E.164 antes de persistir en el CRM.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-6">
+                            <div class="shrink-0 w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-bold">2</div>
+                            <div>
+                                <h4 class="text-xl font-bold mb-2">Motor de Parallax GPU</h4>
+                                <p class="text-slate-600">Efectos de profundidad usando <code>translate3d</code> para delegar el renderizado al hardware gráfico, manteniendo 60fps constantes durante el scroll.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Design System -->
+            <section id="design-system" class="mb-20 scroll-mt-24">
+                <h2 class="text-3xl font-bold text-slate-800 mb-8 flex items-center gap-3">
+                    <span class="text-slate-300">03</span> Design System
+                </h2>
+                <div class="glass-card rounded-3xl p-8 mb-8">
+                    <h4 class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-6">Paleta de Colores</h4>
+                    <div class="flex flex-wrap gap-4">
+                        <div class="flex-1 min-w-[120px]">
+                            <div class="h-16 rounded-xl bg-[#001e41] mb-2 shadow-inner"></div>
+                            <span class="text-xs font-mono">#001e41 (Primary)</span>
+                        </div>
+                        <div class="flex-1 min-w-[120px]">
+                            <div class="h-16 rounded-xl bg-[#0098c8] mb-2 shadow-inner"></div>
+                            <span class="text-xs font-mono">#0098c8 (Secondary)</span>
+                        </div>
+                        <div class="flex-1 min-w-[120px]">
+                            <div class="h-16 rounded-xl bg-slate-100 mb-2 border border-slate-200"></div>
+                            <span class="text-xs font-mono">#F1F5F9 (Background)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="overflow-hidden border border-slate-200 rounded-2xl bg-white">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-slate-50 border-b border-slate-200">
+                            <tr>
+                                <th class="px-6 py-4 font-bold">Rol</th>
+                                <th class="px-6 py-4 font-bold">Fuente</th>
+                                <th class="px-6 py-4 font-bold">Peso</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200">
+                            <tr>
+                                <td class="px-6 py-4">Headings</td>
+                                <td class="px-6 py-4 font-semibold italic text-slate-700">DM Sans</td>
+                                <td class="px-6 py-4 text-slate-500">700 (Bold)</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4">Body</td>
+                                <td class="px-6 py-4 font-semibold italic text-slate-700">Noto Sans</td>
+                                <td class="px-6 py-4 text-slate-500">400 / 600</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Componentes UI Mapping -->
+            <section id="componentes-ui" class="mb-20 scroll-mt-24">
+                <h2 class="text-3xl font-bold text-slate-800 mb-8 flex items-center gap-3">
+                    <span class="text-slate-300">04</span> Mapeo de Componentes (HTML/SCSS)
+                </h2>
+                <p class="text-slate-600 mb-8">
+                    Relación detallada entre las estructuras QWeb de Odoo y las reglas personalizadas en <code>user_custom_rules.scss</code>.
+                </p>
+
+                <div class="space-y-6">
+                    <!-- Hero -->
+                    <div class="p-6 rounded-2xl bg-white border border-slate-100 shadow-sm">
+                        <div class="flex justify-between items-start mb-4">
+                            <h4 class="font-bold text-lg text-[#001e41]">Hero & Partners Carousel</h4>
+                            <span class="px-2 py-1 bg-slate-100 text-[10px] font-mono rounded">Snippet: s_banner</span>
+                        </div>
+                        <p class="text-sm text-slate-500 mb-4">Define el impacto visual inicial y la prueba social de la marca.</p>
+                        <ul class="text-xs space-y-2 font-mono text-indigo-600">
+                            <li>.hero-section: Control de altura (45vh) y centrado flex.</li>
+                            <li>.hero-logos-container: Layout flex para logos con scroll-snap en mobile.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Soluciones -->
+                    <div class="p-6 rounded-2xl bg-white border border-slate-100 shadow-sm">
+                        <div class="flex justify-between items-start mb-4">
+                            <h4 class="font-bold text-lg text-[#001e41]">Soluciones (Masonry Grid)</h4>
+                            <span class="px-2 py-1 bg-slate-100 text-[10px] font-mono rounded">Custom: .bg-card</span>
+                        </div>
+                        <p class="text-sm text-slate-500 mb-4">Sistema de tarjetas interactivas con efectos de profundidad y GPU Parallax.</p>
+                        <ul class="text-xs space-y-2 font-mono text-indigo-600">
+                            <li>.bg-card: Implementa content-visibility: auto para performance.</li>
+                            <li>.bg-card-overlay-*: Variantes de degradado dinámico según categoría de servicio.</li>
+                            <li>.glow-circle: Elementos de fondo vinculados al motor Parallax en JS.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Marquee -->
+                    <div class="p-6 rounded-2xl bg-white border border-slate-100 shadow-sm">
+                        <div class="flex justify-between items-start mb-4">
+                            <h4 class="font-bold text-lg text-[#001e41]">Partner Marquee (Infinite Scroll)</h4>
+                            <span class="px-2 py-1 bg-slate-100 text-[10px] font-mono rounded">Snippet: s_call_to_action</span>
+                        </div>
+                        <p class="text-sm text-slate-500 mb-4">Carrusel infinito optimizado para evitar saltos de diseño (CLS).</p>
+                        <ul class="text-xs space-y-2 font-mono text-indigo-600">
+                            <li>@keyframes scroll-marquee: Animación infinita mediante transform: translateX.</li>
+                            <li>.marquee-item: Ancho fijo (245px) para estabilidad del renderizado.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Formulario -->
+                    <div class="p-6 rounded-2xl bg-white border border-slate-100 shadow-sm">
+                        <div class="flex justify-between items-start mb-4">
+                            <h4 class="font-bold text-lg text-[#001e41]">Formulario CRM Premium</h4>
+                            <span class="px-2 py-1 bg-slate-100 text-[10px] font-mono rounded">Snippet: s_website_form</span>
+                        </div>
+                        <p class="text-sm text-slate-500 mb-4">Interfaz de contacto con validación internacional avanzada.</p>
+                        <ul class="text-xs space-y-2 font-mono text-indigo-600">
+                            <li>.iti__country-list: Sobrescritura de estilos para el dropdown de países.</li>
+                            <li>.js_intl_phone: Feedback visual mediante clases de estado Bootstrap (valid/invalid).</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tokens & Vinculación -->
+            <section id="tokens-vinculacion" class="mb-20 scroll-mt-24">
+                <h2 class="text-3xl font-bold text-slate-800 mb-8 flex items-center gap-3">
+                    <span class="text-slate-300">05</span> Tokens & Vinculación (Valores -> HTML)
+                </h2>
+                <p class="text-slate-600 mb-8">
+                    A continuación se detalla cómo los valores definidos en <code>user_values.scss</code> permean hasta la estructura final en <code>index.html</code>.
+                </p>
+
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="border border-slate-200 rounded-2xl p-6 bg-white">
+                        <h4 class="font-bold text-[#001e41] mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-font"></i> Tipografía Dinámica
+                        </h4>
+                        <p class="text-xs text-slate-500 mb-4">El valor <code>$o-secondary-font-family: 'DM Sans'</code> viaja así:</p>
+                        <div class="space-y-2">
+                            <div class="text-[10px] font-mono p-2 bg-slate-50 rounded">SCSS: --font-heading: #{$o-secondary-font-family}</div>
+                            <div class="text-[10px] font-mono p-2 bg-slate-50 rounded">Regla: h1, h2 { font-family: var(--font-heading) }</div>
+                            <div class="text-[10px] font-mono p-2 bg-blue-50 rounded text-blue-700">HTML: &lt;h1&gt;Ciberseguridad...&lt;/h1&gt;</div>
+                        </div>
+                    </div>
+
+                    <div class="border border-slate-200 rounded-2xl p-6 bg-white">
+                        <h4 class="font-bold text-[#001e41] mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-arrows-up-down"></i> Escala de Espaciado
+                        </h4>
+                        <p class="text-xs text-slate-500 mb-4">Variables como <code>$pt80</code> (64px) se vinculan a utilidades nativas:</p>
+                        <div class="space-y-2">
+                            <div class="text-[10px] font-mono p-2 bg-slate-50 rounded">Variable: $pt80: $o-spacing-unit * 10</div>
+                            <div class="text-[10px] font-mono p-2 bg-slate-50 rounded">Uso: Clase de utilidad .pt80 (Padding Top)</div>
+                            <div class="text-[10px] font-mono p-2 bg-blue-50 rounded text-blue-700">HTML: &lt;section class="pt80"...&gt;</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 p-6 rounded-2xl bg-slate-900 text-slate-300">
+                    <h4 class="text-white font-bold mb-4 text-sm">Control de Animaciones</h4>
+                    <p class="text-sm mb-4">
+                        La variable <code>$assertiva-reveal-duration</code> (0.6s) define la velocidad global de entrada. 
+                        En el HTML, la clase <code>.assertiva-reveal</code> activa este tiempo, pero la propiedad <code>transition-delay</code> se calcula dinámicamente en el SCSS para los grupos (nth-child), creando el efecto de "cascada" que se ve en la Hero y las Cards.
+                    </p>
+                    <div class="text-[10px] font-mono text-cyan-400">
+                        .assertiva-reveal { transition: opacity $assertiva-reveal-duration var(--anim-timing); }
+                    </div>
+                </div>
+            </section>
+
+            <!-- Troubleshooting Section -->
+            <section id="troubleshooting" class="mb-20 scroll-mt-24">
+                <h2 class="text-3xl font-bold text-slate-800 mb-8 flex items-center gap-3">
+                    <span class="text-slate-300">06</span> Troubleshooting & Odoo Gotchas
+                </h2>
+                
+                <div class="space-y-4">
+                    <!-- Asset Bundle Issue -->
+                    <div class="p-5 rounded-xl border border-red-100 bg-red-50/30">
+                        <h4 class="font-bold text-red-800 mb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-sync"></i> Los cambios en JS/SCSS no se reflejan
+                        </h4>
+                        <p class="text-sm text-slate-600 mb-3">Odoo concatena y minifica los archivos. Si los cambios no aparecen:</p>
+                        <ul class="text-xs space-y-2 text-slate-600 list-disc ml-5">
+                            <li>Activa el modo desarrollador con assets: <code>?debug=assets</code> en la URL.</li>
+                            <li>Usa la opción <strong>"Regenerate Assets Bundles"</strong> en el menú de depuración (icono de bug).</li>
+                            <li>Limpia la caché del navegador o usa una ventana de incógnito.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Widget Initialization -->
+                    <div class="p-5 rounded-xl border border-amber-100 bg-amber-50/30">
+                        <h4 class="font-bold text-amber-800 mb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-triangle-exclamation"></i> El Widget no inicializa (No entra en start)
+                        </h4>
+                        <p class="text-sm text-slate-600 mb-3">Comprueba los siguientes puntos críticos:</p>
+                        <ul class="text-xs space-y-2 text-slate-600 list-disc ml-5">
+                            <li>Asegúrate de que el archivo JS esté incluido en el bundle <code>web.assets_frontend</code>.</li>
+                            <li>Verifica que el <code>selector: '#wrapwrap'</code> exista en el DOM.</li>
+                            <li>Comprueba en la consola si hay errores de sintaxis previos que detengan la ejecución del registry.</li>
+                        </ul>
+                    </div>
+
+                    <!-- CSRF Error -->
+                    <div class="p-5 rounded-xl border border-slate-200 bg-white">
+                        <h4 class="font-bold text-slate-800 mb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-shield-halved"></i> Error 400 (Bad Request) al enviar formularios
+                        </h4>
+                        <p class="text-sm text-slate-600 mb-2">Esto suele ser un fallo de validación CSRF.</p>
+                        <div class="text-[10px] font-mono p-3 bg-slate-900 text-cyan-400 rounded-lg">
+                            // Solución: Asegúrate de incluir el token en el FormData<br>
+                            formData.append('csrf_token', odoo.csrf_token);
+                        </div>
+                    </div>
+
+                    <!-- XML Validation -->
+                    <div class="p-5 rounded-xl border border-blue-100 bg-blue-50/30">
+                        <h4 class="font-bold text-blue-800 mb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-vial"></i> Validación de XML (QWeb)
+                        </h4>
+                        <p class="text-sm text-slate-600 mb-3">Antes de subir cambios al editor de Odoo, valida la sintaxis para evitar el error <code>xmlParseEntityRef</code>:</p>
+                        <div class="text-[10px] font-mono p-3 bg-slate-900 text-green-400 rounded-lg mb-3">
+                            # Ejecutar en terminal para verificar errores:<br>
+                            xmllint --noout ruta/al/archivo.html
+                        </div>
+                        <p class="text-xs text-slate-500 italic">Recuerda: El símbolo &amp; debe escribirse siempre como &amp;amp; incluso dentro de diccionarios t-value.</p>
+                    </div>
+
+                    <!-- Debugging 500 Errors -->
+                    <div class="p-5 rounded-xl border border-purple-100 bg-purple-50/30">
+                        <h4 class="font-bold text-purple-800 mb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-terminal"></i> Depuración de Errores 500 (QWeb)
+                        </h4>
+                        <p class="text-sm text-slate-600 mb-3">Si el servidor devuelve un Error 500 tras modificar el HTML:</p>
+                        <ul class="text-xs space-y-2 text-slate-600 list-disc ml-5">
+                            <li><strong>Server Logs:</strong> Busca <code>QWebException</code> en la terminal de Odoo.</li>
+                            <li><strong>Flags de Dev:</strong> Inicia el servidor con <code>--dev=xml</code> para ver tracebacks detallados.</li>
+                            <li><strong>Verificación de Objetos:</strong> Asegúrate de que los campos usados en <code>t-out</code> o <code>t-field</code> existan en el modelo.</li>
+                            <li><strong>Comillas:</strong> Verifica que no haya comillas dobles anidadas dentro de un <code>t-attf-style</code>.</li>
+                        </ul>
+                    </div>
+
+                    <div class="p-4 bg-blue-50 rounded-lg text-xs text-blue-700 italic border-l-4 border-blue-500">
+                        <i class="fa-solid fa-lightbulb mr-1"></i> <strong>Pro-tip:</strong> Usa <code>console.log('DEBUG: ...')</code> dentro de la función <code>start()</code> para confirmar que Odoo ha instanciado tu widget correctamente.
+                    </div>
+                </div>
+            </section>
+
+            <!-- Mobile Strategy -->
+            <section id="mobile" class="mb-20 scroll-mt-24">
+                <h2 class="text-3xl font-bold text-slate-800 mb-8 flex items-center gap-3">
+                    <span class="text-slate-300">07</span> Mobile Strategy
+                </h2>
+                <div class="bg-blue-900 rounded-3xl p-8 text-white relative overflow-hidden">
+                    <div class="relative z-10">
+                        <h4 class="text-xl font-bold mb-4">Optimización Touch-First</h4>
+                        <ul class="space-y-4">
+                            <li class="flex items-start gap-3 text-blue-100">
+                                <i class="fa-solid fa-check-circle text-blue-400 mt-1"></i>
+                                <span><strong>Scroll Snap:</strong> Las pestañas de servicios y cards de impacto se ajustan automáticamente al swipe móvil.</span>
+                            </li>
+                            <li class="flex items-start gap-3 text-blue-100">
+                                <i class="fa-solid fa-check-circle text-blue-400 mt-1"></i>
+                                <span><strong>Carousel Adaptativo:</strong> Generación dinámica de indicadores táctiles (dots) mediante JavaScript.</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="absolute -right-20 -bottom-20 opacity-10 text-[200px]">
+                        <i class="fa-solid fa-mobile-screen"></i>
+                    </div>
+                </div>
+            </section>
+
+            <footer class="mt-32 pt-12 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="text-slate-400 text-sm">
+                    &copy; 2024 Assertiva Risk Advisory. Todos los derechos reservados.
+                </div>
+                <div class="flex gap-4">
+                    <a href="#" class="text-slate-400 hover:text-[#0098c8] transition-colors"><i class="fa-brands fa-linkedin text-xl"></i></a>
+                    <a href="#" class="text-slate-400 hover:text-slate-900 transition-colors"><i class="fa-brands fa-github text-xl"></i></a>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    <script>
+        // Simple Toggle para menú móvil
+        const menuBtn = document.getElementById('menuBtn');
+        const sidebar = document.getElementById('sidebar');
+        menuBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('-translate-x-full');
+        });
+
+        // Smooth closing on link click for mobile
+        document.querySelectorAll('.sidebar-link').forEach(link => {
+            link.addEventListener('click', () => {
+                if(window.innerWidth < 1024) sidebar.classList.add('-translate-x-full');
+            });
+        });
+
+        // Inicialización de Mermaid con tema personalizado
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'base',
+            themeVariables: {
+                primaryColor: '#001e41',
+                primaryTextColor: '#fff',
+                lineColor: '#0098c8',
+                fontFamily: 'Inter'
+            }
+        });
+    </script>
+</body>
+</html>
