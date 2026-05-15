@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentación Técnica - Assertiva Risk Advisory</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: 'Noto Sans', sans-serif;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-weight: 800;
+        }
+
+        .sidebar-link {
+            padding-top: 0.75rem !important;
+            padding-bottom: 0.75rem !important;
+        }
+
+        .sidebar-link:hover {
+            background-color: rgba(128, 128, 128, 0.1);
+            color: #666666;
+        }
+
+        .sidebar-link.active {
+            border-right: 4px solid #666666;
+            background-color: rgba(128, 128, 128, 0.05);
+            color: #666666;
+        }
+
+        code {
+            background: #f3f4f6;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: #4b5563;
+        }
+
+        pre code {
+            background: transparent;
+            color: #f8f8f2;
+            padding: 0;
+        }
+
+        /* Keep f8f8f2 for code blocks */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(50, 50, 50, 0.1);
+        }
+
+        /* Estilos para que Mermaid se integre con el diseño */
+        .mermaid-container {
+            overflow-x: auto;
+            margin-top: 1.5rem;
+            background: white;
+            border-radius: 1rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        .mermaid {
+            padding: 1.5rem;
+            min-width: 600px;
+        }
+
+        .mermaid svg {
+            max-width: 100% !important;
+            height: auto !important;
+        }
+
+        /* Copy Button UX */
+        .code-block-wrapper {
+            position: relative;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.4rem 0.6rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            color: #fff;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            opacity: 0;
+        }
+
+        .code-block-wrapper:hover .copy-btn {
+            opacity: 1;
+        }
+
+        .copy-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .copy-btn.copied {
+            background: #22c55e;
+            border-color: #16a34a;
+        }
+
+        /* Efecto de brillo para la barra de progreso (Success) */
+        .glow-success {
+            box-shadow: 0 0 12px rgba(34, 197, 94, 0.8), 0 0 20px rgba(34, 197, 94, 0.4);
+        }
+
+        /* Personalización de colores de Mermaid mediante variables */
+        /* Estilos específicos para móvil */
+        @media (max-width: 1023px) {
+
+            /* Tailwind's 'lg' breakpoint is 1024px */
+            aside#sidebar:not(.-translate-x-full) {
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            }
+        }
+
+        :root {
+            --mermaid-font-family: 'Noto Sans', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 text-gray-900 leading-relaxed">
+
+    <!-- Mobile Header -->
+    <header class="lg:hidden bg-gray-800 text-white p-4 flex justify-between items-center sticky top-0 z-50">
+        <a href="#" class="font-bold tracking-tight">Assertiva Docs</a>
+        <button id="menuBtn" class="p-2"><i class="fa-solid fa-bars text-xl"></i></button>
+
+        <!-- Reading Progress Indicator -->
+        <div class="absolute bottom-0 left-0 w-full h-[2px] bg-gray-700/50">
+            <div id="readingProgress" class="h-full bg-gray-400 w-0 transition-all duration-75"></div>
+        </div>
+    </header>
+
+    <div class="max-w-[1440px] mx-auto flex flex-col lg:flex-row w-full">
+
+        <!-- Backdrop for mobile navigation -->
+        <div id="backdrop"
+            class="fixed inset-0 bg-gray-900/50 z-30 hidden lg:hidden backdrop-blur-sm transition-opacity duration-300">
+        </div>
+
+        <!-- Sidebar Navigation -->
+        <aside id="sidebar"
+            class="fixed inset-y-0 left-0 z-40 w-72 bg-white border-r border-gray-200 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out lg:sticky lg:h-screen lg:top-0 overflow-y-auto">
+            <div class="p-8 relative">
+                <!-- Close button for mobile -->
+                <button id="closeBtn"
+                    class="lg:hidden absolute top-4 right-4 text-gray-400 hover:text-gray-900 p-2 transition-colors">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+
+                <div class="flex items-center gap-3 mb-10 pr-6">
+                    <div class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center text-white font-bold">
+                        A</div>
+                    <span class="text-xl font-bold tracking-tight text-gray-800">Docs </span>
+                </div>
+
+                <!-- Buscador de Secciones -->
+                <div class="mb-10 px-4">
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+                            <i class="fa-solid fa-magnifying-glass text-[10px]"></i>
+                        </span>
+                        <input type="text" id="sidebarSearch" placeholder="Filtrar contenido..."
+                            class="w-full bg-gray-50 border border-gray-300 text-gray-900 placeholder:text-gray-700 text-xs rounded-lg focus:ring-gray-300 focus:border-gray-400 block pl-9 p-2 transition-all outline-none" autocomplete="off">
+                    </div>
+                </div>
+
+                <nav class="flex flex-col">
+                    <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mt-0 mb-4 px-4 transition-colors duration-300">Introducción</p>
+                    <a href="#arquitectura"
+                        class="sidebar-link flex items-center gap-3 px-4 rounded-md text-sm font-medium transition-colors">
+                        <span class="text-xs font-mono text-gray-400 shrink-0">01</span> Arquitectura
+                    </a>
+
+                    <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mt-10 mb-4 px-4 transition-colors duration-300">Desarrollo</p>
+                    <a href="#scripts"
+                        class="sidebar-link flex items-center gap-3 px-4 rounded-md text-sm font-medium transition-colors">
+                        <span class="text-xs font-mono text-gray-400 shrink-0">02</span> Lógica JS
+                    </a>
+                    <a href="#animaciones"
+                        class="sidebar-link flex items-center gap-3 px-4 rounded-md text-sm font-medium transition-colors">
+                        <span class="text-xs font-mono text-gray-400 shrink-0">03</span> Animaciones
+                    </a>
+                    <a href="#form"
+                        class="sidebar-link flex items-center gap-3 px-4 rounded-md text-sm font-medium transition-colors">
+                        <span class="text-xs font-mono text-gray-400 shrink-0">04</span> Formularios
+                    </a>
+
+                    <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mt-10 mb-4 px-4 transition-colors duration-300">Diseño</p>
+                    <a href="#design-system"
+                        class="sidebar-link flex items-center gap-3 px-4 rounded-md text-sm font-medium transition-colors">
+                        <span class="text-xs font-mono text-gray-400 shrink-0">05</span> Design System
+                    </a>
+                    <a href="#componentes-ui"
+                        class="sidebar-link flex items-center gap-3 px-4 rounded-md text-sm font-medium transition-colors">
+                        <span class="text-xs font-mono text-gray-400 shrink-0">06</span> Componentes UI
+                    </a>
+                    <a href="#tokens-vinculacion"
+                        class="sidebar-link flex items-center gap-3 px-4 rounded-md text-sm font-medium transition-colors">
+                        <span class="text-xs font-mono text-gray-400 shrink-0">07</span> Tokens & Vinculación
+                    </a>
+                    <a href="#troubleshooting"
+                        class="sidebar-link flex items-center gap-3 px-4 rounded-md text-sm font-medium transition-colors">
+                        <span class="text-xs font-mono text-gray-400 shrink-0">08</span> Troubleshooting
+                    </a>
+                    <a href="#mobile"
+                        class="sidebar-link flex items-center gap-3 px-4 rounded-md text-sm font-medium transition-colors">
+                        <span class="text-xs font-mono text-gray-400 shrink-0">09</span> Mobile Strategy
+                    </a>
+
+                    <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mt-10 mb-4 px-4 transition-colors duration-300">Arquitectura Pro</p>
+                    <a href="#arquitectura-pro"
+                        class="sidebar-link flex items-center gap-3 px-4 rounded-md text-sm font-medium transition-colors">
+                        <span class="text-xs font-mono text-gray-400 shrink-0">10</span> Visión General
+                    </a>
+                    <a href="#mantenimiento"
+                        class="sidebar-link flex items-center gap-3 px-4 rounded-md text-sm font-medium transition-colors">
+                        <span class="text-xs font-mono text-gray-400 shrink-0">11</span> Mantenimiento
+                    </a>
+                    <a href="#escalabilidad"
+                        class="sidebar-link flex items-center gap-3 px-4 rounded-md text-sm font-medium transition-colors">
+                        <span class="text-xs font-mono text-gray-400 shrink-0">12</span> Escalabilidad
+                    </a>
+                    <a href="#seguridad"
+                        class="sidebar-link flex items-center gap-3 px-4 rounded-md text-sm font-medium transition-colors">
+                        <span class="text-xs font-mono text-gray-400 shrink-0">13</span> Seguridad Web
+                    </a>
+                    <a href="#performance"
+                        class="sidebar-link flex items-center gap-3 px-4 rounded-md text-sm font-medium transition-colors">
+                        <span class="text-xs font-mono text-gray-400 shrink-0">14</span> Performance Audit
+                    </a>
+                    <a href="#workflow"
+                        class="sidebar-link flex items-center gap-3 px-4 rounded-md text-sm font-medium transition-colors">
+                        <span class="text-xs font-mono text-gray-400 shrink-0">15</span> Workflow & Validation
+                    </a>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 px-6 md:px-12 py-12 lg:px-16 lg:py-16 max-w-4xl">
+
+            <!-- Header Section -->
+            <header class="mb-16">
+                <div
+                    class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gray-100 text-gray-600 text-xs font-bold mb-4">
+                    <span class="relative flex h-2 w-2">
+                        <span
+                            class="animate-ping absolute inline-flex h-full w-2 rounded-full bg-gray-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-gray-500"></span>
+                    </span>
+                    ODOO 17 REFACTOREO
+                </div>
+                <h1 class="text-4xl lg:text-5xl font-extrabold text-gray-800 mb-6">Frontend Engineering</h1>
+                <p class="text-xl text-gray-600 max-w-2xl leading-relaxed">
+                    Documentación técnica sobre la implementación de la capa de interactividad avanzada y sistema de
+                    diseño para Assertiva Risk Advisory.
+                </p>
+                <div class="mt-8 p-4 rounded-xl bg-white border border-gray-200 flex items-center gap-4">
+                    <span class="p-2 bg-gray-50 rounded text-gray-400"><i class="fa-solid fa-link"></i></span>
+                    <a href="https://assertiva-test17-31505073.dev.odoo.com/" target="_blank"
+                        class="text-sm font-medium text-gray-600 hover:underline">assertiva-test17-31505073.dev.odoo.com</a>
+                </div>
+            </header>
+
+            <!-- Architecture -->
+            <section id="arquitectura" class="mb-20 scroll-mt-24">
+                <h2 class="text-1xl font-bold text-gray-800 mb-8 flex items-center gap-3">
+                    <span class="text-gray-300">01</span> Arquitectura del Sistema
+                </h2>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="p-6 rounded-2xl bg-white border border-gray-100 shadow-sm">
+                        <div class="text-gray-500 mb-4 text-xl"><i class="fa-solid fa-code"></i></div>
+                        <h4 class="font-bold text-lg mb-2">Scripts JS</h4>
+                        <p class="text-sm text-gray-500">Encapsulado en <code>publicWidget.registry</code> para
+                            modularidad en Odoo.</p>
+                    </div>
+                    <div class="p-6 rounded-2xl bg-white border border-gray-100 shadow-sm">
+                        <div class="text-gray-500 mb-4 text-xl"><i class="fa-solid fa-layer-group"></i></div>
+                        <h4 class="font-bold text-lg mb-2">SCSS Modular</h4>
+                        <p class="text-sm text-gray-500">Uso de variables y mixins para un diseño atómico consistente.
+                        </p>
+                    </div>
+                    <div class="p-6 rounded-2xl bg-white border border-gray-100 shadow-sm">
+                        <div class="text-gray-500 mb-4 text-xl"><i class="fa-solid fa-cubes"></i></div>
+                        <h4 class="font-bold text-lg mb-2">QWeb Views</h4>
+                        <p class="text-sm text-gray-500">Arquitectura orientada a datos (Data-Driven) con bucles
+                            <code>t-foreach</code> para fácil mantenimiento.</p>
+                    </div>
+                </div>
+
+                <!-- Visual Diagram -->
+                <div class="mt-10">
+                    <h4 class="text-sm font-bold text-gray-400 uppercase tracking-widest mb-4">Flujo de Ejecución en
+                        Odoo</h4>
+                    <div class="mermaid-container">
+                        <div class="mermaid">
+                            graph TD
+                            A[Carga de Página Odoo] --> B{Selector #wrapwrap?}
+                            B -- Sí --> C[Instanciación de AssertivaApp]
+                            B -- No --> D[Idle]
+                            C --> E[initRevealEffect]
+                            C --> F[initIntlTelInput]
+                            C --> G[initParallaxGlow]
+                            F --> H[Validación UI]
+                            H --> I[Envío AJAX a /website/form]
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Logic JS -->
+            <section id="scripts" class="mb-20 scroll-mt-24">
+                <h2 class="text-1xl font-bold text-gray-800 mb-8 flex items-center gap-3">
+                    <span class="text-gray-300">02</span> Lógica de Componentes (JS)
+                </h2>
+                <div class="prose prose-gray max-w-none">
+                    <p class="text-gray-600 mb-6 leading-relaxed">Assertiva utiliza el framework
+                        <code>publicWidget</code> de Odoo para encapsular la interactividad. Esto garantiza que los
+                        scripts solo se carguen cuando el DOM esté listo y el selector principal esté presente.</p>
+                    <div class="code-block-wrapper bg-gray-900 rounded-2xl p-6 shadow-2xl overflow-x-auto mb-8">
+                        <pre class="text-sm font-mono"><code class="language-javascript">publicWidget.registry.AssertivaApp = publicWidget.Widget.extend({
+    selector: '#wrapwrap',
+    start: function () {
+        return this._super.apply(this, arguments).then(() => {
+            this.initRevealEffect();
+            this.initIntlTelInput();
+            this.initParallaxGlow();
+            this.initSkeletonScreens();
+            // ... motor de inicialización
+        });
+    }
+});</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Animations -->
+            <section id="animaciones" class="mb-20 scroll-mt-24">
+                <h2 class="text-1xl font-bold text-gray-800 mb-8 flex items-center gap-3">
+                    <span class="text-gray-300">03</span> Sistema de Animaciones
+                </h2>
+                <div class="prose prose-gray max-w-none">
+                    <div class="space-y-8">
+                        <div class="flex gap-6">
+                            <div
+                                class="shrink-0 w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 font-bold">
+                                1</div>
+                            <div>
+                                <h4 class="text-lg md:text-xl font-bold mb-2">Motor de Parallax GPU</h4>
+                                <p class="text-gray-600">Efectos de profundidad usando <code>translate3d</code> para
+                                    delegar el renderizado al hardware gráfico, manteniendo 60fps constantes durante el
+                                    scroll.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-6">
+                            <div
+                                class="shrink-0 w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 font-bold">
+                                2</div>
+                            <div>
+                                <h4 class="text-lg md:text-xl font-bold mb-2">Garantía de Carga (Skeleton Screens)</h4>
+                                <p class="text-gray-600">Implementación de <code>initSkeletonScreens</code> para mostrar
+                                    estados de carga elegantes (shimmer) mientras se descargan las imágenes críticas del
+                                    Hero.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Forms Section -->
+            <section id="form" class="mb-20 scroll-mt-24">
+                <h2 class="text-1xl font-bold text-gray-800 mb-8 flex items-center gap-3">
+                    <span class="text-gray-300">04</span> Gestión de Formularios
+                </h2>
+                <div class="prose prose-gray max-w-none">
+                    <p class="text-gray-600 mb-8">El motor de formularios de Assertiva está diseñado para maximizar la
+                        conversión y asegurar la integridad de los datos que ingresan al CRM de Odoo 17.</p>
+
+                    <div class="grid md:grid-cols-2 gap-8 mb-10">
+                        <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-sm">
+                            <h4 class="font-bold text-gray-800 mb-3 flex items-center gap-2 text-base">
+                                <i class="fa-solid fa-phone text-gray-400"></i> Validación Telefónica
+                            </h4>
+                            <p class="text-xs text-gray-400 mb-4 leading-relaxed">Integración avanzada con
+                                <code>intl-tel-input</code> (vía <code>initIntlTelInput</code>):</p>
+                            <ul class="text-[11px] space-y-2 text-gray-600">
+                                <li>Geolocalización por IP para pre-selección de país.</li>
+                                <li>Máscaras dinámicas (Inputmask) según el estándar local.</li>
+                                <li>Conversión automática al formato internacional <strong>E.164</strong>.</li>
+                            </ul>
+                        </div>
+                        <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-sm">
+                            <h4 class="font-bold text-gray-800 mb-3 flex items-center gap-2 text-base">
+                                <i class="fa-solid fa-check-double text-gray-400"></i> Feedback de Usuario
+                            </h4>
+                            <p class="text-xs text-gray-400 mb-4 leading-relaxed">Validación nativa y asíncrona:</p>
+                            <ul class="text-[11px] space-y-2 text-gray-600">
+                                <li>Clases <code>.is-valid</code>/<code>.is-invalid</code> instantáneas.</li>
+                                <li>Bloqueo de botón submit con spinner de carga.</li>
+                                <li>Manejo de errores seguro (Sin revelar rutas del servidor).</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h4 class="text-sm font-bold text-gray-400 uppercase tracking-widest mb-6">Mapeo CRM y Flujo de
+                        Datos</h4>
+                    <div class="mermaid-container">
+                        <div class="mermaid">
+                            graph LR
+                            F[Formulario HTML] -- name='contact_name' --> C(Lead: Nombre)
+                            F -- name='phone' --> D(Lead: Teléfono)
+                            F -- metadata --> E(Lead: URL Origen)
+                            C & D & E --> G{Controlador Odoo}
+                            G -- Success --> H[Registro en crm.lead]
+                            G -- Error --> I[Log Interno / Feedback Seguro]
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Design System -->
+            <section id="design-system" class="mb-20 scroll-mt-24">
+                <h2 class="text-1xl font-bold text-gray-800 mb-8 flex items-center gap-3">
+                    <span class="text-gray-300">05</span> Design System
+                </h2>
+                <div class="glass-card rounded-3xl p-8 mb-8">
+                    <h4 class="text-sm font-bold text-gray-400 uppercase tracking-widest mb-6">Paleta de Colores</h4>
+                    <div class="flex flex-wrap gap-4">
+                        <div class="flex-1 min-w-[120px]">
+                            <div class="h-16 rounded-xl bg-gray-800 mb-2 shadow-inner"></div>
+                            <span class="text-xs font-mono">#333333 (Primary)</span>
+                        </div>
+                        <div class="flex-1 min-w-[120px]">
+                            <div class="h-16 rounded-xl bg-gray-600 mb-2 shadow-inner"></div>
+                            <span class="text-xs font-mono">#666666 (Secondary)</span>
+                        </div>
+                        <div class="flex-1 min-w-[120px]">
+                            <div class="h-16 rounded-xl bg-gray-100 mb-2 border border-gray-200"></div>
+                            <span class="text-xs font-mono">#F3F4F6 (Background)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto border border-gray-200 rounded-2xl bg-white">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-gray-50 border-b border-gray-200">
+                            <tr>
+                                <th class="px-4 md:px-6 py-4 font-bold">Rol</th>
+                                <th class="px-4 md:px-6 py-4 font-bold">Fuente</th>
+                                <th class="px-4 md:px-6 py-4 font-bold">Peso</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                            <tr>
+                                <td class="px-4 md:px-6 py-4">Headings</td>
+                                <td class="px-4 md:px-6 py-4 font-semibold italic text-gray-700">Noto Sans</td>
+                                <td class="px-4 md:px-6 py-4 text-gray-500">800 (ExtraBold)</td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 md:px-6 py-4">Body</td>
+                                <td class="px-4 md:px-6 py-4 font-semibold italic text-gray-700">Noto Sans</td>
+                                <td class="px-4 md:px-6 py-4 text-gray-500">400 / 600</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Componentes UI Mapping -->
+            <section id="componentes-ui" class="mb-20 scroll-mt-24">
+                <h2 class="text-1xl font-bold text-gray-800 mb-8 flex items-center gap-3">
+                    <span class="text-gray-300">06</span> Mapeo de Componentes
+                </h2>
+                <p class="text-gray-600 mb-8">
+                    Relación detallada entre las estructuras QWeb de Odoo y las reglas personalizadas en
+                    <code>user_custom_rules.scss</code>.
+                </p>
+
+                <div class="space-y-6">
+                    <!-- Hero -->
+                    <div class="p-6 rounded-2xl bg-white border border-gray-100 shadow-sm">
+                        <div class="flex justify-between items-start mb-4">
+                            <h4 class="font-bold text-lg text-gray-800">Hero & Custom Mobile Carousel</h4>
+                            <span class="px-2 py-1 bg-gray-100 text-[10px] font-mono rounded">Logic:
+                                initMobileLogoCarousel</span>
+                        </div>
+                        <p class="text-sm text-gray-500 mb-4">Implementación personalizada que evita el JS nativo de
+                            Bootstrap para mayor fluidez táctil y control de indicadores (dots).</p>
+                        <ul class="text-xs space-y-2 font-mono text-gray-600">
+                            <li>.hero-section: Control de altura (45vh) y centrado flex.</li>
+                            <li>.hero-logos-container: Contenedor con <code>scroll-snap-type: x mandatory</code> para
+                                Single-Item display en mobile.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Soluciones -->
+                    <div class="p-6 rounded-2xl bg-white border border-gray-100 shadow-sm">
+                        <div class="flex justify-between items-start mb-4">
+                            <h4 class="font-bold text-lg text-gray-800">Soluciones (Masonry Grid)</h4>
+                            <span class="px-2 py-1 bg-gray-100 text-[10px] font-mono rounded">Custom: .bg-card</span>
+                        </div>
+                        <p class="text-sm text-gray-500 mb-4">Sistema de tarjetas interactivas con efectos de
+                            profundidad y GPU Parallax.</p>
+                        <ul class="text-xs space-y-2 font-mono text-gray-600">
+                            <li>.bg-card: Implementa content-visibility: auto para performance.</li>
+                            <li>.bg-card-overlay-*: Variantes de degradado dinámico según categoría de servicio.</li>
+                            <li>.glow-circle: Elementos de fondo vinculados al motor Parallax en JS.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Pestañas -->
+                    <div class="p-6 rounded-2xl bg-white border border-gray-100 shadow-sm">
+                        <div class="flex justify-between items-start mb-4">
+                            <h4 class="font-bold text-lg text-gray-800">Tabs: Servicios de Gobernanza</h4>
+                            <span class="px-2 py-1 bg-gray-100 text-[10px] font-mono rounded">Layout: Flex Grid</span>
+                        </div>
+                        <p class="text-sm text-gray-500 mb-4">Diseño asimétrico 2/10 para desplazar el contenido hacia
+                            la izquierda y maximizar legibilidad.</p>
+                        <ul class="text-xs space-y-2 font-mono text-gray-600">
+                            <li>.position-sticky: Navegación anclada lateralmente con cálculo dinámico de
+                                <code>--header-height</code>.</li>
+                            <li>initTabs(): Script de seguridad para garantizar que la primera pestaña esté activa por
+                                defecto.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Marquee -->
+                    <div class="p-6 rounded-2xl bg-white border border-gray-100 shadow-sm">
+                        <div class="flex justify-between items-start mb-4">
+                            <h4 class="font-bold text-lg text-gray-800">Partner Marquee (Infinite Scroll)</h4>
+                            <span class="px-2 py-1 bg-gray-100 text-[10px] font-mono rounded">Snippet:
+                                s_call_to_action</span>
+                        </div>
+                        <p class="text-sm text-gray-500 mb-4">Carrusel infinito optimizado para evitar saltos de diseño
+                            (CLS).</p>
+                        <ul class="text-xs space-y-2 font-mono text-gray-600">
+                            <li>@keyframes scroll-marquee: Animación infinita mediante transform: translateX.</li>
+                            <li>.marquee-item: Ancho fijo (245px) para estabilidad del renderizado.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Formulario -->
+                    <div class="p-6 rounded-2xl bg-white border border-gray-100 shadow-sm">
+                        <div class="flex justify-between items-start mb-4">
+                            <h4 class="font-bold text-lg text-gray-800">Formulario CRM</h4>
+                            <span class="px-2 py-1 bg-gray-100 text-[10px] font-mono rounded">Snippet:
+                                s_website_form</span>
+                        </div>
+                        <p class="text-sm text-gray-500 mb-4">Interfaz de contacto con validación internacional
+                            avanzada.</p>
+                        <ul class="text-xs space-y-2 font-mono text-gray-600">
+                            <li>.iti__country-list: Sobrescritura de estilos para el dropdown de países.</li>
+                            <li>.js_intl_phone: Feedback visual mediante clases de estado Bootstrap (valid/invalid).
+                            </li>
+                        </ul>
+                        <!-- CRM Mapping Table -->
+                        <div class="mt-4 overflow-hidden border border-gray-100 rounded-lg">
+                            <table class="w-full text-[10px] text-left">
+                                <thead class="bg-gray-50 text-gray-500">
+                                    <tr>
+                                        <th class="px-3 py-2">Input Name</th>
+                                        <th class="px-3 py-2">Odoo Field (crm.lead)</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-100 text-gray-600">
+                                    <tr>
+                                        <td class="px-3 py-2 font-mono">contact_name</td>
+                                        <td class="px-3 py-2 font-mono">contact_name</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-3 py-2 font-mono">email_from</td>
+                                        <td class="px-3 py-2 font-mono">email_from</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-3 py-2 font-mono">phone</td>
+                                        <td class="px-3 py-2 font-mono">phone</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-3 py-2 font-mono">name</td>
+                                        <td class="px-3 py-2 font-mono">name (Subject)</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-3 py-2 font-mono">description</td>
+                                        <td class="px-3 py-2 font-mono">description</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tokens & Vinculación -->
+            <section id="tokens-vinculacion" class="mb-20 scroll-mt-24">
+                <h2 class="text-1xl font-bold text-gray-800 mb-8 flex items-center gap-3">
+                    <span class="text-gray-300">07</span> Tokens & Vinculación
+                </h2>
+                <p class="text-gray-600 mb-8">
+                    Se detalla cómo los valores definidos en <code>user_values.scss</code> permean hasta
+                    la estructura final en <code>index.html</code>.
+                </p>
+
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="border border-gray-200 rounded-2xl p-6 bg-white">
+                        <h4 class="font-bold text-gray-800 mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-font"></i> Tipografía Dinámica
+                        </h4>
+                        <p class="text-xs text-gray-400 mb-4">El valor <code>$o-base-font-family: 'Noto Sans'</code>
+                            viaja en el flujo:</p>
+                        <div class="space-y-2">
+                            <div class="text-[10px] font-mono p-2 bg-gray-50 rounded">SCSS: --font-heading:
+                                #{$o-base-font-family}</div>
+                            <div class="text-[10px] font-mono p-2 bg-gray-50 rounded">Regla: h1, h2 { font-family:
+                                var(--font-heading) }</div>
+                            <div class="text-[10px] font-mono p-2 bg-gray-50 rounded text-gray-700">HTML:
+                                &lt;h1&gt;Ciberseguridad...&lt;/h1&gt;</div>
+                        </div>
+                    </div>
+
+                    <div class="border border-gray-200 rounded-2xl p-6 bg-white">
+                        <h4 class="font-bold text-gray-800 mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-arrows-up-down"></i> Escala de Espaciado
+                        </h4>
+                        <p class="text-xs text-gray-400 mb-4">Variables como <code>$pt80</code> se vinculan a
+                            utilidades nativas:</p>
+                        <div class="space-y-2">
+                            <div class="text-[10px] font-mono p-2 bg-gray-50 rounded">Variable: $pt80: $o-spacing-unit *
+                                10</div>
+                            <div class="text-[10px] font-mono p-2 bg-gray-50 rounded">Uso: Clase de utilidad .pt80
+                                (Padding Top)</div>
+                            <div class="text-[10px] font-mono p-2 bg-gray-50 rounded text-gray-700">HTML: &lt;section
+                                class="pt80"...&gt;</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 p-6 rounded-2xl bg-gray-900 text-gray-300">
+                    <h4 class="text-white font-bold mb-4 text-sm">Control de Animaciones</h4>
+                    <p class="text-sm mb-4">
+                        La variable <code>$assertiva-reveal-duration</code> (0.6s) define la velocidad global de
+                        entrada.
+                        En el HTML, la clase <code>.assertiva-reveal</code> activa este tiempo, pero la propiedad
+                        <code>transition-delay</code> se calcula dinámicamente en el SCSS para los grupos (nth-child),
+                        creando el efecto de "cascada" que se ve en la Hero y las Cards.
+                    </p>
+                    <div class="text-[10px] font-mono text-gray-400">
+                        .assertiva-reveal { transition: opacity $assertiva-reveal-duration var(--anim-timing); }
+                    </div>
+                </div>
+            </section>
+
+            <!-- Troubleshooting Section -->
+            <section id="troubleshooting" class="mb-20 scroll-mt-24">
+                <h2 class="text-1xl font-bold text-gray-800 mb-8 flex items-center gap-3">
+                    <span class="text-gray-300">08</span> Troubleshooting
+                </h2>
+
+                <div class="space-y-4">
+                    <!-- Asset Bundle Issue -->
+                    <div class="p-5 rounded-xl border border-red-100 bg-red-50/30">
+                        <h4 class="font-bold text-red-800 mb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-sync"></i> Los cambios en JS/SCSS no se reflejan
+                        </h4>
+                        <p class="text-sm text-slate-600 mb-3">Odoo concatena y minifica los archivos. Si los cambios no
+                            aparecen:</p>
+                        <ul class="text-xs space-y-2 text-slate-600 list-disc ml-5">
+                            <li>Activa el modo desarrollador con assets: <code>?debug=assets</code> en la URL.</li>
+                            <li>Usa la opción <strong>"Regenerate Assets Bundles"</strong> en el menú de depuración
+                                (icono de bug).</li>
+                            <li>Limpia la caché del navegador o usa una ventana de incógnito.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Widget Initialization -->
+                    <div class="p-5 rounded-xl border border-amber-100 bg-amber-50/30">
+                        <h4 class="font-bold text-gray-800 mb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-triangle-exclamation"></i> El Widget no inicializa (No entra en start)
+                        </h4>
+                        <p class="text-sm text-gray-600 mb-3">Comprueba los siguientes puntos críticos:</p>
+                        <ul class="text-xs space-y-2 text-gray-600 list-disc ml-5">
+                            <li>Asegúrate de que el archivo JS esté incluido en el bundle
+                                <code>web.assets_frontend</code>.</li>
+                            <li>Verifica que el <code>selector: '#wrapwrap'</code> exista en el DOM.</li>
+                            <li>Comprueba en la consola si hay errores de sintaxis previos que detengan la ejecución del
+                                registry.</li>
+                        </ul>
+                    </div>
+
+                    <!-- CSRF Error -->
+                    <div class="p-5 rounded-xl border border-gray-200 bg-white">
+                        <h4 class="font-bold text-gray-800 mb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-shield-halved"></i> Error 400 (Bad Request) al enviar formularios
+                        </h4>
+                        <p class="text-sm text-gray-600 mb-2">Esto suele ser un fallo de validación CSRF.</p>
+                        <div class="code-block-wrapper text-[10px] font-mono p-3 bg-gray-900 text-gray-400 rounded-lg">
+                            // Solución implementada en scripts.js:<br>
+                            <code>formData.append('csrf_token', odoo.csrf_token || request.csrf_token());</code>
+                        </div>
+                    </div>
+
+                    <!-- XML Validation -->
+                    <div class="p-5 rounded-xl border border-blue-100 bg-blue-50/30">
+                        <h4 class="font-bold text-gray-800 mb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-vial"></i> Validación de XML (QWeb)
+                        </h4>
+                        <p class="text-sm text-gray-600 mb-3">Antes de subir cambios al editor de Odoo, valida la
+                            sintaxis XML:</p>
+                        <div
+                            class="code-block-wrapper text-[10px] font-mono p-3 bg-gray-900 text-gray-400 rounded-lg mb-3">
+                            # Ejecutar en terminal para verificar errores:<br>
+                            <code>xmllint --noout ruta/al/archivo.html</code>
+                        </div>
+                        <p class="text-xs text-gray-500 italic">Recuerda: El símbolo &amp; debe escribirse siempre como
+                            &amp;amp; (escapado) para evitar el error 500.</p>
+                    </div>
+
+                    <!-- Debugging 500 Errors -->
+                    <div class="p-5 rounded-xl border border-purple-100 bg-purple-50/30">
+                        <h4 class="font-bold text-purple-800 mb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-terminal"></i> Depuración de Errores 500 (QWeb)
+                        </h4>
+                        <p class="text-sm text-gray-600 mb-3">Si el servidor devuelve un Error 500 tras modificar el
+                            HTML:</p>
+                        <ul class="text-xs space-y-2 text-gray-600 list-disc ml-5">
+                            <li><strong>Server Logs:</strong> Busca <code>QWebException</code> en la terminal de Odoo.
+                            </li>
+                            <li><strong>Flags de Dev:</strong> Inicia el servidor con <code>--dev=xml</code> para ver
+                                tracebacks detallados.</li>
+                            <li><strong>Cierre de Tags:</strong> Un <code>&lt;/div</code> (incompleto) es la causa
+                                número uno de errores críticos en Odoo 17.</li>
+                            <li><strong>Comillas:</strong> Verifica que no haya comillas dobles anidadas dentro de un
+                                <code>t-attf-style</code>.</li>
+                        </ul>
+                    </div>
+
+                    <div class="p-4 bg-gray-100 rounded-lg text-xs text-gray-700 italic border-l-4 border-gray-500">
+                        <i class="fa-solid fa-lightbulb mr-1"></i> <strong>Pro-tip:</strong> Usa
+                        <code>console.log('DEBUG: ...')</code> dentro de la función <code>start()</code> para confirmar
+                        que Odoo ha instanciado tu widget correctamente.
+                    </div>
+
+                    <!-- Browser Policy Violation Note -->
+                    <div class="mt-6 p-4 rounded-xl border border-gray-200 bg-white">
+                        <h4 class="font-bold text-gray-800 mb-2 flex items-center gap-2 text-sm">
+                            <i class="fa-solid fa-circle-info text-gray-400"></i> [Violation] Permissions policy: unload
+                        </h4>
+                        <p class="text-[11px] text-gray-500 leading-relaxed italic">
+                            Este aviso en la consola de Chrome es un comportamiento conocido en Odoo 17 causado por versiones heredadas de jQuery en el core. <strong>No es un error del código personalizado</strong> y no afecta la performance ni la persistencia de datos en el CRM. Puede ser ignorado con seguridad.
+                        </p>
+                        <div class="mt-4 p-3 bg-gray-50 rounded-lg border border-gray-100">
+                            <p class="text-[10px] font-bold text-gray-700 uppercase mb-2">Cómo silenciar estos avisos en Chrome:</p>
+                            <ol class="text-[10px] text-gray-600 list-decimal ml-4 space-y-1">
+                                <li>Abre DevTools (F12) > pestaña <strong>Console</strong>.</li>
+                                <li>Haz clic en el icono de engranaje (⚙️) de la derecha.</li>
+                                <li>Desmarca la opción <strong>"Log violations"</strong>.</li>
+                                <li>Esto ocultará el ruido de Odoo Core y permitirá ver tus logs de depuración claramente.</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Mobile Strategy -->
+            <section id="mobile" class="mb-20 scroll-mt-24">
+                <h2 class="text-1xl font-bold text-gray-800 mb-8 flex items-center gap-3">
+                    <span class="text-gray-300">09</span> Mobile Strategy
+                </h2>
+                <div class="bg-gray-900 rounded-3xl p-8 text-white relative overflow-hidden">
+                    <div class="relative z-10">
+                        <h4 class="text-xl font-bold mb-4">Optimización Touch-First</h4>
+                        <ul class="space-y-4">
+                            <li class="flex items-start gap-3 text-gray-100">
+                                <i class="fa-solid fa-check-circle text-gray-400 mt-1"></i>
+                                <span><strong>Scroll Snap:</strong> Las pestañas de servicios y cards de impacto se
+                                    ajustan automáticamente al swipe móvil.</span>
+                            </li>
+                            <li class="flex items-start gap-3 text-gray-100">
+                                <i class="fa-solid fa-check-circle text-gray-400 mt-1"></i>
+                                <span><strong>Carousel Adaptativo:</strong> Generación dinámica de indicadores táctiles
+                                    (dots) mediante JavaScript.</span>
+                            </li>
+                            <li class="flex items-start gap-3 text-gray-100">
+                                <i class="fa-solid fa-check-circle text-gray-400 mt-1"></i>
+                                <span><strong>Form Stack:</strong> Reorganización automática de campos en mobile para maximizar el área de contacto (Tap Target).</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="absolute -right-20 -bottom-20 opacity-10 text-[200px]">
+                        <i class="fa-solid fa-mobile-screen"></i>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Arquitectura Pro Grouping Section -->
+            <section id="arquitectura-pro" class="mb-20 scroll-mt-24">
+                <h2 class="text-1xl font-bold text-gray-800 mb-8 flex items-center gap-3">
+                    <span class="text-gray-300">10</span> Arquitectura Pro
+                </h2>
+                <p class="text-xl text-gray-500 max-w-2xl leading-relaxed mb-8">Principios de ingeniería para un
+                    desarrollo robusto, escalable y seguro en Odoo 17.</p>
+            </section>
+
+            <!-- Mantenimiento de Código -->
+            <section id="mantenimiento" class="mb-20 scroll-mt-24">
+                <h2 class="text-1xl font-bold text-gray-800 mb-8 flex items-center gap-3">
+                    <span class="text-gray-300">11</span> Mantenimiento del Código
+                </h2>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="p-6 rounded-2xl bg-white border border-gray-200">
+                        <h4 class="font-bold text-gray-800 mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-database"></i> Arquitectura Basada en Datos
+                        </h4>
+                        <p class="text-sm text-gray-600 leading-relaxed">
+                            El uso de bloques <code>t-set</code> en QWeb permite centralizar la información de
+                            servicios, soluciones y partners. Esto evita la duplicación de código (DRY) y reduce el
+                            riesgo de errores al actualizar enlaces o imágenes en múltiples lugares del HTML.
+                        </p>
+                    </div>
+                    <div class="p-6 rounded-2xl bg-white border border-gray-200">
+                        <h4 class="font-bold text-gray-800 mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-broom"></i> Ciclo de Vida JS
+                        </h4>
+                        <p class="text-sm text-gray-600 leading-relaxed">
+                            La implementación del método <code>destroy</code> en los widgets de Odoo garantiza que todos
+                            los intervalos de carrusel y oyentes (listeners) de eventos de scroll se limpien
+                            correctamente al navegar, evitando "memory leaks" y degradación de performance.
+                        </p>
+                    </div>
+                    <div class="p-6 rounded-2xl bg-white border border-gray-200 md:col-span-2">
+                        <h4 class="font-bold text-gray-800 mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-wand-magic-sparkles text-gray-400"></i> Limpieza de Markup
+                        </h4>
+                        <p class="text-sm text-gray-600 leading-relaxed">
+                            Se han eliminado etiquetas obsoletas (<code>&lt;font&gt;</code>) y estilos en línea (<code>style="..."</code>) en favor de clases de utilidad. Esto permite que el editor de Odoo gestione el DOM sin generar duplicados accidentales durante la edición visual.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Escalabilidad -->
+            <section id="escalabilidad" class="mb-20 scroll-mt-24">
+                <h2 class="text-1xl font-bold text-gray-800 mb-8 flex items-center gap-3">
+                    <span class="text-gray-300">12</span> Escalabilidad y Crecimiento
+                </h2>
+                <div class="prose prose-gray max-w-none">
+                    <p class="text-gray-600 mb-6">El sistema está diseñado para expandirse sin requerir
+                        cambios estructurales profundos:</p>
+                    <ul class="space-y-4">
+                        <li class="flex gap-4">
+                            <span class="p-2 h-fit bg-gray-100 rounded text-gray-400"><i
+                                    class="fa-solid fa-plus"></i></span>
+                            <div>
+                                <p class="font-bold text-gray-800">Nuevos Contenidos:</p>
+                                <p class="text-sm text-gray-600">Añadir una nueva tarjeta de solución o un logo de
+                                    partner es tan simple como agregar una entrada al diccionario correspondiente en
+                                    <code>index.html</code>. El grid y los carruseles se ajustan automáticamente.</p>
+                            </div>
+                        </li>
+                        <li class="flex gap-4">
+                            <span class="p-2 h-fit bg-gray-100 rounded text-gray-400"><i
+                                    class="fa-solid fa-language"></i></span>
+                            <div>
+                                <p class="font-bold text-gray-800">Internacionalización:</p>
+                                <p class="text-sm text-gray-600">Al usar strings planos en las listas QWeb, Odoo los
+                                    detecta como términos traducibles, permitiendo que el sitio escale a múltiples
+                                    idiomas de forma nativa desde el backend.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Seguridad Web -->
+            <section id="seguridad" class="mb-20 scroll-mt-24">
+                <h2 class="text-1xl font-bold text-gray-800 mb-8 flex items-center gap-3">
+                    <span class="text-gray-300">13</span> Seguridad Web
+                </h2>
+                <div class="glass-card rounded-3xl p-8 bg-gray-900 text-white">
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <div>
+                            <div class="text-2xl mb-4 text-gray-400"><i class="fa-solid fa-fingerprint"></i></div>
+                            <h4 class="font-bold mb-2 text-sm uppercase">CSRF Protection (A05)</h4>
+                            <p class="text-[11px] text-gray-400 leading-relaxed">Implementación de tokens únicos por
+                                sesión mediante <code>request.csrf_token()</code> para mitigar ataques Cross-Site
+                                Request Forgery.</p>
+                        </div>
+                        <div>
+                            <div class="text-2xl mb-4 text-gray-400"><i class="fa-solid fa-filter"></i></div>
+                            <h4 class="font-bold mb-2 text-sm uppercase">XSS Prevention (A03)</h4>
+                            <p class="text-[11px] text-gray-400 leading-relaxed">Escape automático de caracteres vía
+                                QWeb y sanitización de inputs dinámicos en JS para prevenir Inyecciones.</p>
+                        </div>
+                        <div>
+                            <div class="text-2xl mb-4 text-gray-400"><i class="fa-solid fa-robot"></i></div>
+                            <h4 class="font-bold mb-2 text-sm uppercase">Anti-Automation</h4>
+                            <p class="text-[11px] text-gray-400 leading-relaxed">Integración con Google reCAPTCHA v3 y
+                                límites de tasa (rate-limiting) nativos de Odoo para prevenir el spam masivo.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Performance Audit -->
+            <section id="performance" class="mb-20 scroll-mt-24">
+                <h2 class="text-1xl font-bold text-gray-800 mb-8 flex items-center gap-3">
+                    <span class="text-gray-300">14</span> Performance Audit
+                </h2>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="p-6 rounded-2xl bg-white border border-gray-100 shadow-sm">
+                        <h4 class="font-bold text-gray-800 mb-2">LCP (Largest Contentful Paint)</h4>
+                        <p class="text-xs text-gray-500 mb-4">Optimización del renderizado inicial del Hero:</p>
+                        <ul class="text-[11px] space-y-2 text-gray-600">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-bolt text-gray-400"></i> Atributo
+                                <code>fetchpriority="high"</code> en imagen de fondo.</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-bolt text-gray-400"></i>
+                                Implementación de Skeleton Screens para evitar el vacío visual.</li>
+                        </ul>
+                    </div>
+                    <div class="p-6 rounded-2xl bg-white border border-gray-100 shadow-sm">
+                        <h4 class="font-bold text-gray-800 mb-2">CLS (Cumulative Layout Shift)</h4>
+                        <p class="text-xs text-gray-500 mb-4">Eliminación de saltos visuales:</p>
+                        <ul class="text-[11px] space-y-2 text-gray-600">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-expand text-gray-400"></i>
+                                Dimensiones explícitas (width/height) en iconos SVG.</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-expand text-gray-400"></i> Uso de
+                                <code>content-visibility: auto</code> en el grid de soluciones.</li>
+                        </ul>
+                        <p class="text-[10px] text-gray-400 mt-4 italic">Resultado: Mejora del TTI (Time to Interactive) al diferir el renderizado de elementos fuera del viewport.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Workflow & Validation -->
+            <section id="workflow" class="mb-20 scroll-mt-24">
+                <h2 class="text-1xl font-bold text-gray-800 mb-8 flex items-center gap-3">
+                    <span class="text-gray-300">15</span> Workflow &amp; Validation
+                </h2>
+                <div class="prose prose-gray max-w-none">
+                    <p class="text-sm text-gray-600 mb-6 leading-relaxed">
+                        Para garantizar la estabilidad del servidor y evitar el error 500 causado por XML mal formado en
+                        Odoo, se ha establecido un flujo de validación obligatorio antes de cada despliegue.
+                    </p>
+                    <div class="bg-gray-900 rounded-2xl p-6 text-gray-300">
+                        <h5 class="text-white font-bold mb-4 text-xs uppercase tracking-widest">Script de Validación XML
+                            (Python)</h5>
+                        <p class="text-[11px] mb-4">El archivo <code>validate_xml.py</code> utiliza la librería
+                            <code>lxml</code> para verificar la integridad del QWeb:</p>
+                        <div class="code-block-wrapper">
+                            <pre
+                                class="text-[10px] font-mono bg-black/30 p-4 rounded-lg"><code>python3 validate_xml.py index.html</code></pre>
+                        </div>
+                    </div>
+                    <div class="mt-6 flex gap-4 items-start p-4 bg-gray-100 rounded-xl">
+                        <div class="p-2 bg-white rounded shadow-sm text-gray-400"><i
+                                class="fa-solid fa-vial-circle-check"></i></div>
+                        <div>
+                            <p class="text-xs font-bold text-gray-800">Criterios de Éxito:</p>
+                            <ul class="text-[11px] text-gray-400 list-disc ml-4 mt-1">
+                                <li>Entidades &amp;amp; escapadas correctamente en diccionarios <code>t-value</code>.
+                                </li>
+                                <li>Cierre explícito de etiquetas no-vacías (evitar <code>&lt;span/&gt;</code>).</li>
+                                <li>Ausencia de anidamiento de secciones que rompan el editor visual.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <footer
+                class="mt-32 pt-12 border-t border-gray-200 flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="text-gray-400 text-sm">
+                    &copy; 2026 Assertiva Risk Advisory. Powered by Smartweb.
+                </div>
+                <div class="flex gap-4">
+                    <a href="#" class="text-gray-400 hover:text-gray-600 transition-colors"><i
+                            class="fa-brands fa-linkedin text-xl"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-gray-900 transition-colors"><i
+                            class="fa-brands fa-github text-xl"></i></a>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    <script>
+        // Simple Toggle para menú móvil
+        const menuBtn = document.getElementById('menuBtn');
+        const closeBtn = document.getElementById('closeBtn');
+        const sidebar = document.getElementById('sidebar');
+        const backdrop = document.getElementById('backdrop');
+        const body = document.body;
+
+        function toggleMenu(show) {
+            sidebar.classList.toggle('-translate-x-full', !show);
+            backdrop.classList.toggle('hidden', !show);
+            // Bloquear scroll del body cuando el menú está abierto
+            body.style.overflow = show ? 'hidden' : '';
+        }
+
+        menuBtn.addEventListener('click', () => toggleMenu(true));
+        closeBtn.addEventListener('click', () => toggleMenu(false));
+        backdrop.addEventListener('click', () => toggleMenu(false));
+
+        // Smooth closing on link click for mobile
+        const links = document.querySelectorAll('.sidebar-link');
+        links.forEach(link => {
+            link.addEventListener('click', (e) => {
+                const href = link.getAttribute('href');
+                if (href && href.startsWith('#')) {
+                    if (window.innerWidth < 1024) toggleMenu(false);
+
+                    // Sincronización visual de estado activo
+                    links.forEach(l => l.classList.remove('active'));
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Lógica de Búsqueda en el Sidebar
+        const searchInput = document.getElementById('sidebarSearch');
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            const categories = sidebar.querySelectorAll('nav p.text-xs, nav .sidebar-link:has(p)');
+            
+            links.forEach(link => {
+                // No filtramos el link de "Arquitectura Pro" que actúa como header
+                if (link.href.includes('#arquitectura-pro')) return;
+                
+                const text = link.innerText.toLowerCase();
+                const isMatch = text.includes(term);
+                link.style.display = isMatch ? 'flex' : 'none';
+            });
+
+            // Nota: El filtrado de categorías visuales es automático por flujo de DOM
+            // pero los enlaces directos proporcionan el feedback principal.
+        });
+
+        // Intersection Observer para resaltar el enlace activo en el sidebar
+        const mainContent = document.querySelector('main');
+        const sections = mainContent.querySelectorAll('section[id]'); // Obtener todas las secciones con un ID
+
+        const observerOptions = {
+            root: null, // El viewport es el elemento raíz
+            rootMargin: '-10% 0px -80% 0px', // Activar cuando la sección esté en la parte superior
+            threshold: 0 // Observar cualquier intersección
+        };
+
+        const sectionObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const currentSectionId = entry.target.id;
+                    // Sincronización visual de enlaces
+                    links.forEach(link => link.classList.remove('active'));
+                    
+                    // Resetear colores de todos los encabezados de grupo
+                    const groupHeaders = sidebar.querySelectorAll('nav p.uppercase');
+                    groupHeaders.forEach(p => {
+                        p.classList.remove('text-gray-900');
+                        p.classList.add('text-gray-400');
+                    });
+
+                    // Añadir la clase 'active' al enlace correspondiente
+                    const activeLink = document.querySelector(`.sidebar-link[href="#${currentSectionId}"]`);
+                    if (activeLink) {
+                        activeLink.classList.add('active');
+
+                        // Buscar el encabezado de grupo inmediatamente superior en el sidebar
+                        let prev = activeLink.previousElementSibling;
+                        while (prev) {
+                            if (prev.tagName === 'P' && prev.classList.contains('uppercase')) {
+                                prev.classList.remove('text-gray-400');
+                                prev.classList.add('text-gray-900');
+                                break;
+                            }
+                            prev = prev.previousElementSibling;
+                        }
+                    }
+                }
+            });
+        }, observerOptions);
+
+        // Observar cada sección
+        sections.forEach(section => {
+            sectionObserver.observe(section);
+        });
+
+        // Lógica del Indicador de Progreso de Lectura (Mobile)
+        window.addEventListener('scroll', () => {
+            const winScroll = window.scrollY;
+            const height = document.documentElement.scrollHeight - window.innerHeight;
+            const scrolled = (winScroll / height) * 100;
+            const progressBar = document.getElementById("readingProgress");
+            if (progressBar) {
+                const percent = Math.max(0, Math.min(scrolled, 100));
+                progressBar.style.width = percent + "%";
+                
+                // Cambiar a verde success al llegar al final, volver a gris si sube
+                if (percent >= 99.5) {
+                    progressBar.classList.replace('bg-gray-400', 'bg-green-500');
+                    progressBar.classList.add('glow-success');
+                } else {
+                    progressBar.classList.replace('bg-green-500', 'bg-gray-400');
+                    progressBar.classList.remove('glow-success');
+                }
+            }
+        }, { passive: true });
+
+        // Inicialización de Mermaid con tema personalizado
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'base',
+            themeVariables: {
+                primaryColor: '#333333',
+                primaryTextColor: '#fff',
+                lineColor: '#777777',
+                fontFamily: 'Noto Sans, sans-serif'
+            }
+        });
+    </script>
+</body>
+
+</html>
