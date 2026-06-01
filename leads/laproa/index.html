@@ -15,6 +15,9 @@
   <meta name="twitter:description" content="Plan tecnico para ordenar WordPress, reducir errores de consola, activar canales de contacto y sostener mejoras durante el año." />
   <meta name="twitter:image" content="og-image.png" />
 
+  <script>
+    document.documentElement.classList.add('js');
+  </script>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,20 +25,6 @@
   <style>
     body { font-family: 'Inter', sans-serif; }
     h1, h2 { font-family: 'Playfair Display', serif; line-height: 1.12; }
-    .nav-link,
-    .mobile-link {
-      color: #737373;
-      transition: background-color 180ms ease, color 180ms ease;
-    }
-    .nav-link:hover,
-    .mobile-link:hover,
-    .nav-link:focus-visible,
-    .mobile-link:focus-visible,
-    .nav-link[aria-current="page"],
-    .mobile-link[aria-current="page"] {
-      background-color: #f5f5f5;
-      color: #171717;
-    }
     .nav-link:focus-visible,
     .mobile-link:focus-visible,
     button:focus-visible,
@@ -44,49 +33,78 @@
       outline-offset: 4px;
       border-radius: 4px;
     }
-    .reveal-item { will-change: opacity, transform; }
+    html:not(.js) .reveal-item {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+    :target {
+      scroll-margin-top: 6.5rem;
+    }
+    #inicio,
+    section[id] {
+      scroll-margin-top: 6.5rem;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto !important; }
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+      }
+      .reveal-item {
+        opacity: 1 !important;
+        transform: none !important;
+      }
+    }
   </style>
 </head>
 <body class="bg-white text-neutral-950">
   <header class="sticky top-0 z-50 border-b border-neutral-200 bg-black backdrop-blur">
-    <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-4">
-      <a href="#inicio"><img src="brand-light.svg" alt="La Proa" class="h-8 w-8" /></a>
+    <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6 md:py-4">
+      <a href="#inicio" class="flex items-center" aria-label="Ir al inicio">
+        <img src="brand-light.svg" alt="La Proa" class="h-12 w-12 md:h-14 md:w-14" />
+      </a>
 
       <nav class="hidden items-center gap-1 text-sm font-medium md:flex" aria-label="Navegacion principal">
-        <a href="#inicio" class="nav-link rounded-md px-3 py-2">Inicio</a>
-        <a href="#metodologia" class="nav-link rounded-md px-3 py-2">Metodologia</a>
-        <a href="#evidencia" class="nav-link rounded-md px-3 py-2">Evidencia</a>
-        <a href="#planning" class="nav-link rounded-md px-3 py-2">Planning</a>
-        <a href="#inversion" class="nav-link rounded-md px-3 py-2">Inversion</a>
-        <a href="#objetivos" class="nav-link rounded-md px-3 py-2">Performance</a>
-        <a href="#contacto" class="rounded-md bg-neutral-950 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-neutral-800">Contacto</a>
+        <a href="#inicio" class="nav-link rounded-md px-3 py-2 text-neutral-300 transition-colors hover:bg-white/10 hover:text-white">Inicio</a>
+        <a href="#metodologia" class="nav-link rounded-md px-3 py-2 text-neutral-300 transition-colors hover:bg-white/10 hover:text-white">Metodologia</a>
+        <a href="#evidencia" class="nav-link rounded-md px-3 py-2 text-neutral-300 transition-colors hover:bg-white/10 hover:text-white">Evidencia</a>
+        <a href="#planes" class="nav-link rounded-md px-3 py-2 text-neutral-300 transition-colors hover:bg-white/10 hover:text-white">Planes</a>
+        <a href="#inversion" class="nav-link rounded-md px-3 py-2 text-neutral-300 transition-colors hover:bg-white/10 hover:text-white">Inversion</a>
+        <a href="#performance" class="nav-link rounded-md px-3 py-2 text-neutral-300 transition-colors hover:bg-white/10 hover:text-white">Performance</a>
+        <a href="#contacto" class="nav-link nav-link-cta rounded-md bg-white px-3 py-2 font-semibold text-neutral-950 transition-colors hover:bg-neutral-200">Contacto</a>
       </nav>
 
-      <button id="menu-btn" class="flex h-10 w-10 flex-col items-center justify-center gap-1.5 md:hidden" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobile-menu">
-        <span id="line1" class="h-0.5 w-6 origin-center bg-neutral-950 transition-all duration-300"></span>
-        <span id="line2" class="h-0.5 w-6 bg-neutral-950 transition-all duration-300"></span>
-        <span id="line3" class="h-0.5 w-6 origin-center bg-neutral-950 transition-all duration-300"></span>
+      <button id="menu-btn" class="relative z-50 flex h-11 w-11 flex-col items-center justify-center gap-1.5 rounded-md border border-white/10 md:hidden" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobile-menu">
+        <span id="line1" class="h-0.5 w-6 origin-center bg-neutral-300 transition-all duration-300"></span>
+        <span id="line2" class="h-0.5 w-6 bg-neutral-300 transition-all duration-300"></span>
+        <span id="line3" class="h-0.5 w-6 origin-center bg-neutral-300 transition-all duration-300"></span>
       </button>
     </div>
 
-    <div id="mobile-menu" class="hidden fixed inset-0 z-40 flex-col items-stretch justify-center gap-2 bg-white px-8 text-base font-medium md:hidden">
-      <a href="#inicio" class="mobile-link rounded-md px-4 py-3">Inicio</a>
-      <a href="#metodologia" class="mobile-link rounded-md px-4 py-3">Metodologia</a>
-      <a href="#evidencia" class="mobile-link rounded-md px-4 py-3">Evidencia</a>
-      <a href="#planning" class="mobile-link rounded-md px-4 py-3">Planning</a>
-      <a href="#inversion" class="mobile-link rounded-md px-4 py-3">Inversion</a>
-      <a href="#objetivos" class="mobile-link rounded-md px-4 py-3">Performance</a>
-      <a href="#contacto" class="mt-4 rounded-md bg-neutral-950 px-4 py-3 text-center font-semibold text-white">Contacto</a>
+    <div id="mobile-menu" class="hidden fixed inset-0 z-40 overflow-y-auto bg-black px-4 pb-8 pt-28 sm:px-6 md:hidden" role="dialog" aria-modal="true" aria-label="Navegacion mobile">
+      <nav class="mx-auto flex max-w-sm flex-col gap-2 rounded-xl border border-white/10 bg-white/[0.03] p-3 text-base font-medium shadow-2xl shadow-black/40" aria-label="Navegacion mobile">
+        <a href="#inicio" class="mobile-link rounded-lg px-4 py-3 text-neutral-200 transition-colors hover:bg-white/10 hover:text-white">Inicio</a>
+        <a href="#metodologia" class="mobile-link rounded-lg px-4 py-3 text-neutral-200 transition-colors hover:bg-white/10 hover:text-white">Metodologia</a>
+        <a href="#evidencia" class="mobile-link rounded-lg px-4 py-3 text-neutral-200 transition-colors hover:bg-white/10 hover:text-white">Evidencia</a>
+        <a href="#planes" class="mobile-link rounded-lg px-4 py-3 text-neutral-200 transition-colors hover:bg-white/10 hover:text-white">Planes</a>
+        <a href="#inversion" class="mobile-link rounded-lg px-4 py-3 text-neutral-200 transition-colors hover:bg-white/10 hover:text-white">Inversion</a>
+        <a href="#performance" class="mobile-link rounded-lg px-4 py-3 text-neutral-200 transition-colors hover:bg-white/10 hover:text-white">Performance</a>
+        <a href="#contacto" class="mobile-link mobile-link-cta mt-3 rounded-lg bg-white px-4 py-3 text-center font-semibold text-neutral-950 transition-colors hover:bg-neutral-200">Contacto</a>
+      </nav>
     </div>
 
     <div id="progress-bar" class="absolute bottom-0 left-0 h-[2px] w-0 bg-neutral-950 transition-all duration-150 ease-out"></div>
   </header>
 
   <main id="inicio">
-    <section class="mx-auto grid max-w-6xl gap-10 px-6 py-14 md:grid-cols-[1.15fr_0.85fr] md:py-20">
+    <section class="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:px-6 md:grid-cols-2 md:gap-10 md:py-20">
       <div>
         <p class="mb-5 text-xs font-semibold uppercase tracking-[0.28em] text-neutral-500">Nuevo stack WordPress</p>
-        <h1 class="max-w-4xl text-4xl font-semibold tracking-tight md:text-6xl">Modular DS</h1>
+        <h1 class="max-w-4xl text-3xl font-semibold tracking-tight sm:text-4xl md:text-6xl">Planning técnico WordPress para La Proa con Modular DS</h1>
         <div class="reveal-item mt-6 max-w-2xl translate-y-8 space-y-3 text-sm leading-6 text-neutral-600 opacity-0 transition-all duration-700">
           <p>Dominio auditado: <strong class="text-neutral-950">laproa.com.ar</strong></p>
           <p>Criterio clean code: minimizar complejidad de código nativo, evitar depender de plugins para funcionalidades esenciales e implementar un sistema gestionable por el cliente.</p>
@@ -94,7 +112,7 @@
         </div>
       </div>
 
-      <article class="reveal-item translate-y-8 rounded-xl border border-neutral-200 bg-neutral-50 p-6 opacity-0 transition-all duration-700">
+      <article class="reveal-item translate-y-8 rounded-xl border border-neutral-200 bg-neutral-50 p-5 opacity-0 transition-all duration-700 sm:p-6">
         <p class="text-xs font-semibold uppercase tracking-wider text-neutral-500">Resumen del planning</p>
         <dl class="mt-6 space-y-5 text-sm">
           <div>
@@ -114,9 +132,9 @@
     </section>
 
      <section id="metodologia" class="border-t bg-neutral-950 text-white">
-      <div class="mx-auto max-w-6xl px-6 py-14">
+      <div class="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-14">
         <h2 class="reveal-item mb-8 translate-y-8 text-2xl font-semibold opacity-0 transition-all duration-700">Metodología de ejecución</h2>
-        <div class="grid gap-5 md:grid-cols-4">
+        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           <article class="reveal-item translate-y-8 rounded-xl border border-white/15 p-6 opacity-0 transition-all duration-700">
             <p class="text-xs font-semibold uppercase tracking-wider text-white/50">01</p>
             <h3 class="mt-3 font-semibold">Diagnóstico y respaldo</h3>
@@ -142,13 +160,13 @@
     </section>
 
     <section id="evidencia" class="border-t bg-neutral-50">
-      <div class="mx-auto max-w-6xl px-6 py-14">
+      <div class="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-14">
         <div class="mb-8 max-w-3xl">
           <h2 class="reveal-item translate-y-8 text-2xl font-semibold opacity-0 transition-all duration-700">Auditoría en ambiente de Producción</h2>
           <p class="reveal-item mt-4 translate-y-8 text-sm leading-6 text-neutral-600 opacity-0 transition-all duration-700">La auditoría separa falsos positivos de navegador, warnings de terceros y problemas reales del sitio para priorizar acciones de bajo riesgo y alto impacto operativo.</p>
         </div>
         
-        <div class="mb-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <div class="mb-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
            <article class="reveal-item translate-y-8 rounded-xl border border-neutral-200 bg-white p-6 opacity-0 transition-all duration-700 hover:border-neutral-400">
             <p class="text-xs font-semibold uppercase tracking-wider text-green-500">Criticidad baja</p>
             <h3 class="mt-3 font-semibold">Permissions Policy</h3>
@@ -218,67 +236,67 @@
             </div>
 
             <div class="space-y-4">
-              <article class="grid gap-3 border-l-2 border-yellow-300/80 bg-white/[0.03] p-4 md:grid-cols-[1.2fr_1fr_1fr]">
+              <article class="grid gap-3 break-words border-l-2 border-yellow-300/80 bg-white/[0.03] p-4 md:grid-cols-3">
                 <p><span class="text-yellow-300">warn</span> <span class="text-white">content.js:13</span><br><span class="text-white/55">[VULNERS] Match Font Awesome</span></p>
                 <p><span class="text-white/35">lectura:</span> Deteccion de hoja Font Awesome desde Elementor/cache; requiere revisar version y origen.</p>
                 <p><span class="text-white/35">accion:</span> Validar version real, actualizar assets si corresponde y documentar falso positivo.</p>
               </article>
 
-              <article class="grid gap-3 border-l-2 border-yellow-300/80 bg-white/[0.03] p-4 md:grid-cols-[1.2fr_1fr_1fr]">
+              <article class="grid gap-3 break-words border-l-2 border-yellow-300/80 bg-white/[0.03] p-4 md:grid-cols-3">
                 <p><span class="text-yellow-300">warn</span> <span class="text-white">content.js:13</span><br><span class="text-white/55">[VULNERS] Match Yoast SEO v26.7</span></p>
                 <p><span class="text-white/35">lectura:</span> La salida HTML expone firma/version del plugin SEO detectada por navegador.</p>
                 <p><span class="text-white/35">accion:</span> Revisar estado del plugin, compatibilidad y exposicion de metadatos publicos.</p>
               </article>
 
-              <article class="grid gap-3 border-l-2 border-sky-300/80 bg-white/[0.03] p-4 md:grid-cols-[1.2fr_1fr_1fr]">
+              <article class="grid gap-3 break-words border-l-2 border-sky-300/80 bg-white/[0.03] p-4 md:grid-cols-3">
                 <p><span class="text-sky-300">info</span> <span class="text-white">content.js:13</span><br><span class="text-white/55">[VULNERS] Match jQuery 3.7.1</span></p>
                 <p><span class="text-white/35">lectura:</span> jQuery core cargado desde WordPress; no implica vulnerabilidad directa si esta actualizado.</p>
                 <p><span class="text-white/35">accion:</span> Confirmar core y dependencias soportadas, sin duplicados ni cargas innecesarias.</p>
               </article>
 
-              <article class="grid gap-3 border-l-2 border-sky-300/80 bg-white/[0.03] p-4 md:grid-cols-[1.2fr_1fr_1fr]">
+              <article class="grid gap-3 break-words border-l-2 border-sky-300/80 bg-white/[0.03] p-4 md:grid-cols-3">
                 <p><span class="text-sky-300">info</span> <span class="text-white">content.js:13</span><br><span class="text-white/55">[VULNERS] Match jQuery Migrate</span></p>
                 <p><span class="text-white/35">lectura:</span> Indica compatibilidad con scripts antiguos; puede afectar performance o evidenciar dependencias legacy.</p>
                 <p><span class="text-white/35">accion:</span> Identificar plugins que lo requieren y evaluar si puede mantenerse, optimizarse o diferirse.</p>
               </article>
 
-              <article class="grid gap-3 border-l-2 border-yellow-300/80 bg-white/[0.03] p-4 md:grid-cols-[1.2fr_1fr_1fr]">
+              <article class="grid gap-3 break-words border-l-2 border-yellow-300/80 bg-white/[0.03] p-4 md:grid-cols-3">
                 <p><span class="text-yellow-300">warn</span> <span class="text-white">content.js:13</span><br><span class="text-white/55">[VULNERS] Match WordPress generator</span></p>
                 <p><span class="text-white/35">lectura:</span> La etiqueta generator declara WordPress y una version que debe contrastarse contra el core instalado.</p>
                 <p><span class="text-white/35">accion:</span> Auditar core, plugins, tema activo y cabeceras generadas por cache/optimizacion.</p>
               </article>
 
-              <article class="grid gap-3 border-l-2 border-sky-300/80 bg-white/[0.03] p-4 md:grid-cols-[1.2fr_1fr_1fr]">
+              <article class="grid gap-3 break-words border-l-2 border-sky-300/80 bg-white/[0.03] p-4 md:grid-cols-3">
                 <p><span class="text-sky-300">info</span> <span class="text-white">www-widgetapi.js:194</span><br><span class="text-white/55">Unrecognized feature: web-share</span></p>
                 <p><span class="text-white/35">lectura:</span> Warning de iframe o Permissions Policy asociado a YouTube.</p>
                 <p><span class="text-white/35">accion:</span> Revisar atributos allow en iframes y politica de permisos del sitio.</p>
               </article>
 
-              <article class="grid gap-3 border-l-2 border-yellow-300/80 bg-white/[0.03] p-4 md:grid-cols-[1.2fr_1fr_1fr]">
+              <article class="grid gap-3 break-words border-l-2 border-yellow-300/80 bg-white/[0.03] p-4 md:grid-cols-3">
                 <p><span class="text-yellow-300">warn</span> <span class="text-white">www-widgetapi.js:210</span><br><span class="text-white/55">postMessage origin mismatch</span></p>
                 <p><span class="text-white/35">lectura:</span> La API de YouTube intenta comunicarse con un origen que no coincide.</p>
                 <p><span class="text-white/35">accion:</span> Normalizar parametros origin/forigin, embeds y scripts duplicados de widgetapi.</p>
               </article>
 
-              <article class="grid gap-3 border-l-2 border-red-400/80 bg-white/[0.03] p-4 md:grid-cols-[1.2fr_1fr_1fr]">
+              <article class="grid gap-3 break-words border-l-2 border-red-400/80 bg-white/[0.03] p-4 md:grid-cols-3">
                 <p><span class="text-red-300">error</span> <span class="text-white">Content-Security-Policy</span><br><span class="text-white/55">frame-ancestors contiene report-to</span></p>
                 <p><span class="text-white/35">lectura:</span> Cabecera CSP probablemente construida con sintaxis incorrecta.</p>
                 <p><span class="text-white/35">accion:</span> Corregir CSP, separar directivas y probar compatibilidad con WordPress, Elementor y YouTube.</p>
               </article>
 
-              <article class="grid gap-3 border-l-2 border-sky-300/80 bg-white/[0.03] p-4 md:grid-cols-[1.2fr_1fr_1fr]">
+              <article class="grid gap-3 break-words border-l-2 border-sky-300/80 bg-white/[0.03] p-4 md:grid-cols-3">
                 <p><span class="text-sky-300">info</span> <span class="text-white">base.js:5172</span><br><span class="text-white/55">Permissions Policy: compute-pressure no permitido</span></p>
                 <p><span class="text-white/35">lectura:</span> Warning de Permissions Policy disparado por codigo de YouTube.</p>
                 <p><span class="text-white/35">accion:</span> Documentar como tercero no critico o ajustar politica si el sitio la declara explicitamente.</p>
               </article>
 
-              <article class="grid gap-3 border-l-2 border-red-400/80 bg-white/[0.03] p-4 md:grid-cols-[1.2fr_1fr_1fr]">
+              <article class="grid gap-3 break-words border-l-2 border-red-400/80 bg-white/[0.03] p-4 md:grid-cols-3">
                 <p><span class="text-red-300">error</span> <span class="text-white">contact.form</span><br><span class="text-white/55">Contacto sin formulario funcional</span></p>
                 <p><span class="text-white/35">lectura:</span> No se detecta form, action, metodo POST ni endpoint Formspree en el presupuesto actual.</p>
                 <p><span class="text-white/35">accion:</span> Implementar campos, endpoint Formspree, validacion HTML y prueba de recepcion.</p>
               </article>
 
-              <article class="grid gap-3 border-l-2 border-yellow-300/80 bg-white/[0.03] p-4 md:grid-cols-[1.2fr_1fr_1fr]">
+              <article class="grid gap-3 break-words border-l-2 border-yellow-300/80 bg-white/[0.03] p-4 md:grid-cols-3">
                 <p><span class="text-yellow-300">warn</span> <span class="text-white">preload.audit</span><br><span class="text-white/55">Recursos preloaded no usados luego del load</span></p>
                 <p><span class="text-white/35">lectura:</span> Recursos precargados no se consumen rapidamente; pueden competir con assets criticos.</p>
                 <p><span class="text-white/35">accion:</span> Auditar link rel="preload", confirmar atributo as y conservar solo recursos realmente prioritarios.</p>
@@ -289,20 +307,20 @@
       </div>
     </section>
 
-    <section id="planning" class="border-t">
-      <div class="mx-auto max-w-6xl px-6 py-14">
+    <section id="planes" class="border-t">
+      <div class="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-14">
         <div class="mb-8 max-w-3xl">
           <h2 class="reveal-item translate-y-8 text-2xl font-semibold opacity-0 transition-all duration-700">Planes</h2>
           <p class="reveal-item mt-4 translate-y-8 text-sm leading-6 text-neutral-600 opacity-0 transition-all duration-700">Cada plan tiene un objetivo de negocio claro: estabilizar la operación digital o estabilizarla y mejorar la percepción de velocidad en mobile con métricas comparables.</p>
         </div>
 
         <div class="grid gap-6 lg:grid-cols-2">
-          <article class="reveal-item translate-y-8 rounded-xl border-2 border-neutral-950 bg-white p-8 opacity-0 shadow-xl transition-all duration-700">
+          <article class="reveal-item translate-y-8 rounded-xl border-2 border-neutral-950 bg-white p-6 opacity-0 shadow-xl transition-all duration-700 sm:p-8">
             <p class="text-xs font-semibold uppercase tracking-wider text-neutral-500">Plan 1</p>
             <h3 class="mt-3 text-2xl font-semibold">Plan Integral</h3>
             <p class="mt-3 text-sm leading-6 text-neutral-600">Base mínima viable para estabilizar WordPress, reducir alertas visibles, activar canales de contacto y dejar el sitio trazable para mantenimiento.</p>
 
-            <div class="mt-8 grid gap-6 md:grid-cols-2">
+            <div class="mt-8 grid gap-6 sm:grid-cols-2">
               <div>
                 <h4 class="text-sm font-semibold">Alcance técnico</h4>
                 <ul class="mt-3 space-y-2 text-sm leading-6 text-neutral-600">
@@ -328,12 +346,12 @@
             </div>
           </article>
 
-          <article class="reveal-item translate-y-8 rounded-xl border border-neutral-300 bg-neutral-50 p-8 opacity-0 transition-all duration-700 hover:border-neutral-400">
+          <article class="reveal-item translate-y-8 rounded-xl border border-neutral-300 bg-neutral-50 p-6 opacity-0 transition-all duration-700 hover:border-neutral-400 sm:p-8">
             <p class="text-xs font-semibold uppercase tracking-wider text-neutral-500">Plan 2</p>
             <h3 class="mt-3 text-2xl font-semibold">Plan Integral + Core Web</h3>
             <p class="mt-3 text-sm leading-6 text-neutral-600">Plan recomendado cuando se quiere convertir la auditoría en una mejora perceptible para usuarios móviles, con foco en PageSpeed, LCP, Speed Index y recursos críticos.</p>
 
-            <div class="mt-8 grid gap-6 md:grid-cols-2">
+            <div class="mt-8 grid gap-6 sm:grid-cols-2">
               <div>
                 <h4 class="text-sm font-semibold">Alcance técnico</h4>
                 <ul class="mt-3 space-y-2 text-sm leading-6 text-neutral-600">
@@ -363,10 +381,10 @@
 
    
     <section id="inversion" class="border-t">
-      <div class="mx-auto max-w-6xl px-6 py-16">
+      <div class="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
         <h2 class="reveal-item mb-8 translate-y-8 text-2xl font-semibold opacity-0 transition-all duration-700">Opciones de inversión</h2>
-        <div class="grid gap-8 lg:grid-cols-[0.8fr_1fr_1fr]">
-          <article class="reveal-item translate-y-8 rounded-xl border border-neutral-200 bg-white p-8 opacity-0 transition-all duration-700 hover:border-neutral-400 hover:shadow-lg">
+        <div class="grid gap-6 lg:grid-cols-3 lg:gap-8">
+          <article class="reveal-item translate-y-8 rounded-xl border border-neutral-200 bg-white p-6 opacity-0 transition-all duration-700 hover:border-neutral-400 hover:shadow-lg sm:p-8">
             <h3 class="text-xl font-semibold">Plazo estimado</h3>
             <p class="mt-2 text-sm leading-6 text-neutral-500">Ventana de trabajo y observación para dejar el stack documentado.</p>
             <div class="mt-8 space-y-5 text-sm text-neutral-600">
@@ -376,22 +394,14 @@
             </div>
           </article>
 
-          <article class="reveal-item translate-y-8 rounded-xl border border-neutral-200 bg-white p-8 opacity-0 transition-all duration-700 hover:border-neutral-400 hover:shadow-lg">
+          <article class="reveal-item translate-y-8 rounded-xl border border-neutral-200 bg-white p-6 opacity-0 transition-all duration-700 hover:border-neutral-400 hover:shadow-lg sm:p-8">
             <h3 class="text-xl font-semibold">Plan Integral</h3>
             <p class="mt-2 text-sm leading-6 text-neutral-500">Base operativa para estabilizar WordPress, contacto, SEO técnico y monitoreo.</p>
 
             <div class="mt-6">
-              <p class="flex items-center text-3xl font-semibold">
-                USD 180
-                <span class="group relative ml-2 inline-flex h-5 w-5 cursor-help items-center justify-center rounded-full border border-neutral-300 text-xs text-neutral-400">
-                  i
-                  <span class="pointer-events-none absolute bottom-full left-1/2 mb-2 w-64 -translate-x-1/2 rounded bg-neutral-800 p-3 text-center text-xs font-normal leading-5 text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100">
-                    Equivalente en pesos argentinos según cotización acordada al momento de iniciar.
-                    <span class="absolute left-1/2 top-full h-0 w-0 -translate-x-1/2 border-x-4 border-t-4 border-x-transparent border-t-neutral-800"></span>
-                  </span>
-                </span>
-              </p>
+              <p class="text-3xl font-semibold">USD 180</p>
               <p class="mt-2 text-sm text-neutral-400">50% al inicio y 50% al finalizar. Sin emisión de factura.</p>
+              <p class="mt-2 text-xs leading-5 text-neutral-500">Equivalente en pesos argentinos según cotización Dólar Venta Banco Nación acordada al momento de iniciar.</p>
             </div>
 
             <div class="mt-6 text-sm text-neutral-700">Alcance principal: <strong>base técnica sostenible</strong></div>
@@ -410,23 +420,15 @@
             </div>
           </article>
 
-          <article class="reveal-item relative translate-y-8 rounded-xl border-2 border-neutral-950 bg-white p-8 opacity-0 shadow-xl transition-all duration-700 hover:shadow-2xl">
+          <article class="reveal-item relative translate-y-8 rounded-xl border-2 border-neutral-950 bg-white p-6 opacity-0 shadow-xl transition-all duration-700 hover:shadow-2xl sm:p-8">
             <div class="absolute -top-3 left-6 rounded bg-neutral-950 px-3 py-1 text-xs font-medium text-white">Recomendado</div>
             <h3 class="text-xl font-semibold">Plan Integral + Core Web</h3>
             <p class="mt-2 text-sm leading-6 text-neutral-500">Incluye la base operativa y suma optimización medible de performance mobile.</p>
 
             <div class="mt-6">
-              <p class="flex items-center text-3xl font-semibold">
-                USD 270
-                <span class="group relative ml-2 inline-flex h-5 w-5 cursor-help items-center justify-center rounded-full border border-neutral-300 text-xs text-neutral-400">
-                  i
-                  <span class="pointer-events-none absolute bottom-full left-1/2 mb-2 w-64 -translate-x-1/2 rounded bg-neutral-800 p-3 text-center text-xs font-normal leading-5 text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100">
-                    Equivalente en pesos argentinos según cotización acordada al momento de iniciar.
-                    <span class="absolute left-1/2 top-full h-0 w-0 -translate-x-1/2 border-x-4 border-t-4 border-x-transparent border-t-neutral-800"></span>
-                  </span>
-                </span>
-              </p>
+              <p class="text-3xl font-semibold">USD 250</p>
               <p class="mt-2 text-sm text-neutral-400">50% al inicio y 50% al finalizar. Sin emisión de factura.</p>
+              <p class="mt-2 text-xs leading-5 text-neutral-500">Equivalente en pesos argentinos según cotización Dólar Venta Banco Nación acordada al momento de iniciar.</p>
             </div>
 
             <div class="mt-6 text-sm text-neutral-700">Alcance principal: <strong>base técnica + performance</strong></div>
@@ -448,15 +450,15 @@
     </section>
 
 
-    <section id="objetivos" class="border-t bg-white">
-      <div class="mx-auto max-w-6xl px-6 py-14">
+    <section id="performance" class="border-t bg-white">
+      <div class="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-14">
         <div class="mb-8 max-w-3xl">
         <h2 class="reveal-item translate-y-8 text-2xl font-semibold opacity-0 transition-all duration-700">Métricas y objetivos de performance</h2>
           <p class="reveal-item mt-4 translate-y-8 text-sm leading-6 text-neutral-600 opacity-0 transition-all duration-700">Los objetivos se definen a partir de PageSpeed Insights, consola del navegador y estado operativo del sitio: preservar una base saludable, reducir ruido técnico y dejar mejoras medibles para mantenimiento anual.</p>
         </div>
 
         <div class="grid gap-6 lg:grid-cols-2">
-          <article class="reveal-item translate-y-8 rounded-xl border border-neutral-200 p-6 opacity-0 transition-all duration-700 hover:border-neutral-400">
+          <article class="reveal-item translate-y-8 rounded-xl border border-neutral-200 p-5 opacity-0 transition-all duration-700 hover:border-neutral-400 sm:p-6">
             <p class="text-xs font-semibold uppercase tracking-wider text-neutral-500">Mobile - Lighthouse</p>
             <div class="mt-5 grid grid-cols-2 gap-3 text-sm sm:grid-cols-4">
               <div class="rounded-lg border border-neutral-200 p-4"><span class="block text-2xl font-semibold">94</span><span class="text-neutral-500">Performance</span></div>
@@ -472,7 +474,7 @@
             </ul>
           </article>
 
-          <article class="reveal-item translate-y-8 rounded-xl border border-neutral-200 p-6 opacity-0 transition-all duration-700 hover:border-neutral-400">
+          <article class="reveal-item translate-y-8 rounded-xl border border-neutral-200 p-5 opacity-0 transition-all duration-700 hover:border-neutral-400 sm:p-6">
             <p class="text-xs font-semibold uppercase tracking-wider text-neutral-500">Desktop - Lighthouse</p>
             <div class="mt-5 grid grid-cols-2 gap-3 text-sm sm:grid-cols-4">
               <div class="rounded-lg border border-neutral-200 p-4"><span class="block text-2xl font-semibold">99</span><span class="text-neutral-500">Performance</span></div>
@@ -507,31 +509,31 @@
             </div>
 
             <div class="space-y-3">
-              <article class="grid gap-3 border-l-2 border-yellow-300/80 bg-white/[0.03] p-4 md:grid-cols-[0.9fr_1fr_1.1fr]">
+              <article class="grid gap-3 break-words border-l-2 border-yellow-300/80 bg-white/[0.03] p-4 md:grid-cols-3">
                 <p><span class="text-yellow-300">warn</span> <span class="text-white">unused-css</span><br><span class="text-white/55">Reducir CSS no utilizado · 41 KiB</span></p>
                 <p><span class="text-white/35">impacto:</span> Carga estilos que no aportan al render inicial, típico en WordPress + Elementor.</p>
                 <p><span class="text-white/35">refactor:</span> Revisar assets por plantilla, depurar CSS no crítico, diferir estilos secundarios y validar cache/minificación.</p>
               </article>
 
-              <article class="grid gap-3 border-l-2 border-yellow-300/80 bg-white/[0.03] p-4 md:grid-cols-[0.9fr_1fr_1.1fr]">
+              <article class="grid gap-3 break-words border-l-2 border-yellow-300/80 bg-white/[0.03] p-4 md:grid-cols-3">
                 <p><span class="text-yellow-300">warn</span> <span class="text-white">speed-index</span><br><span class="text-white/55">Mobile · 4.5 s</span></p>
                 <p><span class="text-white/35">impacto:</span> El contenido se percibe completo más tarde en dispositivos móviles.</p>
                 <p><span class="text-white/35">refactor:</span> Priorizar CSS crítico, revisar hero/imagenes above the fold, fuentes, preload y orden de recursos.</p>
               </article>
 
-              <article class="grid gap-3 border-l-2 border-emerald-300/80 bg-white/[0.03] p-4 md:grid-cols-[0.9fr_1fr_1.1fr]">
+              <article class="grid gap-3 break-words border-l-2 border-emerald-300/80 bg-white/[0.03] p-4 md:grid-cols-3">
                 <p><span class="text-emerald-300">pass</span> <span class="text-white">lcp</span><br><span class="text-white/55">Mobile · 2.5 s</span></p>
                 <p><span class="text-white/35">impacto:</span> Está en umbral correcto, pero es sensible a imagen principal, fuentes y recursos bloqueantes.</p>
                 <p><span class="text-white/35">refactor:</span> Optimizar elemento LCP, tamaños responsivos, preconnect/preload selectivo y lazy loading fuera del viewport.</p>
               </article>
 
-              <article class="grid gap-3 border-l-2 border-sky-300/80 bg-white/[0.03] p-4 md:grid-cols-[0.9fr_1fr_1.1fr]">
+              <article class="grid gap-3 break-words border-l-2 border-sky-300/80 bg-white/[0.03] p-4 md:grid-cols-3">
                 <p><span class="text-sky-300">info</span> <span class="text-white">accessibility</span><br><span class="text-white/55">Desktop · score 93</span></p>
                 <p><span class="text-white/35">impacto:</span> Queda margen para corregir atributos, labels o contraste puntual.</p>
                 <p><span class="text-white/35">refactor:</span> Auditar elementos interactivos, nombres accesibles, jerarquía semántica y estados de foco.</p>
               </article>
 
-              <article class="grid gap-3 border-l-2 border-sky-300/80 bg-white/[0.03] p-4 md:grid-cols-[0.9fr_1fr_1.1fr]">
+              <article class="grid gap-3 break-words border-l-2 border-sky-300/80 bg-white/[0.03] p-4 md:grid-cols-3">
                 <p><span class="text-sky-300">info</span> <span class="text-white">seo</span><br><span class="text-white/55">Score · 92</span></p>
                 <p><span class="text-white/35">impacto:</span> Buen estado general, con margen para enriquecer datos estructurados y metadatos.</p>
                 <p><span class="text-white/35">refactor:</span> Complementar Yoast con SmartWeb SEO Schema, JSON-LD y validación Rich Results.</p>
@@ -544,7 +546,7 @@
 
   </main>
 
-  <section id="contacto" class="bg-black px-6 py-24 text-center text-white">
+  <section id="contacto" class="bg-black px-4 py-16 text-center text-white sm:px-6 sm:py-24">
     <div class="mx-auto max-w-3xl">
       <h2 class="reveal-item translate-y-8 text-3xl font-semibold opacity-0 transition-all duration-700">Menos mantenimiento reactivo. Más control operativo.</h2>
       <p class="reveal-item mx-auto mt-5 max-w-2xl translate-y-8 text-sm leading-6 text-white/65 opacity-0 transition-all duration-700">La Proa queda con una lectura clara de sus alertas, un set de ajustes aplicados y una base preparada para sostener el sitio durante el año.</p>
@@ -560,7 +562,7 @@
   </footer>
 
   <button id="back-to-top" class="pointer-events-none fixed bottom-8 right-8 z-50 hidden translate-y-10 items-center justify-center bg-black p-3 text-white opacity-0 shadow-2xl transition-all duration-300 hover:bg-neutral-800 md:flex" aria-label="Volver arriba">
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true" focusable="false">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
     </svg>
   </button>
@@ -571,52 +573,98 @@
     const line1 = document.getElementById('line1');
     const line2 = document.getElementById('line2');
     const line3 = document.getElementById('line3');
-    const mobileLinks = document.querySelectorAll('.mobile-link');
-    const navLinks = document.querySelectorAll('.nav-link, .mobile-link');
+    const navLinks = [...document.querySelectorAll('.nav-link, .mobile-link')];
     const progressBar = document.getElementById('progress-bar');
     const backToTopBtn = document.getElementById('back-to-top');
-    const sectionIds = ['inicio', 'metodologia', 'evidencia', 'planning', 'inversion', 'objetivos', 'contacto'];
+    const sectionIds = ['inicio', 'metodologia', 'evidencia', 'planes', 'inversion', 'performance', 'contacto'];
     const navSections = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
+    const focusableSelectors = 'a[href], button:not([disabled])';
+    const activeLinkClasses = ['bg-white/10', 'text-white'];
+    const ctaActiveClasses = ['ring-2', 'ring-white/50'];
+    let lastFocusedElement = null;
 
-    const closeMenu = () => {
-      mobileMenu.classList.add('hidden');
-      mobileMenu.classList.remove('flex');
-      menuBtn.setAttribute('aria-expanded', 'false');
-      line1.classList.remove('rotate-45', 'translate-y-2');
-      line2.classList.remove('opacity-0');
-      line3.classList.remove('-rotate-45', '-translate-y-2');
-      document.body.classList.remove('overflow-hidden');
-    };
+    const isMenuOpen = () => menuBtn.getAttribute('aria-expanded') === 'true';
 
-    const toggleMenu = () => {
-      const isOpen = mobileMenu.classList.contains('flex');
-      if (isOpen) {
-        closeMenu();
+    const setMenuState = (open, restoreFocus = false) => {
+      mobileMenu.classList.toggle('hidden', !open);
+      mobileMenu.classList.toggle('flex', open);
+      document.body.classList.toggle('overflow-hidden', open);
+
+      menuBtn.setAttribute('aria-expanded', String(open));
+      menuBtn.setAttribute('aria-label', open ? 'Cerrar menu' : 'Abrir menu');
+      line1.classList.toggle('rotate-45', open);
+      line1.classList.toggle('translate-y-2', open);
+      line2.classList.toggle('opacity-0', open);
+      line3.classList.toggle('-rotate-45', open);
+      line3.classList.toggle('-translate-y-2', open);
+
+      if (open) {
+        lastFocusedElement = document.activeElement;
+        mobileMenu.querySelector(focusableSelectors)?.focus();
         return;
       }
-      mobileMenu.classList.remove('hidden');
-      mobileMenu.classList.add('flex');
-      menuBtn.setAttribute('aria-expanded', 'true');
-      line1.classList.add('rotate-45', 'translate-y-2');
-      line2.classList.add('opacity-0');
-      line3.classList.add('-rotate-45', '-translate-y-2');
-      document.body.classList.add('overflow-hidden');
+
+      if (restoreFocus && lastFocusedElement) {
+        lastFocusedElement.focus();
+      }
+    };
+
+    const closeMenu = (restoreFocus = false) => setMenuState(false, restoreFocus);
+    const toggleMenu = () => setMenuState(!isMenuOpen(), true);
+
+    const trapMobileMenuFocus = (event) => {
+      if (!isMenuOpen() || event.key !== 'Tab') return;
+      const focusableItems = [...mobileMenu.querySelectorAll(focusableSelectors)];
+      const firstItem = focusableItems[0];
+      const lastItem = focusableItems[focusableItems.length - 1];
+      if (!firstItem || !lastItem) return;
+
+      if (event.shiftKey && document.activeElement === firstItem) {
+        event.preventDefault();
+        lastItem.focus();
+      }
+
+      if (!event.shiftKey && document.activeElement === lastItem) {
+        event.preventDefault();
+        firstItem.focus();
+      }
+    };
+
+    const handleDocumentKeydown = (event) => {
+      if (event.key === 'Escape' && isMenuOpen()) closeMenu(true);
+      trapMobileMenuFocus(event);
     };
 
     const setActiveNavLink = (currentHash) => {
       navLinks.forEach(link => {
+        const isCta = link.classList.contains('nav-link-cta') || link.classList.contains('mobile-link-cta');
         if (link.getAttribute('href') === currentHash) {
           link.setAttribute('aria-current', 'page');
+          link.classList.add(...(isCta ? ctaActiveClasses : activeLinkClasses));
         } else {
           link.removeAttribute('aria-current');
+          link.classList.remove(...activeLinkClasses, ...ctaActiveClasses);
         }
       });
+    };
+
+    const getSectionFromLink = (link) => {
+      const hash = link.getAttribute('href');
+      return hash?.startsWith('#') ? document.querySelector(hash) : null;
+    };
+
+    const handleNavLinkClick = (event) => {
+      const section = getSectionFromLink(event.currentTarget);
+      if (!section) return;
+
+      if (isMenuOpen()) closeMenu();
+      setActiveNavLink(`#${section.id}`);
     };
 
     const updateActiveNavOnScroll = () => {
       let currentHash = '#inicio';
       navSections.forEach(section => {
-        if (window.scrollY >= section.offsetTop - 140) {
+        if (window.scrollY >= section.offsetTop - 112) {
           currentHash = `#${section.id}`;
         }
       });
@@ -654,8 +702,9 @@
 
     document.querySelectorAll('main > section, #contacto').forEach(section => revealObserver.observe(section));
     menuBtn.addEventListener('click', toggleMenu);
-    mobileLinks.forEach(link => link.addEventListener('click', closeMenu));
+    navLinks.forEach(link => link.addEventListener('click', handleNavLinkClick));
     backToTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    document.addEventListener('keydown', handleDocumentKeydown);
     window.addEventListener('scroll', updateScrollUi, { passive: true });
     updateScrollUi();
   </script>
