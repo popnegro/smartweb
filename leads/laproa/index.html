@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Planning tecnologico WordPress - La Proa</title>
+
+  <meta name="description" content="Planning tecnologico para estabilizar laproa.com.ar: auditoria WordPress, consola, contacto, SEO tecnico, Modular DS y Core Web opcional." />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Planning tecnologico WordPress - La Proa" />
+  <meta property="og:description" content="Plan tecnico para ordenar WordPress, reducir errores de consola, activar canales de contacto y sostener mejoras durante el año." />
+  <meta property="og:image" content="og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Planning tecnologico WordPress - La Proa" />
+  <meta name="twitter:description" content="Plan tecnico para ordenar WordPress, reducir errores de consola, activar canales de contacto y sostener mejoras durante el año." />
+  <meta name="twitter:image" content="og-image.png" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    h1, h2 { font-family: 'Playfair Display', serif; line-height: 1.12; }
+    .nav-link,
+    .mobile-link {
+      color: #737373;
+      transition: background-color 180ms ease, color 180ms ease;
+    }
+    .nav-link:hover,
+    .mobile-link:hover,
+    .nav-link:focus-visible,
+    .mobile-link:focus-visible,
+    .nav-link[aria-current="page"],
+    .mobile-link[aria-current="page"] {
+      background-color: #f5f5f5;
+      color: #171717;
+    }
+    .nav-link:focus-visible,
+    .mobile-link:focus-visible,
+    button:focus-visible,
+    a:focus-visible {
+      outline: 2px solid currentColor;
+      outline-offset: 4px;
+      border-radius: 4px;
+    }
+    .reveal-item { will-change: opacity, transform; }
+  </style>
+</head>
+<body class="bg-white text-neutral-950">
+  <header class="sticky top-0 z-50 border-b border-neutral-200 bg-black backdrop-blur">
+    <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-4">
+      <a href="#inicio"><img src="brand-light.svg" alt="La Proa" class="h-8 w-8" /></a>
+
+      <nav class="hidden items-center gap-1 text-sm font-medium md:flex" aria-label="Navegacion principal">
+        <a href="#inicio" class="nav-link rounded-md px-3 py-2">Inicio</a>
+        <a href="#metodologia" class="nav-link rounded-md px-3 py-2">Metodologia</a>
+        <a href="#evidencia" class="nav-link rounded-md px-3 py-2">Evidencia</a>
+        <a href="#planning" class="nav-link rounded-md px-3 py-2">Planning</a>
+        <a href="#inversion" class="nav-link rounded-md px-3 py-2">Inversion</a>
+        <a href="#objetivos" class="nav-link rounded-md px-3 py-2">Performance</a>
+        <a href="#contacto" class="rounded-md bg-neutral-950 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-neutral-800">Contacto</a>
+      </nav>
+
+      <button id="menu-btn" class="flex h-10 w-10 flex-col items-center justify-center gap-1.5 md:hidden" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobile-menu">
+        <span id="line1" class="h-0.5 w-6 origin-center bg-neutral-950 transition-all duration-300"></span>
+        <span id="line2" class="h-0.5 w-6 bg-neutral-950 transition-all duration-300"></span>
+        <span id="line3" class="h-0.5 w-6 origin-center bg-neutral-950 transition-all duration-300"></span>
+      </button>
+    </div>
+
+    <div id="mobile-menu" class="hidden fixed inset-0 z-40 flex-col items-stretch justify-center gap-2 bg-white px-8 text-base font-medium md:hidden">
+      <a href="#inicio" class="mobile-link rounded-md px-4 py-3">Inicio</a>
+      <a href="#metodologia" class="mobile-link rounded-md px-4 py-3">Metodologia</a>
+      <a href="#evidencia" class="mobile-link rounded-md px-4 py-3">Evidencia</a>
+      <a href="#planning" class="mobile-link rounded-md px-4 py-3">Planning</a>
+      <a href="#inversion" class="mobile-link rounded-md px-4 py-3">Inversion</a>
+      <a href="#objetivos" class="mobile-link rounded-md px-4 py-3">Performance</a>
+      <a href="#contacto" class="mt-4 rounded-md bg-neutral-950 px-4 py-3 text-center font-semibold text-white">Contacto</a>
+    </div>
+
+    <div id="progress-bar" class="absolute bottom-0 left-0 h-[2px] w-0 bg-neutral-950 transition-all duration-150 ease-out"></div>
+  </header>
+
+  <main id="inicio">
+    <section class="mx-auto grid max-w-6xl gap-10 px-6 py-14 md:grid-cols-[1.15fr_0.85fr] md:py-20">
+      <div>
+        <p class="mb-5 text-xs font-semibold uppercase tracking-[0.28em] text-neutral-500">Nuevo stack WordPress</p>
+        <h1 class="max-w-4xl text-4xl font-semibold tracking-tight md:text-6xl">Modular DS</h1>
+        <div class="reveal-item mt-6 max-w-2xl translate-y-8 space-y-3 text-sm leading-6 text-neutral-600 opacity-0 transition-all duration-700">
+          <p>Dominio auditado: <strong class="text-neutral-950">laproa.com.ar</strong></p>
+          <p>Criterio clean code: minimizar complejidad de código nativo, evitar depender de plugins para funcionalidades esenciales e implementar un sistema gestionable por el cliente.</p>
+          <p>Inversión hoy, retorno en el futuro.</p>
+        </div>
+      </div>
+
+      <article class="reveal-item translate-y-8 rounded-xl border border-neutral-200 bg-neutral-50 p-6 opacity-0 transition-all duration-700">
+        <p class="text-xs font-semibold uppercase tracking-wider text-neutral-500">Resumen del planning</p>
+        <dl class="mt-6 space-y-5 text-sm">
+          <div>
+            <dt class="text-neutral-500">Base</dt>
+            <dd class="mt-1 font-semibold">WordPress, contacto, SEO técnico y monitoreo</dd>
+          </div>
+          <div>
+            <dt class="text-neutral-500">Evidencia</dt>
+            <dd class="mt-1 font-semibold">Consola, PageSpeed y dependencias expuestas</dd>
+          </div>
+          <div>
+            <dt class="text-neutral-500">Decisión</dt>
+            <dd class="mt-1 font-semibold">Plan Integral o Plan Integral + Core Web</dd>
+          </div>
+        </dl>
+      </article>
+    </section>
+
+     <section id="metodologia" class="border-t bg-neutral-950 text-white">
+      <div class="mx-auto max-w-6xl px-6 py-14">
+        <h2 class="reveal-item mb-8 translate-y-8 text-2xl font-semibold opacity-0 transition-all duration-700">Metodología de ejecución</h2>
+        <div class="grid gap-5 md:grid-cols-4">
+          <article class="reveal-item translate-y-8 rounded-xl border border-white/15 p-6 opacity-0 transition-all duration-700">
+            <p class="text-xs font-semibold uppercase tracking-wider text-white/50">01</p>
+            <h3 class="mt-3 font-semibold">Diagnóstico y respaldo</h3>
+            <p class="mt-2 text-sm leading-6 text-white/65">Relevamiento de WordPress, plugins, tema, cache, cabeceras HTTP, embeds, consola y estado de actualizaciones.</p>
+          </article>
+          <article class="reveal-item translate-y-8 rounded-xl border border-white/15 p-6 opacity-0 transition-all duration-700">
+            <p class="text-xs font-semibold uppercase tracking-wider text-white/50">02</p>
+            <h3 class="mt-3 font-semibold">Remediación base</h3>
+            <p class="mt-2 text-sm leading-6 text-white/65">Ajustes de CSP, iframes, dependencias, metadatos expuestos, compatibilidad de scripts, Formspree, WhatsApp y schemas accionables.</p>
+          </article>
+          <article class="reveal-item translate-y-8 rounded-xl border border-white/15 p-6 opacity-0 transition-all duration-700">
+            <p class="text-xs font-semibold uppercase tracking-wider text-white/50">03</p>
+            <h3 class="mt-3 font-semibold">Performance según plan</h3>
+            <p class="mt-2 text-sm leading-6 text-white/65">Refactorizacion CSS, priorizacion del render mobile, optimizacion LCP, revision de recursos bloqueantes y validacion PageSpeed cuando se active Core Web.</p>
+          </article>
+          <article class="reveal-item translate-y-8 rounded-xl border border-white/15 p-6 opacity-0 transition-all duration-700">
+            <p class="text-xs font-semibold uppercase tracking-wider text-white/50">04</p>
+            <h3 class="mt-3 font-semibold">Entrega y continuidad</h3>
+            <p class="mt-2 text-sm leading-6 text-white/65">Integracion Modular DS, SmartWeb SEO Schema, reporte tecnico, evidencia de pruebas y recomendaciones de mantenimiento.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="evidencia" class="border-t bg-neutral-50">
+      <div class="mx-auto max-w-6xl px-6 py-14">
+        <div class="mb-8 max-w-3xl">
+          <h2 class="reveal-item translate-y-8 text-2xl font-semibold opacity-0 transition-all duration-700">Auditoría en ambiente de Producción</h2>
+          <p class="reveal-item mt-4 translate-y-8 text-sm leading-6 text-neutral-600 opacity-0 transition-all duration-700">La auditoría separa falsos positivos de navegador, warnings de terceros y problemas reales del sitio para priorizar acciones de bajo riesgo y alto impacto operativo.</p>
+        </div>
+        
+        <div class="mb-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+           <article class="reveal-item translate-y-8 rounded-xl border border-neutral-200 bg-white p-6 opacity-0 transition-all duration-700 hover:border-neutral-400">
+            <p class="text-xs font-semibold uppercase tracking-wider text-green-500">Criticidad baja</p>
+            <h3 class="mt-3 font-semibold">Permissions Policy</h3>
+            <p class="mt-2 text-sm leading-6 text-neutral-600">Los mensajes <strong>web-share</strong> y <strong>compute-pressure</strong> provienen del entorno de YouTube o de permisos no habilitados para el documento.</p>
+          </article>
+          <article class="reveal-item translate-y-8 rounded-xl border border-neutral-200 bg-white p-6 opacity-0 transition-all duration-700 hover:border-neutral-400">
+            <p class="text-xs font-semibold uppercase tracking-wider text-yellow-500">Criticidad media</p>
+            <h3 class="mt-3 font-semibold">CSP mal configurada</h3>
+            <p class="mt-2 text-sm leading-6 text-neutral-600">La consola repite que <strong>frame-ancestors</strong> contiene <strong>report-to</strong> como si fuera un origen. Esto indica una cabecera Content-Security-Policy construida con sintaxis incorrecta.</p>
+          </article>
+          <article class="reveal-item translate-y-8 rounded-xl border border-neutral-200 bg-white p-6 opacity-0 transition-all duration-700 hover:border-neutral-400">
+            <p class="text-xs font-semibold uppercase tracking-wider text-yellow-500">Criticidad media</p>
+            <h3 class="mt-3 font-semibold">Origen YouTube inconsistente</h3>
+            <p class="mt-2 text-sm leading-6 text-neutral-600">El warning de <strong>postMessage</strong> muestra que la API de YouTube intenta comunicarse con un origen que no coincide con el iframe cargado.</p>
+          </article>
+         <article class="reveal-item translate-y-8 rounded-xl border border-neutral-200 bg-white p-6 opacity-0 transition-all duration-700 hover:border-neutral-400">
+            <p class="text-xs font-semibold uppercase tracking-wider text-yellow-500">Criticidad media</p>
+            <h3 class="mt-3 font-semibold">Performance</h3>
+            <p class="mt-2 text-sm leading-6 text-neutral-600">El log repite advertencias de recursos cargados con <strong>link preload</strong> que no se usan pocos segundos despues del load. Esto puede indicar preloads excesivos, atributo <strong>as</strong> incorrecto o assets priorizados sin necesidad.</p>
+          </article>
+           <article class="reveal-item translate-y-8 rounded-xl border border-neutral-200 bg-white p-6 opacity-0 transition-all duration-700 hover:border-neutral-400">
+            <p class="text-xs font-semibold uppercase tracking-wider text-red-500">Criticidad alta</p>
+            <h3 class="mt-3 font-semibold">SEO / GEO</h3>
+            <p class="mt-2 text-sm leading-6 text-neutral-600">El sitio necesita reforzar metadatos, schemas y señales de entidad para mejorar lectura orgánica y consistencia en buscadores.</p>
+          </article>
+          <article class="reveal-item translate-y-8 rounded-xl border border-neutral-200 bg-white p-6 opacity-0 transition-all duration-700 hover:border-neutral-400">
+            <p class="text-xs font-semibold uppercase tracking-wider text-red-500">Criticidad alta</p>
+            <h3 class="mt-3 font-semibold">Dependencias expuestas</h3>
+            <p class="mt-2 text-sm leading-6 text-neutral-600">La extension VULNERS detecta Font Awesome, Yoast, jQuery, jQuery Migrate y WordPress. No todo es falla real, pero exige validar versiones.</p>
+          </article>
+          <article class="reveal-item translate-y-8 rounded-xl border border-neutral-200 bg-white p-6 opacity-0 transition-all duration-700 hover:border-neutral-400">
+            <p class="text-xs font-semibold uppercase tracking-wider text-red-500">Criticidad alta</p>
+            <h3 class="mt-3 font-semibold">Formulario Error 404</h3>
+            <p class="mt-2 text-sm leading-6 text-neutral-600">El formulario no está disponible en la sección contacto. Falta endpoint, campos, validacion y prueba de envio.</p>
+          </article>
+          <article class="reveal-item translate-y-8 rounded-xl border border-neutral-200 bg-white p-6 opacity-0 transition-all duration-700 hover:border-neutral-400">
+            <p class="text-xs font-semibold uppercase tracking-wider text-red-500">Criticidad alta</p>
+            <h3 class="mt-3 font-semibold">WidgetApi Downtime</h3>
+            <p class="mt-2 text-sm leading-6 text-neutral-600">El widget de WhatsApp no está 24/7 activo, forzando a los usuarios a utilizar otros canales de comunicación, y reduciendo la eficiencia en la atención al cliente.</p>
+          </article>
+          <article class="reveal-item translate-y-8 rounded-xl border border-neutral-200 bg-white p-6 opacity-0 transition-all duration-700 hover:border-neutral-400">
+            <p class="text-xs font-semibold uppercase tracking-wider text-red-500">Criticidad alta</p>
+            <h3 class="mt-3 font-semibold">Subcontratación de servicios</h3>
+            <p class="mt-2 text-sm leading-6 text-neutral-600">La subcontratación de servicios externos puede generar riesgos de seguridad y calidad en la entrega de soluciones digitales. Además, suma riesgo de dependencia tecnológica.</p>
+          </article>
+        </div>
+
+        <div class="mb-8 mt-6 max-w-3xl">
+          <h2 class="reveal-item translate-y-8 text-2xl font-semibold opacity-0 transition-all duration-700">Auditoría en Console</h2>
+        </div>
+
+        <div class="reveal-item overflow-hidden rounded-xl border border-neutral-800 bg-neutral-950 opacity-0 shadow-2xl shadow-neutral-950/20 transition-all duration-700">
+          <div class="flex items-center justify-between border-b border-white/10 bg-neutral-900 px-4 py-3">
+            <div class="flex items-center gap-2" aria-hidden="true">
+              <span class="h-3 w-3 rounded-full bg-red-400"></span>
+              <span class="h-3 w-3 rounded-full bg-yellow-300"></span>
+              <span class="h-3 w-3 rounded-full bg-green-400"></span>
+            </div>
+            <p class="font-mono text-[11px] uppercase tracking-[0.24em] text-white/45">console.audit.log</p>
+          </div>
+
+          <div class="max-h-[620px] overflow-auto p-4 font-mono text-[12px] leading-6 text-neutral-300 md:p-5">
+            <div class="mb-4 flex flex-wrap items-center gap-2 border-b border-white/10 pb-4">
+              <span class="rounded bg-white/10 px-2 py-1 text-white">laproa.com.ar</span>
+              <span class="text-white/35">/</span>
+              <span class="text-emerald-300">audit --console --wordpress --core-web</span>
+            </div>
+
+            <div class="space-y-4">
+              <article class="grid gap-3 border-l-2 border-yellow-300/80 bg-white/[0.03] p-4 md:grid-cols-[1.2fr_1fr_1fr]">
+                <p><span class="text-yellow-300">warn</span> <span class="text-white">content.js:13</span><br><span class="text-white/55">[VULNERS] Match Font Awesome</span></p>
+                <p><span class="text-white/35">lectura:</span> Deteccion de hoja Font Awesome desde Elementor/cache; requiere revisar version y origen.</p>
+                <p><span class="text-white/35">accion:</span> Validar version real, actualizar assets si corresponde y documentar falso positivo.</p>
+              </article>
+
+              <article class="grid gap-3 border-l-2 border-yellow-300/80 bg-white/[0.03] p-4 md:grid-cols-[1.2fr_1fr_1fr]">
+                <p><span class="text-yellow-300">warn</span> <span class="text-white">content.js:13</span><br><span class="text-white/55">[VULNERS] Match Yoast SEO v26.7</span></p>
+                <p><span class="text-white/35">lectura:</span> La salida HTML expone firma/version del plugin SEO detectada por navegador.</p>
+                <p><span class="text-white/35">accion:</span> Revisar estado del plugin, compatibilidad y exposicion de metadatos publicos.</p>
+              </article>
+
+              <article class="grid gap-3 border-l-2 border-sky-300/80 bg-white/[0.03] p-4 md:grid-cols-[1.2fr_1fr_1fr]">
+                <p><span class="text-sky-300">info</span> <span class="text-white">content.js:13</span><br><span class="text-white/55">[VULNERS] Match jQuery 3.7.1</span></p>
+                <p><span class="text-white/35">lectura:</span> jQuery core cargado desde WordPress; no implica vulnerabilidad directa si esta actualizado.</p>
+                <p><span class="text-white/35">accion:</span> Confirmar core y dependencias soportadas, sin duplicados ni cargas innecesarias.</p>
+              </article>
+
+              <article class="grid gap-3 border-l-2 border-sky-300/80 bg-white/[0.03] p-4 md:grid-cols-[1.2fr_1fr_1fr]">
+                <p><span class="text-sky-300">info</span> <span class="text-white">content.js:13</span><br><span class="text-white/55">[VULNERS] Match jQuery Migrate</span></p>
+                <p><span class="text-white/35">lectura:</span> Indica compatibilidad con scripts antiguos; puede afectar performance o evidenciar dependencias legacy.</p>
+                <p><span class="text-white/35">accion:</span> Identificar plugins que lo requieren y evaluar si puede mantenerse, optimizarse o diferirse.</p>
+              </article>
+
+              <article class="grid gap-3 border-l-2 border-yellow-300/80 bg-white/[0.03] p-4 md:grid-cols-[1.2fr_1fr_1fr]">
+                <p><span class="text-yellow-300">warn</span> <span class="text-white">content.js:13</span><br><span class="text-white/55">[VULNERS] Match WordPress generator</span></p>
+                <p><span class="text-white/35">lectura:</span> La etiqueta generator declara WordPress y una version que debe contrastarse contra el core instalado.</p>
+                <p><span class="text-white/35">accion:</span> Auditar core, plugins, tema activo y cabeceras generadas por cache/optimizacion.</p>
+              </article>
+
+              <article class="grid gap-3 border-l-2 border-sky-300/80 bg-white/[0.03] p-4 md:grid-cols-[1.2fr_1fr_1fr]">
+                <p><span class="text-sky-300">info</span> <span class="text-white">www-widgetapi.js:194</span><br><span class="text-white/55">Unrecognized feature: web-share</span></p>
+                <p><span class="text-white/35">lectura:</span> Warning de iframe o Permissions Policy asociado a YouTube.</p>
+                <p><span class="text-white/35">accion:</span> Revisar atributos allow en iframes y politica de permisos del sitio.</p>
+              </article>
+
+              <article class="grid gap-3 border-l-2 border-yellow-300/80 bg-white/[0.03] p-4 md:grid-cols-[1.2fr_1fr_1fr]">
+                <p><span class="text-yellow-300">warn</span> <span class="text-white">www-widgetapi.js:210</span><br><span class="text-white/55">postMessage origin mismatch</span></p>
+                <p><span class="text-white/35">lectura:</span> La API de YouTube intenta comunicarse con un origen que no coincide.</p>
+                <p><span class="text-white/35">accion:</span> Normalizar parametros origin/forigin, embeds y scripts duplicados de widgetapi.</p>
+              </article>
+
+              <article class="grid gap-3 border-l-2 border-red-400/80 bg-white/[0.03] p-4 md:grid-cols-[1.2fr_1fr_1fr]">
+                <p><span class="text-red-300">error</span> <span class="text-white">Content-Security-Policy</span><br><span class="text-white/55">frame-ancestors contiene report-to</span></p>
+                <p><span class="text-white/35">lectura:</span> Cabecera CSP probablemente construida con sintaxis incorrecta.</p>
+                <p><span class="text-white/35">accion:</span> Corregir CSP, separar directivas y probar compatibilidad con WordPress, Elementor y YouTube.</p>
+              </article>
+
+              <article class="grid gap-3 border-l-2 border-sky-300/80 bg-white/[0.03] p-4 md:grid-cols-[1.2fr_1fr_1fr]">
+                <p><span class="text-sky-300">info</span> <span class="text-white">base.js:5172</span><br><span class="text-white/55">Permissions Policy: compute-pressure no permitido</span></p>
+                <p><span class="text-white/35">lectura:</span> Warning de Permissions Policy disparado por codigo de YouTube.</p>
+                <p><span class="text-white/35">accion:</span> Documentar como tercero no critico o ajustar politica si el sitio la declara explicitamente.</p>
+              </article>
+
+              <article class="grid gap-3 border-l-2 border-red-400/80 bg-white/[0.03] p-4 md:grid-cols-[1.2fr_1fr_1fr]">
+                <p><span class="text-red-300">error</span> <span class="text-white">contact.form</span><br><span class="text-white/55">Contacto sin formulario funcional</span></p>
+                <p><span class="text-white/35">lectura:</span> No se detecta form, action, metodo POST ni endpoint Formspree en el presupuesto actual.</p>
+                <p><span class="text-white/35">accion:</span> Implementar campos, endpoint Formspree, validacion HTML y prueba de recepcion.</p>
+              </article>
+
+              <article class="grid gap-3 border-l-2 border-yellow-300/80 bg-white/[0.03] p-4 md:grid-cols-[1.2fr_1fr_1fr]">
+                <p><span class="text-yellow-300">warn</span> <span class="text-white">preload.audit</span><br><span class="text-white/55">Recursos preloaded no usados luego del load</span></p>
+                <p><span class="text-white/35">lectura:</span> Recursos precargados no se consumen rapidamente; pueden competir con assets criticos.</p>
+                <p><span class="text-white/35">accion:</span> Auditar link rel="preload", confirmar atributo as y conservar solo recursos realmente prioritarios.</p>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="planning" class="border-t">
+      <div class="mx-auto max-w-6xl px-6 py-14">
+        <div class="mb-8 max-w-3xl">
+          <h2 class="reveal-item translate-y-8 text-2xl font-semibold opacity-0 transition-all duration-700">Planes</h2>
+          <p class="reveal-item mt-4 translate-y-8 text-sm leading-6 text-neutral-600 opacity-0 transition-all duration-700">Cada plan tiene un objetivo de negocio claro: estabilizar la operación digital o estabilizarla y mejorar la percepción de velocidad en mobile con métricas comparables.</p>
+        </div>
+
+        <div class="grid gap-6 lg:grid-cols-2">
+          <article class="reveal-item translate-y-8 rounded-xl border-2 border-neutral-950 bg-white p-8 opacity-0 shadow-xl transition-all duration-700">
+            <p class="text-xs font-semibold uppercase tracking-wider text-neutral-500">Plan 1</p>
+            <h3 class="mt-3 text-2xl font-semibold">Plan Integral</h3>
+            <p class="mt-3 text-sm leading-6 text-neutral-600">Base mínima viable para estabilizar WordPress, reducir alertas visibles, activar canales de contacto y dejar el sitio trazable para mantenimiento.</p>
+
+            <div class="mt-8 grid gap-6 md:grid-cols-2">
+              <div>
+                <h4 class="text-sm font-semibold">Alcance técnico</h4>
+                <ul class="mt-3 space-y-2 text-sm leading-6 text-neutral-600">
+                  <li>Auditoria WordPress, plugins, tema, cache y dependencias visibles.</li>
+                  <li>Revision de consola: VULNERS, YouTube, CSP, Permissions Policy y preloads.</li>
+                  <li>Correccion o documentacion de warnings accionables.</li>
+                  <li>Integracion Formspree para formulario de contacto.</li>
+                  <li>SmartWeb Widget WhatsApp.</li>
+                  <li>SmartWeb SEO Schema para metas y JSON-LD complementario.</li>
+                  <li>Alta y monitoreo inicial con Modular DS.</li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="text-sm font-semibold">Entregables y continuidad</h4>
+                <ul class="mt-3 space-y-2 text-sm leading-6 text-neutral-600">
+                  <li>Informe tecnico con hallazgos y acciones aplicadas.</li>
+                  <li>Formulario y WhatsApp listos para captura de consultas.</li>
+                  <li>Base SEO estructurada y documentada.</li>
+                  <li>Tablero Modular DS conectado.</li>
+                  <li>Recomendaciones para sostenibilidad anual.</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <article class="reveal-item translate-y-8 rounded-xl border border-neutral-300 bg-neutral-50 p-8 opacity-0 transition-all duration-700 hover:border-neutral-400">
+            <p class="text-xs font-semibold uppercase tracking-wider text-neutral-500">Plan 2</p>
+            <h3 class="mt-3 text-2xl font-semibold">Plan Integral + Core Web</h3>
+            <p class="mt-3 text-sm leading-6 text-neutral-600">Plan recomendado cuando se quiere convertir la auditoría en una mejora perceptible para usuarios móviles, con foco en PageSpeed, LCP, Speed Index y recursos críticos.</p>
+
+            <div class="mt-8 grid gap-6 md:grid-cols-2">
+              <div>
+                <h4 class="text-sm font-semibold">Alcance técnico</h4>
+                <ul class="mt-3 space-y-2 text-sm leading-6 text-neutral-600">
+                  <li>Todo lo incluido en el Plan Integral.</li>
+                  <li>Auditoria comparativa PageSpeed mobile/desktop.</li>
+                  <li>Refactor de CSS no utilizado detectado por PageSpeed.</li>
+                  <li>Optimizacion de LCP, Speed Index mobile y recursos above the fold.</li>
+                  <li>Revision de fuentes, preload/preconnect y lazy loading.</li>
+                  <li>Correcciones menores de accesibilidad y SEO tecnico.</li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="text-sm font-semibold">Entregables y continuidad</h4>
+                <ul class="mt-3 space-y-2 text-sm leading-6 text-neutral-600">
+                  <li>Todo el paquete documental del Plan Integral.</li>
+                  <li>Comparativa mobile/desktop antes y despues.</li>
+                  <li>Detalle de assets intervenidos.</li>
+                  <li>Reporte de mejoras Core Web aplicadas.</li>
+                  <li>Lista de optimizaciones futuras si exceden el alcance.</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+   
+    <section id="inversion" class="border-t">
+      <div class="mx-auto max-w-6xl px-6 py-16">
+        <h2 class="reveal-item mb-8 translate-y-8 text-2xl font-semibold opacity-0 transition-all duration-700">Opciones de inversión</h2>
+        <div class="grid gap-8 lg:grid-cols-[0.8fr_1fr_1fr]">
+          <article class="reveal-item translate-y-8 rounded-xl border border-neutral-200 bg-white p-8 opacity-0 transition-all duration-700 hover:border-neutral-400 hover:shadow-lg">
+            <h3 class="text-xl font-semibold">Plazo estimado</h3>
+            <p class="mt-2 text-sm leading-6 text-neutral-500">Ventana de trabajo y observación para dejar el stack documentado.</p>
+            <div class="mt-8 space-y-5 text-sm text-neutral-600">
+              <p>Ejecución técnica inicial:<strong class="mt-2 block text-3xl text-neutral-950">1 a 2 jornadas</strong></p>
+              <p class="border-t pt-5">Observación posterior:<strong class="mt-2 block text-3xl text-neutral-950">24 a 48 h</strong></p>
+              <p class="border-t pt-5">Horizonte de sostenibilidad:<strong class="mt-2 block text-3xl text-neutral-950">12 meses</strong></p>
+            </div>
+          </article>
+
+          <article class="reveal-item translate-y-8 rounded-xl border border-neutral-200 bg-white p-8 opacity-0 transition-all duration-700 hover:border-neutral-400 hover:shadow-lg">
+            <h3 class="text-xl font-semibold">Plan Integral</h3>
+            <p class="mt-2 text-sm leading-6 text-neutral-500">Base operativa para estabilizar WordPress, contacto, SEO técnico y monitoreo.</p>
+
+            <div class="mt-6">
+              <p class="flex items-center text-3xl font-semibold">
+                USD 180
+                <span class="group relative ml-2 inline-flex h-5 w-5 cursor-help items-center justify-center rounded-full border border-neutral-300 text-xs text-neutral-400">
+                  i
+                  <span class="pointer-events-none absolute bottom-full left-1/2 mb-2 w-64 -translate-x-1/2 rounded bg-neutral-800 p-3 text-center text-xs font-normal leading-5 text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                    Equivalente en pesos argentinos según cotización acordada al momento de iniciar.
+                    <span class="absolute left-1/2 top-full h-0 w-0 -translate-x-1/2 border-x-4 border-t-4 border-x-transparent border-t-neutral-800"></span>
+                  </span>
+                </span>
+              </p>
+              <p class="mt-2 text-sm text-neutral-400">50% al inicio y 50% al finalizar. Sin emisión de factura.</p>
+            </div>
+
+            <div class="mt-6 text-sm text-neutral-700">Alcance principal: <strong>base técnica sostenible</strong></div>
+
+            <ul class="mt-5 space-y-2 text-sm leading-6 text-neutral-600">
+              <li>• Auditoría WordPress, plugins, tema y cache.</li>
+              <li>• Revisión de consola y warnings accionables.</li>
+              <li>• Formspree para formulario de contacto.</li>
+              <li>• SmartWeb Widget WhatsApp.</li>
+              <li>• SmartWeb SEO Schema.</li>
+              <li>• Modular DS.</li>
+            </ul>
+
+            <div class="mt-6 border-t pt-4 text-sm text-neutral-700">
+              <p><strong>Ideal para:</strong> clientes con conocimiento técnico y contenido estático. Mantenimiento básico.</p>
+            </div>
+          </article>
+
+          <article class="reveal-item relative translate-y-8 rounded-xl border-2 border-neutral-950 bg-white p-8 opacity-0 shadow-xl transition-all duration-700 hover:shadow-2xl">
+            <div class="absolute -top-3 left-6 rounded bg-neutral-950 px-3 py-1 text-xs font-medium text-white">Recomendado</div>
+            <h3 class="text-xl font-semibold">Plan Integral + Core Web</h3>
+            <p class="mt-2 text-sm leading-6 text-neutral-500">Incluye la base operativa y suma optimización medible de performance mobile.</p>
+
+            <div class="mt-6">
+              <p class="flex items-center text-3xl font-semibold">
+                USD 270
+                <span class="group relative ml-2 inline-flex h-5 w-5 cursor-help items-center justify-center rounded-full border border-neutral-300 text-xs text-neutral-400">
+                  i
+                  <span class="pointer-events-none absolute bottom-full left-1/2 mb-2 w-64 -translate-x-1/2 rounded bg-neutral-800 p-3 text-center text-xs font-normal leading-5 text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                    Equivalente en pesos argentinos según cotización acordada al momento de iniciar.
+                    <span class="absolute left-1/2 top-full h-0 w-0 -translate-x-1/2 border-x-4 border-t-4 border-x-transparent border-t-neutral-800"></span>
+                  </span>
+                </span>
+              </p>
+              <p class="mt-2 text-sm text-neutral-400">50% al inicio y 50% al finalizar. Sin emisión de factura.</p>
+            </div>
+
+            <div class="mt-6 text-sm text-neutral-700">Alcance principal: <strong>base técnica + performance</strong></div>
+
+            <ul class="mt-5 space-y-2 text-sm leading-6 text-neutral-600">
+              <li>• Todo lo incluido en el Plan Integral.</li>
+              <li>• Auditoría PageSpeed mobile/desktop.</li>
+              <li>• Refactor de CSS no utilizado.</li>
+              <li>• Optimización LCP, Speed Index y recursos críticos.</li>
+              <li>• Comparativa antes/después y backlog futuro.</li>
+            </ul>
+
+            <div class="mt-6 border-t pt-4 text-sm text-neutral-700">
+              <p><strong>Ideal para:</strong> ramificación orgánica del sitemap y optimización de cuota de Ads.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+
+    <section id="objetivos" class="border-t bg-white">
+      <div class="mx-auto max-w-6xl px-6 py-14">
+        <div class="mb-8 max-w-3xl">
+        <h2 class="reveal-item translate-y-8 text-2xl font-semibold opacity-0 transition-all duration-700">Métricas y objetivos de performance</h2>
+          <p class="reveal-item mt-4 translate-y-8 text-sm leading-6 text-neutral-600 opacity-0 transition-all duration-700">Los objetivos se definen a partir de PageSpeed Insights, consola del navegador y estado operativo del sitio: preservar una base saludable, reducir ruido técnico y dejar mejoras medibles para mantenimiento anual.</p>
+        </div>
+
+        <div class="grid gap-6 lg:grid-cols-2">
+          <article class="reveal-item translate-y-8 rounded-xl border border-neutral-200 p-6 opacity-0 transition-all duration-700 hover:border-neutral-400">
+            <p class="text-xs font-semibold uppercase tracking-wider text-neutral-500">Mobile - Lighthouse</p>
+            <div class="mt-5 grid grid-cols-2 gap-3 text-sm sm:grid-cols-4">
+              <div class="rounded-lg border border-neutral-200 p-4"><span class="block text-2xl font-semibold">94</span><span class="text-neutral-500">Performance</span></div>
+              <div class="rounded-lg border border-neutral-200 p-4"><span class="block text-2xl font-semibold">97</span><span class="text-neutral-500">Accesibilidad</span></div>
+              <div class="rounded-lg border border-neutral-200 p-4"><span class="block text-2xl font-semibold">96</span><span class="text-neutral-500">Practicas</span></div>
+              <div class="rounded-lg border border-neutral-200 p-4"><span class="block text-2xl font-semibold">92</span><span class="text-neutral-500">SEO</span></div>
+            </div>
+            <ul class="mt-5 space-y-2 text-sm leading-6 text-neutral-600">
+              <li>FCP: 1.5 s; LCP: 2.5 s; TBT: 0 ms; CLS: 0.</li>
+              <li>Speed Index: 4.5 s, principal punto de mejora perceptual en mobile.</li>
+              <li>CSS no utilizado: ahorro estimado de 41 KiB.</li>
+              <li>Respuesta inicial del servidor correcta: 30 ms.</li>
+            </ul>
+          </article>
+
+          <article class="reveal-item translate-y-8 rounded-xl border border-neutral-200 p-6 opacity-0 transition-all duration-700 hover:border-neutral-400">
+            <p class="text-xs font-semibold uppercase tracking-wider text-neutral-500">Desktop - Lighthouse</p>
+            <div class="mt-5 grid grid-cols-2 gap-3 text-sm sm:grid-cols-4">
+              <div class="rounded-lg border border-neutral-200 p-4"><span class="block text-2xl font-semibold">99</span><span class="text-neutral-500">Performance</span></div>
+              <div class="rounded-lg border border-neutral-200 p-4"><span class="block text-2xl font-semibold">93</span><span class="text-neutral-500">Accesibilidad</span></div>
+              <div class="rounded-lg border border-neutral-200 p-4"><span class="block text-2xl font-semibold">96</span><span class="text-neutral-500">Practicas</span></div>
+              <div class="rounded-lg border border-neutral-200 p-4"><span class="block text-2xl font-semibold">92</span><span class="text-neutral-500">SEO</span></div>
+            </div>
+            <ul class="mt-5 space-y-2 text-sm leading-6 text-neutral-600">
+              <li>FCP: 0.4 s; LCP: 0.5 s; TBT: 0 ms; CLS: 0.</li>
+              <li>Speed Index: 1.4 s, con margen menor de optimizacion.</li>
+              <li>CSS no utilizado: ahorro estimado de 41 KiB.</li>
+              <li>Respuesta inicial del servidor correcta: 10 ms.</li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="reveal-item mt-8 overflow-hidden rounded-xl border border-neutral-800 bg-neutral-950 opacity-0 shadow-2xl shadow-neutral-950/20 transition-all duration-700">
+          <div class="flex flex-col gap-3 border-b border-white/10 bg-neutral-900 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+            <div class="flex items-center gap-2" aria-hidden="true">
+              <span class="h-3 w-3 rounded-full bg-red-400"></span>
+              <span class="h-3 w-3 rounded-full bg-yellow-300"></span>
+              <span class="h-3 w-3 rounded-full bg-green-400"></span>
+            </div>
+            <p class="font-mono text-[11px] uppercase tracking-[0.24em] text-white/45">pagespeed.console.log</p>
+          </div>
+
+          <div class="p-4 font-mono text-[12px] leading-6 text-neutral-300 md:p-5">
+            <div class="mb-4 flex flex-wrap items-center gap-2 border-b border-white/10 pb-4">
+              <span class="rounded bg-white/10 px-2 py-1 text-white">lighthouse</span>
+              <span class="text-white/35">/</span>
+              <span class="text-emerald-300">core-web --mobile --desktop --refactor</span>
+            </div>
+
+            <div class="space-y-3">
+              <article class="grid gap-3 border-l-2 border-yellow-300/80 bg-white/[0.03] p-4 md:grid-cols-[0.9fr_1fr_1.1fr]">
+                <p><span class="text-yellow-300">warn</span> <span class="text-white">unused-css</span><br><span class="text-white/55">Reducir CSS no utilizado · 41 KiB</span></p>
+                <p><span class="text-white/35">impacto:</span> Carga estilos que no aportan al render inicial, típico en WordPress + Elementor.</p>
+                <p><span class="text-white/35">refactor:</span> Revisar assets por plantilla, depurar CSS no crítico, diferir estilos secundarios y validar cache/minificación.</p>
+              </article>
+
+              <article class="grid gap-3 border-l-2 border-yellow-300/80 bg-white/[0.03] p-4 md:grid-cols-[0.9fr_1fr_1.1fr]">
+                <p><span class="text-yellow-300">warn</span> <span class="text-white">speed-index</span><br><span class="text-white/55">Mobile · 4.5 s</span></p>
+                <p><span class="text-white/35">impacto:</span> El contenido se percibe completo más tarde en dispositivos móviles.</p>
+                <p><span class="text-white/35">refactor:</span> Priorizar CSS crítico, revisar hero/imagenes above the fold, fuentes, preload y orden de recursos.</p>
+              </article>
+
+              <article class="grid gap-3 border-l-2 border-emerald-300/80 bg-white/[0.03] p-4 md:grid-cols-[0.9fr_1fr_1.1fr]">
+                <p><span class="text-emerald-300">pass</span> <span class="text-white">lcp</span><br><span class="text-white/55">Mobile · 2.5 s</span></p>
+                <p><span class="text-white/35">impacto:</span> Está en umbral correcto, pero es sensible a imagen principal, fuentes y recursos bloqueantes.</p>
+                <p><span class="text-white/35">refactor:</span> Optimizar elemento LCP, tamaños responsivos, preconnect/preload selectivo y lazy loading fuera del viewport.</p>
+              </article>
+
+              <article class="grid gap-3 border-l-2 border-sky-300/80 bg-white/[0.03] p-4 md:grid-cols-[0.9fr_1fr_1.1fr]">
+                <p><span class="text-sky-300">info</span> <span class="text-white">accessibility</span><br><span class="text-white/55">Desktop · score 93</span></p>
+                <p><span class="text-white/35">impacto:</span> Queda margen para corregir atributos, labels o contraste puntual.</p>
+                <p><span class="text-white/35">refactor:</span> Auditar elementos interactivos, nombres accesibles, jerarquía semántica y estados de foco.</p>
+              </article>
+
+              <article class="grid gap-3 border-l-2 border-sky-300/80 bg-white/[0.03] p-4 md:grid-cols-[0.9fr_1fr_1.1fr]">
+                <p><span class="text-sky-300">info</span> <span class="text-white">seo</span><br><span class="text-white/55">Score · 92</span></p>
+                <p><span class="text-white/35">impacto:</span> Buen estado general, con margen para enriquecer datos estructurados y metadatos.</p>
+                <p><span class="text-white/35">refactor:</span> Complementar Yoast con SmartWeb SEO Schema, JSON-LD y validación Rich Results.</p>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <section id="contacto" class="bg-black px-6 py-24 text-center text-white">
+    <div class="mx-auto max-w-3xl">
+      <h2 class="reveal-item translate-y-8 text-3xl font-semibold opacity-0 transition-all duration-700">Menos mantenimiento reactivo. Más control operativo.</h2>
+      <p class="reveal-item mx-auto mt-5 max-w-2xl translate-y-8 text-sm leading-6 text-white/65 opacity-0 transition-all duration-700">La Proa queda con una lectura clara de sus alertas, un set de ajustes aplicados y una base preparada para sostener el sitio durante el año.</p>
+      <div class="reveal-item mt-8 flex translate-y-8 flex-col justify-center gap-4 opacity-0 transition-all duration-700 sm:flex-row">
+        <a href="https://wa.me/5492613871088" target="_blank" rel="noopener noreferrer" class="rounded-lg bg-white px-8 py-4 font-medium text-black transition-colors hover:bg-neutral-200">Hablar por WhatsApp</a>
+        <a href="https://laproa.com.ar/" target="_blank" rel="noopener noreferrer" class="rounded-lg border border-white/25 px-8 py-4 font-medium text-white transition-colors hover:border-white">Ver sitio auditado</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="py-12 text-center text-xs uppercase tracking-widest text-neutral-400">
+    SmartWeb - Presupuesto valido por 15 dias
+  </footer>
+
+  <button id="back-to-top" class="pointer-events-none fixed bottom-8 right-8 z-50 hidden translate-y-10 items-center justify-center bg-black p-3 text-white opacity-0 shadow-2xl transition-all duration-300 hover:bg-neutral-800 md:flex" aria-label="Volver arriba">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+    </svg>
+  </button>
+
+  <script>
+    const menuBtn = document.getElementById('menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const line1 = document.getElementById('line1');
+    const line2 = document.getElementById('line2');
+    const line3 = document.getElementById('line3');
+    const mobileLinks = document.querySelectorAll('.mobile-link');
+    const navLinks = document.querySelectorAll('.nav-link, .mobile-link');
+    const progressBar = document.getElementById('progress-bar');
+    const backToTopBtn = document.getElementById('back-to-top');
+    const sectionIds = ['inicio', 'metodologia', 'evidencia', 'planning', 'inversion', 'objetivos', 'contacto'];
+    const navSections = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
+
+    const closeMenu = () => {
+      mobileMenu.classList.add('hidden');
+      mobileMenu.classList.remove('flex');
+      menuBtn.setAttribute('aria-expanded', 'false');
+      line1.classList.remove('rotate-45', 'translate-y-2');
+      line2.classList.remove('opacity-0');
+      line3.classList.remove('-rotate-45', '-translate-y-2');
+      document.body.classList.remove('overflow-hidden');
+    };
+
+    const toggleMenu = () => {
+      const isOpen = mobileMenu.classList.contains('flex');
+      if (isOpen) {
+        closeMenu();
+        return;
+      }
+      mobileMenu.classList.remove('hidden');
+      mobileMenu.classList.add('flex');
+      menuBtn.setAttribute('aria-expanded', 'true');
+      line1.classList.add('rotate-45', 'translate-y-2');
+      line2.classList.add('opacity-0');
+      line3.classList.add('-rotate-45', '-translate-y-2');
+      document.body.classList.add('overflow-hidden');
+    };
+
+    const setActiveNavLink = (currentHash) => {
+      navLinks.forEach(link => {
+        if (link.getAttribute('href') === currentHash) {
+          link.setAttribute('aria-current', 'page');
+        } else {
+          link.removeAttribute('aria-current');
+        }
+      });
+    };
+
+    const updateActiveNavOnScroll = () => {
+      let currentHash = '#inicio';
+      navSections.forEach(section => {
+        if (window.scrollY >= section.offsetTop - 140) {
+          currentHash = `#${section.id}`;
+        }
+      });
+      setActiveNavLink(currentHash);
+    };
+
+    const updateScrollUi = () => {
+      const height = document.documentElement.scrollHeight - window.innerHeight;
+      const scrolled = height > 0 ? (window.scrollY / height) * 100 : 0;
+      progressBar.style.width = `${scrolled}%`;
+
+      if (window.scrollY > 400) {
+        backToTopBtn.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none');
+        backToTopBtn.classList.add('opacity-100', 'translate-y-0', 'pointer-events-auto');
+      } else {
+        backToTopBtn.classList.add('opacity-0', 'translate-y-10', 'pointer-events-none');
+        backToTopBtn.classList.remove('opacity-100', 'translate-y-0', 'pointer-events-auto');
+      }
+
+      updateActiveNavOnScroll();
+    };
+
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        entry.target.querySelectorAll('.reveal-item').forEach((item, index) => {
+          setTimeout(() => {
+            item.classList.remove('opacity-0', 'translate-y-8');
+            item.classList.add('opacity-100', 'translate-y-0');
+          }, index * 80);
+        });
+        revealObserver.unobserve(entry.target);
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+    document.querySelectorAll('main > section, #contacto').forEach(section => revealObserver.observe(section));
+    menuBtn.addEventListener('click', toggleMenu);
+    mobileLinks.forEach(link => link.addEventListener('click', closeMenu));
+    backToTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    window.addEventListener('scroll', updateScrollUi, { passive: true });
+    updateScrollUi();
+  </script>
+</body>
+</html>
