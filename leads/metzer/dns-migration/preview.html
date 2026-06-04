@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informe Técnico de Integración DNS - metzer.com.ar</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background:#f5f7fa;
+    color:#333;
+    margin:0;
+    padding:40px;
+}
+
+.container{
+    max-width:1000px;
+    margin:auto;
+    background:#fff;
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 3px 15px rgba(0,0,0,.08);
+}
+
+.header{
+    background:#0f172a;
+    color:#fff;
+    padding:40px;
+}
+
+.header h1{
+    margin:0;
+}
+
+.section{
+    padding:30px 40px;
+    border-bottom:1px solid #e5e7eb;
+}
+
+h2{
+    color:#0f172a;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:15px;
+}
+
+th,td{
+    border:1px solid #d1d5db;
+    padding:12px;
+    text-align:left;
+}
+
+th{
+    background:#f3f4f6;
+}
+
+.status{
+    color:#15803d;
+    font-weight:bold;
+}
+
+.note{
+    background:#eff6ff;
+    border-left:4px solid #2563eb;
+    padding:15px;
+    margin-top:15px;
+}
+
+.footer{
+    padding:30px 40px;
+    background:#f9fafb;
+    font-size:14px;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h1>Informe de Integración DNS</h1>
+        <p>Dominio: <strong>metzer.com.ar</strong></p>
+        <p>Validación e integración con Kinsta y Cloudflare</p>
+    </div>
+
+    <div class="section">
+        <h2>Resumen Ejecutivo</h2>
+
+        <p>
+            Se realizó la revisión y validación de la configuración DNS del dominio
+            <strong>metzer.com.ar</strong> con el objetivo de integrar los servicios
+            de Cloudflare y Kinsta, garantizando la continuidad operativa del sitio web
+            y del correo corporativo.
+        </p>
+
+        <p>
+            La infraestructura actual es compatible con la integración solicitada y
+            no se detectaron conflictos críticos que afecten la operación del sitio
+            o de los servicios de correo electrónico.
+        </p>
+    </div>
+
+    <div class="section">
+        <h2>Trabajos Realizados</h2>
+
+        <ul>
+            <li>Auditoría completa de registros DNS.</li>
+            <li>Validación de infraestructura de hosting y correo.</li>
+            <li>Revisión de registros MX, SPF, DKIM y DMARC.</li>
+            <li>Verificación de compatibilidad con Cloudflare y Kinsta.</li>
+            <li>Validación de certificados SSL automáticos.</li>
+            <li>Análisis de posibles conflictos con formularios web.</li>
+            <li>Control de continuidad operativa del correo corporativo.</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Configuración Implementada</h2>
+
+        <table>
+            <tr>
+                <th>Tipo</th>
+                <th>Registro</th>
+                <th>Estado</th>
+            </tr>
+            <tr>
+                <td>TXT</td>
+                <td>_cf-custom-hostname</td>
+                <td class="status">Configurado</td>
+            </tr>
+            <tr>
+                <td>CNAME</td>
+                <td>_acme-challenge</td>
+                <td class="status">Configurado</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>Estado del Correo Electrónico</h2>
+
+        <table>
+            <tr>
+                <th>Elemento</th>
+                <th>Estado</th>
+            </tr>
+            <tr>
+                <td>MX</td>
+                <td class="status">Correcto</td>
+            </tr>
+            <tr>
+                <td>SPF</td>
+                <td class="status">Correcto</td>
+            </tr>
+            <tr>
+                <td>DKIM</td>
+                <td class="status">Correcto</td>
+            </tr>
+            <tr>
+                <td>DMARC</td>
+                <td class="status">Correcto</td>
+            </tr>
+        </table>
+
+        <div class="note">
+            <strong>DMARC detectado:</strong><br>
+            v=DMARC1; p=none; rua=mailto:postmaster@metzer.com.ar
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Compatibilidad con Formularios Web</h2>
+
+        <p>
+            La integración realizada no modifica los servidores de correo (MX) ni la
+            infraestructura SMTP existente.
+        </p>
+
+        <p>
+            Por este motivo, los formularios de contacto y plataformas externas
+            continúan operando normalmente.
+        </p>
+
+        <table>
+            <tr>
+                <th>Servicio</th>
+                <th>Compatibilidad</th>
+            </tr>
+            <tr>
+                <td>Formularios Web</td>
+                <td class="status">Compatible</td>
+            </tr>
+            <tr>
+                <td>SMTP Externo</td>
+                <td class="status">Compatible</td>
+            </tr>
+            <tr>
+                <td>Google Workspace</td>
+                <td class="status">Compatible</td>
+            </tr>
+            <tr>
+                <td>Microsoft 365</td>
+                <td class="status">Compatible</td>
+            </tr>
+            <tr>
+                <td>Brevo / Mailchimp</td>
+                <td class="status">Compatible</td>
+            </tr>
+            <tr>
+                <td>WordPress SMTP</td>
+                <td class="status">Compatible</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>Resultado Final</h2>
+
+        <table>
+            <tr>
+                <th>Servicio</th>
+                <th>Resultado</th>
+            </tr>
+            <tr>
+                <td>Sitio Web</td>
+                <td class="status">Operativo</td>
+            </tr>
+            <tr>
+                <td>Correo Corporativo</td>
+                <td class="status">Sin afectación detectada</td>
+            </tr>
+            <tr>
+                <td>Validación SSL</td>
+                <td class="status">Correcta</td>
+            </tr>
+            <tr>
+                <td>Cloudflare</td>
+                <td class="status">Compatible</td>
+            </tr>
+            <tr>
+                <td>Kinsta</td>
+                <td class="status">Compatible</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>Conclusión</h2>
+
+        <p>
+            La integración DNS requerida para Cloudflare y Kinsta fue validada
+            correctamente. La configuración actual mantiene la continuidad del sitio
+            web y del correo corporativo, sin impacto previsto sobre formularios,
+            servicios SMTP externos o plataformas de email marketing.
+        </p>
+
+        <p>
+            Se recomienda mantener monitoreo periódico de la infraestructura DNS y
+            continuar utilizando las políticas actuales de autenticación de correo
+            (SPF, DKIM y DMARC).
+        </p>
+    </div>
+
+    <div class="footer">
+        Documento técnico emitido como respaldo de la validación e integración DNS
+        del dominio metzer.com.ar.
+    </div>
+
+</div>
+
+</body>
+</html>

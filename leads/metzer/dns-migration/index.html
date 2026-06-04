@@ -1,0 +1,1459 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Auditoría DNS, Correo y SSL - metzer.com.ar</title>
+  <meta name="description" content="Informe actualizado de auditoría DNS, correo, SSL y compatibilidad de metzer.com.ar con Kinsta y Cloudflare." />
+  <meta name="theme-color" content="#000000" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Auditoría DNS, Correo y SSL - metzer.com.ar" />
+  <meta property="og:description" content="Estado técnico actualizado de DNS, correo, certificados y compatibilidad de metzer.com.ar." />
+  <meta property="og:image" content="og-image.png" />
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:title" content="Auditoría DNS, Correo y SSL - metzer.com.ar" />
+  <meta property="twitter:description" content="Estado técnico actualizado de DNS, correo, certificados y compatibilidad de metzer.com.ar." />
+  <meta property="twitter:image" content="og-image.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+  <script>
+    document.documentElement.classList.add("js");
+  </script>
+
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #111827;
+      --muted: #6b7280;
+      --soft: #f9fafb;
+      --line: #e5e7eb;
+      --white: #ffffff;
+      --black: #000000;
+      --ok: #15803d;
+      --warn: #a16207;
+      --bad: #b91c1c;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--white);
+      color: var(--ink);
+      font-family: "Inter", Arial, Helvetica, sans-serif;
+      line-height: 1.6;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+    }
+
+    body.menu-open {
+      overflow: hidden;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    h1,
+    h2 {
+      font-family: "Playfair Display", Georgia, serif;
+      letter-spacing: 0;
+      line-height: 1.15;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      max-width: 760px;
+      margin-bottom: 20px;
+      font-size: clamp(34px, 5vw, 54px);
+      font-weight: 700;
+    }
+
+    h2 {
+      margin-bottom: 28px;
+      font-size: clamp(24px, 3vw, 34px);
+      font-weight: 600;
+    }
+
+    h3 {
+      margin-bottom: 8px;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.25;
+    }
+
+    p {
+      color: var(--muted);
+    }
+
+    code {
+      border-radius: 5px;
+      background: #f3f4f6;
+      color: #1f2937;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-size: 0.92em;
+      padding: 2px 5px;
+      word-break: break-word;
+    }
+
+    .shell {
+      max-width: 1152px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(0, 0, 0, 0.96);
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      min-height: 80px;
+    }
+
+    .brand {
+      display: block;
+      text-decoration: none;
+    }
+
+    .brand img {
+      display: block;
+      width: auto;
+      height: 32px;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .nav a,
+    .mobile-menu a {
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color 180ms ease;
+      white-space: nowrap;
+    }
+
+    .nav a:hover,
+    .nav a:focus-visible,
+    .nav a[aria-current="page"],
+    .mobile-menu a:hover,
+    .mobile-menu a:focus-visible,
+    .mobile-menu a[aria-current="page"] {
+      color: #ffffff;
+      outline: none;
+    }
+
+    :focus-visible {
+      outline: 2px solid currentColor;
+      outline-offset: 4px;
+    }
+
+    .menu-btn {
+      display: none;
+      position: relative;
+      z-index: 70;
+      width: 30px;
+      height: 24px;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .menu-btn span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      margin: 5px 0;
+      background: #fff;
+      transition: transform 220ms ease, opacity 220ms ease;
+    }
+
+    .menu-btn.is-open span:nth-child(1) {
+      transform: translateY(7px) rotate(45deg);
+    }
+
+    .menu-btn.is-open span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .menu-btn.is-open span:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg);
+    }
+
+    .mobile-menu {
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 30px;
+      background: #000;
+    }
+
+    .mobile-menu[aria-hidden="true"] {
+      visibility: hidden;
+    }
+
+    .mobile-menu.is-open {
+      display: flex;
+      visibility: visible;
+    }
+
+    .progress {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: #fff;
+      transition: width 150ms ease-out;
+    }
+
+    main {
+      padding: 40px 0 0;
+    }
+
+    .hero {
+      padding: 0 0 64px;
+    }
+
+    .hero-meta {
+      max-width: 720px;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .meta-line {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 18px;
+      margin-top: 26px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .meta-line strong {
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 30px;
+    }
+
+    .chip {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: #4b5563;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      padding: 6px 12px;
+      text-transform: uppercase;
+    }
+
+    .score-strip {
+      display: grid;
+      grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr);
+      gap: 28px;
+      align-items: start;
+      margin-top: 42px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 28px;
+    }
+
+    .score {
+      color: var(--ink);
+      font-size: clamp(46px, 8vw, 76px);
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .score-label {
+      margin-bottom: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .section {
+      padding: 56px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .section-intro {
+      max-width: 760px;
+      margin-bottom: 32px;
+      font-size: 15px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 24px;
+    }
+
+    .mt-24 {
+      margin-top: 24px;
+    }
+
+    .cards-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .cards-4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 0.42fr);
+      gap: 32px;
+      align-items: start;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+      padding: 24px;
+      transition: border-color 180ms ease;
+    }
+
+    .card:hover {
+      border-color: #9ca3af;
+    }
+
+    .card p {
+      margin-bottom: 0;
+      font-size: 14px;
+    }
+
+    .status,
+    .ok,
+    .warn,
+    .bad {
+      font-weight: 700;
+    }
+
+    .ok {
+      color: var(--ok);
+    }
+
+    .warn {
+      color: var(--warn);
+    }
+
+    .bad {
+      color: var(--bad);
+    }
+
+    .status {
+      display: inline-block;
+      color: #374151;
+      font-size: 14px;
+    }
+
+    .status.ok,
+    .status.warn,
+    .status.bad {
+      background: transparent;
+      padding: 0;
+    }
+
+    .status.ok {
+      color: var(--ok);
+    }
+
+    .status.warn {
+      color: var(--warn);
+    }
+
+    .status.bad {
+      color: var(--bad);
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    table {
+      width: 100%;
+      min-width: 720px;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th,
+    td {
+      border-bottom: 1px solid var(--line);
+      padding: 16px 20px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: var(--soft);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .note {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--soft);
+      padding: 24px;
+    }
+
+    .checklist {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .checklist li {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 18px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .checklist strong {
+      color: var(--ink);
+    }
+
+    .mark {
+      flex: 0 0 auto;
+      width: 22px;
+      color: var(--muted);
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .mark.ok {
+      color: var(--ok);
+    }
+
+    .mark.warn {
+      color: var(--warn);
+    }
+
+    .info-term {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      flex-wrap: wrap;
+    }
+
+    .tooltip {
+      position: relative;
+      display: inline-flex;
+      vertical-align: middle;
+    }
+
+    .tooltip-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      border: 1px solid #d1d5db;
+      border-radius: 999px;
+      background: #fff;
+      color: #6b7280;
+      cursor: help;
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 1;
+      padding: 0;
+    }
+
+    .tooltip-panel {
+      position: absolute;
+      bottom: calc(100% + 10px);
+      left: 50%;
+      z-index: 20;
+      width: min(280px, calc(100vw - 48px));
+      border-radius: 10px;
+      background: #111827;
+      color: rgba(255, 255, 255, 0.82);
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.5;
+      opacity: 0;
+      padding: 12px 14px;
+      pointer-events: none;
+      text-align: left;
+      transform: translate(-50%, 8px);
+      transition: opacity 160ms ease, transform 160ms ease;
+    }
+
+    .tooltip-panel::after {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-top: 6px solid #111827;
+      border-right: 6px solid transparent;
+      border-left: 6px solid transparent;
+      content: "";
+      transform: translateX(-50%);
+    }
+
+    .tooltip:hover .tooltip-panel,
+    .tooltip:focus-within .tooltip-panel,
+    .tooltip.is-open .tooltip-panel {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translate(-50%, 0);
+    }
+
+    td .tooltip-panel {
+      left: 0;
+      transform: translate(0, 8px);
+    }
+
+    td .tooltip-panel::after {
+      left: 16px;
+      transform: none;
+    }
+
+    td .tooltip:hover .tooltip-panel,
+    td .tooltip:focus-within .tooltip-panel,
+    td .tooltip.is-open .tooltip-panel {
+      transform: translate(0, 0);
+    }
+
+    .closing {
+      margin-top: 24px;
+      background: #000;
+      color: #fff;
+      padding: 90px 24px;
+      text-align: center;
+    }
+
+    .closing h2 {
+      max-width: 760px;
+      margin: 0 auto 18px;
+      color: #fff;
+      font-size: clamp(30px, 4vw, 48px);
+    }
+
+    .closing p {
+      max-width: 680px;
+      margin: 0 auto;
+      color: rgba(255, 255, 255, 0.68);
+      font-size: 15px;
+    }
+
+    .footer {
+      padding: 44px 24px;
+      color: #9ca3af;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .back-to-top {
+      position: fixed;
+      right: 28px;
+      bottom: 28px;
+      z-index: 40;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border: 0;
+      border-radius: 999px;
+      background: #000;
+      color: #fff;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(16px);
+      transition: opacity 220ms ease, transform 220ms ease, background 180ms ease;
+    }
+
+    .back-to-top:hover {
+      background: #1f2937;
+    }
+
+    .back-to-top.is-visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .reveal-item {
+      opacity: 1;
+      transform: none;
+    }
+
+    .js .reveal-item {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 700ms ease, transform 700ms ease;
+    }
+
+    .js .reveal-item.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 940px) {
+      .nav {
+        display: none;
+      }
+
+      .menu-btn {
+        display: block;
+      }
+
+      .cards-3,
+      .cards-4,
+      .checklist,
+      .score-strip,
+      .split {
+        grid-template-columns: 1fr;
+      }
+
+      .section {
+        padding: 46px 0;
+      }
+    }
+
+    @media (max-width: 640px) {
+      h1 {
+        max-width: 360px;
+        margin-bottom: 16px;
+        font-size: clamp(30px, 10vw, 38px);
+        line-height: 1.08;
+      }
+
+      h2 {
+        margin-bottom: 18px;
+        font-size: clamp(24px, 8vw, 30px);
+      }
+
+      h3 {
+        font-size: 15px;
+      }
+
+      .shell {
+        padding-right: 18px;
+        padding-left: 18px;
+      }
+
+      .topbar-inner {
+        min-height: 68px;
+      }
+
+      .brand img {
+        height: 27px;
+      }
+
+      .mobile-menu {
+        gap: 24px;
+        padding: 86px 24px 32px;
+      }
+
+      .mobile-menu a {
+        font-size: 13px;
+      }
+
+      main {
+        padding-top: 28px;
+      }
+
+      .hero {
+        padding-bottom: 42px;
+      }
+
+      .hero-meta,
+      .section-intro,
+      .score-strip p,
+      .closing p {
+        font-size: 14px;
+      }
+
+      .meta-line {
+        display: grid;
+        gap: 6px;
+        margin-top: 22px;
+      }
+
+      .chips {
+        gap: 7px;
+        margin-top: 24px;
+      }
+
+      .chip {
+        font-size: 11px;
+        letter-spacing: 0.06em;
+        padding: 5px 10px;
+      }
+
+      .score-strip {
+        gap: 16px;
+        margin-top: 30px;
+      }
+
+      .score {
+        font-size: clamp(42px, 18vw, 62px);
+      }
+
+      .score-label {
+        font-size: 11px;
+      }
+
+      .section {
+        padding: 38px 0;
+      }
+
+      .section-intro {
+        margin-bottom: 24px;
+      }
+
+      .grid {
+        gap: 14px;
+      }
+
+      .score-strip,
+      .card,
+      .note,
+      .checklist li {
+        padding: 18px;
+      }
+
+      .card p,
+      .status,
+      .checklist li {
+        font-size: 13px;
+      }
+
+      .table-wrap {
+        overflow: visible;
+        border: 0;
+        border-radius: 0;
+      }
+
+      table,
+      thead,
+      tbody,
+      tr,
+      th,
+      td {
+        display: block;
+      }
+
+      table {
+        min-width: 0;
+        font-size: 13px;
+      }
+
+      thead {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+      }
+
+      tr {
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: #fff;
+        margin-bottom: 12px;
+        overflow: hidden;
+      }
+
+      td {
+        display: grid;
+        grid-template-columns: minmax(92px, 0.38fr) minmax(0, 1fr);
+        gap: 12px;
+        align-items: start;
+        border-bottom: 1px solid var(--line);
+        padding: 12px 14px;
+      }
+
+      td::before {
+        color: var(--muted);
+        content: attr(data-label);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+
+      tr:last-child td {
+        border-bottom: 1px solid var(--line);
+      }
+
+      tr td:last-child {
+        border-bottom: 0;
+      }
+
+      code {
+        font-size: 0.88em;
+      }
+
+      .info-term {
+        gap: 6px;
+      }
+
+      .tooltip {
+        position: static;
+      }
+
+      .tooltip-panel,
+      td .tooltip-panel {
+        position: fixed;
+        top: auto;
+        right: 18px;
+        bottom: 18px;
+        left: 18px;
+        width: auto;
+        max-height: 45vh;
+        overflow: auto;
+        transform: translateY(12px);
+      }
+
+      .tooltip-panel::after {
+        display: none;
+      }
+
+      .tooltip:hover .tooltip-panel,
+      .tooltip:focus-within .tooltip-panel,
+      .tooltip.is-open .tooltip-panel,
+      td .tooltip:hover .tooltip-panel,
+      td .tooltip:focus-within .tooltip-panel,
+      td .tooltip.is-open .tooltip-panel {
+        transform: translateY(0);
+      }
+
+      .closing {
+        margin-top: 12px;
+        padding: 66px 18px;
+      }
+
+      .footer {
+        padding: 34px 18px;
+        font-size: 10px;
+        line-height: 1.7;
+      }
+
+      .back-to-top {
+        display: none;
+      }
+    }
+
+    @media print {
+      .topbar,
+      .back-to-top {
+        display: none;
+      }
+
+      main {
+        padding-top: 0;
+      }
+
+      .section,
+      .card,
+      .table-wrap,
+      .checklist li,
+      .note {
+        break-inside: avoid;
+      }
+
+      .reveal-item {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.001ms !important;
+      }
+
+      .js .reveal-item {
+        opacity: 1;
+        transform: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <a class="brand" href="#" aria-label="Metzer">
+        <img src="metzer-brand.png" width="155" height="49" alt="Metzer Logo" decoding="async" />
+      </a>
+
+      <nav class="nav" aria-label="Navegación principal">
+        <a href="#resumen">Resumen</a>
+        <a href="#dns">DNS</a>
+        <a href="#correo">Correo</a>
+        <a href="#ssl">SSL</a>
+        <a href="#validacion">Validación</a>
+        <a href="#pendientes">Pendientes</a>
+      </nav>
+
+      <button id="menu-btn" class="menu-btn" type="button" aria-label="Abrir menú" aria-controls="mobile-menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+
+    <div id="mobile-menu" class="mobile-menu" aria-label="Menú móvil" aria-hidden="true">
+      <a href="#resumen">Resumen</a>
+      <a href="#dns">DNS</a>
+      <a href="#correo">Correo</a>
+      <a href="#ssl">SSL</a>
+      <a href="#validacion">Validación</a>
+      <a href="#pendientes">Pendientes</a>
+    </div>
+
+    <div id="progress-bar" class="progress"></div>
+  </header>
+
+  <main>
+    <section id="hero-section" class="hero">
+      <div class="shell">
+        <h1>Auditoría DNS, Correo y SSL.</h1>
+        <div class="reveal-item">
+          <p class="hero-meta">
+            Informe técnico actualizado para <strong class="ok">metzer.com.ar</strong>, con foco en resolución DNS,
+            seguridad de correo, autorización de certificados y compatibilidad operativa con Kinsta y Cloudflare.
+          </p>
+
+          <div class="meta-line">
+            <span>Fecha: <strong>Junio 2026</strong></span>
+            <span>Dominio: <strong>metzer.com.ar</strong></span>
+            <span>Puntuación: <strong>9/10</strong></span>
+          </div>
+
+          <div class="chips" aria-label="Alcance del informe">
+            <span class="chip">DNS</span>
+            <span class="chip">SSL</span>
+            <span class="chip">Correo</span>
+            <span class="chip">CAA</span>
+            <span class="chip">Kinsta</span>
+            <span class="chip">Cloudflare</span>
+          </div>
+        </div>
+
+        <div class="score-strip reveal-item">
+          <div>
+            <p class="score-label">Puntuación general</p>
+            <div class="score">9/10</div>
+          </div>
+          <p>
+            Configuración saludable. No se detectan bloqueos críticos para sitio web, correo corporativo, SSL ni migración a Kinsta/Cloudflare. Las mejoras pendientes son DNSSEC y PTR.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="resumen" class="section">
+      <div class="shell">
+        <h2 class="reveal-item">Resumen ejecutivo</h2>
+        <p class="section-intro reveal-item">
+          La configuración actual resuelve correctamente, contempla IPv6, conserva correo corporativo y publica controles SPF, DKIM, DMARC y CAA. Las oportunidades de mejora se concentran en DNSSEC y alineación PTR.
+        </p>
+
+        <div class="grid cards-4">
+          <article class="card reveal-item"><h3>Resolución DNS</h3><p class="ok">Correcta</p></article>
+          <article class="card reveal-item"><h3>Correo MX</h3><p class="ok">Correcto</p></article>
+          <article class="card reveal-item"><h3>SSL</h3><p class="ok">Sectigo DV R36</p></article>
+          <article class="card reveal-item">
+            <h3>
+              <span class="info-term">DNSSEC
+                <span class="tooltip">
+                  <button class="tooltip-btn" type="button" aria-label="Información sobre DNSSEC" aria-expanded="false">i</button>
+                  <span class="tooltip-panel" role="tooltip">Pendiente de activación en el proveedor DNS y validación en NIC Argentina. No bloquea la operación actual, pero fortalece la integridad de las respuestas DNS.</span>
+                </span>
+              </span>
+            </h3>
+            <p class="warn">No habilitado</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="dns" class="section">
+      <div class="shell">
+        <h2 class="reveal-item">Registros DNS principales</h2>
+        <p class="section-intro reveal-item">Registros publicados y controles asociados a navegación, correo y emisión de certificados.</p>
+
+        <div class="table-wrap reveal-item">
+          <table>
+            <thead>
+              <tr>
+                <th>Registro</th>
+                <th>Valor detectado</th>
+                <th>Estado</th>
+                <th>Función</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td data-label="Registro"><strong>A</strong></td>
+                <td data-label="Valor detectado"><code>metzer.com.ar -> 200.58.111.25</code></td>
+                <td data-label="Estado"><span class="status ok">Correcto</span></td>
+                <td data-label="Función">Resolución IPv4 del sitio.</td>
+              </tr>
+              <tr>
+                <td data-label="Registro"><strong>AAAA</strong></td>
+                <td data-label="Valor detectado"><code>2800:6c0:2::272</code></td>
+                <td data-label="Estado"><span class="status ok">Implementado</span></td>
+                <td data-label="Función">Resolución IPv6 disponible.</td>
+              </tr>
+              <tr>
+                <td data-label="Registro"><strong>MX</strong></td>
+                <td data-label="Valor detectado"><code>mail.metzer.com.ar</code> prioridad 0</td>
+                <td data-label="Estado"><span class="status ok">Correcto</span></td>
+                <td data-label="Función">Servidor primario de correo.</td>
+              </tr>
+              <tr>
+                <td data-label="Registro"><strong>MX</strong></td>
+                <td data-label="Valor detectado"><code>mx1.metzer.com.ar</code> prioridad 20</td>
+                <td data-label="Estado"><span class="status ok">Correcto</span></td>
+                <td data-label="Función">Servidor secundario de correo.</td>
+              </tr>
+              <tr>
+                <td data-label="Registro"><strong>NS</strong></td>
+                <td data-label="Valor detectado"><code>ns1.donweb.com</code> / <code>ns2.donweb.com</code></td>
+                <td data-label="Estado"><span class="status ok">Delegado</span></td>
+                <td data-label="Función">Autoridad DNS actual.</td>
+              </tr>
+              <tr>
+                <td data-label="Registro">
+                  <strong class="info-term">PTR
+                    <span class="tooltip">
+                      <button class="tooltip-btn" type="button" aria-label="Información sobre PTR" aria-expanded="false">i</button>
+                      <span class="tooltip-panel" role="tooltip">Debe solicitarse al proveedor que administra la IP 200.58.111.25. El objetivo es que la reversa apunte a mail.metzer.com.ar.</span>
+                    </span>
+                  </strong>
+                </td>
+                <td data-label="Valor detectado"><code>200.58.111.25</code> pendiente de alineación</td>
+                <td data-label="Estado"><span class="status warn">Mejorable</span></td>
+                <td data-label="Función">Reputación y trazabilidad del correo saliente.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="correo" class="section">
+      <div class="shell split">
+        <div>
+          <h2 class="reveal-item">Autenticación de correo</h2>
+          <p class="section-intro reveal-item">Los controles esenciales de autenticación están activos y reducen riesgo de spoofing o rechazo por proveedores externos.</p>
+
+          <div class="table-wrap reveal-item">
+            <table>
+              <thead>
+                <tr>
+                  <th>Control</th>
+                  <th>Registro</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td data-label="Control"><strong>SPF</strong></td>
+                  <td data-label="Registro"><code>v=spf1 include:spf.hostmar.com -all</code></td>
+                  <td data-label="Estado"><span class="status ok">Correcto</span></td>
+                </tr>
+                <tr>
+                  <td data-label="Control"><strong>DKIM</strong></td>
+                  <td data-label="Registro"><code>mail._domainkey.metzer.com.ar</code></td>
+                  <td data-label="Estado"><span class="status ok">Configurado</span></td>
+                </tr>
+                <tr>
+                  <td data-label="Control"><strong>DMARC</strong></td>
+                  <td data-label="Registro"><code>p=quarantine</code></td>
+                  <td data-label="Estado"><span class="status ok">Configurado</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <aside class="note reveal-item">
+          <h3>Impacto operativo</h3>
+          <p>La configuración DNS no modifica los servidores MX ni el flujo SMTP existente. Formularios web, SMTP externo y plataformas de email marketing pueden continuar operando sin cambios previstos.</p>
+        </aside>
+      </div>
+    </section>
+
+    <section id="ssl" class="section">
+      <div class="shell">
+        <h2 class="reveal-item">CAA y compatibilidad SSL</h2>
+        <p class="section-intro reveal-item">La autorización CAA permite emisión mediante Sectigo y Let's Encrypt, cubriendo DonWeb, Kinsta y Cloudflare.</p>
+
+        <div class="grid cards-3">
+          <article class="card reveal-item">
+            <h3>CAA issue</h3>
+            <p><code>sectigo.com</code></p>
+            <p class="ok">Autorizado</p>
+          </article>
+          <article class="card reveal-item">
+            <h3>CAA issue</h3>
+            <p><code>letsencrypt.org</code></p>
+            <p class="ok">Autorizado</p>
+          </article>
+          <article class="card reveal-item">
+            <h3>CAA iodef</h3>
+            <p><code>mailto:info@metzer.com.ar</code></p>
+            <p class="ok">Publicado</p>
+          </article>
+        </div>
+
+        <div class="table-wrap reveal-item mt-24">
+          <table>
+            <thead>
+              <tr>
+                <th>Proveedor</th>
+                <th>Estado SSL</th>
+                <th>Observación</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td data-label="Proveedor"><strong>DonWeb</strong></td><td data-label="Estado SSL"><span class="status ok">Compatible</span></td><td data-label="Observación">Certificado Sectigo DV R36 válido.</td></tr>
+              <tr><td data-label="Proveedor"><strong>Let's Encrypt</strong></td><td data-label="Estado SSL"><span class="status ok">Compatible</span></td><td data-label="Observación">Autorizado por registro CAA.</td></tr>
+              <tr><td data-label="Proveedor"><strong>Kinsta</strong></td><td data-label="Estado SSL"><span class="status ok">Compatible</span></td><td data-label="Observación">Sin bloqueo detectado para SSL automático.</td></tr>
+              <tr><td data-label="Proveedor"><strong>Cloudflare</strong></td><td data-label="Estado SSL"><span class="status ok">Compatible</span></td><td data-label="Observación">Compatible con validaciones de certificado.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="validacion" class="section">
+      <div class="shell">
+        <h2 class="reveal-item">Checklist de validación</h2>
+        <p class="section-intro reveal-item">Controles verificados y puntos que quedan abiertos para endurecimiento posterior.</p>
+
+        <ul class="checklist">
+          <li class="reveal-item"><span class="mark ok">✓</span><span><strong>Dominio</strong><br />Resuelve correctamente.</span></li>
+          <li class="reveal-item"><span class="mark ok">✓</span><span><strong>IPv6</strong><br />Registro AAAA configurado.</span></li>
+          <li class="reveal-item"><span class="mark ok">✓</span><span><strong>MX</strong><br />Registros de correo publicados.</span></li>
+          <li class="reveal-item"><span class="mark ok">✓</span><span><strong>SPF</strong><br />Política activa con <code>-all</code>.</span></li>
+          <li class="reveal-item"><span class="mark ok">✓</span><span><strong>DKIM</strong><br />Selector publicado.</span></li>
+          <li class="reveal-item"><span class="mark ok">✓</span><span><strong>DMARC</strong><br />Política <code>p=quarantine</code>.</span></li>
+          <li class="reveal-item"><span class="mark ok">✓</span><span><strong>SSL</strong><br />Certificado válido.</span></li>
+          <li class="reveal-item"><span class="mark ok">✓</span><span><strong>CAA</strong><br />Autoridades declaradas.</span></li>
+          <li class="reveal-item"><span class="mark ok">✓</span><span><strong>Kinsta</strong><br />Compatible.</span></li>
+          <li class="reveal-item"><span class="mark ok">✓</span><span><strong>Cloudflare</strong><br />Compatible.</span></li>
+          <li class="reveal-item">
+            <span class="mark warn">!</span>
+            <span>
+              <strong class="info-term">DNSSEC
+                <span class="tooltip">
+                  <button class="tooltip-btn" type="button" aria-label="Información sobre DNSSEC" aria-expanded="false">i</button>
+                  <span class="tooltip-panel" role="tooltip">Requiere activar firma DNSSEC en DonWeb y publicar/validar la cadena DS en NIC Argentina.</span>
+                </span>
+              </strong><br />Pendiente de activación.
+            </span>
+          </li>
+          <li class="reveal-item">
+            <span class="mark warn">!</span>
+            <span>
+              <strong class="info-term">PTR
+                <span class="tooltip">
+                  <button class="tooltip-btn" type="button" aria-label="Información sobre PTR" aria-expanded="false">i</button>
+                  <span class="tooltip-panel" role="tooltip">La reversa de la IP debe alinearse con mail.metzer.com.ar para mejorar consistencia y reputación del correo saliente.</span>
+                </span>
+              </strong><br />Pendiente alinear con <code>mail.metzer.com.ar</code>.
+            </span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="pendientes" class="section">
+      <div class="shell">
+        <h2 class="reveal-item">Recomendaciones pendientes</h2>
+        <p class="section-intro reveal-item">Acciones sugeridas para elevar la puntuación y fortalecer la operación del dominio.</p>
+
+        <div class="table-wrap reveal-item">
+          <table>
+            <thead>
+              <tr>
+                <th>Prioridad</th>
+                <th>Acción</th>
+                <th>Motivo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td data-label="Prioridad"><span class="status warn">Media</span></td>
+                <td data-label="Acción">
+                  <span class="info-term">Activar DNSSEC en DonWeb/NIC Argentina.
+                    <span class="tooltip">
+                      <button class="tooltip-btn" type="button" aria-label="Información sobre activación DNSSEC" aria-expanded="false">i</button>
+                      <span class="tooltip-panel" role="tooltip">Primero se firma la zona DNS en DonWeb; luego se publica el DS correspondiente en NIC Argentina para cerrar la cadena de confianza.</span>
+                    </span>
+                  </span>
+                </td>
+                <td data-label="Motivo">Protege la zona frente a manipulación de respuestas DNS.</td>
+              </tr>
+              <tr>
+                <td data-label="Prioridad"><span class="status warn">Media</span></td>
+                <td data-label="Acción">
+                  <span class="info-term">Solicitar PTR personalizado: <code>mail.metzer.com.ar -> 200.58.111.25</code>.
+                    <span class="tooltip">
+                      <button class="tooltip-btn" type="button" aria-label="Información sobre PTR personalizado" aria-expanded="false">i</button>
+                      <span class="tooltip-panel" role="tooltip">El PTR no se configura en la zona DNS del dominio, sino en la delegación inversa administrada por el proveedor de la IP.</span>
+                    </span>
+                  </span>
+                </td>
+                <td data-label="Motivo">Mejora reputación y consistencia del correo saliente.</td>
+              </tr>
+              <tr>
+                <td data-label="Prioridad"><span class="status ok">Baja</span></td>
+                <td data-label="Acción">Validar periódicamente SPF, DKIM y DMARC.</td>
+                <td data-label="Motivo">Evita degradación por cambios futuros en proveedores de correo.</td>
+              </tr>
+              <tr>
+                <td data-label="Prioridad"><span class="status ok">Baja</span></td>
+                <td data-label="Acción">Verificar compatibilidad IPv6 del sitio web.</td>
+                <td data-label="Motivo">Confirma experiencia estable para usuarios con conectividad IPv6.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <section class="closing" id="cierre">
+    <h2 class="reveal-item">Auditoría técnica validada.</h2>
+    <p class="reveal-item">Continuidad operativa preservada para sitio web, correo corporativo, certificados SSL e integración con infraestructura Kinsta/Cloudflare.</p>
+  </section>
+
+  <footer class="footer">
+    Informe generado a partir de la auditoría DNS, correo y SSL de metzer.com.ar · Última actualización: junio de 2026
+  </footer>
+
+  <button id="back-to-top" class="back-to-top" type="button" aria-label="Volver arriba">
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+    </svg>
+  </button>
+
+  <script>
+    (() => {
+      const menuBtn = document.getElementById("menu-btn");
+      const mobileMenu = document.getElementById("mobile-menu");
+      const progressBar = document.getElementById("progress-bar");
+      const backToTopBtn = document.getElementById("back-to-top");
+      const navLinks = document.querySelectorAll(".nav a, .mobile-menu a");
+      const tooltipButtons = document.querySelectorAll(".tooltip-btn");
+      const sectionIds = ["resumen", "dns", "correo", "ssl", "validacion", "pendientes"];
+      const navSections = sectionIds.map((id) => document.getElementById(id)).filter(Boolean);
+      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      const closeMenu = () => {
+        if (!menuBtn || !mobileMenu) return;
+        menuBtn.classList.remove("is-open");
+        mobileMenu.classList.remove("is-open");
+        menuBtn.setAttribute("aria-expanded", "false");
+        mobileMenu.setAttribute("aria-hidden", "true");
+        document.body.classList.remove("menu-open");
+      };
+
+      const closeTooltips = () => {
+        document.querySelectorAll(".tooltip.is-open").forEach((tooltip) => {
+          tooltip.classList.remove("is-open");
+          tooltip.querySelector(".tooltip-btn")?.setAttribute("aria-expanded", "false");
+        });
+      };
+
+      if (menuBtn && mobileMenu) {
+        menuBtn.addEventListener("click", () => {
+          const isOpen = !mobileMenu.classList.contains("is-open");
+          menuBtn.classList.toggle("is-open", isOpen);
+          mobileMenu.classList.toggle("is-open", isOpen);
+          menuBtn.setAttribute("aria-expanded", String(isOpen));
+          mobileMenu.setAttribute("aria-hidden", String(!isOpen));
+          document.body.classList.toggle("menu-open", isOpen);
+        });
+      }
+
+      navLinks.forEach((link) => {
+        link.addEventListener("click", closeMenu);
+      });
+
+      tooltipButtons.forEach((button) => {
+        button.addEventListener("click", (event) => {
+          const tooltip = button.closest(".tooltip");
+          if (!tooltip) return;
+
+          const isOpen = tooltip.classList.contains("is-open");
+          closeTooltips();
+
+          tooltip.classList.toggle("is-open", !isOpen);
+          button.setAttribute("aria-expanded", String(!isOpen));
+          event.stopPropagation();
+        });
+      });
+
+      document.addEventListener("click", closeTooltips);
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          closeMenu();
+          closeTooltips();
+        }
+      });
+
+      const setActiveNavLink = (currentHash) => {
+        navLinks.forEach((link) => {
+          if (link.getAttribute("href") === currentHash) {
+            link.setAttribute("aria-current", "page");
+          } else {
+            link.removeAttribute("aria-current");
+          }
+        });
+      };
+
+      const updateActiveNavOnScroll = () => {
+        let currentHash = "#";
+
+        navSections.forEach((section) => {
+          if (window.scrollY >= section.offsetTop - 140) {
+            currentHash = `#${section.id}`;
+          }
+        });
+
+        setActiveNavLink(currentHash);
+      };
+
+      const updateScrollUi = () => {
+        const height = document.documentElement.scrollHeight - window.innerHeight;
+        const scrolled = height > 0 ? (window.scrollY / height) * 100 : 0;
+
+        if (progressBar) {
+          progressBar.style.width = `${scrolled}%`;
+        }
+
+        if (backToTopBtn) {
+          backToTopBtn.classList.toggle("is-visible", window.scrollY > 420);
+        }
+
+        updateActiveNavOnScroll();
+      };
+
+      const revealItems = document.querySelectorAll(".reveal-item");
+
+      if (prefersReducedMotion || !("IntersectionObserver" in window)) {
+        revealItems.forEach((item) => item.classList.add("is-visible"));
+      } else {
+        const revealObserver = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+
+            const items = entry.target.classList.contains("reveal-item")
+              ? [entry.target]
+              : entry.target.querySelectorAll(".reveal-item");
+
+            items.forEach((item, index) => {
+              window.setTimeout(() => {
+                item.classList.add("is-visible");
+              }, index * 90);
+            });
+
+            revealObserver.unobserve(entry.target);
+          });
+        }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+
+        document.querySelectorAll("section, .hero").forEach((section) => {
+          revealObserver.observe(section);
+        });
+      }
+
+      backToTopBtn?.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: prefersReducedMotion ? "auto" : "smooth" });
+      });
+
+      window.addEventListener("scroll", updateScrollUi, { passive: true });
+      updateScrollUi();
+    })();
+  </script>
+</body>
+</html>
