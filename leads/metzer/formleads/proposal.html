@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Propuesta Comercial | Riego Inteligente by METZER</title>
+  <meta name="description" content="Propuesta comercial para transformar el formulario de Metzer en un sistema inteligente de captación y precalificación de proyectos agrícolas." />
+  <meta name="robots" content="noindex,nofollow" />
+  <meta name="theme-color" content="#000000" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Propuesta Comercial | Riego Inteligente by METZER" />
+  <meta property="og:description" content="Sistema inteligente de captación y precalificación de proyectos agrícolas para Metzer." />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    h1, h2 {
+      font-family: 'Playfair Display', serif;
+      letter-spacing: -0.015em;
+      line-height: 1.2;
+    }
+    .nav-link,
+    .mobile-link {
+      color: rgba(255, 255, 255, 0.72);
+      transition: color 180ms ease, opacity 180ms ease;
+    }
+    .nav-link:hover,
+    .mobile-link:hover,
+    .nav-link:focus-visible,
+    .mobile-link:focus-visible,
+    .nav-link[aria-current="page"],
+    .mobile-link[aria-current="page"] {
+      color: #ffffff;
+    }
+    .nav-link:focus-visible,
+    .mobile-link:focus-visible {
+      outline: 2px solid rgba(255, 255, 255, 0.72);
+      outline-offset: 4px;
+      border-radius: 4px;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.001ms !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-white text-gray-900">
+
+  <header class="border-b border-white/10 sticky top-0 bg-black/95 z-50">
+    <div class="max-w-6xl mx-auto px-6 py-6 flex items-center justify-between gap-4">
+      <a href="#" class="text-white leading-none" aria-label="Metzer">
+        <strong class="block text-lg tracking-[0.18em]">METZER</strong>
+        <span class="block text-[10px] uppercase tracking-[0.14em] text-white/60 mt-1">Riego inteligente</span>
+      </a>
+
+      <div class="flex items-center gap-6">
+        <nav class="hidden md:flex gap-6 text-xs font-medium uppercase tracking-wider" aria-label="Navegación principal">
+          <a href="#alcance" class="nav-link whitespace-nowrap">Alcance</a>
+          <a href="#planes" class="nav-link whitespace-nowrap">Planes</a>
+          <a href="#flujo" class="nav-link whitespace-nowrap">Flujo</a>
+          <a href="#roadmap" class="nav-link whitespace-nowrap">Roadmap</a>
+          <a href="#entregables" class="nav-link whitespace-nowrap">Entregables</a>
+          <a href="#contacto" class="nav-link whitespace-nowrap">Contacto</a>
+        </nav>
+
+        <button id="menu-btn" class="md:hidden flex flex-col gap-1.5 z-50 focus:outline-none" type="button" aria-label="Abrir menú" aria-controls="mobile-menu" aria-expanded="false">
+          <span id="line1" class="w-6 h-0.5 bg-white transition-all duration-300 origin-center"></span>
+          <span id="line2" class="w-6 h-0.5 bg-white transition-all duration-300"></span>
+          <span id="line3" class="w-6 h-0.5 bg-white transition-all duration-300 origin-center"></span>
+        </button>
+      </div>
+    </div>
+
+    <div id="mobile-menu" class="hidden fixed inset-0 bg-black flex flex-col items-center justify-center gap-8 text-lg font-medium uppercase tracking-widest z-40 md:hidden" aria-label="Menú móvil">
+      <a href="#alcance" class="mobile-link">Alcance</a>
+      <a href="#planes" class="mobile-link">Planes</a>
+      <a href="#flujo" class="mobile-link">Flujo</a>
+      <a href="#roadmap" class="mobile-link">Roadmap</a>
+      <a href="#entregables" class="mobile-link">Entregables</a>
+      <a href="#contacto" class="mobile-link">Contacto</a>
+    </div>
+
+    <div id="progress-bar" class="absolute bottom-0 left-0 h-[2px] bg-white w-0 transition-all duration-150 ease-out"></div>
+  </header>
+
+  <main class="py-10">
+    <section id="hero-section" class="max-w-6xl mx-auto px-6 mb-16">
+      <h1 class="text-4xl md:text-6xl font-semibold tracking-tight leading-tight md:leading-[1.12] max-w-5xl">
+        Propuesta comercial para Riego Inteligente.
+      </h1>
+      <div class="reveal-item opacity-0 translate-y-8 transition-all duration-700 mt-5 space-y-2 text-sm text-gray-500 max-w-3xl">
+        <p>Canal: <strong class="text-gray-900">riegointeligente.metzer.com.ar</strong></p>
+        <p>Sistema de captación, precalificación y derivación comercial para proyectos agrícolas.</p>
+      </div>
+    </section>
+
+    <section id="alcance" class="max-w-6xl mx-auto px-6 py-14 border-t">
+      <h2 class="text-xl font-semibold mb-6">Alcance de la propuesta</h2>
+
+      <div class="reveal-item opacity-0 translate-y-8 transition-all duration-700 flex flex-wrap gap-2 mb-8">
+        <span class="text-xs font-medium uppercase tracking-wider border rounded-full px-3 py-1 text-gray-600">Landing</span>
+        <span class="text-xs font-medium uppercase tracking-wider border rounded-full px-3 py-1 text-gray-600">Wizard</span>
+        <span class="text-xs font-medium uppercase tracking-wider border rounded-full px-3 py-1 text-gray-600">Email</span>
+        <span class="text-xs font-medium uppercase tracking-wider border rounded-full px-3 py-1 text-gray-600">Precalificación</span>
+        <span class="text-xs font-medium uppercase tracking-wider border rounded-full px-3 py-1 text-gray-600">Responsive</span>
+        <span class="text-xs font-medium uppercase tracking-wider border rounded-full px-3 py-1 text-gray-600">Escalable</span>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        <article class="reveal-item opacity-0 translate-y-8 transition-all duration-700 border rounded-xl p-6 hover:border-gray-400 transition-colors">
+          <h3 class="font-semibold mb-2">Problema</h3>
+          <p class="text-sm text-gray-600">El formulario actual recibe consultas con poca información y obliga al equipo comercial a calificar manualmente cada oportunidad.</p>
+        </article>
+        <article class="reveal-item opacity-0 translate-y-8 transition-all duration-700 border rounded-xl p-6 hover:border-gray-400 transition-colors">
+          <h3 class="font-semibold mb-2">Solución</h3>
+          <p class="text-sm text-gray-600">Un asistente paso a paso captura datos técnicos clave antes del primer contacto.</p>
+        </article>
+        <article class="reveal-item opacity-0 translate-y-8 transition-all duration-700 border rounded-xl p-6 hover:border-gray-400 transition-colors">
+          <h3 class="font-semibold mb-2">Resultado</h3>
+          <p class="text-sm text-gray-600">Leads mejor calificados, menor fricción operativa y oportunidades comerciales más claras.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="planes" class="max-w-6xl mx-auto px-6 py-16 border-t">
+      <h2 class="reveal-item opacity-0 translate-y-8 transition-all duration-700 text-xl font-semibold mb-8">Proyecto completo por etapas</h2>
+
+      <div class="grid gap-8">
+        <article class="reveal-item opacity-0 translate-y-8 transition-all duration-700 border-2 border-black rounded-xl p-8 relative bg-white shadow-xl">
+          <div class="absolute -top-3 left-6 bg-black text-white text-xs px-3 py-1 rounded">Proyecto integral</div>
+
+          <div class="grid md:grid-cols-[1fr_auto] gap-8 items-start">
+            <div>
+              <h3 class="text-lg font-semibold mb-2">Riego Inteligente by Metzer</h3>
+              <p class="text-sm text-gray-500">Ejecución completa del roadmap comercial: captación inicial, calculadoras, contenido técnico y generación orgánica de demanda.</p>
+            </div>
+
+            <div class="flex flex-col items-center md:items-end">
+              <p class="text-3xl font-semibold mb-2">USD 3.400</p>
+              <p class="max-w-xs text-gray-400 text-sm text-center md:text-right">Contratable completo o por fases. La Fase 1 deja una versión operativa de captación.</p>
+            </div>
+          </div>
+
+          <ul class="grid sm:grid-cols-2 lg:grid-cols-5 gap-3 text-sm text-gray-600 my-6">
+            <li class="border rounded-lg px-3 py-2">Wizard inicial</li>
+            <li class="border rounded-lg px-3 py-2">Calculadora de inversión</li>
+            <li class="border rounded-lg px-3 py-2">Ahorro de agua</li>
+            <li class="border rounded-lg px-3 py-2">Landings por cultivo</li>
+            <li class="border rounded-lg px-3 py-2">Biblioteca + SEO</li>
+          </ul>
+
+          <div class="border-t pt-4 mt-4 text-sm text-gray-700">
+            <p><strong>No incluye:</strong> pauta publicitaria, CRM externo, hosting pago ni soporte extendido posterior al deploy inicial.</p>
+          </div>
+        </article>
+
+        <div class="reveal-item opacity-0 translate-y-8 transition-all duration-700 overflow-x-auto pb-4">
+          <div class="relative min-w-[1120px]">
+            <div class="absolute left-8 right-8 top-7 h-px bg-gray-200"></div>
+
+            <div class="grid grid-cols-6 gap-4">
+              <article class="relative border rounded-xl bg-white p-5">
+                <span class="relative z-10 grid h-14 w-14 place-items-center rounded-full border-2 border-black bg-white text-sm font-semibold">01</span>
+                <h3 class="mt-5 font-semibold">Wizard inteligente</h3>
+                <p class="mt-2 text-sm text-gray-600">Publicar landing, formulario guiado, validaciones, resumen, anti-spam y envío por email.</p>
+                <p class="mt-5 text-xl font-semibold">USD 900</p>
+              </article>
+
+              <article class="relative border rounded-xl bg-white p-5">
+                <span class="relative z-10 grid h-14 w-14 place-items-center rounded-full border bg-white text-sm font-semibold">02</span>
+                <h3 class="mt-5 font-semibold">Calculadora de inversión</h3>
+                <p class="mt-2 text-sm text-gray-600">Crear una estimación inicial para orientar expectativas y preparar la conversación comercial.</p>
+                <p class="mt-5 text-xl font-semibold">USD 500</p>
+              </article>
+
+              <article class="relative border rounded-xl bg-white p-5">
+                <span class="relative z-10 grid h-14 w-14 place-items-center rounded-full border bg-white text-sm font-semibold">03</span>
+                <h3 class="mt-5 font-semibold">Ahorro de agua</h3>
+                <p class="mt-2 text-sm text-gray-600">Desarrollar un argumento interactivo para comparar escenarios y aumentar intención.</p>
+                <p class="mt-5 text-xl font-semibold">USD 550</p>
+              </article>
+
+              <article class="relative border rounded-xl bg-white p-5">
+                <span class="relative z-10 grid h-14 w-14 place-items-center rounded-full border bg-white text-sm font-semibold">04</span>
+                <h3 class="mt-5 font-semibold">Landings por cultivo</h3>
+                <p class="mt-2 text-sm text-gray-600">Diseñar páginas segmentadas por cultivo con mensajes y llamados a la acción específicos.</p>
+                <p class="mt-5 text-xl font-semibold">USD 650</p>
+              </article>
+
+              <article class="relative border rounded-xl bg-white p-5">
+                <span class="relative z-10 grid h-14 w-14 place-items-center rounded-full border bg-white text-sm font-semibold">05</span>
+                <h3 class="mt-5 font-semibold">Biblioteca técnica</h3>
+                <p class="mt-2 text-sm text-gray-600">Estructurar contenido para educar, nutrir demanda y apoyar al equipo comercial.</p>
+                <p class="mt-5 text-xl font-semibold">USD 450</p>
+              </article>
+
+              <article class="relative border rounded-xl bg-white p-5">
+                <span class="relative z-10 grid h-14 w-14 place-items-center rounded-full border bg-white text-sm font-semibold">06</span>
+                <h3 class="mt-5 font-semibold">Portal SEO</h3>
+                <p class="mt-2 text-sm text-gray-600">Crear la base del portal orgánico para captar proyectos en etapa temprana.</p>
+                <p class="mt-5 text-xl font-semibold">USD 350</p>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal-item opacity-0 translate-y-8 transition-all duration-700 mt-10 p-6 border rounded-xl bg-gray-50">
+        <p class="text-sm text-gray-700">
+          Los valores siguen los pasos del roadmap. La Fase 1 funciona como lanzamiento mínimo operativo; las fases 2 a 6 agregan herramientas, segmentación y contenido para escalar la generación de demanda.
+        </p>
+      </div>
+    </section>
+
+    <section id="flujo" class="max-w-6xl mx-auto px-6 py-14 border-t">
+      <h2 class="reveal-item opacity-0 translate-y-8 transition-all duration-700 text-xl font-semibold mb-6">Asistente inteligente de proyectos</h2>
+      <p class="reveal-item opacity-0 translate-y-8 transition-all duration-700 max-w-3xl text-sm text-gray-600 mb-8">
+        El flujo convierte un pedido abierto en una ficha comercial accionable para priorizar la gestión del equipo técnico y de ventas.
+      </p>
+
+      <div class="reveal-item opacity-0 translate-y-8 transition-all duration-700 overflow-x-auto border rounded-xl">
+        <table class="w-full min-w-[760px] text-sm">
+          <thead class="bg-gray-50 text-left text-xs uppercase tracking-wider text-gray-500">
+            <tr>
+              <th class="px-5 py-4 font-medium">Paso</th>
+              <th class="px-5 py-4 font-medium">Dato solicitado</th>
+              <th class="px-5 py-4 font-medium">Valor comercial</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y">
+            <tr><td class="px-5 py-4 font-medium">1</td><td class="px-5 py-4">Tipo de proyecto</td><td class="px-5 py-4 text-gray-600">Distingue proyecto nuevo, mejora o ampliación.</td></tr>
+            <tr><td class="px-5 py-4 font-medium">2</td><td class="px-5 py-4">Cultivo</td><td class="px-5 py-4 text-gray-600">Orienta solución, lenguaje técnico y prioridad.</td></tr>
+            <tr><td class="px-5 py-4 font-medium">3</td><td class="px-5 py-4">Superficie</td><td class="px-5 py-4 text-gray-600">Ayuda a estimar escala y potencial comercial.</td></tr>
+            <tr><td class="px-5 py-4 font-medium">4</td><td class="px-5 py-4">Provincia</td><td class="px-5 py-4 text-gray-600">Facilita derivación territorial y contexto agrícola.</td></tr>
+            <tr><td class="px-5 py-4 font-medium">5</td><td class="px-5 py-4">Fuente de agua</td><td class="px-5 py-4 text-gray-600">Anticipa restricciones técnicas.</td></tr>
+            <tr><td class="px-5 py-4 font-medium">6</td><td class="px-5 py-4">Sistema existente</td><td class="px-5 py-4 text-gray-600">Separa instalación inicial de reconversión.</td></tr>
+            <tr><td class="px-5 py-4 font-medium">7</td><td class="px-5 py-4">Fecha estimada</td><td class="px-5 py-4 text-gray-600">Ordena urgencia y probabilidad de cierre.</td></tr>
+            <tr><td class="px-5 py-4 font-medium">8</td><td class="px-5 py-4">Datos de contacto</td><td class="px-5 py-4 text-gray-600">Habilita seguimiento directo.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="roadmap" class="max-w-6xl mx-auto px-6 py-14 border-t">
+      <h2 class="reveal-item opacity-0 translate-y-8 transition-all duration-700 text-xl font-semibold mb-8">Roadmap evolutivo</h2>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <article class="reveal-item opacity-0 translate-y-8 transition-all duration-700 border rounded-xl p-6 hover:border-gray-400 transition-colors"><h3 class="font-semibold mb-2">Fase 1 · Wizard</h3><p class="text-sm text-gray-600">Primera versión operativa para captar consultas.</p></article>
+        <article class="reveal-item opacity-0 translate-y-8 transition-all duration-700 border rounded-xl p-6 hover:border-gray-400 transition-colors"><h3 class="font-semibold mb-2">Fase 2 · Inversión</h3><p class="text-sm text-gray-600">Calculadora inicial para orientar expectativas comerciales.</p></article>
+        <article class="reveal-item opacity-0 translate-y-8 transition-all duration-700 border rounded-xl p-6 hover:border-gray-400 transition-colors"><h3 class="font-semibold mb-2">Fase 3 · Ahorro de agua</h3><p class="text-sm text-gray-600">Argumento técnico-comercial para aumentar intención.</p></article>
+        <article class="reveal-item opacity-0 translate-y-8 transition-all duration-700 border rounded-xl p-6 hover:border-gray-400 transition-colors"><h3 class="font-semibold mb-2">Fase 4 · Cultivos</h3><p class="text-sm text-gray-600">Landing pages segmentadas por necesidad agrícola.</p></article>
+        <article class="reveal-item opacity-0 translate-y-8 transition-all duration-700 border rounded-xl p-6 hover:border-gray-400 transition-colors"><h3 class="font-semibold mb-2">Fase 5 · Biblioteca</h3><p class="text-sm text-gray-600">Contenido técnico para educación y nutrición de demanda.</p></article>
+        <article class="reveal-item opacity-0 translate-y-8 transition-all duration-700 border rounded-xl p-6 hover:border-gray-400 transition-colors"><h3 class="font-semibold mb-2">Fase 6 · SEO</h3><p class="text-sm text-gray-600">Canal orgánico para captar proyectos en etapa temprana.</p></article>
+      </div>
+    </section>
+
+    <section id="entregables" class="max-w-6xl mx-auto px-6 py-14 border-t">
+      <h2 class="reveal-item opacity-0 translate-y-8 transition-all duration-700 text-xl font-semibold mb-8">Entregables incluidos</h2>
+
+      <div class="reveal-item opacity-0 translate-y-8 transition-all duration-700 grid md:grid-cols-2 gap-6 text-sm text-gray-600">
+        <div class="border rounded-xl p-6 bg-gray-50"><p><strong class="text-gray-900">Subdominio operativo</strong><br>Base lista para publicar el canal especializado.</p></div>
+        <div class="border rounded-xl p-6 bg-gray-50"><p><strong class="text-gray-900">Landing de captación</strong><br>Mensaje enfocado en proyectos de riego.</p></div>
+        <div class="border rounded-xl p-6 bg-gray-50"><p><strong class="text-gray-900">Wizard responsive</strong><br>Formulario guiado para mobile y desktop.</p></div>
+        <div class="border rounded-xl p-6 bg-gray-50"><p><strong class="text-gray-900">Envío por email</strong><br>Recepción de datos para gestión comercial.</p></div>
+        <div class="border rounded-xl p-6 bg-gray-50"><p><strong class="text-gray-900">Código fuente completo</strong><br>Entrega editable y extensible.</p></div>
+        <div class="border rounded-xl p-6 bg-gray-50"><p><strong class="text-gray-900">Base para integraciones</strong><br>Preparado para CRM, analítica o automatizaciones futuras.</p></div>
+      </div>
+    </section>
+  </main>
+
+  <section id="contacto" class="bg-black text-white text-center py-24 px-6">
+    <div class="max-w-3xl mx-auto">
+      <h2 class="reveal-item opacity-0 translate-y-8 transition-all duration-700 text-2xl font-semibold tracking-tight mb-6">
+        Una primera versión operativa.
+        <br>Un canal comercial listo para evolucionar.
+      </h2>
+
+      <p class="reveal-item opacity-0 translate-y-8 transition-all duration-700 text-white/60 text-sm max-w-2xl mx-auto">
+        Riego Inteligente convierte visitas en consultas con contexto, reduce el trabajo manual de calificación
+        y deja una base sólida para el canal comercial digital de Metzer.
+      </p>
+    </div>
+  </section>
+
+  <footer class="py-12 text-center text-xs text-gray-400 uppercase tracking-widest">
+    SmartWeb - Propuesta Comercial Riego Inteligente - Junio 2026
+  </footer>
+
+  <button id="back-to-top" class="hidden md:flex fixed bottom-8 right-8 bg-black text-white p-3 rounded-full shadow-2xl opacity-0 translate-y-10 transition-all duration-300 z-50 pointer-events-none hover:bg-gray-800 group items-center justify-center" aria-label="Volver arriba">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 transition-transform group-hover:-translate-y-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+    </svg>
+  </button>
+
+  <script>
+    const menuBtn = document.getElementById("menu-btn");
+    const mobileMenu = document.getElementById("mobile-menu");
+    const line1 = document.getElementById("line1");
+    const line2 = document.getElementById("line2");
+    const line3 = document.getElementById("line3");
+    const mobileLinks = document.querySelectorAll(".mobile-link");
+    const navLinks = document.querySelectorAll(".nav-link, .mobile-link");
+    const sectionIds = ["alcance", "planes", "flujo", "roadmap", "entregables", "contacto"];
+    const navSections = sectionIds.map((id) => document.getElementById(id)).filter(Boolean);
+    const backToTopBtn = document.getElementById("back-to-top");
+
+    const setActiveNavLink = (currentHash) => {
+      navLinks.forEach((link) => {
+        if (link.getAttribute("href") === currentHash) {
+          link.setAttribute("aria-current", "page");
+        } else {
+          link.removeAttribute("aria-current");
+        }
+      });
+    };
+
+    const updateActiveNavOnScroll = () => {
+      let currentHash = "#";
+
+      navSections.forEach((section) => {
+        if (window.scrollY >= section.offsetTop - 140) {
+          currentHash = `#${section.id}`;
+        }
+      });
+
+      setActiveNavLink(currentHash);
+    };
+
+    const closeMenu = () => {
+      mobileMenu.classList.add("hidden");
+      menuBtn.setAttribute("aria-expanded", "false");
+      line1.classList.remove("rotate-45", "translate-y-2");
+      line2.classList.remove("opacity-0");
+      line3.classList.remove("-rotate-45", "-translate-y-2");
+      document.body.classList.remove("overflow-hidden");
+    };
+
+    menuBtn.addEventListener("click", () => {
+      const isOpen = mobileMenu.classList.toggle("hidden") === false;
+      menuBtn.setAttribute("aria-expanded", String(isOpen));
+      line1.classList.toggle("rotate-45", isOpen);
+      line1.classList.toggle("translate-y-2", isOpen);
+      line2.classList.toggle("opacity-0", isOpen);
+      line3.classList.toggle("-rotate-45", isOpen);
+      line3.classList.toggle("-translate-y-2", isOpen);
+      document.body.classList.toggle("overflow-hidden", isOpen);
+    });
+
+    mobileLinks.forEach((link) => {
+      link.addEventListener("click", closeMenu);
+    });
+
+    window.addEventListener("scroll", () => {
+      const progressBar = document.getElementById("progress-bar");
+      const height = document.documentElement.scrollHeight - window.innerHeight;
+      const scrolled = height > 0 ? (window.scrollY / height) * 100 : 0;
+      progressBar.style.width = `${scrolled}%`;
+
+      if (window.scrollY > 400) {
+        backToTopBtn.classList.remove("opacity-0", "translate-y-10", "pointer-events-none");
+        backToTopBtn.classList.add("opacity-100", "translate-y-0", "pointer-events-auto");
+      } else {
+        backToTopBtn.classList.add("opacity-0", "translate-y-10", "pointer-events-none");
+        backToTopBtn.classList.remove("opacity-100", "translate-y-0", "pointer-events-auto");
+      }
+
+      updateActiveNavOnScroll();
+    }, { passive: true });
+
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const revealItems = document.querySelectorAll(".reveal-item");
+
+    if (prefersReducedMotion || !("IntersectionObserver" in window)) {
+      revealItems.forEach((item) => {
+        item.classList.remove("opacity-0", "translate-y-8");
+        item.classList.add("opacity-100", "translate-y-0");
+      });
+    } else {
+      const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const items = entry.target.querySelectorAll(".reveal-item");
+
+          items.forEach((item, index) => {
+            window.setTimeout(() => {
+              item.classList.remove("opacity-0", "translate-y-8");
+              item.classList.add("opacity-100", "translate-y-0");
+            }, index * 100);
+          });
+
+          revealObserver.unobserve(entry.target);
+        });
+      }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+
+      document.querySelectorAll("section").forEach((section) => {
+        revealObserver.observe(section);
+      });
+    }
+
+    backToTopBtn.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: prefersReducedMotion ? "auto" : "smooth" });
+    });
+
+    updateActiveNavOnScroll();
+  </script>
+</body>
+</html>

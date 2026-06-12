@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Metzer | Solicitud de Proyecto de Riego</title>
+<meta name="description" content="Formulario para solicitar asesoramiento de Metzer en proyectos de riego.">
+<meta name="robots" content="noindex,follow">
+<meta property="og:title" content="Metzer | Solicitud de Proyecto de Riego">
+<meta property="og:description" content="Complete el formulario y un especialista de Metzer analizará su proyecto de riego.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://contacto.metzer.com.ar/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="container">
+    <img src="metzer-brand.png" alt="Metzer" class="logo" id="headerLogo">
+  </div>
+</header>
+
+<main>
+<section class="hero">
+  <div class="container">
+    <span class="eyebrow">Metzer Argentina</span>
+    <h1>Riego Inteligente</h1>
+
+    <div class="wizard-card">
+      <div class="progress">
+        <div
+          class="progress-bar"
+          id="progressBar"
+          role="progressbar"
+          aria-valuemin="1"
+          aria-valuemax="6"
+          aria-valuenow="1"
+          aria-label="Progreso del formulario"
+          style="width:16%"
+        ></div>
+      </div>
+
+      <p class="step-status" id="stepStatus" aria-live="polite">Paso 1 de 6 · Proyecto</p>
+
+      <form id="wizardForm">
+        <!-- Paso 1: Definición del Proyecto -->
+        <section class="step active" aria-labelledby="stepTipoTitle">
+          <h2 id="stepTipoTitle" tabindex="-1">
+            ¿Qué tipo de proyecto es?
+            <span class="tooltip-container">
+              <button type="button" class="tooltip-btn" aria-label="Ayuda"><i data-lucide="info"></i></button>
+              <span class="tooltip-content">Define la complejidad técnica.</span>
+            </span>
+          </h2>
+          <div class="cards" role="radiogroup">
+            <label class="card">
+              <input type="radio" name="tipo_proyecto" value="Nuevo Proyecto" required>
+              <i data-lucide="plus-circle" aria-hidden="true"></i>
+              <div class="card-info">
+                <strong>Nuevo</strong>
+              </div>
+            </label>
+            <label class="card">
+              <input type="radio" name="tipo_proyecto" value="Mejora">
+              <i data-lucide="settings" aria-hidden="true"></i>
+              <div class="card-info">
+                <strong>Mejora</strong> <!-- Texto minimizado -->
+              </div>
+            </label>
+            <label class="card">
+              <input type="radio" name="tipo_proyecto" value="Ampliación">
+              <i data-lucide="trending-up" aria-hidden="true"></i>
+              <div class="card-info">
+                <strong>Ampliación</strong> <!-- Texto minimizado -->
+              </div>
+            </label>
+          </div>
+          <p class="field-error" id="tipoError"></p>
+
+          <h2 class="mt-8" id="stepCultivoTitle">
+            ¿Qué cultivo desea irrigar?
+            <span class="tooltip-container">
+              <button type="button" class="tooltip-btn" aria-label="Ayuda"><i data-lucide="info"></i></button>
+              <span class="tooltip-content">Orienta la solución técnica.</span>
+            </span>
+          </h2>
+            <div class="cards">
+
+            <label class="card">
+              <input type="radio" name="cultivo" value="Vid" required>
+              <i data-lucide="grape" aria-hidden="true"></i>
+              <div class="card-info">
+                <strong>Vid</strong>
+              </div>
+            </label> <!-- Texto minimizado -->
+
+            <label class="card">
+              <input type="radio" name="cultivo" value="Olivo">
+              <i data-lucide="leaf" aria-hidden="true"></i>
+              <div class="card-info">
+                <strong>Olivo</strong>
+              </div>
+            </label> <!-- Texto minimizado -->
+
+            <label class="card">
+              <input type="radio" name="cultivo" value="Nogal">
+              <i data-lucide="nut" aria-hidden="true"></i>
+              <div class="card-info">
+                <strong>Nogal</strong>
+              </div>
+            </label> <!-- Texto minimizado -->
+
+            <label class="card">
+              <input type="radio" name="cultivo" value="Otro">
+              <i data-lucide="sprout" aria-hidden="true"></i>
+              <div class="card-info">
+                <strong>Otro tipo</strong>
+              </div>
+            </label>
+          </div>
+          <p class="field-error" id="cultivoError"></p>
+        </section>
+
+        <!-- Paso 2: Escala y Ubicación -->
+        <section class="step" aria-labelledby="stepScaleTitle">
+          <h2 id="stepScaleTitle" tabindex="-1">
+            Ubicación y Escala
+            <span class="tooltip-container">
+              <button type="button" class="tooltip-btn" aria-label="Ayuda"><i data-lucide="info"></i></button>
+              <span class="tooltip-content">Para derivar al técnico de su zona.</span>
+            </span>
+          </h2>
+          <div class="grid">
+            <div class="field-group">
+              <label for="superficie">Superficie</label>
+              <select id="superficie" name="superficie">
+                <option>Menos de 5 ha</option>
+                <option>5 - 20 ha</option>
+                <option>20 - 50 ha</option>
+                <option>Más de 50 ha</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label for="provincia">Provincia</label>
+              <select id="provincia" name="provincia">
+                <option>Mendoza</option>
+                <option>San Juan</option>
+                <option>La Rioja</option>
+                <option>Salta / Jujuy</option>
+                <option>Patagonia</option>
+                <option>Otra</option>
+              </select>
+            </div>
+          </div>
+        </section>
+
+        <!-- Paso 3: Parámetros Técnicos -->
+        <section class="step" aria-labelledby="stepTechTitle">
+          <h2 id="stepTechTitle" tabindex="-1">
+            Detalles Técnicos
+            <span class="tooltip-container">
+              <button type="button" class="tooltip-btn" aria-label="Ayuda"><i data-lucide="info"></i></button>
+              <span class="tooltip-content">Anticipa restricciones de filtrado y hardware.</span>
+            </span>
+          </h2>
+          <div class="field-group mb-4">
+            <label for="fuente_agua">Fuente de agua</label>
+            <select id="fuente_agua" name="fuente_agua">
+              <option>Perforación / Pozo</option>
+              <option>Canal de riego</option>
+              <option>Reservorio / Represa</option>
+              <option>Mixta / Otra</option>
+            </select>
+          </div>
+          <div class="field-group" id="sistemaExistenteContainer">
+            <label for="sistema_existente">¿Posee sistema de riego?</label>
+            <select id="sistema_existente" name="sistema_existente">
+              <option value="Ninguno">No, actualmente es secano / manto</option>
+              <option value="Goteo">Sí, goteo</option>
+              <option value="Aspersión">Sí, aspersión</option>
+            </select>
+          </div>
+        </section>
+
+        <!-- Paso 4: Plazo -->
+        <section class="step" aria-labelledby="stepFechaTitle">
+          <h2 id="stepFechaTitle" tabindex="-1">
+            ¿Cuándo planea iniciar?
+            <span class="tooltip-container">
+              <button type="button" class="tooltip-btn" aria-label="Ayuda"><i data-lucide="info"></i></button>
+              <span class="tooltip-content">Define la urgencia de la respuesta.</span>
+            </span>
+          </h2>
+          <div class="field-group full">
+            <select id="fecha_estimada" name="fecha_estimada">
+              <option>Lo antes posible</option>
+              <option>Próximos 3 meses</option>
+              <option>Próximos 6 meses</option>
+              <option>Solo presupuesto preliminar</option>
+            </select>
+            <input type="hidden" name="estado" value="Roadmap v2">
+          </div>
+          <div class="field-group full mt-8">
+            <label for="detalle">Observaciones</label>
+            <textarea id="detalle" rows="3" name="detalle" placeholder="Ej: Suelo pedregoso, pendiente..."></textarea>
+          </div>
+        </section>
+
+        <!-- Paso 5: Contacto -->
+        <section class="step" aria-labelledby="stepContactoTitle">
+
+          <h2 id="stepContactoTitle" tabindex="-1">
+            Datos de contacto
+            <span class="tooltip-container">
+              <button type="button" class="tooltip-btn" aria-label="Ayuda"><i data-lucide="info"></i></button>
+              <span class="tooltip-content">Para enviarle una respuesta técnica personalizada.</span>
+            </span>
+          </h2>
+
+          <div class="grid">
+
+            <div>
+              <label for="nombre">Nombre</label>
+              <input id="nombre" type="text" name="nombre" autocomplete="name" required aria-describedby="nombreError">
+              <p class="field-error" id="nombreError"></p>
+            </div>
+
+            <div>
+              <label for="empresa">Empresa</label>
+              <input id="empresa" type="text" name="empresa" autocomplete="organization">
+            </div>
+
+            <div>
+              <label for="email">Email</label>
+              <input id="email" type="email" name="email" autocomplete="email" inputmode="email" required aria-describedby="emailError">
+              <p class="field-error" id="emailError"></p>
+            </div>
+
+            <div>
+              <label for="telefono">WhatsApp</label>
+              <input id="telefono" type="tel" name="telefono" autocomplete="tel" inputmode="tel" required aria-describedby="telefonoError" placeholder="+54 9...">
+              <p class="field-error" id="telefonoError"></p>
+            </div>
+
+          </div>
+
+        </section>
+
+        <section class="step" aria-labelledby="stepConfirmacionTitle">
+
+          <h2 id="stepConfirmacionTitle" tabindex="-1">
+            Ficha del Proyecto
+            <span class="tooltip-container">
+              <button type="button" class="tooltip-btn" aria-label="Ayuda"><i data-lucide="info"></i></button>
+              <span class="tooltip-content">Verifique los detalles antes del análisis.</span>
+            </span>
+          </h2>
+
+          <div id="summary" class="summary">
+            Aquí se mostrará el resumen generado por app.js
+          </div>
+
+        </section>
+
+        <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+
+        <footer class="wizard-actions">
+          <button type="button" id="prevBtn" class="btn btn-secondary">Anterior</button>
+          <button type="button" id="nextBtn" class="btn btn-primary">Siguiente</button>
+        </footer>
+
+      </form>
+
+    </div>
+
+  </div>
+</section>
+</main>
+
+<div id="privacyToast" class="privacy-toast" aria-hidden="true">
+  <span>Sus datos se usarán solo para su consulta. Al enviar, acepta ser contactado por Metzer.</span>
+  <button id="closePrivacyToast" class="btn-close-toast" aria-label="Cerrar aviso">
+    <i data-lucide="x"></i>
+  </button>
+</div>
+
+<script src="https://unpkg.com/imask"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script src="site.config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
