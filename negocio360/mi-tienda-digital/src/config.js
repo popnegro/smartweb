@@ -1,0 +1,4 @@
+export const CONFIG = {
+  WHATSAPP_NUMBER: "5491122334455",
+  ADMIN_PASSWORD: "admin123",
+};

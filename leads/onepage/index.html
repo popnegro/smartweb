@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="ElectroFix Store: venta y reparacion de articulos electronicos para comercios minoristas." />
+  <title>ElectroFix Store | Electronica y Reparaciones</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --app-font-family: 'Inter', sans-serif;
+      --app-primary: #0f766e;
+      --app-primary-hover: #115e59;
+      --app-secondary: #111827;
+      --app-accent: #f59e0b;
+      --app-bg-muted: #f8fafc;
+      --app-text-main: #111827;
+      --app-text-muted: #475569;
+    }
+
+    body {
+      color: var(--app-text-main);
+      font-family: var(--app-font-family);
+    }
+
+    .glass-nav {
+      background-color: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(14px);
+    }
+
+    .field-error {
+      border-color: #ef4444;
+      box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.16);
+    }
+
+    .brand-track {
+      animation: brand-scroll 28s linear infinite;
+    }
+
+    @keyframes brand-scroll {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .brand-track { animation: none; }
+    }
+  </style>
+</head>
+<body class="bg-white antialiased">
+  <header id="main-header" class="fixed top-0 z-50 w-full transition-all duration-300">
+    <nav class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-label="Navegacion principal">
+      <div class="flex h-16 items-center justify-between md:h-20">
+        <a href="#inicio" class="flex items-center gap-3" aria-label="Ir al inicio">
+          <span class="flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--app-secondary)] text-sm font-black text-white">EF</span>
+          <span data-brand-name class="text-lg font-black tracking-tight sm:text-xl"></span>
+        </a>
+
+        <div data-nav-links class="hidden items-center gap-8 text-sm font-semibold text-slate-600 md:flex"></div>
+
+        <div class="hidden items-center gap-4 md:flex">
+          <a href="admin.html" class="text-sm font-semibold text-slate-500 transition-colors hover:text-[var(--app-primary)]">Panel Admin</a>
+          <a href="#quote-form" class="rounded-full bg-[var(--app-primary)] px-5 py-2.5 text-sm font-bold text-white transition hover:bg-[var(--app-primary-hover)]">Cotizar ahora</a>
+        </div>
+
+        <button id="mobile-menu-btn" type="button" class="rounded-lg p-2 text-slate-600 md:hidden" aria-expanded="false" aria-controls="mobile-menu" aria-label="Abrir menu">
+          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+      <div id="mobile-menu" class="hidden border-t border-slate-100 bg-white py-4 md:hidden">
+        <div data-mobile-nav-links class="flex flex-col gap-2 text-sm font-semibold text-slate-700"></div>
+        <a href="admin.html" class="mt-4 block rounded-xl border border-slate-200 px-4 py-3 text-center text-sm font-bold text-slate-700">Panel Admin</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="inicio">
+    <section class="relative overflow-hidden bg-slate-950 pt-28 text-white md:pt-36">
+      <div class="absolute inset-0 opacity-35">
+        <img data-hero-image src="" alt="" class="h-full w-full object-cover">
+      </div>
+      <div class="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/85 to-slate-950/30"></div>
+      <div class="relative mx-auto grid min-h-[680px] max-w-7xl items-center gap-10 px-4 pb-16 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:px-8">
+        <div class="max-w-3xl">
+          <p class="mb-5 inline-flex rounded-full bg-white/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-amber-300 ring-1 ring-white/15">Venta + reparacion tecnica</p>
+          <h1 data-hero-title class="text-4xl font-black tracking-tight md:text-6xl lg:text-7xl"></h1>
+          <p data-hero-description class="mt-6 max-w-2xl text-lg leading-relaxed text-slate-200 md:text-xl"></p>
+          <div data-hero-actions class="mt-9 flex flex-col gap-4 sm:flex-row"></div>
+          <div class="mt-10 grid max-w-xl grid-cols-3 gap-3 text-left">
+            <div class="rounded-xl border border-white/10 bg-white/10 p-4">
+              <p class="text-2xl font-black">24h</p>
+              <p class="mt-1 text-xs text-slate-300">diagnostico inicial</p>
+            </div>
+            <div class="rounded-xl border border-white/10 bg-white/10 p-4">
+              <p class="text-2xl font-black">90d</p>
+              <p class="mt-1 text-xs text-slate-300">garantia tecnica</p>
+            </div>
+            <div class="rounded-xl border border-white/10 bg-white/10 p-4">
+              <p class="text-2xl font-black">B2C</p>
+              <p class="mt-1 text-xs text-slate-300">retail y soporte</p>
+            </div>
+          </div>
+        </div>
+        <div class="hidden rounded-2xl border border-white/10 bg-white/10 p-5 shadow-2xl lg:block">
+          <div class="rounded-xl bg-white p-5 text-slate-950">
+            <p class="text-sm font-black uppercase tracking-wider text-[var(--app-primary)]">Flujo PMV</p>
+            <div class="mt-5 space-y-3">
+              <div class="rounded-xl bg-slate-50 p-4">
+                <p class="font-bold">1. Cliente cotiza producto o reparacion</p>
+                <p class="mt-1 text-sm text-slate-500">Desde catalogo, servicios o consulta manual.</p>
+              </div>
+              <div class="rounded-xl bg-slate-50 p-4">
+                <p class="font-bold">2. Admin recibe lead comercial</p>
+                <p class="mt-1 text-sm text-slate-500">Se gestiona desde el panel y se responde por WhatsApp.</p>
+              </div>
+              <div class="rounded-xl bg-slate-50 p-4">
+                <p class="font-bold">3. Venta o reparacion confirmada</p>
+                <p class="mt-1 text-sm text-slate-500">Ideal para validar demanda antes de e-commerce completo.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="border-y border-slate-100 bg-white py-8" aria-label="Marcas">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <p data-logos-title class="mb-6 text-center text-xs font-black uppercase tracking-[0.18em] text-slate-400"></p>
+        <div class="overflow-hidden">
+          <div data-logos-grid class="brand-track flex w-max gap-4"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="services" class="bg-white py-24">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="mb-12 max-w-2xl">
+          <p class="mb-3 text-sm font-black uppercase tracking-[0.18em] text-[var(--app-primary)]">Servicios</p>
+          <h2 data-features-title class="text-3xl font-black tracking-tight text-slate-950 md:text-5xl"></h2>
+          <p data-features-description class="mt-4 text-lg leading-relaxed text-slate-600"></p>
+        </div>
+        <div data-features-grid class="grid gap-6 md:grid-cols-3"></div>
+      </div>
+    </section>
+
+
+    <section id="catalog" class="bg-slate-50 py-24">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="mb-10 flex flex-col justify-between gap-6 md:flex-row md:items-end">
+          <div class="max-w-2xl">
+            <p class="mb-3 text-sm font-black uppercase tracking-[0.18em] text-[var(--app-primary)]">Catalogo</p>
+            <h2 data-catalog-title class="text-3xl font-black tracking-tight text-slate-950 md:text-5xl"></h2>
+            <p data-catalog-description class="mt-4 text-lg leading-relaxed text-slate-600"></p>
+          </div>
+          <a href="#quote-form" class="inline-flex justify-center rounded-full bg-[var(--app-secondary)] px-6 py-3 text-sm font-bold text-white transition hover:opacity-90">Solicitar cotizacion</a>
+        </div>
+        <div data-products-grid class="grid gap-6 md:grid-cols-2 lg:grid-cols-3"></div>
+      </div>
+    </section>
+
+    <section id="quote-form" class="bg-white py-24">
+      <div class="mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:px-8">
+        <div>
+          <p class="mb-3 text-sm font-black uppercase tracking-[0.18em] text-[var(--app-primary)]">Cotizacion</p>
+          <h2 class="text-3xl font-black tracking-tight text-slate-950 md:text-5xl">Converti consultas en ventas sin montar un e-commerce completo.</h2>
+          <p class="mt-4 text-lg leading-relaxed text-slate-600">El cliente selecciona producto o servicio, deja el contexto y el comercio responde con disponibilidad, precio final o diagnostico tecnico.</p>
+          <div class="mt-8 grid gap-3 sm:grid-cols-2">
+            <div class="rounded-xl border border-slate-200 bg-slate-50 p-5">
+              <p class="text-sm font-black text-slate-900">Venta asistida</p>
+              <p class="mt-1 text-sm leading-relaxed text-slate-500">Ideal para stock variable, precios por consulta o combos.</p>
+            </div>
+            <div class="rounded-xl border border-slate-200 bg-slate-50 p-5">
+              <p class="text-sm font-black text-slate-900">Reparacion</p>
+              <p class="mt-1 text-sm leading-relaxed text-slate-500">Captura modelo, falla y prioridad antes del contacto.</p>
+            </div>
+          </div>
+        </div>
+        <form id="quote-request-form" class="rounded-2xl border border-slate-100 bg-white p-6 shadow-xl md:p-8" novalidate>
+          <div class="grid gap-4 sm:grid-cols-2">
+            <div class="sm:col-span-2">
+              <label for="quote-product" class="mb-2 block text-sm font-semibold text-slate-700">Producto o servicio</label>
+              <select id="quote-product" class="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 outline-none focus:ring-2 focus:ring-[var(--app-primary)]"></select>
+            </div>
+            <div>
+              <label for="quote-quantity" class="mb-2 block text-sm font-semibold text-slate-700">Cantidad</label>
+              <input id="quote-quantity" type="number" min="1" value="1" class="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 outline-none focus:ring-2 focus:ring-[var(--app-primary)]">
+              <p data-error-for="quote-quantity" class="mt-2 hidden text-xs font-semibold text-red-500"></p>
+            </div>
+            <div>
+              <label for="quote-company" class="mb-2 block text-sm font-semibold text-slate-700">Comercio o empresa</label>
+              <input id="quote-company" type="text" maxlength="100" placeholder="Opcional" class="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 outline-none focus:ring-2 focus:ring-[var(--app-primary)]">
+            </div>
+            <div>
+              <label for="quote-name" class="mb-2 block text-sm font-semibold text-slate-700">Nombre</label>
+              <input id="quote-name" type="text" maxlength="80" autocomplete="name" class="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 outline-none focus:ring-2 focus:ring-[var(--app-primary)]">
+              <p data-error-for="quote-name" class="mt-2 hidden text-xs font-semibold text-red-500"></p>
+            </div>
+            <div>
+              <label for="quote-phone" class="mb-2 block text-sm font-semibold text-slate-700">Telefono / WhatsApp</label>
+              <input id="quote-phone" type="tel" autocomplete="tel" placeholder="+54 9 ..." class="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 outline-none focus:ring-2 focus:ring-[var(--app-primary)]">
+              <p data-error-for="quote-phone" class="mt-2 hidden text-xs font-semibold text-red-500"></p>
+            </div>
+            <div class="sm:col-span-2">
+              <label for="quote-message" class="mb-2 block text-sm font-semibold text-slate-700">Detalle</label>
+              <textarea id="quote-message" maxlength="700" placeholder="Ej: necesito cambiar modulo de Samsung A32, o cotizar 3 notebooks para oficina." class="h-28 w-full rounded-xl border border-slate-200 bg-slate-50 p-3 outline-none focus:ring-2 focus:ring-[var(--app-primary)]"></textarea>
+            </div>
+          </div>
+          <button type="submit" class="mt-6 w-full rounded-xl bg-[var(--app-primary)] py-4 font-black uppercase text-white shadow-lg transition hover:bg-[var(--app-primary-hover)]">Enviar solicitud</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-slate-200 bg-slate-950 py-16 text-white">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="mb-12 flex flex-col justify-between gap-8 md:flex-row">
+        <div class="max-w-sm">
+          <div class="flex items-center gap-3">
+            <span class="flex h-9 w-9 items-center justify-center rounded-lg bg-white text-sm font-black text-slate-950">EF</span>
+            <span data-brand-name class="text-xl font-black tracking-tight"></span>
+          </div>
+          <p class="mt-4 text-sm leading-relaxed text-slate-400">Landing PMV para comercios minoristas de electronica: captura demanda, ordena consultas y permite validar ventas y reparaciones.</p>
+        </div>
+        <div data-footer-links class="flex flex-wrap gap-6 text-sm font-semibold text-slate-300"></div>
+      </div>
+      <div class="flex flex-col justify-between gap-4 border-t border-white/10 pt-8 text-sm text-slate-400 md:flex-row">
+        <p data-footer-copy></p>
+        <div class="flex gap-6">
+          <a href="#" class="hover:text-white">Privacidad</a>
+          <a href="#" class="hover:text-white">Terminos</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <div id="toast-container" class="pointer-events-none fixed bottom-6 right-6 z-[100] flex flex-col gap-3"></div>
+
+  <div id="checkout-modal" class="fixed inset-0 bg-black/50 hidden place-items-center p-4">
+    <div class="bg-white rounded-3xl p-8 max-w-sm w-full">
+      <h2 class="text-2xl font-black mb-4">Confirmar Pedido</h2>
+      <div id="checkout-summary" class="mb-4 text-sm text-slate-600"></div>
+      <input type="text" id="client-name" placeholder="Tu nombre" class="w-full border p-2 mb-2 rounded">
+      <input type="tel" id="client-phone" placeholder="WhatsApp" class="w-full border p-2 mb-4 rounded">
+      <button onclick="finalizePurchase()" class="w-full bg-emerald-600 text-white py-3 rounded-xl font-bold">
+        Confirmar y enviar pedido
+      </button>
+    </div>
+  </div>
+
+  <script src="shared/config.js"></script>
+  <script src="shared/utils.js"></script>
+  <script src="shared/brand.js"></script>
+  <script src="shared/toast.js"></script>
+  <script>
+    (() => {
+      'use strict';
+
+      const { apiBaseUrl, storageKeys } = window.APP_CONFIG;
+      const { readBrand, normalizeBrand, applyTheme } = window.AppBrand;
+      const { $, $$, createElement, readJson, saveJson } = window.AppUtils;
+      const { showToast } = window.AppToast;
+
+      const state = {
+        brand: readBrand()
+      };
+
+      function renderBrand() {
+        const brand = normalizeBrand(state.brand);
+        applyTheme(brand);
+
+        $$('[data-brand-name]').forEach(el => { el.textContent = brand.identity.name; });
+        $('[data-hero-title]').textContent = brand.hero.title;
+        $('[data-hero-description]').textContent = brand.hero.description;
+        $('[data-hero-image]').src = brand.hero.image;
+        $('[data-hero-image]').alt = brand.hero.imageAlt || brand.identity.name;
+        $('[data-logos-title]').textContent = brand.logos.title;
+        $('[data-features-title]').textContent = brand.features.title;
+        $('[data-features-description]').textContent = brand.features.description;
+        $('[data-catalog-title]').textContent = brand.catalog.title;
+        $('[data-catalog-description]').textContent = brand.catalog.description;
+        $('[data-footer-copy]').textContent = brand.footer.copy;
+
+        renderLinks($('[data-nav-links]'), brand.navigation, 'hover:text-[var(--app-primary)] transition-colors');
+        renderLinks($('[data-mobile-nav-links]'), brand.navigation, 'rounded-lg px-4 py-3 hover:bg-slate-50');
+        renderLinks($('[data-footer-links]'), brand.navigation, 'hover:text-white transition-colors');
+        renderActions($('[data-hero-actions]'), brand.hero.actions);
+        renderLogos(brand.logos.items);
+        renderFeatures(brand.features.items);
+        renderProducts(brand.catalog.products);
+        renderQuoteProductOptions(brand);
+      }
+
+      function renderLinks(container, links, className) {
+        container.replaceChildren();
+        links.forEach(link => {
+          container.appendChild(createElement('a', { text: link.label, className, attrs: { href: link.href } }));
+        });
+      }
+
+      function renderActions(container, actions) {
+        container.replaceChildren();
+        actions.forEach(action => {
+          const className = action.primary
+            ? 'inline-flex justify-center rounded-full bg-[var(--app-primary)] px-7 py-4 text-sm font-black uppercase tracking-wide text-white transition hover:bg-[var(--app-primary-hover)]'
+            : 'inline-flex justify-center rounded-full border border-white/20 px-7 py-4 text-sm font-black uppercase tracking-wide text-white transition hover:bg-white/10';
+          container.appendChild(createElement('a', { text: action.label, className, attrs: { href: action.href } }));
+        });
+      }
+
+      function renderLogos(items) {
+        const container = $('[data-logos-grid]');
+        const duplicated = [...items, ...items];
+        container.replaceChildren();
+        duplicated.forEach(item => {
+          const logo = createElement('div', { text: item.name, className: 'flex h-14 min-w-40 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 px-6 text-sm font-black uppercase tracking-wider text-slate-500' });
+          container.appendChild(logo);
+        });
+      }
+
+      function renderFeatures(items) {
+        const container = $('[data-features-grid]');
+        container.replaceChildren();
+        items.forEach(item => {
+          const card = createElement('article', { className: 'rounded-2xl border border-slate-200 bg-white p-7 shadow-sm transition hover:-translate-y-1 hover:shadow-xl' });
+          card.append(
+            createElement('div', { text: item.icon || '', className: 'mb-5 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-teal-50 text-sm font-black text-[var(--app-primary)]' }),
+            createElement('h3', { text: item.title, className: 'text-xl font-black text-slate-950' }),
+            createElement('p', { text: item.desc, className: 'mt-3 text-sm leading-relaxed text-slate-600' })
+          );
+          container.appendChild(card);
+        });
+      }
+
+      function renderProducts(products) {
+        const container = $('[data-products-grid]');
+        container.replaceChildren();
+        products.forEach(product => {
+          const card = createElement('article', { className: 'flex min-h-[300px] flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl' });
+          const top = createElement('div', { className: 'mb-5 flex items-start justify-between gap-4' });
+          top.append(
+            createElement('span', { text: product.category || 'Producto', className: 'rounded-full bg-teal-50 px-3 py-1 text-xs font-black uppercase tracking-wider text-[var(--app-primary)]' }),
+            createElement('span', { text: product.badge || product.sku || '', className: 'text-xs font-black text-slate-400' })
+          );
+          card.append(
+            top,
+            createElement('h3', { text: product.name, className: 'text-xl font-black text-slate-950' }),
+            createElement('p', { text: product.description, className: 'mt-3 flex-1 text-sm leading-relaxed text-slate-600' }),
+            createElement('p', { text: product.priceLabel || 'Consultar', className: 'mt-5 text-lg font-black text-slate-950' }),
+            createElement('a', { text: 'Cotizar', className: 'mt-5 inline-flex justify-center rounded-xl border border-slate-200 px-4 py-3 text-sm font-black text-slate-700 transition hover:border-[var(--app-primary)] hover:text-[var(--app-primary)]', attrs: { href: '#quote-form', 'data-product-sku': product.sku || product.name } })
+          );
+          container.appendChild(card);
+        });
+      }
+
+      function renderQuoteProductOptions(brand) {
+        const select = $('#quote-product');
+        const options = [
+          ...brand.catalog.products.map(product => ({ value: product.sku || product.name, label: product.name })),
+          ...brand.features.items.map(service => ({ value: `SERVICE:${service.title}`, label: service.title }))
+        ];
+        select.replaceChildren();
+        options.forEach(option => {
+          select.appendChild(createElement('option', { text: option.label, attrs: { value: option.value } }));
+        });
+      }
+
+      function setFieldError(fieldId, message = '') {
+        const field = $(`#${fieldId}`);
+        const error = $(`[data-error-for="${fieldId}"]`);
+        if (!field) return;
+        field.classList.toggle('field-error', Boolean(message));
+        if (error) {
+          error.textContent = message;
+          error.classList.toggle('hidden', !message);
+        }
+      }
+
+      function validateQuoteForm() {
+        let valid = true;
+        ['quote-quantity', 'quote-name', 'quote-phone'].forEach(id => setFieldError(id));
+
+        if (Number($('#quote-quantity').value) < 1) {
+          setFieldError('quote-quantity', 'Indica una cantidad valida.');
+          valid = false;
+        }
+        if ($('#quote-name').value.trim().length < 3) {
+          setFieldError('quote-name', 'Ingresa un nombre valido.');
+          valid = false;
+        }
+        if ($('#quote-phone').value.replace(/\D/g, '').length < 8) {
+          setFieldError('quote-phone', 'Ingresa un telefono valido.');
+          valid = false;
+        }
+        return valid;
+      }
+
+      async function createQuoteRequest(quoteRequest) {
+        if (apiBaseUrl) {
+          const response = await fetch(`${apiBaseUrl}/quote-requests`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(quoteRequest)
+          });
+          if (!response.ok) throw new Error('No se pudo enviar la cotizacion.');
+          return response.json();
+        }
+
+        const quoteRequests = readJson(storageKeys.quoteRequests, []);
+        quoteRequests.push(quoteRequest);
+        saveJson(storageKeys.quoteRequests, quoteRequests);
+        return quoteRequest;
+      }
+
+      function bindEvents() {
+        $('#quote-request-form').addEventListener('submit', async event => {
+          event.preventDefault();
+          if (!validateQuoteForm()) return;
+
+          const brand = normalizeBrand(state.brand);
+          const selectedProduct = brand.catalog.products.find(product => (product.sku || product.name) === $('#quote-product').value);
+          const selectedService = brand.features.items.find(service => `SERVICE:${service.title}` === $('#quote-product').value);
+          const selectedName = selectedProduct?.name || selectedService?.title || $('#quote-product').value;
+
+          const quoteRequest = {
+            id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
+            productSku: $('#quote-product').value,
+            productName: selectedName,
+            quantity: Number($('#quote-quantity').value),
+            company: $('#quote-company').value.trim(),
+            nombre: $('#quote-name').value.trim(),
+            telefono: $('#quote-phone').value.trim(),
+            mensaje: $('#quote-message').value.trim(),
+            estado: 'nuevo',
+            createdAt: new Date().toISOString()
+          };
+
+          try {
+            await createQuoteRequest(quoteRequest);
+            $('#quote-request-form').reset();
+            $('#quote-quantity').value = '1';
+            showToast('Recibimos tu solicitud. Te contactaremos con precio, disponibilidad o diagnostico.', 'Cotizacion enviada');
+          } catch (error) {
+            showToast(error.message || 'Intenta nuevamente en unos minutos.', 'Error');
+          }
+        });
+
+        $('[data-products-grid]').addEventListener('click', event => {
+          const action = event.target.closest('[data-product-sku]');
+          if (!action) return;
+          $('#quote-product').value = action.dataset.productSku;
+        });
+
+        $('#mobile-menu-btn').addEventListener('click', () => {
+          const menu = $('#mobile-menu');
+          const isOpen = !menu.classList.contains('hidden');
+          menu.classList.toggle('hidden', isOpen);
+          $('#mobile-menu-btn').setAttribute('aria-expanded', String(!isOpen));
+        });
+
+        $('#mobile-menu').addEventListener('click', event => {
+          if (event.target.matches('a')) {
+            $('#mobile-menu').classList.add('hidden');
+            $('#mobile-menu-btn').setAttribute('aria-expanded', 'false');
+          }
+        });
+
+        window.addEventListener('scroll', () => {
+          $('#main-header').classList.toggle('glass-nav', window.scrollY > 20);
+          $('#main-header').classList.toggle('shadow-sm', window.scrollY > 20);
+        }, { passive: true });
+      }
+
+      renderBrand();
+      bindEvents();
+    })();
+  </script>
+</body>
+</html>

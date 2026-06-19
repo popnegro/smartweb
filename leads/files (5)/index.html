@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ElectroFix Store | Catálogo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --app-primary: #0f766e;
+      --app-primary-hover: #115e59;
+      --app-secondary: #111827;
+      --app-accent: #f59e0b;
+    }
+    .btn-primary { background: var(--app-primary); transition: background .15s; }
+    .btn-primary:hover { background: var(--app-primary-hover); }
+    .product-card { transition: transform .2s, box-shadow .2s; }
+    .product-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,.10); }
+    #confirm-screen { display: none; }
+    #confirm-screen.active { display: flex; }
+    .qty-btn { width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:8px;background:#f1f5f9;font-weight:700;cursor:pointer;user-select:none;transition:background .15s; }
+    .qty-btn:hover { background:#e2e8f0; }
+    .step-dot { width:8px;height:8px;border-radius:50%;background:#e2e8f0;transition:background .3s; }
+    .step-dot.active { background:var(--app-primary); }
+    .badge-hot { background:#fef3c7;color:#92400e; }
+    .badge-new { background:#d1fae5;color:#065f46; }
+    .badge-default { background:#f1f5f9;color:#475569; }
+    input:focus, textarea:focus { outline: none; border-color: var(--app-primary); box-shadow: 0 0 0 3px rgba(15,118,110,.1); }
+    .pay-label { display:flex;align-items:center;gap:8px;padding:12px;border:2px solid #e2e8f0;border-radius:12px;cursor:pointer;transition:all .15s;font-size:14px;font-weight:700; }
+    .pay-label:has(input:checked) { border-color:var(--app-primary);background:#f0fdf4; }
+  </style>
+</head>
+<body class="bg-slate-50 min-h-screen">
+
+  <div id="toast-container" class="fixed bottom-6 right-6 z-[999] flex flex-col gap-3 pointer-events-none"></div>
+
+  <!-- CATALOG VIEW -->
+  <div id="catalog-view">
+    <header class="bg-white border-b border-slate-100 sticky top-0 z-30 px-6 py-4 flex items-center justify-between max-w-7xl mx-auto">
+      <div>
+        <span class="text-xs font-bold tracking-widest text-teal-700 uppercase">ElectroFix</span>
+        <h1 class="text-lg font-black text-slate-900 leading-tight">Catálogo</h1>
+      </div>
+      <a href="admin.html" class="text-xs text-slate-400 hover:text-slate-700 transition-colors">Panel Admin →</a>
+    </header>
+
+    <section class="max-w-7xl mx-auto px-4 py-10">
+      <div class="flex items-center gap-3 mb-8 overflow-x-auto pb-2">
+        <button data-filter="all" onclick="filterProducts(this)" class="filter-btn flex-shrink-0 px-4 py-2 rounded-full text-sm font-bold bg-slate-900 text-white">Todos</button>
+        <button data-filter="Reparacion" onclick="filterProducts(this)" class="filter-btn flex-shrink-0 px-4 py-2 rounded-full text-sm font-bold bg-white text-slate-600 border border-slate-200 hover:border-teal-600 hover:text-teal-700 transition-colors">Reparación</button>
+        <button data-filter="Accesorios" onclick="filterProducts(this)" class="filter-btn flex-shrink-0 px-4 py-2 rounded-full text-sm font-bold bg-white text-slate-600 border border-slate-200 hover:border-teal-600 hover:text-teal-700 transition-colors">Accesorios</button>
+        <button data-filter="Computacion" onclick="filterProducts(this)" class="filter-btn flex-shrink-0 px-4 py-2 rounded-full text-sm font-bold bg-white text-slate-600 border border-slate-200 hover:border-teal-600 hover:text-teal-700 transition-colors">Computación</button>
+        <button data-filter="Audio" onclick="filterProducts(this)" class="filter-btn flex-shrink-0 px-4 py-2 rounded-full text-sm font-bold bg-white text-slate-600 border border-slate-200 hover:border-teal-600 hover:text-teal-700 transition-colors">Audio</button>
+        <button data-filter="Redes" onclick="filterProducts(this)" class="filter-btn flex-shrink-0 px-4 py-2 rounded-full text-sm font-bold bg-white text-slate-600 border border-slate-200 hover:border-teal-600 hover:text-teal-700 transition-colors">Redes</button>
+      </div>
+
+      <div id="products-grid" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"></div>
+      <div id="empty-state" class="hidden text-center py-24 text-slate-400">
+        <div class="text-5xl mb-4">📦</div>
+        <p class="font-bold text-lg text-slate-600">Sin productos en esta categoría</p>
+        <p class="text-sm mt-1">Probá con otro filtro o volvé más tarde.</p>
+      </div>
+    </section>
+  </div>
+
+  <!-- CONFIRM SCREEN (3 steps) -->
+  <div id="confirm-screen" class="fixed inset-0 z-50 items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-3xl w-full max-w-md shadow-2xl overflow-hidden relative">
+
+      <div class="flex gap-2 justify-center pt-6">
+        <div class="step-dot active" id="dot-1"></div>
+        <div class="step-dot" id="dot-2"></div>
+        <div class="step-dot" id="dot-3"></div>
+      </div>
+
+      <!-- Step 1 -->
+      <div id="step-1" class="p-6">
+        <button onclick="closeConfirm()" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 text-sm transition-colors">✕</button>
+        <p class="text-xs font-bold text-teal-700 uppercase tracking-widest mb-1">Paso 1 de 3</p>
+        <h2 class="text-2xl font-black text-slate-900 mb-5">Tu pedido</h2>
+
+        <div class="flex gap-4 mb-5 p-4 bg-slate-50 rounded-2xl">
+          <img id="confirm-img" src="" alt="" class="w-20 h-20 object-cover rounded-xl flex-shrink-0 bg-slate-200">
+          <div class="flex-1 min-w-0">
+            <p id="confirm-name" class="font-black text-slate-900 text-base leading-tight"></p>
+            <p id="confirm-specs" class="text-xs text-slate-500 mt-1 line-clamp-2"></p>
+            <div class="flex items-center gap-2 mt-2">
+              <span id="confirm-old-price" class="text-xs line-through text-slate-400"></span>
+              <span id="confirm-price" class="text-lg font-black text-teal-600"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between mb-6">
+          <span class="text-sm font-bold text-slate-700">Cantidad</span>
+          <div class="flex items-center gap-3">
+            <button class="qty-btn" onclick="changeQty(-1)">−</button>
+            <span id="qty-display" class="text-base font-black w-6 text-center">1</span>
+            <button class="qty-btn" onclick="changeQty(1)">+</button>
+          </div>
+        </div>
+
+        <div class="flex justify-between items-center py-3 border-t border-slate-100">
+          <span class="text-sm text-slate-500">Subtotal</span>
+          <span id="subtotal" class="font-black text-slate-900 text-lg"></span>
+        </div>
+        <button onclick="goStep(2)" class="btn-primary w-full text-white py-3.5 rounded-xl font-black mt-4">Continuar →</button>
+      </div>
+
+      <!-- Step 2 -->
+      <div id="step-2" class="p-6 hidden">
+        <p class="text-xs font-bold text-teal-700 uppercase tracking-widest mb-1">Paso 2 de 3</p>
+        <h2 class="text-2xl font-black text-slate-900 mb-5">Tus datos</h2>
+        <div class="space-y-3">
+          <div>
+            <label class="text-xs font-bold text-slate-600 mb-1 block">Nombre completo *</label>
+            <input id="client-name" placeholder="Ej: María García" class="w-full border border-slate-200 p-3 rounded-xl text-sm transition-colors">
+          </div>
+          <div>
+            <label class="text-xs font-bold text-slate-600 mb-1 block">Teléfono / WhatsApp *</label>
+            <input id="client-phone" placeholder="Ej: +54 9 261 000-0000" class="w-full border border-slate-200 p-3 rounded-xl text-sm transition-colors">
+          </div>
+          <div>
+            <label class="text-xs font-bold text-slate-600 mb-1 block">Dirección de entrega *</label>
+            <input id="client-address" placeholder="Calle, número, piso / dpto" class="w-full border border-slate-200 p-3 rounded-xl text-sm transition-colors">
+          </div>
+          <div>
+            <label class="text-xs font-bold text-slate-600 mb-1 block">Notas adicionales</label>
+            <textarea id="client-notes" placeholder="Horario de entrega, referencias, etc." rows="2" class="w-full border border-slate-200 p-3 rounded-xl text-sm transition-colors resize-none"></textarea>
+          </div>
+        </div>
+        <div class="flex gap-3 mt-5">
+          <button onclick="goStep(1)" class="flex-1 border border-slate-200 py-3.5 rounded-xl font-bold text-slate-600 hover:bg-slate-50 transition-colors">← Volver</button>
+          <button onclick="goStep(3)" class="flex-1 btn-primary text-white py-3.5 rounded-xl font-black">Revisar →</button>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div id="step-3" class="p-6 hidden">
+        <p class="text-xs font-bold text-teal-700 uppercase tracking-widest mb-1">Paso 3 de 3</p>
+        <h2 class="text-2xl font-black text-slate-900 mb-5">Confirmar pedido</h2>
+
+        <div class="bg-slate-50 rounded-2xl p-4 space-y-2 mb-5 text-sm">
+          <div class="flex justify-between"><span class="text-slate-500">Producto</span><span id="recap-name" class="font-bold text-slate-900 text-right max-w-[180px] truncate"></span></div>
+          <div class="flex justify-between"><span class="text-slate-500">Cantidad</span><span id="recap-qty" class="font-bold text-slate-900"></span></div>
+          <div class="flex justify-between"><span class="text-slate-500">Nombre</span><span id="recap-client" class="font-bold text-slate-900"></span></div>
+          <div class="flex justify-between"><span class="text-slate-500">Dirección</span><span id="recap-address" class="font-bold text-slate-900 text-right max-w-[200px]"></span></div>
+          <div class="border-t border-slate-200 pt-2 flex justify-between">
+            <span class="text-slate-500 font-bold">Total</span>
+            <span id="recap-total" class="font-black text-teal-600 text-base"></span>
+          </div>
+        </div>
+
+        <div class="mb-5">
+          <p class="text-xs font-bold text-slate-600 mb-2">Forma de pago</p>
+          <div class="grid grid-cols-2 gap-2">
+            <label class="pay-label"><input type="radio" name="payment" value="Efectivo" class="accent-teal-600"> 💵 Efectivo</label>
+            <label class="pay-label"><input type="radio" name="payment" value="Transferencia" class="accent-teal-600"> 🏦 Transferencia</label>
+            <label class="pay-label"><input type="radio" name="payment" value="Tarjeta" class="accent-teal-600"> 💳 Tarjeta</label>
+            <label class="pay-label"><input type="radio" name="payment" value="MercadoPago" class="accent-teal-600"> 💙 MercadoPago</label>
+          </div>
+        </div>
+
+        <div class="flex gap-3">
+          <button onclick="goStep(2)" class="flex-1 border border-slate-200 py-3.5 rounded-xl font-bold text-slate-600 hover:bg-slate-50 transition-colors">← Volver</button>
+          <button onclick="finalizePurchase()" class="flex-1 btn-primary text-white py-3.5 rounded-xl font-black flex items-center justify-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 6.627 5.373 12 12 12s12-5.373 12-12C24 5.373 18.627 0 12 0zm0 22c-5.514 0-10-4.486-10-10S6.486 2 12 2s10 4.486 10 10-4.486 10-10 10z"/></svg>
+            Enviar por WhatsApp
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUCCESS -->
+  <div id="success-overlay" class="fixed inset-0 z-[60] hidden items-center justify-center bg-black/60 backdrop-blur-sm">
+    <div class="bg-white rounded-3xl p-8 max-w-sm w-full mx-4 text-center shadow-2xl">
+      <div class="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">✅</div>
+      <h3 class="text-2xl font-black text-slate-900 mb-2">¡Pedido enviado!</h3>
+      <p class="text-slate-500 text-sm mb-6">Tu pedido fue enviado por WhatsApp. Te responderemos a la brevedad.</p>
+      <button onclick="closeSuccess()" class="btn-primary w-full text-white py-3 rounded-xl font-black">Seguir comprando</button>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="utils.js"></script>
+  <script src="brand.js"></script>
+  <script src="toast.js"></script>
+  <script>
+    let allProducts = [];
+    let currentProduct = null;
+    let currentQty = 1;
+
+    const DEFAULT_IMAGES = {
+      'Reparacion': 'https://images.unsplash.com/photo-1601004890684-d8cbf643f5f2?auto=format&fit=crop&w=600&q=80',
+      'Accesorios': 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&w=600&q=80',
+      'Computacion': 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=600&q=80',
+      'Audio': 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80',
+      'Redes': 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=600&q=80',
+      'Impresion': 'https://images.unsplash.com/photo-1612815154858-60aa4c59eaa6?auto=format&fit=crop&w=600&q=80',
+    };
+
+    function getDefaultImage(cat) {
+      return DEFAULT_IMAGES[cat] || 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=600&q=80';
+    }
+
+    (function init() {
+      const brand = window.AppBrand.readBrand();
+      window.AppBrand.applyTheme(brand);
+      const stored = window.AppUtils.readJson('electrofix_products', null);
+      if (stored && stored.length > 0) {
+        allProducts = stored;
+      } else {
+        allProducts = (brand.catalog?.products || []).map((p, i) => ({
+          id: p.sku || ('p' + i),
+          name: p.name,
+          category: p.category || 'General',
+          specs: p.description || '',
+          priceNew: p.priceLabel || '',
+          priceOld: '',
+          image: getDefaultImage(p.category),
+          badge: p.badge || '',
+          stock: true
+        }));
+      }
+      renderGrid(allProducts);
+    })();
+
+    function parseNum(val) {
+      if (!val) return 0;
+      return parseFloat(String(val).replace(/[^0-9.]/g, '')) || 0;
+    }
+
+    function formatPrice(val) {
+      if (!val) return '';
+      const num = parseNum(val);
+      if (!num) return String(val);
+      return '$' + num.toLocaleString('es-AR');
+    }
+
+    function renderGrid(products) {
+      const grid = document.getElementById('products-grid');
+      const empty = document.getElementById('empty-state');
+      if (!products.length) { grid.innerHTML = ''; empty.classList.remove('hidden'); return; }
+      empty.classList.add('hidden');
+      grid.innerHTML = products.map(p => {
+        const hasDiscount = p.priceOld && parseNum(p.priceOld) > 0 && parseNum(p.priceNew) > 0;
+        const disc = hasDiscount ? Math.round((1 - parseNum(p.priceNew) / parseNum(p.priceOld)) * 100) : 0;
+        const bClass = p.badge?.toLowerCase().includes('demand') ? 'badge-hot' : p.badge?.toLowerCase().includes('popular') ? 'badge-new' : 'badge-default';
+        const img = p.image || getDefaultImage(p.category);
+        return `<article class="product-card bg-white rounded-2xl border border-slate-100 overflow-hidden flex flex-col" onclick="openConfirm('${p.id}')">
+          <div class="relative">
+            <img src="${img}" alt="${p.name}" class="w-full h-52 object-cover" onerror="this.src='${getDefaultImage(p.category)}'">
+            ${p.badge ? `<span class="absolute top-3 left-3 text-xs font-black px-2.5 py-1 rounded-full ${bClass}">${p.badge}</span>` : ''}
+            ${hasDiscount ? `<span class="absolute top-3 right-3 text-xs font-black px-2.5 py-1 rounded-full bg-red-500 text-white">-${disc}%</span>` : ''}
+            ${p.stock === false ? '<div class="absolute inset-0 bg-white/70 flex items-center justify-center"><span class="text-sm font-black text-slate-500 bg-white px-4 py-2 rounded-full border">Sin stock</span></div>' : ''}
+          </div>
+          <div class="p-5 flex flex-col flex-1">
+            <span class="text-[10px] font-black tracking-widest text-teal-700 uppercase mb-1">${p.category}</span>
+            <h3 class="font-black text-slate-900 text-base leading-tight mb-1">${p.name}</h3>
+            <p class="text-xs text-slate-500 leading-relaxed mb-4 flex-1 line-clamp-2">${p.specs}</p>
+            <div class="flex items-end justify-between gap-2 mt-auto">
+              <div>
+                ${hasDiscount ? `<span class="text-xs line-through text-slate-400 block">${formatPrice(p.priceOld)}</span>` : ''}
+                <span class="text-xl font-black text-teal-600">${formatPrice(p.priceNew)}</span>
+              </div>
+              <button class="btn-primary text-white px-4 py-2.5 rounded-xl text-xs font-black flex-shrink-0 cursor-pointer ${p.stock === false ? 'opacity-40 pointer-events-none' : ''}"
+                onclick="event.stopPropagation();openConfirm('${p.id}')">Comprar</button>
+            </div>
+          </div>
+        </article>`;
+      }).join('');
+    }
+
+    function filterProducts(btn) {
+      document.querySelectorAll('.filter-btn').forEach(b => {
+        b.className = 'filter-btn flex-shrink-0 px-4 py-2 rounded-full text-sm font-bold bg-white text-slate-600 border border-slate-200 hover:border-teal-600 hover:text-teal-700 transition-colors';
+      });
+      btn.className = 'filter-btn flex-shrink-0 px-4 py-2 rounded-full text-sm font-bold bg-slate-900 text-white';
+      const f = btn.dataset.filter;
+      renderGrid(f === 'all' ? allProducts : allProducts.filter(p => p.category === f));
+    }
+
+    function openConfirm(id) {
+      const p = allProducts.find(x => x.id === id);
+      if (!p || p.stock === false) return;
+      currentProduct = p; currentQty = 1;
+      document.getElementById('confirm-img').src = p.image || getDefaultImage(p.category);
+      document.getElementById('confirm-name').textContent = p.name;
+      document.getElementById('confirm-specs').textContent = p.specs;
+      document.getElementById('confirm-price').textContent = formatPrice(p.priceNew);
+      document.getElementById('confirm-old-price').textContent = p.priceOld ? formatPrice(p.priceOld) : '';
+      document.getElementById('qty-display').textContent = 1;
+      updateSubtotal();
+      goStep(1);
+      document.getElementById('confirm-screen').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeConfirm() {
+      document.getElementById('confirm-screen').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function changeQty(d) {
+      currentQty = Math.max(1, currentQty + d);
+      document.getElementById('qty-display').textContent = currentQty;
+      updateSubtotal();
+    }
+
+    function updateSubtotal() {
+      const num = parseNum(currentProduct?.priceNew);
+      document.getElementById('subtotal').textContent = num ? formatPrice(String(num * currentQty)) : formatPrice(currentProduct?.priceNew);
+    }
+
+    function goStep(n) {
+      [1,2,3].forEach(i => {
+        document.getElementById('step-' + i).classList.toggle('hidden', i !== n);
+        document.getElementById('dot-' + i).classList.toggle('active', i <= n);
+      });
+      if (n === 3) {
+        const name = document.getElementById('client-name').value.trim();
+        const address = document.getElementById('client-address').value.trim();
+        if (!name || !address) {
+          alert('Por favor completá nombre y dirección.');
+          goStep(2); return;
+        }
+        const num = parseNum(currentProduct?.priceNew);
+        const total = num ? formatPrice(String(num * currentQty)) : formatPrice(currentProduct?.priceNew);
+        document.getElementById('recap-name').textContent = currentProduct.name;
+        document.getElementById('recap-qty').textContent = currentQty;
+        document.getElementById('recap-client').textContent = name;
+        document.getElementById('recap-address').textContent = address;
+        document.getElementById('recap-total').textContent = total;
+      }
+    }
+
+    function finalizePurchase() {
+      const name = document.getElementById('client-name').value.trim();
+      const phone = document.getElementById('client-phone').value.trim();
+      const address = document.getElementById('client-address').value.trim();
+      const notes = document.getElementById('client-notes').value.trim();
+      const payment = document.querySelector('input[name="payment"]:checked')?.value || 'A definir';
+      const num = parseNum(currentProduct?.priceNew);
+      const total = num ? formatPrice(String(num * currentQty)) : formatPrice(currentProduct?.priceNew);
+      const lines = [
+        '🛒 *Nuevo pedido - ElectroFix Store*', '',
+        `📦 *Producto:* ${currentProduct.name}`,
+        `🔢 *Cantidad:* ${currentQty}`,
+        `💰 *Total:* ${total}`, '',
+        `👤 *Nombre:* ${name}`,
+        phone ? `📱 *Teléfono:* ${phone}` : null,
+        `📍 *Dirección:* ${address}`,
+        notes ? `📝 *Notas:* ${notes}` : null,
+        `💳 *Pago:* ${payment}`
+      ].filter(Boolean);
+      const waNum = (window.APP_CONFIG?.waNumber) || '5491100000000';
+      window.open('https://wa.me/' + waNum + '?text=' + encodeURIComponent(lines.join('\n')), '_blank');
+      closeConfirm();
+      const overlay = document.getElementById('success-overlay');
+      overlay.classList.remove('hidden');
+      overlay.classList.add('flex');
+    }
+
+    function closeSuccess() {
+      const overlay = document.getElementById('success-overlay');
+      overlay.classList.add('hidden');
+      overlay.classList.remove('flex');
+    }
+
+    document.getElementById('confirm-screen').addEventListener('click', function(e) { if(e.target===this) closeConfirm(); });
+    document.getElementById('success-overlay').addEventListener('click', function(e) { if(e.target===this) closeSuccess(); });
+  </script>
+</body>
+</html>

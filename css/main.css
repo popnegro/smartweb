@@ -1,0 +1,183 @@
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  background:#0b0b0b;
+  color:#fff;
+  font-family:Arial,sans-serif;
+  cursor: none;
+}
+
+a{
+  text-decoration:none;
+  color:inherit;
+  cursor: none;
+}
+
+.cursor {
+  width: 12px;
+  height: 12px;
+  background: #fff;
+  border-radius: 50%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: difference;
+}
+
+.header{
+  position:fixed;
+  top:0;
+  width:100%;
+  padding:24px 48px;
+  display:flex;
+  justify-content:space-between;
+  z-index:100;
+  backdrop-filter:blur(10px);
+}
+
+nav{
+  display:flex;
+  gap:24px;
+}
+
+nav a{
+  color:#999;
+}
+
+.hero{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  padding:0 8vw;
+}
+
+.hero-title{
+  font-size:clamp(3rem,8vw,8rem);
+  line-height:0.9;
+  max-width:1200px;
+}
+
+.projects{
+  padding:120px 8vw;
+  display:grid;
+  gap:48px;
+}
+
+.project{
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:32px;
+  padding:48px;
+  background:#111;
+  transition:all .4s ease;
+}
+
+.project:hover{
+  transform:translateY(-8px);
+  border-color:rgba(255,255,255,0.2);
+}
+
+.project-top{
+  display:flex;
+  justify-content:space-between;
+  gap:32px;
+  flex-wrap:wrap;
+  margin-bottom:32px;
+}
+
+.tag{
+  color:#8d8d8d;
+  text-transform:uppercase;
+  letter-spacing:2px;
+  font-size:.8rem;
+}
+
+.project h2{
+  font-size:3rem;
+  margin-top:8px;
+}
+
+.project p{
+  color:#aaa;
+  max-width:760px;
+  margin-bottom:32px;
+}
+
+.metrics{
+  display:flex;
+  gap:16px;
+}
+
+.metric{
+  background:#181818;
+  border:1px solid rgba(255,255,255,0.06);
+  border-radius:20px;
+  padding:16px;
+  min-width:120px;
+}
+
+.metric span{
+  display:block;
+  color:#888;
+  font-size:.8rem;
+  margin-bottom:8px;
+}
+
+.metric strong{
+  font-size:2rem;
+}
+
+.stack{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+.stack span{
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:999px;
+  padding:10px 16px;
+  color:#aaa;
+}
+
+.about,
+.contact{
+  padding:120px 8vw;
+}
+
+.about h2,
+.contact h2{
+  font-size:3rem;
+  margin-bottom:24px;
+}
+
+.about p{
+  color:#aaa;
+  max-width:760px;
+}
+
+.contact a{
+  font-size:1.5rem;
+}
+
+@media(max-width:768px){
+
+  .project h2{
+    font-size:2rem;
+  }
+
+  .metrics{
+    width:100%;
+    flex-wrap:wrap;
+  }
+
+  .metric{
+    flex:1;
+  }
+
+}

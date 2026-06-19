@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Bookit Case Study | Luis Grasso</title>
+<link rel="stylesheet" href="css/output.css" />
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
+<script defer src="js/app.js"></script>
+</head>
+
+<body class="bg-neutral-950 text-white selection:bg-lime-300 selection:text-neutral-950">
+<header class="sticky top-0 z-30 border-b border-white/10 bg-neutral-950/85 backdrop-blur-xl">
+  <div class="flex flex-col gap-4 px-5 py-4 md:flex-row md:items-center md:justify-between md:px-12 lg:px-[72px]">
+    <a class="inline-flex items-center gap-3 font-black" href="index.html" aria-label="Volver al inicio">
+      <span class="grid size-10 place-items-center rounded-lg bg-lime-300 text-xs text-neutral-950">LG</span>
+      <span>Luis Grasso</span>
+    </a>
+    <nav class="flex items-center gap-4 text-sm font-bold text-white/60" aria-label="Navegación de caso">
+      <a class="transition hover:text-white" href="index.html#work">← Volver</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- Hero Case Study -->
+  <section class="px-5 pb-16 pt-24 md:px-12 md:pt-32 lg:px-[72px]">
+    <div class="reveal">
+      <p class="mb-5 text-sm font-black uppercase tracking-[0.14em] text-lime-300">Case Study: FinTech & SaaS</p>
+      <h1 class="max-w-6xl text-5xl font-black leading-[0.9] tracking-normal md:text-7xl lg:text-8xl">
+        Bookit: Infraestructura global de reservas y gestión de identidad.
+      </h1>
+      <div class="mt-12 grid gap-8 md:grid-cols-3">
+        <div>
+          <h4 class="text-xs font-black uppercase tracking-widest text-white/40">Rol</h4>
+          <p class="mt-2 font-bold">Lead Frontend & Auth Architect</p>
+        </div>
+        <div>
+          <h4 class="text-xs font-black uppercase tracking-widest text-white/40">Stack</h4>
+          <p class="mt-2 font-bold">React, Clerk, Tailwind, i18next</p>
+        </div>
+        <div>
+          <h4 class="text-xs font-black uppercase tracking-widest text-white/40">Países</h4>
+          <p class="mt-2 font-bold">Uruguay, México, Costa Rica, España</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Hero Image -->
+  <section class="px-5 md:px-12 lg:px-[72px]">
+    <div class="reveal aspect-video overflow-hidden rounded-2xl bg-neutral-900 border border-white/10">
+        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070" alt="Bookit Interface Preview" class="h-full w-full object-cover opacity-80">
+    </div>
+  </section>
+
+  <!-- The Challenge -->
+  <section class="px-5 py-20 md:px-12 lg:px-[72px] lg:py-32">
+    <div class="grid gap-12 lg:grid-cols-2">
+      <div class="reveal">
+        <h2 class="text-4xl font-black md:text-5xl">El Desafío</h2>
+        <p class="mt-6 text-lg leading-relaxed text-white/60">
+          Bookit nació con la necesidad de escalar rápidamente en mercados hispanohablantes con regulaciones y modismos distintos. El reto técnico consistía en implementar un sistema de autenticación "Zero-Trust" que fuera amigable para el usuario y una arquitectura de contenidos que hablara el idioma local de cada región, no un español genérico.
+        </p>
+      </div>
+      <div class="reveal space-y-8">
+        <div class="rounded-xl bg-neutral-900 p-8 border border-white/5">
+          <h3 class="text-xl font-bold text-lime-300">01. Autenticación Enterprise</h3>
+          <p class="mt-2 text-white/50">Sustitución de flujos heredados por Clerk para soportar Passkeys y MFA sin fricción.</p>
+        </div>
+        <div class="rounded-xl bg-neutral-900 p-8 border border-white/5">
+          <h3 class="text-xl font-bold text-lime-300">02. Regionalización Dinámica</h3>
+          <p class="mt-2 text-white/50">Manejo de variaciones lingüísticas complejas (voseo uruguayo vs. tú mexicano).</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Technical Deep Dive: Clerk -->
+  <section class="bg-neutral-900 px-5 py-20 md:px-12 lg:px-[72px]">
+    <div class="reveal mb-12">
+      <h2 class="text-3xl font-black md:text-5xl">Gestión de Identidad con Clerk</h2>
+    </div>
+    <div class="grid gap-8 lg:grid-cols-3">
+      <div class="rounded-xl border border-white/10 p-8">
+        <div class="size-12 rounded-lg bg-lime-300/10 flex items-center justify-center text-lime-300 mb-6">
+          <svg xmlns="http://www.w3.org/2000/svg" class="size-6" fill="none" viewBox="0 0 24 24" stroke="currentColor font-black"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+        </div>
+        <h3 class="text-xl font-bold">Seguridad Proactiva</h3>
+        <p class="mt-4 text-white/50 text-sm">Implementación de Session Management avanzado, permitiendo al usuario ver y cerrar sesiones en otros dispositivos de forma remota.</p>
+      </div>
+      <div class="rounded-xl border border-white/10 p-8">
+        <div class="size-12 rounded-lg bg-lime-300/10 flex items-center justify-center text-lime-300 mb-6">
+          <svg xmlns="http://www.w3.org/2000/svg" class="size-6" fill="none" viewBox="0 0 24 24" stroke="currentColor font-black"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+        </div>
+        <h3 class="text-xl font-bold">Fricción Cero</h3>
+        <p class="mt-4 text-white/50 text-sm">Uso de Magic Links y OAuth social para incrementar el ratio de conversión en el onboarding en un 24%.</p>
+      </div>
+      <div class="rounded-xl border border-white/10 p-8">
+        <div class="size-12 rounded-lg bg-lime-300/10 flex items-center justify-center text-lime-300 mb-6">
+          <svg xmlns="http://www.w3.org/2000/svg" class="size-6" fill="none" viewBox="0 0 24 24" stroke="currentColor font-black"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 11.37 9.188 16.503 6 20" /></svg>
+        </div>
+        <h3 class="text-xl font-bold">Localización de UI</h3>
+        <p class="mt-4 text-white/50 text-sm">Personalización total de los componentes de Clerk para que el lenguaje de seguridad coincida con el tono de la marca.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Multi-region Strategy -->
+  <section class="px-5 py-20 md:px-12 lg:px-[72px] lg:py-32">
+    <div class="grid gap-12 lg:grid-cols-[1.2fr_0.8fr]">
+      <div class="reveal">
+        <h2 class="text-4xl font-black md:text-5xl">Arquitectura i18n Regional</h2>
+        <p class="mt-6 text-lg text-white/60">
+          A diferencia de otras plataformas, Bookit utiliza un sistema de detección de <code class="text-lime-300 bg-white/5 px-2 py-1 rounded">locale</code> por subdominio y cabeceras de navegador para servir traducciones específicas.
+        </p>
+        <ul class="mt-8 space-y-4">
+          <li class="flex items-center gap-3 text-white/80"><span class="size-2 rounded-full bg-lime-300"></span> <strong>Uruguay (es-UY):</strong> Adaptación a formas verbales locales (voseo).</li>
+          <li class="flex items-center gap-3 text-white/80"><span class="size-2 rounded-full bg-lime-300"></span> <strong>España (ca-ES):</strong> Soporte completo para Catalán, respetando la identidad cultural.</li>
+          <li class="flex items-center gap-3 text-white/80"><span class="size-2 rounded-full bg-lime-300"></span> <strong>México/CR:</strong> Ajustes en terminología financiera y de pagos locales.</li>
+        </ul>
+      </div>
+      <div class="reveal rounded-2xl bg-neutral-900 p-6 font-mono text-xs border border-white/10 shadow-2xl">
+        <div class="flex gap-1.5 mb-4">
+          <div class="size-3 rounded-full bg-red-500"></div>
+          <div class="size-3 rounded-full bg-yellow-500"></div>
+          <div class="size-3 rounded-full bg-green-500"></div>
+        </div>
+        <p class="text-white/40">// i18n Configuration</p>
+        <pre class="mt-2 text-lime-300">
+const localizationMap = {
+  'es-UY': esUY,
+  'es-MX': esMX,
+  'ca-ES': caES,
+  'pt-PT': ptPT
+};
+
+export default function AuthProvider({ children }) {
+  const { locale } = useLocale();
+  return (
+    &lt;ClerkProvider 
+      localization={localizationMap[locale]}
+    &gt;
+      {children}
+    &lt;/ClerkProvider&gt;
+  );
+}</pre>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="border-t border-white/10 px-5 py-12 md:px-12 lg:px-[72px]">
+  <div class="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
+    <div>
+      <p class="text-2xl font-black">Luis Grasso</p>
+      <p class="text-white/40">Product Design & Frontend</p>
+    </div>
+    <a class="w-fit rounded-lg bg-white px-6 py-3 font-black text-neutral-950 transition hover:bg-lime-300" href="index.html#work">
+      Siguiente Proyecto →
+    </a>
+  </div>
+</footer>
+</body>
+</html>

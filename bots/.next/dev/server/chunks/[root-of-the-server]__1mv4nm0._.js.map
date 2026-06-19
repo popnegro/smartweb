@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 46, "column": 0}, "map": {"version":3,"sources":["file:///home/luisgrasso/Documentos/smartweb/bots/app/api/health/route.ts"],"sourcesContent":["import { NextResponse } from \"next/server\";\n\nexport function GET() {\n  return NextResponse.json({\n    ok: true,\n    service: \"barrio-os\",\n    environment: process.env.VERCEL_ENV ?? \"local\"\n  });\n}\n"],"names":["GET","json","ok","service","environment","process","env","VERCEL_ENV"],"mappings":";;;;AAAA;;AAEO,SAASA;IACd,OAAO,gJAAY,CAACC,IAAI,CAAC;QACvBC,IAAI;QACJC,SAAS;QACTC,aAAaC,QAAQC,GAAG,CAACC,UAAU,IAAI;IACzC;AACF"}}]
+}

@@ -1,0 +1,415 @@
+/* [project]/app/globals.css [app-client] (css) */
+:root {
+  --lightningcss-light: initial;
+  --lightningcss-dark: ;
+  color-scheme: light;
+  --bg: #f4f1ea;
+  --surface: #fff;
+  --surface-strong: #f8fafc;
+  --ink: #16211c;
+  --muted: #63706a;
+  --line: #d9ded8;
+  --green: #1f7a57;
+  --green-soft: #dff3e9;
+  --blue: #276bb5;
+  --amber: #b66a14;
+  --coral: #cc4b37;
+  --shadow: 0 18px 50px #16211c17;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  margin: 0;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif;
+}
+
+button, a {
+  font: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.shell {
+  grid-template-columns: 280px minmax(0, 1fr);
+  min-height: 100vh;
+  display: grid;
+}
+
+.sidebar {
+  border-right: 1px solid var(--line);
+  background: #fbfaf7;
+  flex-direction: column;
+  gap: 28px;
+  height: 100vh;
+  padding: 24px;
+  display: flex;
+  position: sticky;
+  top: 0;
+}
+
+.brand {
+  align-items: center;
+  gap: 12px;
+  display: flex;
+}
+
+.brandMark {
+  background: var(--ink);
+  color: #fff;
+  border-radius: 8px;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  font-weight: 800;
+  display: grid;
+}
+
+.brand strong, .brand span {
+  display: block;
+}
+
+.brand span, .sidebarNote p, .metricCard span, .metricCard small, .businessRow p, .inboxItem p, .flowItem p, .band p {
+  color: var(--muted);
+}
+
+.nav {
+  gap: 8px;
+  display: grid;
+}
+
+.nav a {
+  color: #26342e;
+  border-radius: 8px;
+  align-items: center;
+  gap: 10px;
+  min-height: 42px;
+  padding: 0 12px;
+  display: flex;
+}
+
+.nav a:hover {
+  background: var(--green-soft);
+}
+
+.sidebarNote {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  border-radius: 8px;
+  margin-top: auto;
+  padding: 16px;
+}
+
+.sidebarNote span, .eyebrow {
+  color: var(--green);
+  letter-spacing: 0;
+  text-transform: uppercase;
+  font-size: .75rem;
+  font-weight: 800;
+}
+
+.workspace {
+  width: min(1240px, 100%);
+  margin: 0 auto;
+  padding: 32px;
+}
+
+.topbar {
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 24px;
+  display: flex;
+}
+
+h1, h2, p {
+  margin-top: 0;
+}
+
+h1 {
+  letter-spacing: 0;
+  max-width: 760px;
+  margin-bottom: 0;
+  font-size: clamp(2rem, 4vw, 4rem);
+  line-height: 1.02;
+}
+
+h2 {
+  margin-bottom: 0;
+  font-size: 1.2rem;
+  line-height: 1.2;
+}
+
+.primaryButton, .iconButton {
+  cursor: pointer;
+  border: 0;
+  border-radius: 8px;
+  justify-content: center;
+  align-items: center;
+  display: inline-flex;
+}
+
+.primaryButton {
+  background: var(--green);
+  color: #fff;
+  white-space: nowrap;
+  gap: 10px;
+  min-height: 44px;
+  padding: 0 16px;
+  font-weight: 800;
+}
+
+.iconButton {
+  background: var(--surface-strong);
+  width: 40px;
+  height: 40px;
+  color: var(--ink);
+}
+
+.metricsGrid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 16px;
+  display: grid;
+}
+
+.metricCard, .panel, .band {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  border-radius: 8px;
+}
+
+.metricCard {
+  padding: 18px;
+}
+
+.metricCard strong {
+  margin: 8px 0 4px;
+  font-size: 2rem;
+  display: block;
+}
+
+.split {
+  grid-template-columns: minmax(0, 1.25fr) minmax(320px, .75fr);
+  gap: 16px;
+  margin-bottom: 16px;
+  display: grid;
+}
+
+.panel {
+  padding: 18px;
+}
+
+.panelHeader, .rowBetween {
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  display: flex;
+}
+
+.businessList, .inboxList, .flowList, .qaList {
+  gap: 12px;
+  margin-top: 18px;
+  display: grid;
+}
+
+.businessRow {
+  border: 1px solid var(--line);
+  background: var(--surface-strong);
+  border-radius: 8px;
+  grid-template-columns: 54px minmax(0, 1fr);
+  gap: 12px;
+  padding: 12px;
+  display: grid;
+}
+
+.score {
+  background: var(--green-soft);
+  width: 54px;
+  height: 54px;
+  color: var(--green);
+  border-radius: 8px;
+  place-items: center;
+  font-weight: 900;
+  display: grid;
+}
+
+.businessBody {
+  min-width: 0;
+}
+
+.businessRow p {
+  margin: 4px 0 10px;
+}
+
+.signals {
+  flex-wrap: wrap;
+  gap: 6px;
+  display: flex;
+}
+
+.signals span, .status, .inboxItem span {
+  border-radius: 999px;
+  padding: 5px 9px;
+  font-size: .78rem;
+  font-weight: 800;
+}
+
+.signals span {
+  color: #3f4f5f;
+  background: #eef2f7;
+}
+
+.status {
+  color: var(--blue);
+  white-space: nowrap;
+  background: #edf2f8;
+}
+
+.status.active {
+  background: var(--green-soft);
+  color: var(--green);
+}
+
+.status.contacted {
+  color: var(--amber);
+  background: #fff0da;
+}
+
+.diagnosticGrid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 18px;
+  display: grid;
+}
+
+.diagnosticItem {
+  border: 1px solid var(--line);
+  background: var(--surface-strong);
+  border-radius: 8px;
+  min-height: 132px;
+  padding: 14px;
+}
+
+.diagnosticItem div {
+  color: var(--green);
+}
+
+.diagnosticItem span, .diagnosticItem strong {
+  display: block;
+}
+
+.diagnosticItem span {
+  color: var(--muted);
+  margin-top: 18px;
+}
+
+.diagnosticItem strong {
+  margin-top: 6px;
+  font-size: 1.8rem;
+}
+
+.inboxItem, .flowItem, .qaItem {
+  border: 1px solid var(--line);
+  background: var(--surface-strong);
+  border-radius: 8px;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px;
+  display: flex;
+}
+
+.inboxItem {
+  justify-content: space-between;
+}
+
+.inboxItem p, .flowItem p {
+  margin: 4px 0 0;
+}
+
+.inboxItem span {
+  color: var(--coral);
+  white-space: nowrap;
+  background: #ffe9e5;
+}
+
+.flowItem svg, .qaItem svg {
+  color: var(--green);
+  flex: none;
+}
+
+.band {
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 420px);
+  gap: 24px;
+  padding: 22px;
+  display: grid;
+}
+
+.band p {
+  max-width: 760px;
+  margin-bottom: 0;
+  line-height: 1.6;
+}
+
+.qaList {
+  margin-top: 0;
+}
+
+.qaItem {
+  background: #fbfaf7;
+}
+
+@media (max-width: 980px) {
+  .shell, .split, .band {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+    height: auto;
+    position: relative;
+  }
+
+  .nav, .metricsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .workspace, .sidebar {
+    padding: 18px;
+  }
+
+  .topbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .metricsGrid, .diagnosticGrid, .nav, .businessRow {
+    grid-template-columns: 1fr;
+  }
+
+  .score {
+    width: 100%;
+  }
+
+  .rowBetween, .inboxItem {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/*# sourceMappingURL=app_globals_0yg4wg8.css.map*/

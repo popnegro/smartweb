@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ElectroFix | Panel Admin</title>
+  <!-- Tailwind pinned para producción estable -->
+  <script src="https://cdn.tailwindcss.com/3.4.1"></script>
+  <style>
+    :root {
+      --app-primary: #0f766e;
+      --app-primary-hover: #115e59;
+      --app-secondary: #111827;
+      --app-accent: #f59e0b;
+    }
+
+    *:focus-visible { outline: 2px solid var(--app-primary); outline-offset: 2px; }
+
+    /* ── Botones ── */
+    .btn-primary { background: var(--app-primary); transition: background .15s; }
+    .btn-primary:hover { background: var(--app-primary-hover); }
+    .btn-primary:disabled { opacity: .5; cursor: not-allowed; }
+
+    /* ── Inputs ── */
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: var(--app-primary);
+      box-shadow: 0 0 0 3px rgba(15,118,110,.12);
+    }
+
+    /* ── Tabla de productos ── */
+    .product-row { transition: background .1s; }
+    .product-row:hover { background: #f8fafc; }
+
+    /* ── Modal de producto ── */
+    #modal-overlay { display: none; }
+    #modal-overlay.active { display: flex; }
+
+    /* ── Login / admin ── */
+    #login-screen { display: flex; }
+    #admin-panel  { display: none; }
+
+    /* ── Drag & drop ── */
+    .drag-over { border-color: var(--app-primary) !important; background: #f0fdf4; }
+
+    /* ── Tabs ── */
+    .tab-btn        { background: transparent; color: #94a3b8; transition: all .15s; }
+    .tab-btn.active { background: rgba(255,255,255,.1); color: #fff; }
+    .tab-btn:hover  { color: #fff; }
+
+    /* ── Imagen preview ── */
+    .img-preview { object-fit: cover; border-radius: 12px; }
+
+    /* ── Badges ── */
+    .badge-pill {
+      display: inline-block; padding: 2px 10px;
+      border-radius: 999px; font-size: 11px; font-weight: 700;
+    }
+
+    /* ── Sidebar mobile ── */
+    #sidebar {
+      position: fixed; top: 0; left: 0; bottom: 0; z-index: 40;
+      width: 256px; transform: translateX(-100%); transition: transform .25s ease;
+    }
+    #sidebar.open { transform: translateX(0); }
+    #sidebar-backdrop {
+      display: none; position: fixed; inset: 0; z-index: 39;
+      background: rgba(0,0,0,.5);
+    }
+    #sidebar-backdrop.visible { display: block; }
+
+    @media (min-width: 768px) {
+      #sidebar { position: static; transform: none; }
+      #sidebar-backdrop { display: none !important; }
+      #btn-menu { display: none; }
+    }
+
+    /* ── Campo inválido ── */
+    .field-error { color: #dc2626; font-size: 11px; font-weight: 700; margin-top: 4px; display: none; }
+    .field-error.visible { display: block; }
+    input.invalid, textarea.invalid, select.invalid { border-color: #dc2626 !important; }
+
+    /* ── Reduced motion ── */
+    @media (prefers-reduced-motion: reduce) {
+      .btn-primary, .product-row, #sidebar { transition: none; }
+    }
+  </style>
+</head>
+<body class="bg-slate-100 min-h-screen">
+
+  <!-- Toast container -->
+  <div id="toast-container" aria-live="polite" aria-atomic="true"
+    class="fixed bottom-6 right-6 z-[999] flex flex-col gap-3 pointer-events-none"></div>
+
+  <!-- ══════════════════════════════════════════════
+       LOGIN
+  ══════════════════════════════════════════════ -->
+  <div id="login-screen" class="min-h-screen items-center justify-center" role="main">
+    <div class="bg-white rounded-3xl shadow-xl p-10 w-full max-w-sm mx-4">
+      <div class="mb-6 text-center">
+        <span class="text-xs font-black tracking-widest text-teal-700 uppercase">ElectroFix</span>
+        <h1 class="text-2xl font-black text-slate-900 mt-1">Panel Admin</h1>
+        <p class="text-sm text-slate-400 mt-1">Ingresá tu clave para continuar</p>
+      </div>
+
+      <div class="relative mb-4">
+        <label for="access-key" class="sr-only">Clave de acceso</label>
+        <input id="access-key" type="password" autocomplete="current-password"
+          placeholder="Clave de acceso"
+          class="w-full border border-slate-200 p-3 pr-10 rounded-xl text-sm">
+        <button id="btn-toggle-pwd" type="button" aria-label="Mostrar u ocultar contraseña"
+          class="absolute right-3 top-3 text-slate-400 hover:text-slate-700 text-sm">👁</button>
+      </div>
+
+      <button id="btn-login" class="btn-primary w-full text-white py-3 rounded-xl font-black">Ingresar</button>
+      <p id="login-error" class="text-red-500 text-xs text-center mt-3 hidden" role="alert">Clave incorrecta. Intentá de nuevo.</p>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       PANEL ADMIN
+  ══════════════════════════════════════════════ -->
+  <div id="admin-panel" class="min-h-screen">
+
+    <!-- Topbar mobile -->
+    <div class="md:hidden bg-slate-900 text-white px-4 py-3 flex items-center justify-between sticky top-0 z-30">
+      <button id="btn-menu" aria-label="Abrir menú" aria-expanded="false" aria-controls="sidebar"
+        class="w-9 h-9 flex items-center justify-center rounded-lg bg-slate-700 text-white text-lg">☰</button>
+      <span class="font-black text-sm">ElectroFix Admin</span>
+      <a href="index.html" target="_blank" class="text-teal-400 text-xs font-bold">Ver tienda →</a>
+    </div>
+
+    <div class="flex min-h-[calc(100vh-3rem)] md:min-h-screen">
+
+      <!-- Backdrop mobile -->
+      <div id="sidebar-backdrop" aria-hidden="true"></div>
+
+      <!-- Sidebar -->
+      <aside id="sidebar" class="w-64 bg-slate-900 text-white flex flex-col" role="navigation" aria-label="Panel de administración">
+        <div class="px-6 py-6 border-b border-slate-700">
+          <span class="text-xs font-black tracking-widest text-teal-400 uppercase">ElectroFix</span>
+          <h2 class="font-black text-lg">Panel Admin</h2>
+        </div>
+
+        <nav class="flex-1 py-4">
+          <button data-tab="products" class="tab-btn active w-full text-left px-6 py-3 font-bold text-sm flex items-center gap-3" id="tab-products" aria-controls="panel-products">
+            <span aria-hidden="true">📦</span> Productos
+          </button>
+          <button data-tab="brand" class="tab-btn w-full text-left px-6 py-3 font-bold text-sm flex items-center gap-3" id="tab-brand" aria-controls="panel-brand">
+            <span aria-hidden="true">🎨</span> Marca
+          </button>
+          <button data-tab="orders" class="tab-btn w-full text-left px-6 py-3 font-bold text-sm flex items-center gap-3" id="tab-orders" aria-controls="panel-orders">
+            <span aria-hidden="true">📋</span> Pedidos
+          </button>
+        </nav>
+
+        <div class="px-6 py-4 border-t border-slate-700 flex flex-col gap-2">
+          <a href="index.html" target="_blank" class="text-sm text-teal-400 hover:text-teal-300 font-bold transition-colors">Ver tienda →</a>
+          <button id="btn-logout" class="text-xs text-slate-500 hover:text-slate-300 transition-colors text-left">Cerrar sesión</button>
+        </div>
+      </aside>
+
+      <!-- Contenido principal -->
+      <main id="main-content" class="flex-1 overflow-auto">
+
+        <!-- ── PRODUCTOS ── -->
+        <section id="panel-products" class="p-6 md:p-8" role="tabpanel" aria-labelledby="tab-products">
+          <div class="flex items-center justify-between mb-8">
+            <div>
+              <h2 class="text-2xl font-black text-slate-900">Productos</h2>
+              <p class="text-sm text-slate-500 mt-1" id="product-count" aria-live="polite">0 productos en catálogo</p>
+            </div>
+            <button id="btn-new-product" class="btn-primary text-white px-5 py-2.5 rounded-xl font-black text-sm flex items-center gap-2">
+              + Nuevo producto
+            </button>
+          </div>
+
+          <div class="flex flex-wrap gap-3 mb-6">
+            <label for="search-products" class="sr-only">Buscar producto</label>
+            <input id="search-products" placeholder="Buscar por nombre o SKU…"
+              class="flex-1 min-w-[180px] border border-slate-200 bg-white p-3 rounded-xl text-sm max-w-xs">
+
+            <label for="filter-category" class="sr-only">Filtrar por categoría</label>
+            <select id="filter-category" class="border border-slate-200 bg-white p-3 rounded-xl text-sm">
+              <option value="">Todas las categorías</option>
+              <option value="Reparacion">Reparación</option>
+              <option value="Accesorios">Accesorios</option>
+              <option value="Computacion">Computación</option>
+              <option value="Audio">Audio</option>
+              <option value="Redes">Redes</option>
+              <option value="Impresion">Impresión</option>
+            </select>
+          </div>
+
+          <div class="bg-white rounded-2xl border border-slate-100 overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm" aria-label="Listado de productos">
+                <thead class="bg-slate-50 border-b border-slate-100">
+                  <tr>
+                    <th class="text-left p-4 font-black text-slate-600 w-12" scope="col"><span class="sr-only">Imagen</span></th>
+                    <th class="text-left p-4 font-black text-slate-600" scope="col">Producto</th>
+                    <th class="text-left p-4 font-black text-slate-600 hidden md:table-cell" scope="col">Categoría</th>
+                    <th class="text-left p-4 font-black text-slate-600" scope="col">Precio</th>
+                    <th class="text-left p-4 font-black text-slate-600 hidden lg:table-cell" scope="col">Stock</th>
+                    <th class="text-right p-4 font-black text-slate-600" scope="col">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="products-table-body"></tbody>
+              </table>
+            </div>
+
+            <div id="table-empty" class="hidden py-16 text-center text-slate-400" role="status">
+              <div class="text-4xl mb-3" aria-hidden="true">📦</div>
+              <p class="font-bold text-slate-600">Sin productos todavía</p>
+              <p class="text-xs mt-1">Hacé clic en "+ Nuevo producto" para empezar.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── MARCA ── -->
+        <section id="panel-brand" class="p-6 md:p-8 hidden" role="tabpanel" aria-labelledby="tab-brand">
+          <div class="mb-8">
+            <h2 class="text-2xl font-black text-slate-900">Configuración de Marca</h2>
+            <p class="text-sm text-slate-500 mt-1">Personalizá la identidad visual de tu tienda</p>
+          </div>
+
+          <div class="grid gap-6 max-w-2xl">
+            <div class="bg-white rounded-2xl border border-slate-100 p-6 space-y-4">
+              <h3 class="font-black text-slate-900">Identidad</h3>
+              <div>
+                <label for="brand-name" class="text-xs font-bold text-slate-600 mb-1 block">Nombre del negocio</label>
+                <input id="brand-name" autocomplete="organization" class="w-full border border-slate-200 p-3 rounded-xl text-sm">
+              </div>
+              <div>
+                <label for="brand-wa" class="text-xs font-bold text-slate-600 mb-1 block">
+                  Número de WhatsApp <span class="font-normal text-slate-400">(sin + ni espacios)</span>
+                </label>
+                <input id="brand-wa" type="tel" placeholder="5491100000000"
+                  class="w-full border border-slate-200 p-3 rounded-xl text-sm">
+              </div>
+            </div>
+
+            <div class="bg-white rounded-2xl border border-slate-100 p-6">
+              <h3 class="font-black text-slate-900 mb-4">Colores</h3>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label for="brand-primary" class="text-xs font-bold text-slate-600 mb-1 block">Color primario</label>
+                  <div class="flex items-center gap-2">
+                    <input type="color" id="brand-primary" aria-label="Selector de color primario"
+                      class="w-10 h-10 rounded-lg border border-slate-200 p-1 cursor-pointer">
+                    <input id="brand-primary-hex" placeholder="#0f766e"
+                      aria-label="Valor hex del color primario"
+                      class="flex-1 border border-slate-200 p-2 rounded-lg text-sm">
+                  </div>
+                </div>
+                <div>
+                  <label for="brand-accent" class="text-xs font-bold text-slate-600 mb-1 block">Color acento</label>
+                  <div class="flex items-center gap-2">
+                    <input type="color" id="brand-accent" aria-label="Selector de color acento"
+                      class="w-10 h-10 rounded-lg border border-slate-200 p-1 cursor-pointer">
+                    <input id="brand-accent-hex" placeholder="#f59e0b"
+                      aria-label="Valor hex del color acento"
+                      class="flex-1 border border-slate-200 p-2 rounded-lg text-sm">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-white rounded-2xl border border-slate-100 p-6">
+              <h3 class="font-black text-slate-900 mb-4">Hero</h3>
+              <div class="space-y-3">
+                <div>
+                  <label for="brand-hero-title" class="text-xs font-bold text-slate-600 mb-1 block">Título principal</label>
+                  <input id="brand-hero-title" class="w-full border border-slate-200 p-3 rounded-xl text-sm">
+                </div>
+                <div>
+                  <label for="brand-hero-desc" class="text-xs font-bold text-slate-600 mb-1 block">Descripción</label>
+                  <textarea id="brand-hero-desc" rows="2" class="w-full border border-slate-200 p-3 rounded-xl text-sm resize-none"></textarea>
+                </div>
+              </div>
+            </div>
+
+            <button id="btn-save-brand" class="btn-primary text-white py-3 rounded-xl font-black">Guardar cambios</button>
+          </div>
+        </section>
+
+        <!-- ── PEDIDOS ── -->
+        <section id="panel-orders" class="p-6 md:p-8 hidden" role="tabpanel" aria-labelledby="tab-orders">
+          <div class="flex items-center justify-between mb-8">
+            <div>
+              <h2 class="text-2xl font-black text-slate-900">Pedidos recibidos</h2>
+              <p class="text-sm text-slate-500 mt-1">Los pedidos enviados por WhatsApp aparecen aquí</p>
+            </div>
+            <button id="btn-export-orders"
+              class="border border-slate-200 bg-white text-slate-700 px-4 py-2.5 rounded-xl font-bold text-sm hover:bg-slate-50 transition-colors">
+              ↓ Exportar CSV
+            </button>
+          </div>
+          <div class="bg-white rounded-2xl border border-slate-100 p-12 text-center text-slate-400">
+            <div class="text-4xl mb-3" aria-hidden="true">📋</div>
+            <p class="font-bold text-slate-600">Registro de pedidos</p>
+            <p class="text-sm mt-1 max-w-sm mx-auto">
+              Esta sección registra pedidos al integrar un backend. Por ahora, los pedidos llegan directo a tu WhatsApp.
+            </p>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       MODAL — NUEVO / EDITAR PRODUCTO
+  ══════════════════════════════════════════════ -->
+  <div id="modal-overlay"
+    role="dialog" aria-modal="true" aria-labelledby="modal-product-title"
+    class="fixed inset-0 z-50 items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-3xl w-full max-w-lg shadow-2xl overflow-y-auto max-h-[90vh]">
+
+      <div class="sticky top-0 bg-white border-b border-slate-100 px-6 py-5 flex items-center justify-between rounded-t-3xl">
+        <h3 id="modal-product-title" class="text-xl font-black text-slate-900">Nuevo producto</h3>
+        <button id="btn-close-modal" aria-label="Cerrar"
+          class="w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 text-sm transition-colors">✕</button>
+      </div>
+
+      <div class="p-6 space-y-5">
+
+        <!-- Imagen -->
+        <div>
+          <label class="text-xs font-bold text-slate-600 mb-2 block">Imagen del producto</label>
+          <div id="img-drop-zone"
+            role="button" tabindex="0" aria-label="Cargar imagen — hacé clic o arrastrá un archivo"
+            class="border-2 border-dashed border-slate-200 rounded-2xl p-6 text-center cursor-pointer hover:border-teal-500 transition-colors">
+            <img id="img-preview" src="" alt="Vista previa de imagen" width="400" height="160"
+              class="img-preview w-full h-40 object-cover rounded-xl mb-3 hidden">
+            <div id="img-placeholder">
+              <div class="text-3xl mb-2" aria-hidden="true">🖼️</div>
+              <p class="text-sm font-bold text-slate-600">Arrastrá una imagen o hacé clic</p>
+              <p class="text-xs text-slate-400 mt-1">JPG, PNG, WebP — o pegá una URL abajo</p>
+            </div>
+          </div>
+          <input type="file" id="img-file-input" accept="image/*" class="hidden" aria-label="Seleccionar archivo de imagen">
+          <div class="mt-2 flex gap-2">
+            <label for="product-image-url" class="sr-only">URL de imagen</label>
+            <input id="product-image-url" placeholder="O pegá una URL de imagen…"
+              class="flex-1 border border-slate-200 p-2.5 rounded-xl text-sm">
+            <button id="btn-clear-image"
+              class="border border-slate-200 px-3 py-2 rounded-xl text-xs text-slate-500 hover:bg-slate-50 transition-colors">
+              Borrar
+            </button>
+          </div>
+        </div>
+
+        <!-- Nombre y SKU -->
+        <div class="grid grid-cols-2 gap-4">
+          <div class="col-span-2">
+            <label for="product-name" class="text-xs font-bold text-slate-600 mb-1 block">
+              Nombre <span aria-hidden="true">*</span><span class="sr-only">(obligatorio)</span>
+            </label>
+            <input id="product-name" placeholder="Ej: Auriculares Bluetooth"
+              class="w-full border border-slate-200 p-3 rounded-xl text-sm">
+            <p class="field-error" id="err-product-name" role="alert">El nombre es obligatorio.</p>
+          </div>
+          <div>
+            <label for="product-sku" class="text-xs font-bold text-slate-600 mb-1 block">SKU</label>
+            <input id="product-sku" placeholder="AUD-BT-01" class="w-full border border-slate-200 p-3 rounded-xl text-sm">
+          </div>
+          <div>
+            <label for="product-category" class="text-xs font-bold text-slate-600 mb-1 block">Categoría</label>
+            <select id="product-category" class="w-full border border-slate-200 p-3 rounded-xl text-sm bg-white">
+              <option value="Reparacion">Reparación</option>
+              <option value="Accesorios">Accesorios</option>
+              <option value="Computacion">Computación</option>
+              <option value="Audio">Audio</option>
+              <option value="Redes">Redes</option>
+              <option value="Impresion">Impresión</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label for="product-specs" class="text-xs font-bold text-slate-600 mb-1 block">Datos técnicos / Descripción</label>
+          <textarea id="product-specs" rows="3"
+            placeholder="Especificaciones, compatibilidad, incluye…"
+            class="w-full border border-slate-200 p-3 rounded-xl text-sm resize-none"></textarea>
+        </div>
+
+        <!-- Precios -->
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label for="product-price-old" class="text-xs font-bold text-slate-600 mb-1 block">Precio tachado (antes)</label>
+            <div class="relative">
+              <span class="absolute left-3 top-3 text-slate-400 text-sm" aria-hidden="true">$</span>
+              <input id="product-price-old" type="text" inputmode="numeric" placeholder="0"
+                class="w-full border border-slate-200 p-3 pl-6 rounded-xl text-sm">
+            </div>
+          </div>
+          <div>
+            <label for="product-price-new" class="text-xs font-bold text-slate-600 mb-1 block">
+              Precio actual <span aria-hidden="true">*</span><span class="sr-only">(obligatorio)</span>
+            </label>
+            <div class="relative">
+              <span class="absolute left-3 top-3 text-slate-400 text-sm" aria-hidden="true">$</span>
+              <input id="product-price-new" type="text" inputmode="numeric" placeholder="0 o 'Cotizar'"
+                class="w-full border border-slate-200 p-3 pl-6 rounded-xl text-sm">
+            </div>
+            <p class="field-error" id="err-product-price" role="alert">El precio es obligatorio.</p>
+          </div>
+        </div>
+
+        <!-- Badge + Stock -->
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label for="product-badge" class="text-xs font-bold text-slate-600 mb-1 block">Etiqueta (badge)</label>
+            <input id="product-badge" placeholder="Alta demanda, Popular…"
+              class="w-full border border-slate-200 p-3 rounded-xl text-sm">
+          </div>
+          <div class="flex flex-col justify-end">
+            <label class="flex items-center gap-3 cursor-pointer p-3 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">
+              <input type="checkbox" id="product-stock" checked class="w-4 h-4 accent-teal-600 rounded">
+              <span class="text-sm font-bold text-slate-700">Disponible en stock</span>
+            </label>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="px-6 pb-6 flex gap-3">
+        <button id="btn-cancel-modal"
+          class="flex-1 border border-slate-200 py-3 rounded-xl font-bold text-slate-600 hover:bg-slate-50 transition-colors">
+          Cancelar
+        </button>
+        <button id="btn-save-product" class="flex-1 btn-primary text-white py-3 rounded-xl font-black">
+          Guardar producto
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       CONFIRMAR ELIMINACIÓN
+  ══════════════════════════════════════════════ -->
+  <div id="delete-overlay"
+    role="alertdialog" aria-modal="true" aria-labelledby="delete-heading"
+    class="fixed inset-0 z-[60] hidden items-center justify-center bg-black/60 backdrop-blur-sm">
+    <div class="bg-white rounded-3xl p-8 max-w-sm w-full mx-4 text-center shadow-2xl">
+      <div class="text-4xl mb-3" aria-hidden="true">🗑️</div>
+      <h3 id="delete-heading" class="text-xl font-black text-slate-900 mb-2">¿Eliminar producto?</h3>
+      <p class="text-slate-500 text-sm mb-6">Esta acción no se puede deshacer.</p>
+      <div class="flex gap-3">
+        <button id="btn-cancel-delete"
+          class="flex-1 border border-slate-200 py-3 rounded-xl font-bold text-slate-600 hover:bg-slate-50 transition-colors">
+          Cancelar
+        </button>
+        <button id="btn-confirm-delete"
+          class="flex-1 bg-red-500 hover:bg-red-600 text-white py-3 rounded-xl font-black transition-colors">
+          Eliminar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="utils.js"></script>
+  <script src="brand.js"></script>
+  <script src="toast.js"></script>
+  <script>
+    'use strict';
+
+    // ── Estado ──────────────────────────────────────────────────
+    let products   = [];
+    let editingId  = null;
+    let deletingId = null;
+    let _prevFocus = null;
+
+    // ── Helpers ─────────────────────────────────────────────────
+    function parseNum(val) {
+      if (!val) return 0;
+      return parseFloat(String(val).replace(/[^0-9.]/g, '')) || 0;
+    }
+
+    function formatPrice(val) {
+      if (!val) return '';
+      const num = parseNum(val);
+      if (!num) return String(val);
+      return '$' + num.toLocaleString('es-AR');
+    }
+
+    function showToast(msg, title = 'Listo') {
+      window.AppToast?.showToast(msg, title, 'dark');
+    }
+
+    // ── Auth ─────────────────────────────────────────────────────
+    async function login() {
+      const keyInput  = document.getElementById('access-key');
+      const errorMsg  = document.getElementById('login-error');
+      const key       = keyInput.value;
+
+      errorMsg.classList.add('hidden');
+      keyInput.setAttribute('aria-invalid', 'false');
+
+      const hash = await window.AppUtils.sha256(key);
+      if (hash === window.APP_CONFIG.adminAccessKeyHash) {
+        window.AppUtils.saveSession(window.APP_CONFIG.storageKeys.session, { ts: Date.now() });
+        showAdminPanel();
+      } else {
+        keyInput.setAttribute('aria-invalid', 'true');
+        errorMsg.classList.remove('hidden');
+        keyInput.focus();
+      }
+    }
+
+    function logout() {
+      window.AppUtils.removeSession(window.APP_CONFIG.storageKeys.session);
+      location.reload();
+    }
+
+    function checkSession() {
+      const session = window.AppUtils.readSession(window.APP_CONFIG.storageKeys.session);
+      if (session && (Date.now() - session.ts) < 8 * 3600 * 1000) {
+        showAdminPanel();
+      }
+    }
+
+    function showAdminPanel() {
+      document.getElementById('login-screen').style.display  = 'none';
+      document.getElementById('admin-panel').style.display   = 'block';
+
+      const brand = window.AppBrand.readBrand();
+      window.AppBrand.applyTheme(brand);
+      loadBrandForm(brand);
+      loadProducts();
+      renderProductTable();
+    }
+
+    // ── Tabs ─────────────────────────────────────────────────────
+    function switchTab(name) {
+      ['products', 'brand', 'orders'].forEach(t => {
+        document.getElementById('panel-' + t).classList.toggle('hidden', t !== name);
+        const btn = document.getElementById('tab-' + t);
+        btn.classList.toggle('active', t === name);
+        btn.setAttribute('aria-selected', String(t === name));
+      });
+      // En mobile: cerrar sidebar al navegar
+      closeSidebar();
+    }
+
+    // ── Sidebar mobile ────────────────────────────────────────────
+    function openSidebar() {
+      document.getElementById('sidebar').classList.add('open');
+      document.getElementById('sidebar-backdrop').classList.add('visible');
+      document.getElementById('btn-menu')?.setAttribute('aria-expanded', 'true');
+    }
+
+    function closeSidebar() {
+      document.getElementById('sidebar').classList.remove('open');
+      document.getElementById('sidebar-backdrop').classList.remove('visible');
+      document.getElementById('btn-menu')?.setAttribute('aria-expanded', 'false');
+    }
+
+    // ── Productos ─────────────────────────────────────────────────
+    function loadProducts() {
+      const stored = window.AppUtils.readJson('electrofix_products', null);
+      if (stored && stored.length) {
+        products = stored;
+      } else {
+        const brand = window.AppBrand.readBrand();
+        products = (brand.catalog?.products || []).map((p, i) => ({
+          id:       p.sku || ('p' + i),
+          name:     p.name,
+          category: p.category || 'General',
+          specs:    p.description || '',
+          priceNew: p.priceLabel || '',
+          priceOld: '',
+          image:    '',
+          badge:    p.badge || '',
+          stock:    true,
+        }));
+        saveProducts();
+      }
+    }
+
+    function saveProducts() {
+      window.AppUtils.saveJson('electrofix_products', products);
+    }
+
+    function renderProductTable() {
+      const search    = document.getElementById('search-products')?.value?.toLowerCase() || '';
+      const catFilter = document.getElementById('filter-category')?.value || '';
+      const tbody     = document.getElementById('products-table-body');
+      const empty     = document.getElementById('table-empty');
+      const count     = document.getElementById('product-count');
+
+      const filtered = products.filter(p => {
+        const matchSearch = !search || p.name.toLowerCase().includes(search) || (p.id || '').toLowerCase().includes(search);
+        const matchCat    = !catFilter || p.category === catFilter;
+        return matchSearch && matchCat;
+      });
+
+      count.textContent = products.length + ' producto' + (products.length !== 1 ? 's' : '') + ' en catálogo';
+
+      if (!filtered.length) {
+        tbody.innerHTML = '';
+        empty.classList.remove('hidden');
+        return;
+      }
+      empty.classList.add('hidden');
+
+      const FALLBACK_IMG = 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=80&q=60';
+
+      // Construimos con DOM — sin innerHTML con datos del usuario (XSS)
+      const frag = document.createDocumentFragment();
+
+      filtered.forEach(p => {
+        const hasDiscount = p.priceOld && parseNum(p.priceOld) > 0 && parseNum(p.priceNew) > 0;
+        const disc = hasDiscount ? Math.round((1 - parseNum(p.priceNew) / parseNum(p.priceOld)) * 100) : 0;
+
+        const tr = document.createElement('tr');
+        tr.className = 'product-row border-b border-slate-50';
+
+        // Imagen
+        const tdImg = document.createElement('td');
+        tdImg.className = 'p-4';
+        const img = document.createElement('img');
+        img.src    = p.image || FALLBACK_IMG;
+        img.alt    = p.name;
+        img.width  = 40; img.height = 40;
+        img.loading = 'lazy';
+        img.className = 'w-10 h-10 object-cover rounded-lg bg-slate-100';
+        img.onerror = () => { img.src = FALLBACK_IMG; };
+        tdImg.appendChild(img);
+
+        // Nombre + SKU
+        const tdName = document.createElement('td');
+        tdName.className = 'p-4';
+        const pName = document.createElement('p');
+        pName.className = 'font-black text-slate-900 text-sm';
+        pName.textContent = p.name;
+        const pSku = document.createElement('p');
+        pSku.className = 'text-xs text-slate-400 mt-0.5';
+        pSku.textContent = p.id || '';
+        tdName.appendChild(pName);
+        tdName.appendChild(pSku);
+
+        // Categoría
+        const tdCat = document.createElement('td');
+        tdCat.className = 'p-4 hidden md:table-cell';
+        const catBadge = document.createElement('span');
+        catBadge.className = 'text-xs font-bold text-teal-700 bg-teal-50 px-2 py-1 rounded-full';
+        catBadge.textContent = p.category;
+        tdCat.appendChild(catBadge);
+
+        // Precio
+        const tdPrice = document.createElement('td');
+        tdPrice.className = 'p-4';
+        const priceBlock = document.createElement('div');
+        priceBlock.className = 'flex flex-col';
+        if (hasDiscount) {
+          const oldEl = document.createElement('span');
+          oldEl.className = 'text-xs line-through text-slate-400';
+          oldEl.textContent = formatPrice(p.priceOld);
+          priceBlock.appendChild(oldEl);
+        }
+        const newEl = document.createElement('span');
+        newEl.className = 'font-black text-teal-600 text-sm';
+        newEl.textContent = formatPrice(p.priceNew);
+        priceBlock.appendChild(newEl);
+        if (hasDiscount) {
+          const discEl = document.createElement('span');
+          discEl.className = 'text-xs text-red-500 font-bold';
+          discEl.textContent = `-${disc}%`;
+          priceBlock.appendChild(discEl);
+        }
+        tdPrice.appendChild(priceBlock);
+
+        // Stock
+        const tdStock = document.createElement('td');
+        tdStock.className = 'p-4 hidden lg:table-cell';
+        const stockBadge = document.createElement('span');
+        stockBadge.className = p.stock !== false
+          ? 'badge-pill bg-green-100 text-green-700'
+          : 'badge-pill bg-red-100 text-red-700';
+        stockBadge.textContent = p.stock !== false ? '✓ En stock' : 'Sin stock';
+        tdStock.appendChild(stockBadge);
+
+        // Acciones
+        const tdActions = document.createElement('td');
+        tdActions.className = 'p-4 text-right';
+        const actionsDiv = document.createElement('div');
+        actionsDiv.className = 'flex items-center justify-end gap-2';
+
+        const editBtn = document.createElement('button');
+        editBtn.className = 'text-xs font-bold text-teal-700 bg-teal-50 hover:bg-teal-100 px-3 py-1.5 rounded-lg transition-colors';
+        editBtn.textContent = 'Editar';
+        editBtn.setAttribute('aria-label', `Editar ${p.name}`);
+        editBtn.addEventListener('click', () => openProductModal(p.id));
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg transition-colors';
+        deleteBtn.textContent = 'Eliminar';
+        deleteBtn.setAttribute('aria-label', `Eliminar ${p.name}`);
+        deleteBtn.addEventListener('click', () => askDelete(p.id));
+
+        actionsDiv.appendChild(editBtn);
+        actionsDiv.appendChild(deleteBtn);
+        tdActions.appendChild(actionsDiv);
+
+        tr.appendChild(tdImg);
+        tr.appendChild(tdName);
+        tr.appendChild(tdCat);
+        tr.appendChild(tdPrice);
+        tr.appendChild(tdStock);
+        tr.appendChild(tdActions);
+
+        frag.appendChild(tr);
+      });
+
+      tbody.innerHTML = '';
+      tbody.appendChild(frag);
+    }
+
+    // ── Modal de producto ─────────────────────────────────────────
+    function openProductModal(id) {
+      editingId = id || null;
+      document.getElementById('modal-product-title').textContent = id ? 'Editar producto' : 'Nuevo producto';
+      clearProductForm();
+
+      if (id) {
+        const p = products.find(x => x.id === id);
+        if (!p) return;
+        document.getElementById('product-name').value      = p.name      || '';
+        document.getElementById('product-sku').value       = p.id        || '';
+        document.getElementById('product-category').value  = p.category  || 'Accesorios';
+        document.getElementById('product-specs').value     = p.specs     || '';
+        document.getElementById('product-price-old').value = p.priceOld  || '';
+        document.getElementById('product-price-new').value = p.priceNew  || '';
+        document.getElementById('product-badge').value     = p.badge     || '';
+        document.getElementById('product-stock').checked   = p.stock !== false;
+        document.getElementById('product-image-url').value = p.image     || '';
+        if (p.image) setPreview(p.image);
+      }
+
+      _prevFocus = document.activeElement;
+      document.getElementById('modal-overlay').classList.add('active');
+      document.body.style.overflow = 'hidden';
+      document.getElementById('product-name').focus();
+    }
+
+    function closeProductModal() {
+      document.getElementById('modal-overlay').classList.remove('active');
+      document.body.style.overflow = '';
+      editingId = null;
+      clearProductModalErrors();
+      _prevFocus?.focus();
+    }
+
+    function clearProductForm() {
+      ['product-name','product-sku','product-specs','product-price-old','product-price-new','product-badge','product-image-url'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+      });
+      document.getElementById('product-stock').checked    = true;
+      document.getElementById('product-category').value   = 'Accesorios';
+      clearImage();
+    }
+
+    // ── Validación del modal ──────────────────────────────────────
+    function clearProductModalErrors() {
+      ['product-name','product-price-new'].forEach(id => {
+        document.getElementById(id)?.classList.remove('invalid');
+      });
+      document.querySelectorAll('#modal-overlay .field-error').forEach(e => e.classList.remove('visible'));
+    }
+
+    function validateProductForm() {
+      clearProductModalErrors();
+      let valid = true;
+
+      const name = document.getElementById('product-name').value.trim();
+      if (!name) {
+        document.getElementById('product-name').classList.add('invalid');
+        document.getElementById('err-product-name').classList.add('visible');
+        if (valid) document.getElementById('product-name').focus();
+        valid = false;
+      }
+
+      const price = document.getElementById('product-price-new').value.trim();
+      if (!price) {
+        document.getElementById('product-price-new').classList.add('invalid');
+        document.getElementById('err-product-price').classList.add('visible');
+        if (valid) document.getElementById('product-price-new').focus();
+        valid = false;
+      }
+
+      return valid;
+    }
+
+    function saveProduct() {
+      if (!validateProductForm()) return;
+
+      const name     = document.getElementById('product-name').value.trim();
+      const priceNew = document.getElementById('product-price-new').value.trim();
+      const sku      = document.getElementById('product-sku').value.trim();
+      const id       = sku || ('p_' + Date.now());
+
+      const product = {
+        id,
+        name,
+        category: document.getElementById('product-category').value,
+        specs:    document.getElementById('product-specs').value.trim(),
+        priceOld: document.getElementById('product-price-old').value.trim(),
+        priceNew,
+        badge:    document.getElementById('product-badge').value.trim(),
+        stock:    document.getElementById('product-stock').checked,
+        image:    document.getElementById('product-image-url').value.trim(),
+      };
+
+      if (editingId) {
+        const idx = products.findIndex(p => p.id === editingId);
+        if (idx > -1) products[idx] = { ...products[idx], ...product, id: editingId };
+      } else {
+        products.unshift(product);
+      }
+
+      saveProducts();
+      renderProductTable();
+      closeProductModal();
+      showToast(editingId ? 'Producto actualizado.' : 'Producto creado.', '✅ Listo');
+    }
+
+    // ── Imagen ────────────────────────────────────────────────────
+    function setPreview(src) {
+      const preview     = document.getElementById('img-preview');
+      const placeholder = document.getElementById('img-placeholder');
+      preview.src = src;
+      preview.classList.remove('hidden');
+      placeholder.classList.add('hidden');
+    }
+
+    function clearImage() {
+      const preview     = document.getElementById('img-preview');
+      const placeholder = document.getElementById('img-placeholder');
+      preview.src = '';
+      preview.classList.add('hidden');
+      placeholder.classList.remove('hidden');
+      document.getElementById('product-image-url').value = '';
+    }
+
+    function handleFileSelect(file) {
+      if (!file || !file.type.startsWith('image/')) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        setPreview(e.target.result);
+        document.getElementById('product-image-url').value = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // ── Eliminar ──────────────────────────────────────────────────
+    function askDelete(id) {
+      deletingId = id;
+      _prevFocus = document.activeElement;
+      const el = document.getElementById('delete-overlay');
+      el.classList.remove('hidden');
+      el.classList.add('flex');
+      document.getElementById('btn-cancel-delete').focus();
+    }
+
+    function closeDelete() {
+      document.getElementById('delete-overlay').classList.add('hidden');
+      document.getElementById('delete-overlay').classList.remove('flex');
+      deletingId = null;
+      _prevFocus?.focus();
+    }
+
+    function confirmDelete() {
+      if (!deletingId) return;
+      products = products.filter(p => p.id !== deletingId);
+      saveProducts();
+      renderProductTable();
+      closeDelete();
+      showToast('Producto eliminado.', '🗑️ Eliminado');
+    }
+
+    // ── Marca ─────────────────────────────────────────────────────
+    function loadBrandForm(brand) {
+      document.getElementById('brand-name').value       = brand.identity?.name              || '';
+      document.getElementById('brand-wa').value         = window.APP_CONFIG?.waNumber        || '';
+      document.getElementById('brand-primary').value    = brand.identity?.theme?.primary     || '#0f766e';
+      document.getElementById('brand-primary-hex').value= brand.identity?.theme?.primary     || '#0f766e';
+      document.getElementById('brand-accent').value     = brand.identity?.theme?.accent      || '#f59e0b';
+      document.getElementById('brand-accent-hex').value = brand.identity?.theme?.accent      || '#f59e0b';
+      document.getElementById('brand-hero-title').value = brand.hero?.title                  || '';
+      document.getElementById('brand-hero-desc').value  = brand.hero?.description            || '';
+
+      // Sincronizar color picker ↔ hex
+      syncColorPicker('brand-primary', 'brand-primary-hex');
+      syncColorPicker('brand-accent',  'brand-accent-hex');
+    }
+
+    function syncColorPicker(pickerId, hexId) {
+      const picker = document.getElementById(pickerId);
+      const hex    = document.getElementById(hexId);
+      // Evitar duplicar listeners si loadBrandForm se llama varias veces
+      picker.onchange = () => { hex.value = picker.value; };
+      hex.oninput = () => {
+        if (/^#[0-9a-fA-F]{6}$/.test(hex.value)) picker.value = hex.value;
+      };
+    }
+
+    async function saveBrand() {
+      const btn = document.getElementById('btn-save-brand');
+      btn.disabled = true;
+      btn.textContent = 'Guardando…';
+      try {
+        const brand = window.AppBrand.readBrand();
+        brand.identity.name                = document.getElementById('brand-name').value.trim()        || brand.identity.name;
+        brand.identity.theme.primary       = document.getElementById('brand-primary-hex').value        || brand.identity.theme.primary;
+        brand.identity.theme.primaryHover  = document.getElementById('brand-primary-hex').value        || brand.identity.theme.primaryHover;
+        brand.identity.theme.accent        = document.getElementById('brand-accent-hex').value         || brand.identity.theme.accent;
+        brand.hero.title                   = document.getElementById('brand-hero-title').value.trim()  || brand.hero.title;
+        brand.hero.description             = document.getElementById('brand-hero-desc').value.trim()   || brand.hero.description;
+
+        const wa = document.getElementById('brand-wa').value.trim();
+        if (wa && window.APP_CONFIG) window.APP_CONFIG.waNumber = wa;
+
+        await window.AppBrand.persistBrand(brand);
+        window.AppBrand.applyTheme(brand);
+        showToast('Cambios guardados correctamente.', '✅ Marca actualizada');
+      } catch (e) {
+        showToast('Error al guardar. Intentá de nuevo.', '❌ Error');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Guardar cambios';
+      }
+    }
+
+    // ── Exportar pedidos ──────────────────────────────────────────
+    function exportOrders() {
+      const headers = ['ID','Producto','Cantidad','Cliente','Dirección','Total','Pago','Fecha'];
+      window.AppUtils.downloadCsv('pedidos-electrofix.csv', headers, []);
+      showToast('No hay pedidos para exportar todavía.', 'ℹ️ Info');
+    }
+
+    // ── Bindings ──────────────────────────────────────────────────
+    (function bindEvents() {
+      // Login
+      document.getElementById('btn-login').addEventListener('click', login);
+      document.getElementById('access-key').addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
+      document.getElementById('btn-toggle-pwd').addEventListener('click', () => {
+        const el = document.getElementById('access-key');
+        el.type = el.type === 'password' ? 'text' : 'password';
+      });
+
+      // Logout
+      document.getElementById('btn-logout').addEventListener('click', logout);
+
+      // Tabs
+      document.querySelectorAll('.tab-btn[data-tab]').forEach(btn => {
+        btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+      });
+
+      // Sidebar mobile
+      document.getElementById('btn-menu')?.addEventListener('click', openSidebar);
+      document.getElementById('sidebar-backdrop').addEventListener('click', closeSidebar);
+
+      // Productos
+      document.getElementById('btn-new-product').addEventListener('click', () => openProductModal());
+      document.getElementById('search-products').addEventListener('input', renderProductTable);
+      document.getElementById('filter-category').addEventListener('change', renderProductTable);
+
+      // Modal producto
+      document.getElementById('btn-save-product').addEventListener('click', saveProduct);
+      document.getElementById('btn-close-modal').addEventListener('click', closeProductModal);
+      document.getElementById('btn-cancel-modal').addEventListener('click', closeProductModal);
+      document.getElementById('modal-overlay').addEventListener('click', e => { if (e.target === e.currentTarget) closeProductModal(); });
+
+      // Imagen
+      const dropZone = document.getElementById('img-drop-zone');
+      dropZone.addEventListener('click', () => document.getElementById('img-file-input').click());
+      dropZone.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); document.getElementById('img-file-input').click(); } });
+      dropZone.addEventListener('dragover',  e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+      dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+      dropZone.addEventListener('drop', e => {
+        e.preventDefault();
+        dropZone.classList.remove('drag-over');
+        handleFileSelect(e.dataTransfer.files[0]);
+      });
+      document.getElementById('img-file-input').addEventListener('change', e => handleFileSelect(e.target.files[0]));
+      document.getElementById('btn-clear-image').addEventListener('click', clearImage);
+      document.getElementById('product-image-url').addEventListener('input', e => {
+        const url = e.target.value.trim();
+        if (url) setPreview(url); else clearImage();
+      });
+
+      // Eliminar
+      document.getElementById('btn-cancel-delete').addEventListener('click', closeDelete);
+      document.getElementById('btn-confirm-delete').addEventListener('click', confirmDelete);
+      document.getElementById('delete-overlay').addEventListener('click', e => { if (e.target === e.currentTarget) closeDelete(); });
+
+      // Marca
+      document.getElementById('btn-save-brand').addEventListener('click', saveBrand);
+
+      // Pedidos
+      document.getElementById('btn-export-orders').addEventListener('click', exportOrders);
+
+      // Escape global
+      document.addEventListener('keydown', e => {
+        if (e.key !== 'Escape') return;
+        if (document.getElementById('modal-overlay').classList.contains('active')) closeProductModal();
+        if (!document.getElementById('delete-overlay').classList.contains('hidden')) closeDelete();
+        closeSidebar();
+      });
+
+      // Iniciar
+      checkSession();
+    })();
+  </script>
+</body>
+</html>

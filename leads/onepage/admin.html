@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Panel Admin | ElectroFix Store</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --app-primary: #2563eb;
+      --app-primary-hover: #1d4ed8;
+      --app-secondary: #0f172a;
+      --app-font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      font-family: var(--app-font-family);
+    }
+
+    .field-error {
+      border-color: #ef4444;
+      box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.16);
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-900 antialiased">
+  <div id="login-overlay" class="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/95 p-4">
+    <form id="login-form" class="w-full max-w-sm rounded-3xl bg-white p-8 text-center shadow-2xl" novalidate>
+      <div class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-100 text-[var(--app-primary)]">
+        <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+        </svg>
+      </div>
+      <h1 class="mb-2 text-2xl font-bold text-slate-800">Panel privado</h1>
+      <p class="mb-6 text-sm text-slate-500">Este acceso local es solo para PMV. En produccion debe validarse desde backend.</p>
+      <label for="login-pass" class="sr-only">Clave de acceso</label>
+      <input id="login-pass" type="password" autocomplete="current-password" placeholder="Clave de acceso" class="w-full rounded-xl border border-slate-200 bg-slate-50 p-4 outline-none transition focus:ring-2 focus:ring-[var(--app-primary)]" required autofocus />
+      <p id="login-error" class="mt-3 hidden text-xs font-bold text-red-500">Clave incorrecta</p>
+      <button type="submit" class="mt-4 w-full rounded-xl bg-[var(--app-primary)] py-4 font-bold text-white shadow-lg shadow-blue-100 transition hover:bg-[var(--app-primary-hover)]">Entrar al panel</button>
+      <a href="index.html" class="mt-6 inline-block text-sm font-medium text-slate-400 transition hover:text-slate-600">Volver al sitio</a>
+    </form>
+  </div>
+
+  <div id="admin-content" class="hidden">
+    <header class="fixed top-0 z-50 w-full border-b border-slate-200 bg-white shadow-sm">
+      <nav class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-label="Navegacion admin">
+        <div class="flex h-16 items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--app-primary)] font-bold text-white">A</div>
+            <span class="text-xl font-bold tracking-tight text-slate-800">Admin Panel</span>
+          </div>
+          <div class="flex items-center gap-4">
+            <a href="index.html" class="hidden items-center gap-2 text-sm font-semibold text-slate-500 transition hover:text-slate-800 sm:flex">
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              </svg>
+              Sitio
+            </a>
+            <button id="logout-btn" type="button" class="rounded-lg bg-red-50 px-3 py-2 text-xs font-bold text-red-600 transition hover:bg-red-100">Salir</button>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="pt-24 pb-20">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <header class="mb-10 flex flex-col justify-between gap-4 border-b border-slate-200 pb-6 sm:flex-row sm:items-center">
+          <div>
+            <h2 class="text-3xl font-bold tracking-tight text-slate-800">Gestion general</h2>
+            <p class="mt-1 text-slate-500">Control de cotizaciones, servicios y productos.</p>
+          </div>
+          <div class="flex gap-2 rounded-xl border border-slate-200 bg-white p-1 shadow-sm">
+            <button type="button" data-tab-btn="quotes" class="rounded-lg px-5 py-2 text-sm font-bold transition-all">Cotizaciones</button>
+            <button type="button" data-tab-btn="services" class="rounded-lg px-5 py-2 text-sm font-bold transition-all">Servicios</button>
+            <button type="button" data-tab-btn="products" class="rounded-lg px-5 py-2 text-sm font-bold transition-all">Productos</button>
+          </div>
+        </header>
+
+        <section id="tab-quotes" data-tab-panel="quotes" class="space-y-6">
+          <div class="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+            <div class="flex flex-1 items-center gap-4">
+              <label for="quote-search-input" class="sr-only">Buscar cotizacion</label>
+              <input id="quote-search-input" type="search" placeholder="Buscar cotizacion..." class="max-w-xs flex-1 rounded-lg border border-slate-200 bg-slate-50 p-2 text-sm outline-none focus:ring-2 focus:ring-[var(--app-primary)]">
+              <span class="text-sm font-medium text-slate-400">Total: <strong id="quote-total-count" class="text-slate-800">0</strong></span>
+            </div>
+            <button id="quote-export-btn" type="button" class="rounded-lg bg-slate-800 px-4 py-2 text-xs font-bold text-white transition hover:bg-slate-900">Exportar CSV</button>
+          </div>
+
+          <div class="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
+            <table class="w-full min-w-[860px] text-left text-sm">
+              <thead class="border-b border-slate-200 bg-slate-50 text-xs uppercase text-slate-500">
+                <tr>
+                  <th class="px-6 py-4 font-bold">Contacto</th>
+                  <th class="px-6 py-4 font-bold">Producto</th>
+                  <th class="px-6 py-4 font-bold">Cantidad</th>
+                  <th class="px-6 py-4 font-bold">Detalle</th>
+                  <th class="px-6 py-4 text-right font-bold">Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="quotes-rows" class="divide-y divide-slate-100"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="tab-services" data-tab-panel="services" class="hidden grid gap-8 md:grid-cols-[1fr_2fr]">
+          <form id="service-form" class="h-fit rounded-2xl border border-slate-200 bg-white p-6 shadow-sm" novalidate>
+            <h3 class="mb-4 text-lg font-bold text-slate-900">Cargar servicio</h3>
+            <div class="space-y-4">
+              <div>
+                <label for="service-title" class="sr-only">Nombre del servicio</label>
+                <input id="service-title" type="text" maxlength="80" placeholder="Nombre del servicio" class="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm outline-none focus:ring-2 focus:ring-[var(--app-primary)]">
+              </div>
+              <div>
+                <label for="service-icon" class="sr-only">Codigo visual</label>
+                <input id="service-icon" type="text" maxlength="8" placeholder="Codigo visual (Ej: 04)" class="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm outline-none focus:ring-2 focus:ring-[var(--app-primary)]">
+              </div>
+              <textarea id="service-desc" maxlength="180" placeholder="Descripcion breve..." class="h-28 w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm outline-none focus:ring-2 focus:ring-[var(--app-primary)]"></textarea>
+              <button type="submit" class="w-full rounded-xl bg-[var(--app-primary)] py-3 font-bold text-white transition hover:bg-[var(--app-primary-hover)]">Guardar servicio</button>
+            </div>
+          </form>
+          <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <h3 class="mb-4 text-lg font-bold text-slate-900">Catalogo actual</h3>
+            <div id="services-list" class="grid gap-4 sm:grid-cols-2"></div>
+          </div>
+        </section>
+
+        <section id="tab-products" data-tab-panel="products" class="hidden grid gap-8 md:grid-cols-[1fr_2fr]">
+          <form id="product-form" class="h-fit rounded-2xl border border-slate-200 bg-white p-6 shadow-sm" novalidate>
+            <h3 class="mb-4 text-lg font-bold text-slate-900">Cargar producto</h3>
+            <div class="space-y-4">
+              <input id="product-name" type="text" maxlength="90" placeholder="Nombre del producto" class="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm outline-none focus:ring-2 focus:ring-[var(--app-primary)]">
+              <input id="product-sku" type="text" maxlength="30" placeholder="SKU o codigo" class="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm outline-none focus:ring-2 focus:ring-[var(--app-primary)]">
+              <input id="product-category" type="text" maxlength="50" placeholder="Categoria" class="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm outline-none focus:ring-2 focus:ring-[var(--app-primary)]">
+              <input id="product-price" type="text" maxlength="50" placeholder="Precio visible (Ej: Desde USD 45)" class="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm outline-none focus:ring-2 focus:ring-[var(--app-primary)]">
+              <input id="product-badge" type="text" maxlength="40" placeholder="Etiqueta (Ej: Destacado)" class="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm outline-none focus:ring-2 focus:ring-[var(--app-primary)]">
+              <textarea id="product-desc" maxlength="220" placeholder="Descripcion breve..." class="h-28 w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm outline-none focus:ring-2 focus:ring-[var(--app-primary)]"></textarea>
+              <button type="submit" class="w-full rounded-xl bg-[var(--app-primary)] py-3 font-bold text-white transition hover:bg-[var(--app-primary-hover)]">Guardar producto</button>
+            </div>
+          </form>
+          <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <h3 class="mb-4 text-lg font-bold text-slate-900">Catalogo de productos</h3>
+            <div id="products-list" class="grid gap-4 sm:grid-cols-2"></div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <div id="toast-container" class="pointer-events-none fixed bottom-6 right-6 z-[100] flex flex-col gap-3"></div>
+
+  <script src="shared/config.js"></script>
+  <script src="shared/utils.js"></script>
+  <script src="shared/brand.js"></script>
+  <script src="shared/toast.js"></script>
+  <script>
+    (() => {
+      'use strict';
+
+      const { apiBaseUrl, storageKeys, adminAccessKeyHash } = window.APP_CONFIG;
+      const { readBrand, normalizeBrand, applyTheme, persistBrand } = window.AppBrand;
+      const { $, $$, createElement, readJson, readSession, saveSession, removeSession, sha256, escapeCsv, downloadCsv } = window.AppUtils;
+      const { showToast } = window.AppToast;
+
+      const state = {
+        quoteRequests: [],
+        brand: null,
+        activeTab: 'quotes'
+      };
+
+      async function login(accessKey) {
+        if (apiBaseUrl) {
+          const response = await fetch(`${apiBaseUrl}/admin/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ accessKey })
+          });
+          if (!response.ok) throw new Error('Clave incorrecta.');
+          const session = await response.json();
+          saveSession(storageKeys.session, session);
+          return;
+        }
+
+        const accessKeyHash = await sha256(accessKey);
+        if (accessKeyHash !== adminAccessKeyHash) throw new Error('Clave incorrecta.');
+        saveSession(storageKeys.session, { authenticated: true, createdAt: Date.now() });
+      }
+
+      function logout() {
+        removeSession(storageKeys.session);
+        location.reload();
+      }
+
+      function isAuthenticated() {
+        const session = readSession(storageKeys.session);
+        return Boolean(session?.authenticated);
+      }
+
+      async function loadData() {
+        if (apiBaseUrl) {
+          const [quoteRequestsResponse, brandResponse] = await Promise.all([
+            fetch(`${apiBaseUrl}/quote-requests`),
+            fetch(`${apiBaseUrl}/brand`)
+          ]);
+          if (!quoteRequestsResponse.ok || !brandResponse.ok) throw new Error('No se pudieron cargar los datos.');
+          state.quoteRequests = await quoteRequestsResponse.json();
+          state.brand = await brandResponse.json();
+          return;
+        }
+
+        state.quoteRequests = readJson(storageKeys.quoteRequests, []);
+        state.brand = readBrand();
+      }
+
+      function applyAdminTheme() {
+        state.brand = normalizeBrand(state.brand);
+        applyTheme(state.brand);
+      }
+
+      function renderTabs() {
+        $$('[data-tab-panel]').forEach(panel => {
+          panel.classList.toggle('hidden', panel.dataset.tabPanel !== state.activeTab);
+        });
+
+        $$('[data-tab-btn]').forEach(button => {
+          const active = button.dataset.tabBtn === state.activeTab;
+          button.className = active
+            ? 'rounded-lg bg-[var(--app-primary)] px-5 py-2 text-sm font-bold text-white shadow-md transition-all'
+            : 'rounded-lg px-5 py-2 text-sm font-bold text-slate-500 transition-all hover:text-slate-800';
+        });
+      }
+
+      function renderQuotes() {
+        const container = $('#quotes-rows');
+        const search = $('#quote-search-input').value.trim().toLowerCase();
+        const filtered = state.quoteRequests
+          .filter(quote => `${quote.nombre || ''} ${quote.telefono || ''} ${quote.productName || ''} ${quote.company || ''}`.toLowerCase().includes(search))
+          .sort((a, b) => new Date(b.createdAt || b.id || 0) - new Date(a.createdAt || a.id || 0));
+
+        $('#quote-total-count').textContent = String(filtered.length);
+        container.replaceChildren();
+
+        if (!filtered.length) {
+          const row = createElement('tr');
+          row.appendChild(createElement('td', { text: 'No se encontraron cotizaciones.', className: 'px-6 py-12 text-center italic text-slate-400', attrs: { colspan: '5' } }));
+          container.appendChild(row);
+          return;
+        }
+
+        filtered.forEach(quote => container.appendChild(createQuoteRow(quote)));
+      }
+
+      function createQuoteRow(quote) {
+        const row = createElement('tr', { className: 'transition hover:bg-slate-50' });
+        const contactCell = createElement('td', { className: 'px-6 py-4' });
+        contactCell.append(
+          createElement('div', { text: quote.nombre || 'Sin nombre', className: 'font-bold text-slate-900' }),
+          createElement('div', { text: quote.company || 'Sin empresa', className: 'text-xs text-slate-400' }),
+          createElement('div', { text: quote.telefono || 'Sin telefono', className: 'text-xs text-slate-400' })
+        );
+
+        const productCell = createElement('td', { className: 'px-6 py-4' });
+        productCell.append(
+          createElement('div', { text: quote.productName || quote.productSku || 'Sin producto', className: 'font-semibold text-slate-800' }),
+          createElement('div', { text: quote.productSku || '', className: 'text-xs text-slate-400' })
+        );
+
+        const quantityCell = createElement('td', { text: String(quote.quantity || 1), className: 'px-6 py-4 font-bold text-slate-700' });
+        const detailCell = createElement('td', { text: quote.mensaje || 'Sin detalle', className: 'max-w-xs px-6 py-4 text-slate-500' });
+        const actionsCell = createElement('td', { className: 'px-6 py-4 text-right' });
+        const phone = String(quote.telefono || '').replace(/\D/g, '');
+        actionsCell.appendChild(createElement('a', {
+          text: 'WhatsApp',
+          className: 'font-bold uppercase text-green-600 hover:text-green-700',
+          attrs: {
+            href: phone ? `https://wa.me/${phone}?text=${encodeURIComponent(`Hola ${quote.nombre || ''}, recibimos tu solicitud de cotizacion por ${quote.productName || quote.productSku || 'el producto'}.`)}` : '#',
+            target: '_blank',
+            rel: 'noopener noreferrer'
+          }
+        }));
+
+        row.append(contactCell, productCell, quantityCell, detailCell, actionsCell);
+        return row;
+      }
+
+      function renderServices() {
+        const container = $('#services-list');
+        container.replaceChildren();
+        const items = state.brand.features.items || [];
+
+        if (!items.length) {
+          container.appendChild(createElement('p', { text: 'No hay servicios cargados.', className: 'text-sm text-slate-400' }));
+          return;
+        }
+
+        items.forEach((item, index) => {
+          const card = createElement('article', { className: 'flex items-start justify-between gap-4 rounded-xl border border-slate-200 bg-slate-50 p-4 transition hover:border-blue-200' });
+          const content = createElement('div', { className: 'flex gap-3' });
+          content.append(
+            createElement('div', { text: item.icon || '', className: 'flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white text-sm font-bold text-slate-500' })
+          );
+          const text = createElement('div');
+          text.append(
+            createElement('h4', { text: item.title, className: 'text-sm font-bold text-slate-900' }),
+            createElement('p', { text: item.desc, className: 'mt-1 text-xs leading-relaxed text-slate-500' })
+          );
+          content.appendChild(text);
+
+          const removeButton = createElement('button', { text: 'Eliminar', className: 'text-xs font-bold text-slate-300 transition hover:text-red-500', attrs: { type: 'button', 'data-delete-service': String(index) } });
+          card.append(content, removeButton);
+          container.appendChild(card);
+        });
+      }
+
+      function renderProducts() {
+        const container = $('#products-list');
+        container.replaceChildren();
+        const products = state.brand.catalog.products || [];
+
+        if (!products.length) {
+          container.appendChild(createElement('p', { text: 'No hay productos cargados.', className: 'text-sm text-slate-400' }));
+          return;
+        }
+
+        products.forEach((product, index) => {
+          const card = createElement('article', { className: 'flex items-start justify-between gap-4 rounded-xl border border-slate-200 bg-slate-50 p-4 transition hover:border-blue-200' });
+          const content = createElement('div');
+          content.append(
+            createElement('p', { text: product.category || 'Producto', className: 'text-[10px] font-bold uppercase tracking-wider text-blue-600' }),
+            createElement('h4', { text: product.name, className: 'mt-1 text-sm font-bold text-slate-900' }),
+            createElement('p', { text: product.description, className: 'mt-1 text-xs leading-relaxed text-slate-500' }),
+            createElement('p', { text: product.priceLabel || 'Consultar', className: 'mt-2 text-xs font-bold text-slate-800' })
+          );
+          const removeButton = createElement('button', { text: 'Eliminar', className: 'text-xs font-bold text-slate-300 transition hover:text-red-500', attrs: { type: 'button', 'data-delete-product': String(index) } });
+          card.append(content, removeButton);
+          container.appendChild(card);
+        });
+      }
+
+      async function addService(event) {
+        event.preventDefault();
+        const title = $('#service-title').value.trim();
+        const icon = $('#service-icon').value.trim() || String((state.brand.features.items || []).length + 1).padStart(2, '0');
+        const desc = $('#service-desc').value.trim();
+
+        if (title.length < 3 || desc.length < 10) {
+          showToast('Completa nombre y descripcion del servicio.', 'Datos incompletos', 'dark');
+          return;
+        }
+
+        state.brand.features.items.push({ title, desc, icon });
+        await persistBrand(state.brand);
+        renderServices();
+        $('#service-form').reset();
+        showToast('Servicio agregado correctamente.', 'Notificacion', 'dark');
+      }
+
+      async function deleteService(index) {
+        state.brand.features.items.splice(index, 1);
+        await persistBrand(state.brand);
+        renderServices();
+        showToast('Servicio eliminado.', 'Notificacion', 'dark');
+      }
+
+      async function addProduct(event) {
+        event.preventDefault();
+        const name = $('#product-name').value.trim();
+        const sku = $('#product-sku').value.trim() || `PRD-${Date.now()}`;
+        const category = $('#product-category').value.trim() || 'Producto';
+        const priceLabel = $('#product-price').value.trim() || 'Consultar';
+        const badge = $('#product-badge').value.trim();
+        const description = $('#product-desc').value.trim();
+
+        if (name.length < 3 || description.length < 10) {
+          showToast('Completa nombre y descripcion del producto.', 'Datos incompletos', 'dark');
+          return;
+        }
+
+        state.brand.catalog.products.push({ sku, name, category, description, priceLabel, badge });
+        await persistBrand(state.brand);
+        renderProducts();
+        $('#product-form').reset();
+        showToast('Producto agregado correctamente.', 'Notificacion', 'dark');
+      }
+
+      async function deleteProduct(index) {
+        state.brand.catalog.products.splice(index, 1);
+        await persistBrand(state.brand);
+        renderProducts();
+        showToast('Producto eliminado.', 'Notificacion', 'dark');
+      }
+
+      function exportQuotesToCsv() {
+        if (!state.quoteRequests.length) {
+          showToast('No hay cotizaciones para exportar.', 'Notificacion', 'dark');
+          return;
+        }
+
+        const headers = ['Nombre', 'Empresa', 'Telefono', 'Producto', 'SKU', 'Cantidad', 'Detalle', 'Creado'];
+        const rows = state.quoteRequests.map(quote => [
+          quote.nombre,
+          quote.company,
+          quote.telefono,
+          quote.productName,
+          quote.productSku,
+          quote.quantity,
+          quote.mensaje,
+          quote.createdAt
+        ].map(escapeCsv).join(','));
+
+        downloadCsv('cotizaciones.csv', headers, rows);
+      }
+
+      function bindEvents() {
+        $('#login-form').addEventListener('submit', async event => {
+          event.preventDefault();
+          $('#login-error').classList.add('hidden');
+          try {
+            await login($('#login-pass').value);
+            await bootstrap();
+          } catch {
+            $('#login-error').classList.remove('hidden');
+            $('#login-pass').value = '';
+            $('#login-pass').focus();
+          }
+        });
+
+        $('#logout-btn').addEventListener('click', logout);
+        $('#quote-search-input').addEventListener('input', renderQuotes);
+        $('#quote-export-btn').addEventListener('click', exportQuotesToCsv);
+        $('#service-form').addEventListener('submit', addService);
+        $('#product-form').addEventListener('submit', addProduct);
+
+        $$('[data-tab-btn]').forEach(button => {
+          button.addEventListener('click', () => {
+            state.activeTab = button.dataset.tabBtn;
+            renderTabs();
+          });
+        });
+
+        $('#services-list').addEventListener('click', event => {
+          const button = event.target.closest('[data-delete-service]');
+          if (!button) return;
+          deleteService(Number(button.dataset.deleteService));
+        });
+
+        $('#products-list').addEventListener('click', event => {
+          const button = event.target.closest('[data-delete-product]');
+          if (!button) return;
+          deleteProduct(Number(button.dataset.deleteProduct));
+        });
+      }
+
+      async function bootstrap() {
+        if (!isAuthenticated()) {
+          $('#login-overlay').classList.remove('hidden');
+          $('#admin-content').classList.add('hidden');
+          return;
+        }
+
+        $('#login-overlay').classList.add('hidden');
+        $('#admin-content').classList.remove('hidden');
+        await loadData();
+        applyAdminTheme();
+        renderTabs();
+        renderQuotes();
+        renderServices();
+        renderProducts();
+      }
+
+      bindEvents();
+      bootstrap();
+    })();
+  </script>
+</body>
+</html>
