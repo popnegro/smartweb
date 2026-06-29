@@ -4,25 +4,25 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SmartKit – Media Kit</title>
-<link rel="stylesheet" href="/assets/css/mediakit.css">
+<link rel="stylesheet" href="/mediakit.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 </head>
 <body>
 
-<header class="top">
+<header class="top" role="banner">
   <div class="brand">
     <div class="logo" id="brand-logo">SK</div>
     <strong id="brand-name">SmartKit</strong>
   </div>
-  <nav class="nav">
+  <nav class="nav" aria-label="Navegación principal">
     <a href="/index.html">Brochure</a>
     <a href="/dashboard.html" class="no-print">Dashboard</a>
     <a href="/index.html" class="pri">+ Nueva propuesta</a>
   </nav>
 </header>
 
-<main class="page" id="app"></main>
+<main class="page" id="app" role="main"></main>
 
 <!-- Data is not strictly needed here but can be useful for fallbacks -->
 <script src="/assets/js/inventory-data.js"></script>

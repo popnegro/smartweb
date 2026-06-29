@@ -4,32 +4,32 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SmartKit – Brochure DOOH</title>
-<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="/main.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 </head>
 <body>
 
-<header class="top">
+<header class="top" role="banner">
   <div class="brand">
     <div class="logo" id="brand-logo">SK</div>
     <strong id="brand-name">SmartKit</strong>
   </div>
-  <nav class="nav">
-    <button class="on" data-view="brochure">Brochure</button>
+  <nav class="nav" aria-label="Navegación principal">
+    <button class="on" data-view="brochure" aria-pressed="true">Brochure</button>
     <a href="/map.html">Mapa</a>
     <a href="/mediakit.html" class="nav-link-kit">Media Kit</a>
   </nav>
 </header>
 
-<div id="view-brochure" class="view on brochure-wrap">
+<main id="view-brochure" class="view on brochure-wrap" role="main">
   <div class="hero">
     <h1 id="hero-title">SmartKit</h1>
     <p id="hero-copy">Planificá campañas DOOH, seleccioná ubicaciones digitales y generá una propuesta comercial en minutos.</p>
     <div class="stats" id="hero-stats"></div>
   </div>
   <div class="wrap">
-    <div class="zone-filters" id="zone-filters"></div>
+    <div class="zone-filters" id="zone-filters" role="group" aria-label="Filtros de zona"></div>
     <div class="brochure-grid">
       <section>
         <div class="catalog-head">
@@ -38,9 +38,9 @@
         </div>
         <div class="cards" id="cards"></div>
       </section>
-      <aside class="quote-panel">
+      <aside class="quote-panel" role="complementary" aria-labelledby="quote-panel-title">
         <div class="qp-head">
-          <div><span class="eyebrow">Plan de campaña</span><h2>Cotizador</h2></div>
+          <div><span class="eyebrow">Plan de campaña</span><h2 id="quote-panel-title">Cotizador</h2></div>
           <span class="q-status" id="q-status">Vacío</span>
         </div>
         <div class="q-summary">
@@ -74,14 +74,14 @@
       </aside>
     </div>
   </div>
-</div>
+</main>
 
 <div class="toast" id="toast"></div>
 
 <!-- Media Kit Modal -->
-<div class="mk-overlay" id="mk-overlay">
-  <div class="mk-modal" id="mk-modal">
-    <button class="btn" style="margin-bottom:16px" id="mk-close">← Volver</button>
+<div class="mk-overlay" id="mk-overlay" role="dialog" aria-modal="true" aria-labelledby="mk-modal-title" style="display: none;">
+  <div class="mk-modal" id="mk-modal" role="document">
+    <button class="btn" style="margin-bottom:16px" id="mk-close" aria-label="Cerrar modal">← Volver</button>
     <div id="mk-content"></div>
   </div>
 </div>

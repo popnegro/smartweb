@@ -4,38 +4,37 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SmartKit – Mapa DOOH</title>
-<link rel="stylesheet" href="/assets/css/map.css">
+<link rel="stylesheet" href="/map.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 </head>
 <body>
 
-<header class="top">
+<header class="top" role="banner">
   <div class="brand">
     <div class="logo" id="brand-logo">SK</div>
     <strong id="brand-name">SmartKit</strong>
   </div>
-  <nav class="nav">
+  <nav class="nav" aria-label="Navegación principal">
     <a href="/index.html">Brochure</a>
     <a href="/map.html" class="on">Mapa</a>
     <a href="/mediakit.html" class="nav-link-kit">Media Kit</a>
   </nav>
 </header>
 
-<div class="view-map">
-  <div id="map"></div>
-  <div class="legend">
+<main class="view-map" role="main">
+  <div id="map" role="region" aria-label="Mapa interactivo de pantallas"></div>
+  <div class="legend" role="group" aria-label="Leyenda del mapa">
     <span><i class="dot dot-p"></i>Peatonal</span>
     <span><i class="dot dot-v"></i>Vehicular</span>
     <span><i class="dot dot-m"></i>Mixto</span>
   </div>
-  <div id="sc-panel">
+  <div id="sc-panel" role="dialog" aria-modal="false" aria-labelledby="scp-title" style="display: none;">
     <div class="scp-inner">
-      <button class="scp-close" id="scp-close">✕</button>
+      <button class="scp-close" id="scp-close" aria-label="Cerrar panel">✕</button>
       <div id="scp-content"></div>
     </div>
   </div>
-</div>
 
 <script src="/assets/js/inventory-data.js"></script>
 <script src="/assets/js/config.js"></script>
