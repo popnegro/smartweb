@@ -1,10 +1,10 @@
 import { Topbar } from "@/components/layout/Topbar";
-import { RECLAMOS } from "@/lib/data";
+import { getReclamos } from "@/lib/data";
 import { columns } from "./columns";
 import { DataTable } from "@/components/ui/DataTable";
 
-export default function CustomerRecoveryPage() {
-  const data = RECLAMOS;
+export default async function CustomerRecoveryPage() {
+  const data = await getReclamos();
 
   return (
     <>

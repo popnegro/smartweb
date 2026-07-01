@@ -1,26 +1,18 @@
-"use client";
-
 import { Topbar } from "@/components/layout/Topbar";
 import { KpiCard } from "@/components/dashboard/KpiCard";
-import { TrendChart } from "@/components/dashboard/TrendChart";
-import { SucursalChart } from "@/components/dashboard/SucursalChart";
 import { Card } from "@/components/ui/Card";
 import { Badge, riesgoTone, prioridadTone } from "@/components/ui/Badge";
-import { RECLAMOS, SUCURSAL_KPIS, TREND, getDashboardKpis } from "@/lib/data";
+import { getReclamos, SUCURSAL_KPIS, TREND, getDashboardKpis } from "@/lib/data";
+import { formatDate } from "@/lib/utils";
 import { Gauge, MessageSquareWarning, Clock3, AlertTriangle } from "lucide-react";
 import Link from "next/link";
+import type { Reclamo } from "@/lib/types";
+import { DashboardClient } from "./DashboardClient";
 
-export default function DashboardPage() {
-  function formatDate(d: string | Date) {
-    try {
-      const dt = typeof d === "string" ? new Date(d) : d;
-      return dt.toLocaleDateString("es-AR", { day: "2-digit", month: "short", year: "numeric" });
-    } catch {
-      return String(d);
-    }
-  }
+export default async function DashboardPage() {
   const kpis = getDashboardKpis();
-  const criticos = RECLAMOS.filter((r) => r.riesgo === "Crítico" && r.estado !== "Resuelto").slice(0, 5);
+  const reclamos = await getReclamos();
+  const criticos = reclamos.filter((r) => r.riesgo === "Crítico" && r.estado !== "Resuelto").slice(0, 5);
 
   return (
     <>
@@ -49,27 +41,7 @@ export default function DashboardPage() {
           />
         </div>
 
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-          <Card className="p-5 lg:col-span-2">
-            <div className="mb-4 flex items-center justify-between">
-              <div>
-                <p className="text-sm font-semibold text-ink">Tendencia NPS / CSAT</p>
-                <p className="text-xs text-muted">Últimos 6 meses</p>
-              </div>
-              <div className="flex gap-3 text-xs">
-                <span className="flex items-center gap-1.5 text-muted"><span className="h-2 w-2 rounded-full bg-lorenzo" />NPS</span>
-                <span className="flex items-center gap-1.5 text-muted"><span className="h-2 w-2 rounded-full bg-signal-info" />CSAT</span>
-              </div>
-            </div>
-            <TrendChart data={TREND} />
-          </Card>
-
-          <Card className="p-5">
-            <p className="text-sm font-semibold text-ink">Ranking de sucursales</p>
-            <p className="mb-4 text-xs text-muted">Por NPS</p>
-            <SucursalChart data={SUCURSAL_KPIS} />
-          </Card>
-        </div>
+        <DashboardClient trendData={TREND} sucursalKpis={SUCURSAL_KPIS} />
 
         <Card className="p-5">
           <div className="mb-4 flex items-center justify-between">

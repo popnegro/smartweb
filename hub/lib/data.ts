@@ -152,8 +152,6 @@ function generarReclamos(cantidad: number): Reclamo[] {
   return out.sort((a, b) => +new Date(b.fecha) - +new Date(a.fecha));
 }
 
-export const RECLAMOS: Reclamo[] = generarReclamos(42);
-
 const ESTADOS_AUDITORIA: EstadoAuditoria[] = ["Planificada", "En curso", "Completada", "Cancelada"];
 
 const CRITICIDAD: Criticidad[] = ["Alta", "Media", "Baja"];
@@ -217,8 +215,6 @@ function generarAuditorias(cantidad: number): Auditoria[] {
   return out.sort((a, b) => +new Date(b.fecha) - +new Date(a.fecha));
 }
 
-export const AUDITORIAS: Auditoria[] = generarAuditorias(18);
-
 const FUENTES_COMENTARIO: FuenteComentario[] = ["Google Reviews", "WhatsApp", "Email", "Encuesta NPS", "Facebook", "Instagram"];
 const CATEGORIAS_COMENTARIO: CategoriaComentario[] = ["Demoras", "Atención", "Facturación", "Garantías", "Repuestos", "Entrega", "Calidad"];
 const SENTIMIENTOS: Sentimiento[] = ["Positivo", "Negativo", "Mixto", "Neutro"];
@@ -278,8 +274,6 @@ function generarComentarios(cantidad: number): Comentario[] {
   return out.sort((a, b) => +new Date(b.fecha) - +new Date(a.fecha));
 }
 
-export const COMENTARIOS: Comentario[] = generarComentarios(120);
-
 function generarPlanesDeAccion(): AccionCorrectiva[] {
   const acciones: AccionCorrectiva[] = [];
   AUDITORIAS.forEach((auditoria) => {
@@ -300,7 +294,6 @@ function generarPlanesDeAccion(): AccionCorrectiva[] {
   });
   return acciones;
 }
-export const PLANES_DE_ACCION: AccionCorrectiva[] = generarPlanesDeAccion();
 
 export const CHECKLIST_TEMPLATE: ChecklistTemplate = [
   {
@@ -381,6 +374,13 @@ export const JOURNEY_STAGES: JourneyStage[] = [
   },
 ];
 
+// --- Mock Data Fetching Functions ---
+
+const RECLAMOS: Reclamo[] = generarReclamos(42);
+const AUDITORIAS: Auditoria[] = generarAuditorias(18);
+const COMENTARIOS: Comentario[] = generarComentarios(120);
+const PLANES_DE_ACCION: AccionCorrectiva[] = generarPlanesDeAccion();
+
 export const SUCURSAL_KPIS: SucursalKpi[] = SUCURSALES.map((s) => {
   const reclamosSucursal = RECLAMOS.filter((r) => r.sucursal === s);
   const auditoriasSucursal = AUDITORIAS.filter((a) => a.sucursal === s);
@@ -427,3 +427,10 @@ export function getDashboardKpis() {
     tiempoPromedioHoras: Math.round(tiempoProm),
   };
 }
+
+// Simulate API calls to fetch data asynchronously
+export const getReclamos = async () => Promise.resolve(RECLAMOS);
+export const getAuditorias = async () => Promise.resolve(AUDITORIAS);
+export const getComentarios = async () => Promise.resolve(COMENTARIOS);
+export const getPlanesDeAccion = async () => Promise.resolve(PLANES_DE_ACCION);
+export const getReclamoById = async (id: string) => Promise.resolve(RECLAMOS.find((r) => r.id === id));

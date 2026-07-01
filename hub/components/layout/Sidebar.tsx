@@ -10,18 +10,15 @@ import {
   Building2,
   Sparkles,
 } from "lucide-react";
-
-function cn(...classes: Array<string | boolean | null | undefined>) {
-  return classes.filter(Boolean).join(" ");
-}
+import { cn } from "@/lib/utils";
 
 const NAV = [
   { href: "/", label: "Dashboard", icon: LayoutDashboard, active: true },
   { href: "/reclamos", label: "Customer Recovery", icon: MessageSquareWarning, active: true },
-  { href: "/auditorias", label: "Auditorías de Calidad", icon: ClipboardCheck, active: true },
-  { href: "/action-center", label: "Action Center", icon: KanbanSquare, active: false },
-  { href: "/sucursales", label: "Sucursales", icon: Building2, active: false },
-  { href: "/ai-copilot", label: "AI Copilot", icon: Sparkles, active: false },
+  { href: "/auditorias", label: "Auditorías", icon: ClipboardCheck, active: true },
+  { href: "/acciones", label: "Action Center", icon: KanbanSquare, active: true },
+  { href: "/sucursales", label: "Sucursales", icon: Building2, active: true },
+  { href: "/copilot", label: "AI Copilot", icon: Sparkles, active: true },
 ];
 
 export function Sidebar() {
@@ -41,7 +38,10 @@ export function Sidebar() {
 
       <nav className="flex-1 space-y-1 px-3">
         {NAV.map((item) => {
-          const isActive = item.active && pathname === item.href;
+          const isActive =
+            item.href === "/"
+              ? pathname === item.href
+              : pathname.startsWith(item.href);
           const Icon = item.icon;
           return (
             <Link

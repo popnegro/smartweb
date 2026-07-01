@@ -1,43 +1,57 @@
+import * as React from "react";
 import { cn } from "@/lib/utils";
+import type { Prioridad, Riesgo, EstadoReclamo } from "@/lib/types";
 
-type Tone = "critical" | "warning" | "good" | "info" | "neutral";
+export type BadgeTone = "neutral" | "info" | "good" | "warning" | "critical";
 
-const TONE_CLASSES: Record<Tone, string> = {
-  critical: "bg-red-50 text-signal-critical ring-1 ring-inset ring-red-200",
-  warning: "bg-amber-50 text-signal-warning ring-1 ring-inset ring-amber-200",
-  good: "bg-emerald-50 text-signal-good ring-1 ring-inset ring-emerald-200",
-  info: "bg-sky-50 text-signal-info ring-1 ring-inset ring-sky-200",
-  neutral: "bg-gray-100 text-gray-600 ring-1 ring-inset ring-gray-200",
+const badgeTones: Record<BadgeTone, string> = {
+  neutral: "border-transparent bg-muted text-muted-foreground",
+  info: "border-transparent bg-sky-100 text-sky-800",
+  good: "border-transparent bg-emerald-100 text-emerald-800",
+  warning: "border-transparent bg-amber-100 text-amber-800",
+  critical: "border-transparent bg-red-100 text-red-800",
 };
 
-export function Badge({ tone = "neutral", children }: { tone?: Tone; children: React.ReactNode }) {
+export interface BadgeProps extends React.HTMLAttributes<HTMLDivElement> {
+  tone?: BadgeTone;
+}
+
+function Badge({ className, tone = "neutral", ...props }: BadgeProps) {
   return (
-    <span
+    <div
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium",
-        TONE_CLASSES[tone]
+        "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+        badgeTones[tone],
+        className
       )}
-    >
-      {children}
-    </span>
+      {...props}
+    />
   );
 }
 
-export function riesgoTone(riesgo: string): Tone {
-  if (riesgo === "Crítico") return "critical";
-  if (riesgo === "Moderado") return "warning";
-  return "good";
-}
+const prioridadMap: Record<Prioridad, BadgeTone> = {
+  Alta: "critical",
+  Media: "warning",
+  Baja: "info",
+};
+export const prioridadTone = (prioridad: Prioridad): BadgeTone =>
+  prioridadMap[prioridad];
 
-export function prioridadTone(prioridad: string): Tone {
-  if (prioridad === "Alta") return "critical";
-  if (prioridad === "Media") return "warning";
-  return "info";
-}
+const riesgoMap: Record<Riesgo, BadgeTone> = {
+  Crítico: "critical",
+  Moderado: "warning",
+  Bajo: "good",
+};
+export const riesgoTone = (riesgo: Riesgo): BadgeTone =>
+  riesgoMap[riesgo];
 
-export function estadoTone(estado: string): Tone {
-  if (estado === "Resuelto") return "good";
-  if (estado === "Nuevo") return "info";
-  if (estado === "Esperando cliente") return "warning";
-  return "neutral";
-}
+const estadoMap: Record<EstadoReclamo, BadgeTone> = {
+  Resuelto: "good",
+  "En curso": "info",
+  "Esperando cliente": "warning",
+  Nuevo: "neutral",
+};
+export const estadoTone = (estado: EstadoReclamo): BadgeTone =>
+  estadoMap[estado];
+
+export { Badge };
