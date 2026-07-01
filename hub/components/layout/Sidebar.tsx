@@ -21,7 +21,7 @@ const NAV = [
   { href: "/auditorias", label: "Auditorías de Calidad", icon: ClipboardCheck, active: true },
   { href: "/action-center", label: "Action Center", icon: KanbanSquare, active: true },
   { href: "/sucursales", label: "Sucursales", icon: Building2, active: true },
-  { href: "#", label: "AI Copilot", icon: Sparkles, active: false },
+  { href: "/ai-copilot", label: "AI Copilot", icon: Sparkles, active: true },
 ];
 
 export function Sidebar() {
