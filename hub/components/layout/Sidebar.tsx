@@ -15,10 +15,10 @@ import { cn } from "@/lib/utils";
 const NAV = [
   { href: "/", label: "Dashboard", icon: LayoutDashboard, active: true },
   { href: "/reclamos", label: "Customer Recovery", icon: MessageSquareWarning, active: true },
-  { href: "/auditorias", label: "Auditorías", icon: ClipboardCheck, active: true },
-  { href: "/acciones", label: "Action Center", icon: KanbanSquare, active: true },
-  { href: "/sucursales", label: "Sucursales", icon: Building2, active: true },
-  { href: "/copilot", label: "AI Copilot", icon: Sparkles, active: true },
+  { href: "/auditorias", label: "Auditorías", icon: ClipboardCheck, active: false },
+  { href: "/acciones", label: "Action Center", icon: KanbanSquare, active: false },
+  { href: "/sucursales", label: "Sucursales", icon: Building2, active: false },
+  { href: "/copilot", label: "AI Copilot", icon: Sparkles, active: false },
 ];
 
 export function Sidebar() {
