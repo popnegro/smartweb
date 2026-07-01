@@ -19,7 +19,7 @@ const NAV = [
   { href: "/", label: "Dashboard", icon: LayoutDashboard, active: true },
   { href: "/reclamos", label: "Customer Recovery", icon: MessageSquareWarning, active: true },
   { href: "/auditorias", label: "Auditorías de Calidad", icon: ClipboardCheck, active: true },
-  { href: "#", label: "Action Center", icon: KanbanSquare, active: false },
+  { href: "/action-center", label: "Action Center", icon: KanbanSquare, active: true },
   { href: "/sucursales", label: "Sucursales", icon: Building2, active: true },
   { href: "#", label: "AI Copilot", icon: Sparkles, active: false },
 ];

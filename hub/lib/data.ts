@@ -8,6 +8,8 @@ import type {
   Origen,
   Auditoria,
   EstadoAuditoria,
+  Accion,
+  EstadoAccion,
 } from "./types";
 
 // PRNG simple con semilla fija para que los datos sean siempre los mismos
@@ -144,6 +146,21 @@ function generarReclamos(cantidad: number): Reclamo[] {
 }
 
 export const RECLAMOS: Reclamo[] = generarReclamos(42);
+
+const ESTADOS_ACCION: EstadoAccion[] = ["Pendiente", "En curso", "Completada"];
+
+function generarAcciones(): Accion[] {
+  return RECLAMOS.filter((r) => r.estado !== "Resuelto").map((reclamo) => ({
+    id: `act-${reclamo.id}`,
+    descripcion: reclamo.ia.accionSugerida,
+    tiempoRecomendado: reclamo.ia.tiempoRecomendado,
+    estado: pick(ESTADOS_ACCION),
+    reclamoId: reclamo.id,
+    cliente: reclamo.cliente,
+  }));
+}
+
+export const ACCIONES: Accion[] = generarAcciones();
 
 const ESTADOS_AUDITORIA: EstadoAuditoria[] = ["Planificada", "En curso", "Completada", "Cancelada"];
 

@@ -53,3 +53,14 @@ export type Auditoria = {
   estado: EstadoAuditoria;
   responsable: string;
 };
+
+export type EstadoAccion = "Pendiente" | "En curso" | "Completada";
+
+export type Accion = {
+  id: string;
+  descripcion: string;
+  tiempoRecomendado: string;
+  estado: EstadoAccion;
+  reclamoId: string;
+  cliente: string;
+};
