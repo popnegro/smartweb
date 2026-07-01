@@ -12,7 +12,12 @@ import type {
   EstadoAccion,
   Hallazgo,
   Criticidad,
+  Comentario,
+  FuenteComentario,
+  CategoriaComentario,
+  Sentimiento,
 } from "./types";
+import type { JourneyStage, NombreEtapa, EstadoEtapa, ChecklistTemplate, AccionCorrectiva } from "./types";
 
 // PRNG simple con semilla fija para que los datos sean siempre los mismos
 // entre build y deploy (reproducible, sin librerías externas).
@@ -149,21 +154,6 @@ function generarReclamos(cantidad: number): Reclamo[] {
 
 export const RECLAMOS: Reclamo[] = generarReclamos(42);
 
-const ESTADOS_ACCION: EstadoAccion[] = ["Pendiente", "En curso", "Completada"];
-
-function generarAcciones(): Accion[] {
-  return RECLAMOS.filter((r) => r.estado !== "Resuelto").map((reclamo) => ({
-    id: `act-${reclamo.id}`,
-    descripcion: reclamo.ia.accionSugerida,
-    tiempoRecomendado: reclamo.ia.tiempoRecomendado,
-    estado: pick(ESTADOS_ACCION),
-    reclamoId: reclamo.id,
-    cliente: reclamo.cliente,
-  }));
-}
-
-export const ACCIONES: Accion[] = generarAcciones();
-
 const ESTADOS_AUDITORIA: EstadoAuditoria[] = ["Planificada", "En curso", "Completada", "Cancelada"];
 
 const CRITICIDAD: Criticidad[] = ["Alta", "Media", "Baja"];
@@ -174,6 +164,14 @@ const HALLAZGOS_EJEMPLO = [
   "Documentación de garantías incompleta en 10% de los casos revisados.",
   "Tiempos de espera en la línea de postventa superan el objetivo de 5 minutos.",
   "Falta de capacitación del personal nuevo en el uso del CRM.",
+];
+
+const ESTADOS_ACCION_KANBAN: EstadoAccion[] = ["Pendiente", "En curso", "Bloqueado", "Finalizado"];
+
+const IMPACTOS_ESPERADOS = [
+  "Mejora de NPS en 5 pts",
+  "Reducción de tiempo de espera en 10%",
+  "Aumento de satisfacción de cliente",
 ];
 
 function generarAuditorias(cantidad: number): Auditoria[] {
@@ -195,15 +193,23 @@ function generarAuditorias(cantidad: number): Auditoria[] {
           id: hallazgoId,
           descripcion: pick(HALLAZGOS_EJEMPLO),
           criticidad: pick(CRITICIDAD),
-          accionesCorrectivas: Array.from({ length: int(1, 2) }, (__, k) => ({
-            id: `AC-${hallazgoId}-${k}`,
-            descripcion: `Implementar plan de acción para: ${HALLAZGOS_EJEMPLO[j % HALLAZGOS_EJEMPLO.length].slice(0, 40)}...`,
-            responsable: pick(RESPONSABLES),
-            fechaLimite: new Date(
-              fecha.getTime() + int(7, 30) * 24 * 60 * 60 * 1000
-            ).toISOString(),
-            estado: pick(ESTADOS_ACCION),
-          })),
+          accionesCorrectivas: Array.from({ length: int(1, 2) }, (__, k) => {
+            const accion: AccionCorrectiva = {
+              id: `AC-${hallazgoId}-${k}`,
+              descripcion: `Implementar plan de acción para: ${HALLAZGOS_EJEMPLO[
+                j % HALLAZGOS_EJEMPLO.length
+              ].slice(0, 40)}...`,
+              responsable: pick(RESPONSABLES),
+              fechaLimite: new Date(fecha.getTime() + int(7, 30) * 24 * 60 * 60 * 1000).toISOString(),
+              estado: pick(ESTADOS_ACCION_KANBAN),
+              prioridad: pick(PRIORIDADES),
+              area: pick(AREAS),
+              costo: int(100, 1000),
+              impactoEsperado: pick(IMPACTOS_ESPERADOS),
+              origenId: `AU-${String(2000 + i)}`,
+            };
+            return accion;
+          }),
         };
       }),
     });
@@ -213,14 +219,190 @@ function generarAuditorias(cantidad: number): Auditoria[] {
 
 export const AUDITORIAS: Auditoria[] = generarAuditorias(18);
 
+const IMPACTOS_ESPERADOS = [
+  "Mejora de NPS en 5 pts",
+  "Reducción de tiempo de espera en 10%",
+  "Aumento de satisfacción de cliente",
+];
+const FUENTES_COMENTARIO: FuenteComentario[] = ["Google Reviews", "WhatsApp", "Email", "Encuesta NPS", "Facebook", "Instagram"];
+const CATEGORIAS_COMENTARIO: CategoriaComentario[] = ["Demoras", "Atención", "Facturación", "Garantías", "Repuestos", "Entrega", "Calidad"];
+const SENTIMIENTOS: Sentimiento[] = ["Positivo", "Negativo", "Mixto", "Neutro"];
+
+const CONTENIDOS_COMENTARIO = [
+  {
+    contenido: "El servicio fue excelente, muy rápido y el personal muy amable. ¡Volveré sin dudarlo!",
+    sentimiento: "Positivo",
+    categoria: "Atención",
+    palabrasClave: ["excelente", "rápido", "amable"],
+  },
+  {
+    contenido: "Tuve que esperar más de una hora para que me atendieran, a pesar de tener turno. La demora fue excesiva.",
+    sentimiento: "Negativo",
+    categoria: "Demoras",
+    palabrasClave: ["esperar", "demora", "excesiva"],
+  },
+  {
+    contenido: "El arreglo quedó bien, pero el precio final fue más alto de lo que me habían cotizado inicialmente.",
+    sentimiento: "Mixto",
+    categoria: "Facturación",
+    palabrasClave: ["precio", "cotizado", "alto"],
+  },
+  {
+    contenido: "No tenían el repuesto que necesitaba y tardaron dos semanas en conseguirlo. Poca comunicación durante el proceso.",
+    sentimiento: "Negativo",
+    categoria: "Repuestos",
+    palabrasClave: ["repuesto", "tardaron", "comunicación"],
+  },
+  {
+    contenido: "La entrega del 0km fue un momento mágico. Todo el equipo se portó de maravilla. Gracias!",
+    sentimiento: "Positivo",
+    categoria: "Entrega",
+    palabrasClave: ["entrega", "mágico", "maravilla"],
+  },
+  {
+    contenido: "El auto sigue haciendo el mismo ruido que cuando lo llevé. No solucionaron el problema de calidad.",
+    sentimiento: "Negativo",
+    categoria: "Calidad",
+    palabrasClave: ["ruido", "calidad", "solucionaron"],
+  },
+];
+
+function generarComentarios(cantidad: number): Comentario[] {
+  const out: Comentario[] = [];
+  for (let i = 0; i < cantidad; i++) {
+    const data = pick(CONTENIDOS_COMENTARIO);
+    out.push({
+      id: `COM-${1000 + i}`,
+      fuente: pick(FUENTES_COMENTARIO),
+      cliente: pick(NOMBRES),
+      fecha: new Date(Date.now() - int(0, 60) * 24 * 60 * 60 * 1000).toISOString(),
+      contenido: data.contenido,
+      ia: { sentimiento: data.sentimiento as Sentimiento, categoria: data.categoria as CategoriaComentario, palabrasClave: data.palabrasClave },
+    });
+  }
+  return out.sort((a, b) => +new Date(b.fecha) - +new Date(a.fecha));
+}
+
+export const COMENTARIOS: Comentario[] = generarComentarios(120);
+
+function generarPlanesDeAccion(): AccionCorrectiva[] {
+  const acciones: AccionCorrectiva[] = [];
+  AUDITORIAS.forEach((auditoria) => {
+    auditoria.hallazgos.forEach((hallazgo) => {
+      hallazgo.accionesCorrectivas.forEach((ac) => {
+        acciones.push({
+          ...ac,
+          prioridad: hallazgo.criticidad,
+          area: auditoria.area,
+          costo: int(50, 500),
+          impactoEsperado: pick(IMPACTOS_ESPERADOS),
+          origenId: auditoria.id,
+          // Asegurarse de que el estado sea válido para el Kanban
+          estado: pick(ESTADOS_ACCION_KANBAN),
+        });
+      });
+    });
+  });
+  return acciones;
+}
+export const PLANES_DE_ACCION: AccionCorrectiva[] = generarPlanesDeAccion();
+
+export const CHECKLIST_TEMPLATE: ChecklistTemplate = [
+  {
+    id: "recepcion",
+    nombre: "Recepción y Taller",
+    items: [
+      { id: "recepcion-1", nombre: "Limpieza y orden del área", descripcion: "El área de recepción de vehículos está limpia, ordenada y libre de obstáculos." },
+      { id: "recepcion-2", nombre: "Uniformidad del personal", descripcion: "Los asesores de servicio visten el uniforme completo y limpio." },
+      { id: "recepcion-3", nombre: "Tiempos de espera", descripcion: "El cliente es atendido en menos de 5 minutos desde su llegada." },
+      { id: "recepcion-4", nombre: "Uso de cobertor y protección", descripcion: "Se utilizan cobertores de asiento, volante y palanca de cambios en todos los vehículos." },
+    ],
+  },
+  {
+    id: "sala-espera",
+    nombre: "Sala de Espera",
+    items: [
+      { id: "sala-1", nombre: "Limpieza y confort", descripcion: "La sala de espera está limpia, con temperatura agradable y asientos cómodos." },
+      { id: "sala-2", nombre: "Disponibilidad de servicios", descripcion: "Hay disponible Wi-Fi, café y agua para los clientes." },
+      { id: "sala-3", nombre: "Material de lectura actualizado", descripcion: "Se ofrece material de lectura reciente y en buen estado." },
+    ],
+  },
+  {
+    id: "documentacion",
+    nombre: "Documentación y Procesos",
+    items: [
+      { id: "doc-1", nombre: "Orden de reparación clara", descripcion: "La orden de reparación es clara, legible y está firmada por el cliente." },
+      { id: "doc-2", nombre: "Presupuesto detallado", descripcion: "El presupuesto entregado al cliente detalla mano de obra y repuestos." },
+      { id: "doc-3", nombre: "Registro en CRM", descripcion: "Toda la interacción con el cliente está debidamente registrada en el sistema." },
+    ],
+  },
+];
+
+export const JOURNEY_STAGES: JourneyStage[] = [
+  {
+    nombre: "Reserva",
+    tiempoPromedio: "5 min",
+    estado: "Positivo",
+    kpi: { nombre: "Tasa de conversión", valor: "95%", tendencia: "up" },
+    ia: { insight: null, impactoNPS: 2 },
+  },
+  {
+    nombre: "Recepción",
+    tiempoPromedio: "25 min",
+    estado: "Negativo",
+    kpi: { nombre: "Tiempo de espera", valor: "15 min", tendencia: "down" },
+    ia: {
+      insight: "Cuello de botella detectado. El tiempo de espera supera el objetivo en un 50%.",
+      impactoNPS: -8,
+    },
+  },
+  {
+    nombre: "Diagnóstico",
+    tiempoPromedio: "1.5 hs",
+    estado: "Neutral",
+    kpi: { nombre: "Precisión", valor: "92%", tendencia: "neutral" },
+    ia: { insight: "Oportunidad de mejora en la comunicación con el cliente sobre el diagnóstico.", impactoNPS: -1 },
+  },
+  {
+    nombre: "Taller",
+    tiempoPromedio: "2 días",
+    estado: "Neutral",
+    kpi: { nombre: "Cumplimiento de plazos", valor: "88%", tendencia: "up" },
+    ia: { insight: null, impactoNPS: 0 },
+  },
+  {
+    nombre: "Entrega",
+    tiempoPromedio: "35 min",
+    estado: "Crítico",
+    kpi: { nombre: "Satisfacción en entrega", valor: "7.2/10", tendencia: "down" },
+    ia: { insight: "Fricción crítica: los clientes reportan falta de claridad en la facturación.", impactoNPS: -12 },
+  },
+  {
+    nombre: "Encuesta",
+    tiempoPromedio: "N/A",
+    estado: "Positivo",
+    kpi: { nombre: "Tasa de respuesta", valor: "45%", tendencia: "up" },
+    ia: { insight: null, impactoNPS: 5 },
+  },
+];
+
 export const SUCURSAL_KPIS: SucursalKpi[] = SUCURSALES.map((s) => {
   const reclamosSucursal = RECLAMOS.filter((r) => r.sucursal === s);
+  const auditoriasSucursal = AUDITORIAS.filter((a) => a.sucursal === s);
+  const auditoriasCompletadas = auditoriasSucursal.filter((a) => a.estado === "Completada");
+  const cumplimiento =
+    auditoriasCompletadas.length > 0
+      ? Math.round(auditoriasCompletadas.reduce((acc, a) => acc + a.puntuacion, 0) / auditoriasCompletadas.length)
+      : 0;
+
   return {
     sucursal: s,
     nps: int(38, 78),
     reclamos: reclamosSucursal.length,
     tiempoPromedioHoras: int(6, 48),
     recuperados: reclamosSucursal.filter((r) => r.estado === "Resuelto").length,
+    auditoriasCompletadas: auditoriasCompletadas.length,
+    cumplimiento,
   };
 }).sort((a, b) => b.nps - a.nps);
 

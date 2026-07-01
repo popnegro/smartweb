@@ -1,33 +1,33 @@
 "use client";
 
-import {
-  ResponsiveContainer,
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-} from "recharts";
 import type { TrendPoint } from "@/lib/types";
+import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 export function TrendChart({ data }: { data: TrendPoint[] }) {
   return (
-    <ResponsiveContainer width="100%" height={260}>
-      <LineChart data={data} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
-        <CartesianGrid strokeDasharray="3 3" stroke="#E7E5E0" vertical={false} />
-        <XAxis dataKey="mes" tick={{ fontSize: 12, fill: "#6B7280" }} axisLine={false} tickLine={false} />
-        <YAxis tick={{ fontSize: 12, fill: "#6B7280" }} axisLine={false} tickLine={false} width={32} />
+    <ResponsiveContainer width="100%" height={250}>
+      <AreaChart data={data}>
+        <defs>
+          <linearGradient id="colorNps" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="5%" stopColor="hsl(var(--lorenzo))" stopOpacity={0.4} />
+            <stop offset="95%" stopColor="hsl(var(--lorenzo))" stopOpacity={0} />
+          </linearGradient>
+          <linearGradient id="colorCsat" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="5%" stopColor="hsl(var(--signal-info))" stopOpacity={0.4} />
+            <stop offset="95%" stopColor="hsl(var(--signal-info))" stopOpacity={0} />
+          </linearGradient>
+        </defs>
+        <XAxis dataKey="mes" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
+        <YAxis stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
         <Tooltip
           contentStyle={{
-            borderRadius: 12,
-            border: "1px solid #E7E5E0",
-            fontSize: 13,
+            backgroundColor: "hsl(var(--canvas-secondary))",
+            borderColor: "hsl(var(--line))",
           }}
         />
-        <Line type="monotone" dataKey="nps" stroke="#1E3A8A" strokeWidth={2.5} dot={false} name="NPS" />
-        <Line type="monotone" dataKey="csat" stroke="#0EA5E9" strokeWidth={2.5} dot={false} name="CSAT" />
-      </LineChart>
+        <Area type="monotone" dataKey="nps" stroke="hsl(var(--lorenzo))" fill="url(#colorNps)" />
+        <Area type="monotone" dataKey="csat" stroke="hsl(var(--signal-info))" fill="url(#colorCsat)" />
+      </AreaChart>
     </ResponsiveContainer>
   );
 }
