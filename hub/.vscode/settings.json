@@ -1,0 +1,5 @@
+{
+  // Ignora los errores de "regla desconocida" en los archivos CSS.
+  // Esto es útil para que el editor no marque como error las directivas de Tailwind CSS.
+  "css.lint.unknownAtRules": "ignore"
+}
