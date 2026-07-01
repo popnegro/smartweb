@@ -18,7 +18,7 @@ function cn(...classes: Array<string | boolean | null | undefined>) {
 const NAV = [
   { href: "/", label: "Dashboard", icon: LayoutDashboard, active: true },
   { href: "/reclamos", label: "Customer Recovery", icon: MessageSquareWarning, active: true },
-  { href: "/auditorias", label: "Auditorías de Calidad", icon: ClipboardCheck, active: false },
+  { href: "/auditorias", label: "Auditorías de Calidad", icon: ClipboardCheck, active: true },
   { href: "/action-center", label: "Action Center", icon: KanbanSquare, active: false },
   { href: "/sucursales", label: "Sucursales", icon: Building2, active: false },
   { href: "/ai-copilot", label: "AI Copilot", icon: Sparkles, active: false },

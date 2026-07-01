@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+// @ts-ignore: allow side-effect import of global CSS without type declarations
 import "./globals.css";
 import { Sidebar } from "@/components/layout/Sidebar";
 
