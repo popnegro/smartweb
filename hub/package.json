@@ -10,8 +10,8 @@
   },
   "dependencies": {
     "next": "15.5.19",
-    "react": "19.0.0-rc-f994737d14-20240522",
-    "react-dom": "19.0.0-rc-f994737d14-20240522",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "lucide-react": "0.469.0",
     "recharts": "2.15.0",
     "clsx": "^2.1.1",
