@@ -10,14 +10,17 @@ import {
   Building2,
   Sparkles,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
+
+function cn(...classes: Array<string | boolean | null | undefined>) {
+  return classes.filter(Boolean).join(" ");
+}
 
 const NAV = [
   { href: "/", label: "Dashboard", icon: LayoutDashboard, active: true },
   { href: "/reclamos", label: "Customer Recovery", icon: MessageSquareWarning, active: true },
-  { href: "#", label: "Auditorías de Calidad", icon: ClipboardCheck, active: false },
+  { href: "/auditorias", label: "Auditorías de Calidad", icon: ClipboardCheck, active: true },
   { href: "#", label: "Action Center", icon: KanbanSquare, active: false },
-  { href: "#", label: "Sucursales", icon: Building2, active: false },
+  { href: "/sucursales", label: "Sucursales", icon: Building2, active: true },
   { href: "#", label: "AI Copilot", icon: Sparkles, active: false },
 ];
 

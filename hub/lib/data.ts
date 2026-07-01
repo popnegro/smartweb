@@ -1,4 +1,14 @@
-import type { Reclamo, SucursalKpi, TrendPoint, Prioridad, Riesgo, Estado, Origen } from "./types";
+import type {
+  Reclamo,
+  SucursalKpi,
+  TrendPoint,
+  Prioridad,
+  Riesgo,
+  EstadoReclamo,
+  Origen,
+  Auditoria,
+  EstadoAuditoria,
+} from "./types";
 
 // PRNG simple con semilla fija para que los datos sean siempre los mismos
 // entre build y deploy (reproducible, sin librerías externas).
@@ -38,7 +48,7 @@ const RESPONSABLES = [
   "Silvina Castro", "Hernán Cabrera",
 ];
 const ORIGENES: Origen[] = ["WhatsApp", "Google Reviews", "Email", "Encuesta NPS", "Llamada", "Presencial"];
-const ESTADOS: Estado[] = ["Nuevo", "En curso", "Esperando cliente", "Resuelto"];
+const ESTADOS_RECLAMO: EstadoReclamo[] = ["Nuevo", "En curso", "Esperando cliente", "Resuelto"];
 const PRIORIDADES: Prioridad[] = ["Alta", "Media", "Baja"];
 
 const MOTIVOS = [
@@ -75,7 +85,7 @@ function buildIA(prioridad: Prioridad, riesgo: Riesgo, motivo: string) {
   };
 }
 
-function buildTimeline(fechaBase: Date, estado: Estado) {
+function buildTimeline(fechaBase: Date, estado: EstadoReclamo) {
   const fmt = (d: Date) => d.toISOString();
   const events = [
     { offset: 0, evento: "Reclamo recibido y registrado en el sistema." },
@@ -106,7 +116,7 @@ function generarReclamos(cantidad: number): Reclamo[] {
       prioridad === "Alta" ? pick(["Crítico", "Moderado"]) : prioridad === "Media" ? "Moderado" : pick(["Bajo", "Moderado"]);
     const diasAtras = int(0, 45);
     const fecha = new Date(Date.now() - diasAtras * 24 * 60 * 60 * 1000);
-    const estado = pick(ESTADOS);
+    const estado = pick(ESTADOS_RECLAMO);
     const marca = pick(MARCAS);
 
     out.push({
@@ -134,6 +144,28 @@ function generarReclamos(cantidad: number): Reclamo[] {
 }
 
 export const RECLAMOS: Reclamo[] = generarReclamos(42);
+
+const ESTADOS_AUDITORIA: EstadoAuditoria[] = ["Planificada", "En curso", "Completada", "Cancelada"];
+
+function generarAuditorias(cantidad: number): Auditoria[] {
+  const out: Auditoria[] = [];
+  for (let i = 0; i < cantidad; i++) {
+    const diasAtras = int(0, 90);
+    const fecha = new Date(Date.now() - diasAtras * 24 * 60 * 60 * 1000);
+    out.push({
+      id: `AU-${String(2000 + i)}`,
+      fecha: fecha.toISOString(),
+      sucursal: pick(SUCURSALES),
+      area: pick(AREAS),
+      puntuacion: int(75, 98),
+      estado: pick(ESTADOS_AUDITORIA),
+      responsable: pick(RESPONSABLES),
+    });
+  }
+  return out.sort((a, b) => +new Date(b.fecha) - +new Date(a.fecha));
+}
+
+export const AUDITORIAS: Auditoria[] = generarAuditorias(18);
 
 export const SUCURSAL_KPIS: SucursalKpi[] = SUCURSALES.map((s) => {
   const reclamosSucursal = RECLAMOS.filter((r) => r.sucursal === s);
