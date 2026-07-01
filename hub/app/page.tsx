@@ -1,3 +1,5 @@
+"use client";
+
 import { Topbar } from "@/components/layout/Topbar";
 import { KpiCard } from "@/components/dashboard/KpiCard";
 import { TrendChart } from "@/components/dashboard/TrendChart";

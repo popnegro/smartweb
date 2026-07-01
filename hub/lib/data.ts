@@ -219,11 +219,6 @@ function generarAuditorias(cantidad: number): Auditoria[] {
 
 export const AUDITORIAS: Auditoria[] = generarAuditorias(18);
 
-const IMPACTOS_ESPERADOS = [
-  "Mejora de NPS en 5 pts",
-  "Reducción de tiempo de espera en 10%",
-  "Aumento de satisfacción de cliente",
-];
 const FUENTES_COMENTARIO: FuenteComentario[] = ["Google Reviews", "WhatsApp", "Email", "Encuesta NPS", "Facebook", "Instagram"];
 const CATEGORIAS_COMENTARIO: CategoriaComentario[] = ["Demoras", "Atención", "Facturación", "Garantías", "Repuestos", "Entrega", "Calidad"];
 const SENTIMIENTOS: Sentimiento[] = ["Positivo", "Negativo", "Mixto", "Neutro"];
