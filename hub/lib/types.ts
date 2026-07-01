@@ -44,6 +44,23 @@ export type TrendPoint = { mes: string; nps: number; csat: number };
 
 export type EstadoAuditoria = "Planificada" | "En curso" | "Completada" | "Cancelada";
 
+export type Criticidad = "Alta" | "Media" | "Baja";
+
+export type AccionCorrectiva = {
+  id: string;
+  descripcion: string;
+  responsable: string;
+  fechaLimite: string;
+  estado: EstadoAccion;
+};
+
+export type Hallazgo = {
+  id: string;
+  descripcion: string;
+  criticidad: Criticidad;
+  accionesCorrectivas: AccionCorrectiva[];
+};
+
 export type Auditoria = {
   id: string;
   fecha: string;
@@ -52,6 +69,7 @@ export type Auditoria = {
   puntuacion: number;
   estado: EstadoAuditoria;
   responsable: string;
+  hallazgos: Hallazgo[];
 };
 
 export type EstadoAccion = "Pendiente" | "En curso" | "Completada";

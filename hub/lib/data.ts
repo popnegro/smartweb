@@ -10,6 +10,8 @@ import type {
   EstadoAuditoria,
   Accion,
   EstadoAccion,
+  Hallazgo,
+  Criticidad,
 } from "./types";
 
 // PRNG simple con semilla fija para que los datos sean siempre los mismos
@@ -164,6 +166,16 @@ export const ACCIONES: Accion[] = generarAcciones();
 
 const ESTADOS_AUDITORIA: EstadoAuditoria[] = ["Planificada", "En curso", "Completada", "Cancelada"];
 
+const CRITICIDAD: Criticidad[] = ["Alta", "Media", "Baja"];
+const HALLAZGOS_EJEMPLO = [
+  "Falta de seguimiento en reclamos abiertos hace más de 15 días.",
+  "Procesos de recepción de vehículos no estandarizados entre turnos.",
+  "Inventario de repuestos con discrepancias en sistema vs. físico.",
+  "Documentación de garantías incompleta en 10% de los casos revisados.",
+  "Tiempos de espera en la línea de postventa superan el objetivo de 5 minutos.",
+  "Falta de capacitación del personal nuevo en el uso del CRM.",
+];
+
 function generarAuditorias(cantidad: number): Auditoria[] {
   const out: Auditoria[] = [];
   for (let i = 0; i < cantidad; i++) {
@@ -177,6 +189,23 @@ function generarAuditorias(cantidad: number): Auditoria[] {
       puntuacion: int(75, 98),
       estado: pick(ESTADOS_AUDITORIA),
       responsable: pick(RESPONSABLES),
+      hallazgos: Array.from({ length: int(2, 4) }, (_, j) => {
+        const hallazgoId = `H${i * 5 + j}`;
+        return {
+          id: hallazgoId,
+          descripcion: pick(HALLAZGOS_EJEMPLO),
+          criticidad: pick(CRITICIDAD),
+          accionesCorrectivas: Array.from({ length: int(1, 2) }, (__, k) => ({
+            id: `AC-${hallazgoId}-${k}`,
+            descripcion: `Implementar plan de acción para: ${HALLAZGOS_EJEMPLO[j % HALLAZGOS_EJEMPLO.length].slice(0, 40)}...`,
+            responsable: pick(RESPONSABLES),
+            fechaLimite: new Date(
+              fecha.getTime() + int(7, 30) * 24 * 60 * 60 * 1000
+            ).toISOString(),
+            estado: pick(ESTADOS_ACCION),
+          })),
+        };
+      }),
     });
   }
   return out.sort((a, b) => +new Date(b.fecha) - +new Date(a.fecha));
