@@ -25,10 +25,10 @@ async function testApi() {
     detalle: "El cliente reclama que el problema reaparece tras el service.",
   };
 
-  console.log("Enviando reclamo de prueba a la API en http://localhost:3000/api...");
+  console.log("Enviando reclamo de prueba a la API en http://localhost:3000/hub/api...");
 
   try {
-    const response = await fetch('http://localhost:3000/api', {
+    const response = await fetch('http://localhost:3000/hub/api', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ reclamo: sampleReclamo }),
