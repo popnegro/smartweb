@@ -5,11 +5,18 @@ import { SucursalChart } from "@/components/dashboard/SucursalChart";
 import { Card } from "@/components/ui/Card";
 import { Badge, riesgoTone, prioridadTone } from "@/components/ui/Badge";
 import { RECLAMOS, SUCURSAL_KPIS, TREND, getDashboardKpis } from "@/lib/data";
-import { formatDate } from "@/lib/utils";
 import { Gauge, MessageSquareWarning, Clock3, AlertTriangle } from "lucide-react";
 import Link from "next/link";
 
 export default function DashboardPage() {
+  function formatDate(d: string | Date) {
+    try {
+      const dt = typeof d === "string" ? new Date(d) : d;
+      return dt.toLocaleDateString("es-AR", { day: "2-digit", month: "short", year: "numeric" });
+    } catch {
+      return String(d);
+    }
+  }
   const kpis = getDashboardKpis();
   const criticos = RECLAMOS.filter((r) => r.riesgo === "Crítico" && r.estado !== "Resuelto").slice(0, 5);
 
