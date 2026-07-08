@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Panel Admin | ElectroFix Store</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --app-primary: #2563eb;
+      --app-primary-hover: #1d4ed8;
+      --app-secondary: #0f172a;
+      --app-font-family: 'Inter', sans-serif;
+    }
+    
+    body {
+      font-family: var(--app-font-family);
+    }
+    
+    .field-error {
+      border-color: #ef4444;
+      box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.16);
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-900 antialiased">
+  
+  <!-- Login Modal -->
+  <div id="login-overlay" class="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/95 p-4">
+    <form id="login-form" class="w-full max-w-sm rounded-3xl bg-white p-8 text-center shadow-2xl" novalidate>
+      <div class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-100 text-[var(--app-primary)]">
+        <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+        </svg>
+      </div>
+      <h1 class="mb-2 text-2xl font-bold text-slate-800">Panel Privado</h1>
+      <p class="mb-6 text-sm text-slate-500">Acceso protegido para administradores</p>
+      <input id="login-pass" type="password" autocomplete="current-password" placeholder="Contraseña" class="w-full rounded-xl border border-slate-200 bg-slate-50 p-4 outline-none transition focus:ring-2 focus:ring-[var(--app-primary)]" required autofocus />
+      <p id="login-error" class="mt-3 hidden text-xs font-bold text-red-500">Contraseña incorrecta</p>
+      <button type="submit" class="mt-4 w-full rounded-xl bg-[var(--app-primary)] py-4 font-bold text-white shadow-lg transition hover:bg-[var(--app-primary-hover)]">Entrar</button>
+      <a href="index.html" class="mt-6 inline-block text-sm font-medium text-slate-400 transition hover:text-slate-600">Volver al sitio</a>
+    </form>
+  </div>
+
+  <!-- Admin Panel -->
+  <div id="admin-content" class="hidden">
+    <header class="fixed top-0 z-50 w-full border-b border-slate-200 bg-white shadow-sm">
+      <nav class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="flex h-16 items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--app-primary)] text-sm font-bold text-white">A</div>
+            <span class="text-xl font-bold tracking-tight text-slate-800">Admin Panel</span>
+          </div>
+          <div class="flex items-center gap-4">
+            <a href="index.html" class="hidden items-center gap-2 text-sm font-semibold text-slate-500 transition hover:text-slate-800 sm:flex">
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              </svg>
+              Sitio
+            </a>
+            <button id="logout-btn" type="button" class="rounded-lg bg-red-50 px-3 py-2 text-xs font-bold text-red-600 transition hover:bg-red-100">Salir</button>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="pt-24 pb-20">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <header class="mb-10 border-b border-slate-200 pb-6">
+          <h2 class="text-3xl font-bold tracking-tight text-slate-800">Administración</h2>
+          <p class="mt-1 text-slate-500">Gestiona tu negocio: productos, pedidos y configuración</p>
+        </header>
+
+        <!-- Tab Navigation -->
+        <div class="mb-8 flex gap-2 rounded-xl border border-slate-200 bg-white p-1 shadow-sm">
+          <button type="button" data-tab-btn="brand" class="rounded-lg px-5 py-2 text-sm font-bold transition-all">Marca</button>
+          <button type="button" data-tab-btn="products" class="rounded-lg px-5 py-2 text-sm font-bold transition-all">Productos</button>
+          <button type="button" data-tab-btn="orders" class="rounded-lg px-5 py-2 text-sm font-bold transition-all">Pedidos</button>
+          <button type="button" data-tab-btn="quotes" class="rounded-lg px-5 py-2 text-sm font-bold transition-all">Cotizaciones</button>
+        </div>
+
+        <!-- Brand Settings Tab -->
+        <section id="tab-brand" data-tab-panel="brand" class="hidden space-y-6">
+          <div class="grid gap-8 md:grid-cols-[1fr_2fr]">
+            <!-- Brand Form -->
+            <form id="brand-form" class="h-fit rounded-2xl border border-slate-200 bg-white p-6 shadow-sm" novalidate>
+              <h3 class="mb-4 text-lg font-bold text-slate-900">Configuración de Marca</h3>
+              <div class="space-y-4">
+                <div>
+                  <label for="brand-name" class="sr-only">Nombre de negocio</label>
+                  <input id="brand-name" type="text" maxlength="80" placeholder="Nombre del negocio" class="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm outline-none focus:ring-2 focus:ring-[var(--app-primary)]">
+                </div>
+                
+                <div>
+                  <label for="brand-whatsapp" class="sr-only">WhatsApp</label>
+                  <input id="brand-whatsapp" type="tel" placeholder="+54 9 ..." class="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm outline-none focus:ring-2 focus:ring-[var(--app-primary)]">
+                </div>
+                
+                <div>
+                  <label for="brand-primary-color" class="sr-only">Color primario</label>
+                  <label class="text-sm font-semibold text-slate-700 block mb-2">Color Primario</label>
+                  <input id="brand-primary-color" type="color" class="w-full rounded-xl border border-slate-200 h-12 cursor-pointer">
+                </div>
+                
+                <div>
+                  <label for="brand-secondary-color" class="sr-only">Color secundario</label>
+                  <label class="text-sm font-semibold text-slate-700 block mb-2">Color Secundario</label>
+                  <input id="brand-secondary-color" type="color" class="w-full rounded-xl border border-slate-200 h-12 cursor-pointer">
+                </div>
+                
+                <button type="submit" class="w-full rounded-xl bg-[var(--app-primary)] py-3 font-bold text-white transition hover:bg-[var(--app-primary-hover)]">Guardar marca</button>
+              </div>
+            </form>
+            
+            <!-- Brand Preview -->
+            <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+              <h3 class="mb-4 text-lg font-bold text-slate-900">Vista previa</h3>
+              <div id="brand-preview" class="rounded-xl border border-slate-200 p-6 bg-slate-50">
+                <div class="flex items-center gap-3 mb-4">
+                  <div class="w-8 h-8 rounded-lg bg-[var(--app-primary)]"></div>
+                  <span id="preview-name" class="font-bold text-slate-900"></span>
+                </div>
+                <p id="preview-whatsapp" class="text-sm text-slate-600"></p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Products Tab -->
+        <section id="tab-products" data-tab-panel="products" class="hidden grid gap-8 md:grid-cols-[1fr_2fr]">
+          <form id="product-form" class="h-fit rounded-2xl border border-slate-200 bg-white p-6 shadow-sm" novalidate>
+            <h3 class="mb-4 text-lg font-bold text-slate-900">Agregar Producto</h3>
+            <div class="space-y-4">
+              <input id="product-name" type="text" maxlength="90" placeholder="Nombre" class="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm outline-none focus:ring-2 focus:ring-[var(--app-primary)]">
+              <input id="product-sku" type="text" maxlength="30" placeholder="SKU" class="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm outline-none focus:ring-2 focus:ring-[var(--app-primary)]">
+              <input id="product-category" type="text" maxlength="50" placeholder="Categoría" class="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm outline-none focus:ring-2 focus:ring-[var(--app-primary)]">
+              <input id="product-price" type="text" maxlength="50" placeholder="Precio (ej: $500)" class="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm outline-none focus:ring-2 focus:ring-[var(--app-primary)]">
+              <textarea id="product-desc" maxlength="220" placeholder="Descripción" class="h-20 w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm outline-none focus:ring-2 focus:ring-[var(--app-primary)]"></textarea>
+              <button type="submit" class="w-full rounded-xl bg-[var(--app-primary)] py-3 font-bold text-white transition hover:bg-[var(--app-primary-hover)]">Agregar producto</button>
+            </div>
+          </form>
+          
+          <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <h3 class="mb-4 text-lg font-bold text-slate-900">Catálogo</h3>
+            <div id="products-list" class="space-y-3"></div>
+          </div>
+        </section>
+
+        <!-- Orders Tab -->
+        <section id="tab-orders" data-tab-panel="orders" class="hidden space-y-6">
+          <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+            <h3 class="font-bold text-slate-900 mb-4">Pedidos</h3>
+            <div class="overflow-x-auto">
+              <table class="w-full min-w-[860px] text-left text-sm">
+                <thead class="border-b border-slate-200 bg-slate-50 text-xs uppercase text-slate-500">
+                  <tr>
+                    <th class="px-6 py-4 font-bold">Cliente</th>
+                    <th class="px-6 py-4 font-bold">Producto</th>
+                    <th class="px-6 py-4 font-bold">Cantidad</th>
+                    <th class="px-6 py-4 font-bold">Pago</th>
+                    <th class="px-6 py-4 font-bold">Estado</th>
+                    <th class="px-6 py-4 text-right font-bold">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="orders-rows" class="divide-y divide-slate-100"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- Quotes Tab -->
+        <section id="tab-quotes" data-tab-panel="quotes" class="hidden space-y-6">
+          <div class="flex items-center justify-between rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+            <div class="flex items-center gap-4">
+              <input id="quote-search" type="search" placeholder="Buscar..." class="rounded-lg border border-slate-200 bg-slate-50 p-2 text-sm focus:ring-2 focus:ring-[var(--app-primary)]">
+              <span class="text-sm font-medium text-slate-400">Total: <strong id="quote-count" class="text-slate-800">0</strong></span>
+            </div>
+            <button id="quote-export" type="button" class="rounded-lg bg-slate-800 px-4 py-2 text-xs font-bold text-white transition hover:bg-slate-900">Exportar CSV</button>
+          </div>
+          
+          <div class="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
+            <table class="w-full min-w-[860px] text-left text-sm">
+              <thead class="border-b border-slate-200 bg-slate-50 text-xs uppercase text-slate-500">
+                <tr>
+                  <th class="px-6 py-4 font-bold">Contacto</th>
+                  <th class="px-6 py-4 font-bold">Producto</th>
+                  <th class="px-6 py-4 font-bold">Cantidad</th>
+                  <th class="px-6 py-4 font-bold">Detalle</th>
+                  <th class="px-6 py-4 text-right font-bold">Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="quotes-rows" class="divide-y divide-slate-100"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/config.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/theme.js"></script>
+  
+  <script>
+    (() => {
+      'use strict';
+      
+      /**
+       * Panel de Administración
+       */
+      
+      class AdminPanel {
+        constructor() {
+          this.currentTab = 'brand';
+          this.state = stateManager.getState();
+          this.init();
+        }
+        
+        async init() {
+          await this.checkAuth();
+          this.setupLoginForm();
+          this.setupTabNavigation();
+          this.renderAllTabs();
+          this.bindEvents();
+        }
+        
+        /**
+         * Verificar autenticación
+         */
+        async checkAuth() {
+          if (!stateManager.getState().user?.authenticated) {
+            Utils.show(Utils.$('#login-overlay'));
+            Utils.hide(Utils.$('#admin-content'));
+            return false;
+          }
+          
+          Utils.hide(Utils.$('#login-overlay'));
+          Utils.show(Utils.$('#admin-content'));
+          return true;
+        }
+        
+        /**
+         * Setup formulario de login
+         */
+        setupLoginForm() {
+          const form = Utils.$('#login-form');
+          form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const password = Utils.$('#login-pass').value;
+            
+            try {
+              const hash = await Utils.sha256(password);
+              // Validar contra la contraseña configurada
+              if (password === ELECTROFIX.ADMIN_ACCESS_KEY) {
+                stateManager.createSession({ authenticated: true });
+                await this.init();
+              } else {
+                Utils.show(Utils.$('#login-error'));
+              }
+            } catch (error) {
+              console.error('Auth error:', error);
+              Utils.show(Utils.$('#login-error'));
+            }
+          });
+          
+          Utils.$('#logout-btn').addEventListener('click', () => {
+            stateManager.clearSession();
+            location.reload();
+          });
+        }
+        
+        /**
+         * Setup navegación de pestañas
+         */
+        setupTabNavigation() {
+          Utils.$$('[data-tab-btn]').forEach(btn => {
+            btn.addEventListener('click', () => {
+              this.currentTab = btn.dataset.tabBtn;
+              this.renderTabNavigation();
+              this.renderTab(this.currentTab);
+            });
+          });
+        }
+        
+        /**
+         * Renderizar navegación de pestañas
+         */
+        renderTabNavigation() {
+          Utils.$$('[data-tab-btn]').forEach(btn => {
+            const active = btn.dataset.tabBtn === this.currentTab;
+            btn.className = active
+              ? 'rounded-lg bg-[var(--app-primary)] px-5 py-2 text-sm font-bold text-white shadow-md'
+              : 'rounded-lg px-5 py-2 text-sm font-bold text-slate-500 hover:text-slate-800';
+          });
+          
+          Utils.$$('[data-tab-panel]').forEach(panel => {
+            panel.classList.toggle('hidden', panel.dataset.tabPanel !== this.currentTab);
+          });
+        }
+        
+        /**
+         * Renderizar todas las pestañas
+         */
+        renderAllTabs() {
+          this.renderBrandTab();
+          this.renderProductsTab();
+          this.renderOrdersTab();
+          this.renderQuotesTab();
+          this.renderTabNavigation();
+        }
+        
+        /**
+         * Pestaña de Marca
+         */
+        renderBrandTab() {
+          const brand = this.state.brand;
+          
+          Utils.$('#brand-name').value = brand.identity?.name || '';
+          Utils.$('#brand-whatsapp').value = brand.identity?.whatsapp || '';
+          Utils.$('#brand-primary-color').value = brand.theme?.primary || '#0f766e';
+          Utils.$('#brand-secondary-color').value = brand.theme?.secondary || '#111827';
+          
+          Utils.$('#preview-name').textContent = brand.identity?.name || 'Tu Negocio';
+          Utils.$('#preview-whatsapp').textContent = brand.identity?.whatsapp || 'WhatsApp: No configurado';
+          
+          Utils.$('#brand-form').addEventListener('submit', (e) => this.saveBrand(e));
+        }
+        
+        /**
+         * Guardar marca
+         */
+        saveBrand(event) {
+          event.preventDefault();
+          
+          const updates = {
+            identity: {
+              name: Utils.$('#brand-name').value.trim(),
+              whatsapp: Utils.$('#brand-whatsapp').value.trim()
+            },
+            theme: {
+              primary: Utils.$('#brand-primary-color').value,
+              secondary: Utils.$('#brand-secondary-color').value
+            }
+          };
+          
+          stateManager.updateBrand(Utils.deepMerge(this.state.brand, updates));
+          themeManager.updateTheme(updates.theme);
+          
+          this.renderBrandTab();
+          uiManager.showToast('Marca actualizada', 'Éxito', 'success');
+        }
+        
+        /**
+         * Pestaña de Productos
+         */
+        renderProductsTab() {
+          const products = this.state.brand.catalog?.products || [];
+          const container = Utils.$('#products-list');
+          container.innerHTML = '';
+          
+          if (!products.length) {
+            container.innerHTML = '<p class="text-sm text-slate-400">No hay productos</p>';
+            return;
+          }
+          
+          products.forEach((product, index) => {
+            const card = Utils.createElement('div', {
+              className: 'rounded-lg border border-slate-200 bg-slate-50 p-3 flex justify-between items-start'
+            });
+            
+            const info = Utils.createElement('div');
+            info.innerHTML = `
+              <p class="font-bold text-slate-900">${product.name}</p>
+              <p class="text-xs text-slate-500">${product.category}</p>
+              <p class="text-xs text-slate-600 mt-1">${product.priceLabel}</p>
+            `;
+            
+            const deleteBtn = Utils.createElement('button', {
+              text: '×',
+              className: 'text-2xl font-bold text-slate-300 hover:text-red-500',
+              attrs: { type: 'button', 'data-delete-product': String(index) }
+            });
+            
+            card.appendChild(info);
+            card.appendChild(deleteBtn);
+            container.appendChild(card);
+          });
+          
+          Utils.$('#product-form').addEventListener('submit', (e) => this.addProduct(e));
+          
+          container.addEventListener('click', (e) => {
+            const btn = e.target.closest('[data-delete-product]');
+            if (btn) this.deleteProduct(Number(btn.dataset.deleteProduct));
+          });
+        }
+        
+        /**
+         * Agregar producto
+         */
+        addProduct(event) {
+          event.preventDefault();
+          
+          const product = {
+            sku: Utils.$('#product-sku').value.trim() || `PRD-${Date.now()}`,
+            name: Utils.$('#product-name').value.trim(),
+            category: Utils.$('#product-category').value.trim() || 'Producto',
+            priceLabel: Utils.$('#product-price').value.trim() || 'Consultar',
+            description: Utils.$('#product-desc').value.trim()
+          };
+          
+          if (!product.name || !product.description) {
+            uiManager.showToast('Completa nombre y descripción', 'Error', 'error');
+            return;
+          }
+          
+          const brand = this.state.brand;
+          brand.catalog.products.push(product);
+          stateManager.saveBrand(brand);
+          
+          Utils.$('#product-form').reset();
+          this.renderProductsTab();
+          uiManager.showToast('Producto agregado', 'Éxito', 'success');
+        }
+        
+        /**
+         * Eliminar producto
+         */
+        deleteProduct(index) {
+          const brand = this.state.brand;
+          brand.catalog.products.splice(index, 1);
+          stateManager.saveBrand(brand);
+          this.renderProductsTab();
+          uiManager.showToast('Producto eliminado', 'Notificación', 'dark');
+        }
+        
+        /**
+         * Pestaña de Pedidos
+         */
+        renderOrdersTab() {
+          const orders = this.state.orders || [];
+          const container = Utils.$('#orders-rows');
+          container.innerHTML = '';
+          
+          if (!orders.length) {
+            const row = Utils.createElement('tr');
+            row.innerHTML = '<td colspan="6" class="px-6 py-12 text-center text-slate-400 italic">No hay pedidos</td>';
+            container.appendChild(row);
+            return;
+          }
+          
+          orders.forEach(order => {
+            const row = Utils.createElement('tr', { className: 'hover:bg-slate-50' });
+            row.innerHTML = `
+              <td class="px-6 py-4">
+                <div class="font-bold">${order.customer?.name || 'Sin nombre'}</div>
+                <div class="text-xs text-slate-400">${order.customer?.phone || ''}</div>
+              </td>
+              <td class="px-6 py-4">${order.productName || 'Sin producto'}</td>
+              <td class="px-6 py-4 font-bold">${order.quantity || 1}</td>
+              <td class="px-6 py-4">${order.paymentMethod || '-'}</td>
+              <td class="px-6 py-4"><span class="text-xs font-bold text-blue-600">${order.status || 'pending'}</span></td>
+              <td class="px-6 py-4 text-right">
+                <a href="https://wa.me/${order.customer?.phone?.replace(/\D/g, '')}" target="_blank" class="text-xs font-bold text-green-600 hover:text-green-700">WhatsApp</a>
+              </td>
+            `;
+            container.appendChild(row);
+          });
+        }
+        
+        /**
+         * Pestaña de Cotizaciones
+         */
+        renderQuotesTab() {
+          const quotes = this.state.quoteRequests || [];
+          const container = Utils.$('#quotes-rows');
+          
+          Utils.$('#quote-count').textContent = String(quotes.length);
+          container.innerHTML = '';
+          
+          if (!quotes.length) {
+            const row = Utils.createElement('tr');
+            row.innerHTML = '<td colspan="5" class="px-6 py-12 text-center text-slate-400 italic">No hay cotizaciones</td>';
+            container.appendChild(row);
+            return;
+          }
+          
+          quotes.forEach(quote => {
+            const row = Utils.createElement('tr', { className: 'hover:bg-slate-50' });
+            const phone = String(quote.telefono || '').replace(/\D/g, '');
+            row.innerHTML = `
+              <td class="px-6 py-4">
+                <div class="font-bold">${quote.nombre || 'Sin nombre'}</div>
+                <div class="text-xs text-slate-400">${quote.company || 'Sin empresa'}</div>
+              </td>
+              <td class="px-6 py-4 font-semibold">${quote.productName || quote.productSku || 'Sin producto'}</td>
+              <td class="px-6 py-4 font-bold">${quote.quantity || 1}</td>
+              <td class="px-6 py-4 text-sm text-slate-600">${quote.mensaje || 'Sin detalle'}</td>
+              <td class="px-6 py-4 text-right">
+                <a href="https://wa.me/${phone}?text=${encodeURIComponent(`Recibimos tu solicitud de ${quote.productName || 'producto'}`)}..." target="_blank" class="text-xs font-bold text-green-600 hover:text-green-700">WhatsApp</a>
+              </td>
+            `;
+            container.appendChild(row);
+          });
+          
+          Utils.$('#quote-search').addEventListener('input', (e) => {
+            this.filterQuotes(e.target.value);
+          });
+          
+          Utils.$('#quote-export').addEventListener('click', () => this.exportQuotes());
+        }
+        
+        /**
+         * Filtrar cotizaciones
+         */
+        filterQuotes(search) {
+          const quotes = this.state.quoteRequests || [];
+          const filtered = quotes.filter(q => 
+            `${q.nombre} ${q.telefono} ${q.productName} ${q.company}`.toLowerCase().includes(search.toLowerCase())
+          );
+          
+          Utils.$('#quote-count').textContent = String(filtered.length);
+          
+          const container = Utils.$('#quotes-rows');
+          container.innerHTML = '';
+          
+          filtered.forEach(quote => {
+            const row = Utils.createElement('tr');
+            const phone = String(quote.telefono || '').replace(/\D/g, '');
+            row.innerHTML = `
+              <td class="px-6 py-4">
+                <div class="font-bold">${quote.nombre}</div>
+                <div class="text-xs text-slate-400">${quote.company}</div>
+              </td>
+              <td class="px-6 py-4 font-semibold">${quote.productName}</td>
+              <td class="px-6 py-4 font-bold">${quote.quantity}</td>
+              <td class="px-6 py-4 text-sm text-slate-600">${quote.mensaje}</td>
+              <td class="px-6 py-4 text-right">
+                <a href="https://wa.me/${phone}" target="_blank" class="text-xs font-bold text-green-600">WhatsApp</a>
+              </td>
+            `;
+            container.appendChild(row);
+          });
+        }
+        
+        /**
+         * Exportar cotizaciones a CSV
+         */
+        exportQuotes() {
+          const quotes = this.state.quoteRequests || [];
+          if (!quotes.length) {
+            uiManager.showToast('No hay cotizaciones para exportar', 'Notificación', 'dark');
+            return;
+          }
+          
+          const headers = ['Nombre', 'Empresa', 'Teléfono', 'Producto', 'Cantidad', 'Detalle', 'Fecha'];
+          const rows = quotes.map(q => [
+            q.nombre,
+            q.company,
+            q.telefono,
+            q.productName,
+            q.quantity,
+            q.mensaje,
+            q.createdAt
+          ].map(v => Utils.escapeCsv(v)).join(','));
+          
+          const csv = [headers.join(','), ...rows].join('\n');
+          const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+          const link = document.createElement('a');
+          const url = URL.createObjectURL(blob);
+          link.setAttribute('href', url);
+          link.setAttribute('download', 'cotizaciones.csv');
+          link.click();
+        }
+        
+        /**
+         * Renderizar pestaña específica
+         */
+        renderTab(tabName) {
+          if (tabName === 'brand') this.renderBrandTab();
+          if (tabName === 'products') this.renderProductsTab();
+          if (tabName === 'orders') this.renderOrdersTab();
+          if (tabName === 'quotes') this.renderQuotesTab();
+        }
+        
+        /**
+         * Bind eventos generales
+         */
+        bindEvents() {
+          // Los eventos se bindean en cada función render
+        }
+      }
+      
+      // Inicializar panel
+      new AdminPanel();
+    })();
+  </script>
+</body>
+</html>

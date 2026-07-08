@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="ElectroFix Store: Venta y reparación de electrónica para comercios minoristas." />
+  <title>ElectroFix Store | Electrónica y Reparaciones</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --app-primary: #0f766e;
+      --app-primary-hover: #115e59;
+      --app-secondary: #111827;
+      --app-accent: #f59e0b;
+      --app-font-family: 'Inter', sans-serif;
+    }
+    
+    body {
+      font-family: var(--app-font-family);
+      color: var(--app-text-main, #111827);
+    }
+    
+    .glass-nav {
+      background-color: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(14px);
+    }
+    
+    .field-error {
+      border-color: #ef4444;
+      box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.16);
+    }
+    
+    @keyframes slide-up {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .animate-slide-up {
+      animation: slide-up 0.5s ease-out;
+    }
+  </style>
+</head>
+<body class="bg-white antialiased">
+  <!-- Header -->
+  <header id="main-header" class="fixed top-0 z-50 w-full transition-all duration-300">
+    <nav class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="flex h-16 items-center justify-between md:h-20">
+        <a href="#inicio" class="flex items-center gap-3">
+          <span class="flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--app-secondary)] text-sm font-black text-white">EF</span>
+          <span id="brand-name" class="text-lg font-black tracking-tight sm:text-xl"></span>
+        </a>
+        
+        <div id="nav-links" class="hidden items-center gap-8 text-sm font-semibold text-slate-600 md:flex"></div>
+        
+        <div class="hidden items-center gap-4 md:flex">
+          <a href="admin.html" class="text-sm font-semibold text-slate-500 transition-colors hover:text-[var(--app-primary)]">Panel Admin</a>
+          <a href="#quote-form" class="rounded-full bg-[var(--app-primary)] px-5 py-2.5 text-sm font-bold text-white transition hover:bg-[var(--app-primary-hover)]">Cotizar ahora</a>
+        </div>
+        
+        <button id="mobile-menu-btn" class="rounded-lg p-2 text-slate-600 md:hidden">
+          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main id="inicio">
+    <!-- Hero Section -->
+    <section class="relative overflow-hidden bg-slate-950 pt-28 text-white md:pt-36">
+      <div class="absolute inset-0 opacity-35">
+        <img id="hero-image" src="" alt="" class="h-full w-full object-cover">
+      </div>
+      <div class="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/85 to-slate-950/30"></div>
+      
+      <div class="relative mx-auto grid min-h-[680px] max-w-7xl items-center gap-10 px-4 pb-16 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:px-8">
+        <div class="max-w-3xl">
+          <p class="mb-5 inline-flex rounded-full bg-white/10 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-amber-300 ring-1 ring-white/15">Venta + reparación técnica</p>
+          <h1 id="hero-title" class="text-4xl font-black tracking-tight md:text-6xl lg:text-7xl"></h1>
+          <p id="hero-description" class="mt-6 max-w-2xl text-lg leading-relaxed text-slate-200 md:text-xl"></p>
+          
+          <div id="hero-actions" class="mt-9 flex flex-col gap-4 sm:flex-row"></div>
+          
+          <div class="mt-10 grid max-w-xl grid-cols-3 gap-3 text-left">
+            <div class="rounded-xl border border-white/10 bg-white/10 p-4">
+              <p class="text-2xl font-black">24h</p>
+              <p class="mt-1 text-xs text-slate-300">diagnóstico inicial</p>
+            </div>
+            <div class="rounded-xl border border-white/10 bg-white/10 p-4">
+              <p class="text-2xl font-black">90d</p>
+              <p class="mt-1 text-xs text-slate-300">garantía técnica</p>
+            </div>
+            <div class="rounded-xl border border-white/10 bg-white/10 p-4">
+              <p class="text-2xl font-black">B2C</p>
+              <p class="mt-1 text-xs text-slate-300">retail y soporte</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="services" class="bg-white py-24">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="mb-12 max-w-2xl">
+          <p class="mb-3 text-sm font-black uppercase tracking-[0.18em] text-[var(--app-primary)]">Servicios</p>
+          <h2 id="features-title" class="text-3xl font-black tracking-tight text-slate-950 md:text-5xl"></h2>
+          <p id="features-description" class="mt-4 text-lg leading-relaxed text-slate-600"></p>
+        </div>
+        <div id="features-grid" class="grid gap-6 md:grid-cols-3"></div>
+      </div>
+    </section>
+
+    <!-- Catalog Section -->
+    <section id="catalog" class="bg-slate-50 py-24">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="mb-10">
+          <p class="mb-3 text-sm font-black uppercase tracking-[0.18em] text-[var(--app-primary)]">Catálogo</p>
+          <h2 id="catalog-title" class="text-3xl font-black tracking-tight text-slate-950 md:text-5xl"></h2>
+          <p id="catalog-description" class="mt-4 text-lg leading-relaxed text-slate-600"></p>
+        </div>
+        <div id="products-grid" class="grid gap-6 md:grid-cols-2 lg:grid-cols-3"></div>
+      </div>
+    </section>
+
+    <!-- Quote Form Section -->
+    <section id="quote-form" class="bg-white py-24">
+      <div class="mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:px-8">
+        <div>
+          <p class="mb-3 text-sm font-black uppercase tracking-[0.18em] text-[var(--app-primary)]">Cotización</p>
+          <h2 class="text-3xl font-black tracking-tight text-slate-950 md:text-5xl">Convierte consultas en ventas</h2>
+          <p class="mt-4 text-lg leading-relaxed text-slate-600">El cliente selecciona producto o servicio, y nosotros respondemos con disponibilidad y precio.</p>
+        </div>
+        
+        <form id="quote-request-form" class="rounded-2xl border border-slate-100 bg-white p-6 shadow-xl md:p-8" novalidate>
+          <div class="grid gap-4 sm:grid-cols-2">
+            <div class="sm:col-span-2">
+              <label for="quote-product" class="mb-2 block text-sm font-semibold text-slate-700">Producto o servicio</label>
+              <select id="quote-product" class="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 focus:ring-2 focus:ring-[var(--app-primary)]"></select>
+            </div>
+            
+            <div>
+              <label for="quote-quantity" class="mb-2 block text-sm font-semibold text-slate-700">Cantidad</label>
+              <input id="quote-quantity" type="number" min="1" value="1" class="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 focus:ring-2 focus:ring-[var(--app-primary)]">
+              <p data-error-for="quote-quantity" class="mt-2 hidden text-xs font-bold text-red-500"></p>
+            </div>
+            
+            <div>
+              <label for="quote-company" class="mb-2 block text-sm font-semibold text-slate-700">Empresa</label>
+              <input id="quote-company" type="text" maxlength="100" placeholder="Opcional" class="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 focus:ring-2 focus:ring-[var(--app-primary)]">
+            </div>
+            
+            <div>
+              <label for="quote-name" class="mb-2 block text-sm font-semibold text-slate-700">Nombre</label>
+              <input id="quote-name" type="text" maxlength="80" class="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 focus:ring-2 focus:ring-[var(--app-primary)]">
+              <p data-error-for="quote-name" class="mt-2 hidden text-xs font-bold text-red-500"></p>
+            </div>
+            
+            <div>
+              <label for="quote-phone" class="mb-2 block text-sm font-semibold text-slate-700">WhatsApp</label>
+              <input id="quote-phone" type="tel" placeholder="+54 9 ..." class="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 focus:ring-2 focus:ring-[var(--app-primary)]">
+              <p data-error-for="quote-phone" class="mt-2 hidden text-xs font-bold text-red-500"></p>
+            </div>
+            
+            <div class="sm:col-span-2">
+              <label for="quote-message" class="mb-2 block text-sm font-semibold text-slate-700">Detalle</label>
+              <textarea id="quote-message" maxlength="700" placeholder="Ej: cambiar módulo de Samsung A32" class="h-28 w-full rounded-xl border border-slate-200 bg-slate-50 p-3 focus:ring-2 focus:ring-[var(--app-primary)]"></textarea>
+            </div>
+          </div>
+          <button type="submit" class="mt-6 w-full rounded-xl bg-[var(--app-primary)] py-4 font-black uppercase text-white shadow-lg transition hover:bg-[var(--app-primary-hover)]">Enviar solicitud</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-200 bg-slate-950 py-16 text-white">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="mb-12 flex flex-col justify-between gap-8 md:flex-row">
+        <div class="max-w-sm">
+          <div class="flex items-center gap-3">
+            <span class="flex h-9 w-9 items-center justify-center rounded-lg bg-white text-sm font-black text-slate-950">EF</span>
+            <span id="footer-brand-name" class="text-xl font-black tracking-tight"></span>
+          </div>
+          <p class="mt-4 text-sm leading-relaxed text-slate-400">Landing para comercios minoristas de electrónica</p>
+        </div>
+        <div id="footer-links" class="flex flex-wrap gap-6 text-sm font-semibold text-slate-300"></div>
+      </div>
+      <div class="flex flex-col justify-between gap-4 border-t border-white/10 pt-8 text-sm text-slate-400 md:flex-row">
+        <p id="footer-copy"></p>
+        <div class="flex gap-6">
+          <a href="#" class="hover:text-white">Privacidad</a>
+          <a href="#" class="hover:text-white">Términos</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/config.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/theme.js"></script>
+  <script src="js/checkout.js"></script>
+  
+  <script>
+    (() => {
+      'use strict';
+      
+      /**
+       * Página de Catálogo - Lógica Principal
+       */
+      
+      class CatalogPage {
+        constructor() {
+          this.state = stateManager.getState();
+          this.brand = this.state.brand;
+          this.init();
+        }
+        
+        init() {
+          this.renderBrand();
+          this.renderFeatures();
+          this.renderProducts();
+          this.renderQuoteForm();
+          this.setupCheckoutModal();
+          this.bindEvents();
+          this.setupScrollHeader();
+        }
+        
+        /**
+         * Renderizar marca e identidad
+         */
+        renderBrand() {
+          const brand = this.brand;
+          
+          Utils.$('#brand-name').textContent = brand.identity.name;
+          Utils.$('#footer-brand-name').textContent = brand.identity.name;
+          Utils.$('#hero-title').textContent = brand.hero.title;
+          Utils.$('#hero-description').textContent = brand.hero.description;
+          Utils.$('#hero-image').src = brand.hero.image;
+          Utils.$('#features-title').textContent = brand.features.title;
+          Utils.$('#features-description').textContent = brand.features.description;
+          Utils.$('#catalog-title').textContent = brand.catalog.title;
+          Utils.$('#catalog-description').textContent = brand.catalog.description;
+          Utils.$('#footer-copy').textContent = `© ${new Date().getFullYear()} ${brand.identity.name}. Todos los derechos reservados.`;
+          
+          // Renderizar navegación
+          this.renderNavigation();
+        }
+        
+        /**
+         * Renderizar navegación
+         */
+        renderNavigation() {
+          const navContainer = Utils.$('#nav-links');
+          const footerContainer = Utils.$('#footer-links');
+          
+          navContainer.innerHTML = '';
+          footerContainer.innerHTML = '';
+          
+          this.brand.navigation.forEach(link => {
+            const navLink = Utils.createElement('a', {
+              text: link.label,
+              className: 'hover:text-[var(--app-primary)] transition-colors',
+              attrs: { href: link.href }
+            });
+            navContainer.appendChild(navLink);
+            
+            const footerLink = Utils.createElement('a', {
+              text: link.label,
+              className: 'hover:text-white transition-colors',
+              attrs: { href: link.href }
+            });
+            footerContainer.appendChild(footerLink);
+          });
+        }
+        
+        /**
+         * Renderizar features/servicios
+         */
+        renderFeatures() {
+          const container = Utils.$('#features-grid');
+          container.innerHTML = '';
+          
+          this.brand.features.items.forEach(item => {
+            const card = Utils.createElement('article', {
+              className: 'rounded-2xl border border-slate-200 bg-white p-7 shadow-sm transition hover:-translate-y-1 hover:shadow-xl'
+            });
+            
+            const iconEl = Utils.createElement('div', {
+              text: item.icon || '⚙️',
+              className: 'mb-5 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-teal-50 text-xl'
+            });
+            
+            const titleEl = Utils.createElement('h3', {
+              text: item.title,
+              className: 'text-xl font-black text-slate-950'
+            });
+            
+            const descEl = Utils.createElement('p', {
+              text: item.desc,
+              className: 'mt-3 text-sm leading-relaxed text-slate-600'
+            });
+            
+            card.appendChild(iconEl);
+            card.appendChild(titleEl);
+            card.appendChild(descEl);
+            container.appendChild(card);
+          });
+        }
+        
+        /**
+         * Renderizar catálogo de productos
+         */
+        renderProducts() {
+          const container = Utils.$('#products-grid');
+          container.innerHTML = '';
+          
+          const products = this.brand.catalog.products || [];
+          
+          if (!products.length) {
+            container.innerHTML = '<p class="col-span-full text-center text-slate-500">No hay productos disponibles</p>';
+            return;
+          }
+          
+          products.forEach(product => {
+            const card = Utils.createElement('article', {
+              className: 'flex min-h-[300px] flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl'
+            });
+            
+            const top = Utils.createElement('div', {
+              className: 'mb-5 flex items-start justify-between gap-4'
+            });
+            
+            const category = Utils.createElement('span', {
+              text: product.category || 'Producto',
+              className: 'rounded-full bg-teal-50 px-3 py-1 text-xs font-black uppercase tracking-wider text-[var(--app-primary)]'
+            });
+            
+            const badge = Utils.createElement('span', {
+              text: product.badge || '',
+              className: 'text-xs font-black text-slate-400'
+            });
+            
+            top.appendChild(category);
+            if (product.badge) top.appendChild(badge);
+            
+            const name = Utils.createElement('h3', {
+              text: product.name,
+              className: 'text-xl font-black text-slate-950'
+            });
+            
+            const desc = Utils.createElement('p', {
+              text: product.description,
+              className: 'mt-3 flex-1 text-sm leading-relaxed text-slate-600'
+            });
+            
+            const price = Utils.createElement('p', {
+              text: product.priceLabel || 'Consultar',
+              className: 'mt-5 text-lg font-black text-slate-950'
+            });
+            
+            const button = Utils.createElement('button', {
+              text: 'Comprar',
+              className: 'mt-5 inline-flex justify-center rounded-xl border border-slate-200 px-4 py-3 text-sm font-black text-slate-700 transition hover:border-[var(--app-primary)] hover:text-[var(--app-primary)]',
+              attrs: { type: 'button', 'data-product-id': product.sku || product.name }
+            });
+            
+            button.addEventListener('click', () => checkoutFlow.startCheckout(product));
+            
+            card.appendChild(top);
+            card.appendChild(name);
+            card.appendChild(desc);
+            card.appendChild(price);
+            card.appendChild(button);
+            
+            container.appendChild(card);
+          });
+        }
+        
+        /**
+         * Renderizar opciones en el formulario de cotización
+         */
+        renderQuoteForm() {
+          const select = Utils.$('#quote-product');
+          select.innerHTML = '';
+          
+          const products = this.brand.catalog.products || [];
+          const features = this.brand.features.items || [];
+          
+          products.forEach(product => {
+            const option = Utils.createElement('option', {
+              text: product.name,
+              attrs: { value: product.sku || product.name }
+            });
+            select.appendChild(option);
+          });
+          
+          features.forEach(feature => {
+            const option = Utils.createElement('option', {
+              text: `Servicio: ${feature.title}`,
+              attrs: { value: `SERVICE:${feature.title}` }
+            });
+            select.appendChild(option);
+          });
+        }
+        
+        /**
+         * Setup del modal de checkout
+         */
+        setupCheckoutModal() {
+          if (!Utils.$('#checkout-modal')) {
+            const modal = Utils.createElement('div', {
+              id: 'checkout-modal',
+              className: 'fixed inset-0 bg-black/50 hidden place-items-center p-4 z-50'
+            });
+            document.body.appendChild(modal);
+          }
+          
+          uiManager.createModal('checkout-modal', {
+            title: 'Tu Pedido',
+            maxWidth: 'sm'
+          });
+        }
+        
+        /**
+         * Bind eventos del formulario
+         */
+        bindEvents() {
+          const form = Utils.$('#quote-request-form');
+          if (form) {
+            form.addEventListener('submit', (e) => this.handleQuoteSubmit(e));
+          }
+          
+          // Mobile menu
+          Utils.$('#mobile-menu-btn').addEventListener('click', () => {
+            // Implementar toggle de menu
+          });
+        }
+        
+        /**
+         * Manejar envío de cotización
+         */
+        async handleQuoteSubmit(event) {
+          event.preventDefault();
+          
+          // Validar campos
+          const name = Utils.$('#quote-name').value.trim();
+          const phone = Utils.$('#quote-phone').value.trim();
+          const quantity = Utils.$('#quote-quantity').value;
+          
+          if (!Utils.isValidName(name)) {
+            uiManager.setFieldError('quote-name', 'Nombre inválido');
+            return;
+          }
+          
+          if (!Utils.isValidPhone(phone)) {
+            uiManager.setFieldError('quote-phone', 'Teléfono inválido');
+            return;
+          }
+          
+          if (!Utils.isValidQuantity(quantity)) {
+            uiManager.setFieldError('quote-quantity', 'Cantidad inválida');
+            return;
+          }
+          
+          // Guardar cotización
+          const quote = stateManager.saveQuoteRequest({
+            productSku: Utils.$('#quote-product').value,
+            productName: Utils.$('#quote-product').options[Utils.$('#quote-product').selectedIndex].text,
+            quantity: Number(quantity),
+            company: Utils.$('#quote-company').value.trim(),
+            nombre: name,
+            telefono: phone,
+            mensaje: Utils.$('#quote-message').value.trim()
+          });
+          
+          // Limpiar form
+          form.reset();
+          Utils.$('#quote-quantity').value = '1';
+          
+          uiManager.showToast('Cotización enviada. Te contactaremos pronto.', 'Éxito', 'success');
+        }
+        
+        /**
+         * Header con efecto glass al scroll
+         */
+        setupScrollHeader() {
+          window.addEventListener('scroll', () => {
+            const header = Utils.$('#main-header');
+            if (window.scrollY > 20) {
+              header.classList.add('glass-nav', 'shadow-sm');
+            } else {
+              header.classList.remove('glass-nav', 'shadow-sm');
+            }
+          }, { passive: true });
+        }
+      }
+      
+      // Inicializar página
+      new CatalogPage();
+    })();
+  </script>
+</body>
+</html>
