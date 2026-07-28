@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cuestionario de Onboarding de Proyecto</title>
+  <meta name="description" content="Cuestionario para recolectar información clave para el inicio de proyectos." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📝</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <link rel="preload" href="/contract.css" as="style">
+  <link rel="stylesheet" href="/contract.css" media="print" onload="this.media='all'">
+  <script src="/shared.js"></script>
+  <noscript><link rel="stylesheet" href="/contract.css"></noscript>
+  <style>
+    /* Unificación de estilos de formulario */
+    .form-radio-group, .form-checkbox-group {
+      margin-top: var(--space-2); /* Espaciado más ajustado para listas de opciones */
+    }
+
+    /* Estilos para la validación en tiempo real */
+    .form-input.is-valid {
+      border-color: #28a745; /* Verde */
+    }
+    .form-input.is-invalid {
+      border-color: #dc3545; /* Rojo */
+    }
+    .form-status.is-error {
+      color: #dc3545;
+      font-size: 0.8rem;
+      margin-top: 0.5rem;
+    }
+    .error-message {
+      color: #dc3545;
+      font-size: 0.8rem;
+      margin-top: 0.25rem;
+      display: none;
+    }
+    .form-radio-group label, .form-checkbox-group label { margin-left: 8px; }
+    fieldset {
+      border: none;
+      padding: 0;
+      margin: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page-wrapper">
+    <aside class="sidebar">
+      <nav id="toc-nav">
+        <ul id="toc-list" class="toc"></ul>
+      </nav>
+    </aside>
+
+    <div class="mobile-header">
+      <button id="menu-toggle" class="menu-toggle" aria-label="Abrir menú">☰</button>
+      <span style="font-weight: 600;">Onboarding</span>
+    </div>
+
+    <div id="overlay" class="overlay"></div>
+
+    <main id="main-content" class="main-content">
+
+      <!-- 1. TÍTULO -->
+      <section id="portada" class="content-section animate-on-scroll">
+        <div class="container">
+          <h1 class="section-title">Onboarding</h1>
+          <p>Por favor, completa la siguiente información para que podamos entender mejor tu proyecto y tus necesidades.</p>
+        </div>
+      </section>
+
+      <!-- 2. FORMULARIO DEL CUESTIONARIO -->
+      <section id="cuestionario" class="content-section animate-on-scroll">
+        <div class="container">
+          <form id="questionnaire-form">
+            
+            <!-- SECCIÓN DE OBJETIVOS -->
+            <div class="form-group">
+              <label for="project-goals" class="form-label">¿Qué problema principal esperan resolver con el sitio web y plataforma autogestiva?</label>
+              <textarea id="project-goals" name="projectGoals" rows="4" required class="form-input" placeholder="Ej: Centralizar la gestión de medios, agilizar la creación de propuestas..." aria-describedby="project-goals-error"></textarea>
+              <div id="project-goals-error" class="error-message" aria-live="polite"></div>
+            </div>
+            <div class="form-group">
+              <label for="project-success" class="form-label">¿Cómo medirán el éxito del proyecto?</label>
+              <textarea id="project-success" name="projectSuccess" rows="4" required class="form-input" placeholder="Ej: Reducción del tiempo de armado de propuestas en un 50%, aumento de ventas..." aria-describedby="project-success-error"></textarea>
+              <div id="project-success-error" class="error-message" aria-live="polite"></div>
+            </div>
+
+            <!-- SECCIÓN DE RECURSOS -->
+            <h2 class="content-title mt-8">Branding</h2>
+            <fieldset class="form-group">
+              <legend class="form-label">¿Poseen manual de marca?</legend>
+              <div class="form-radio-group"><input type="radio" id="brand-manual-yes" name="brandManual" value="si" required><label for="brand-manual-yes">Sí</label></div>
+              <div class="form-radio-group"><input type="radio" id="brand-manual-no" name="brandManual" value="no"><label for="brand-manual-no">No</label></div>
+            </fieldset>
+            <fieldset class="form-group">
+              <legend class="form-label">¿Tienen logo en formato vectorial?</legend>
+              <div class="form-radio-group"><input type="radio" id="vector-logo-yes" name="vectorLogo" value="si" required><label for="vector-logo-yes">Sí</label></div>
+              <div class="form-radio-group"><input type="radio" id="vector-logo-no" name="vectorLogo" value="no"><label for="vector-logo-no">No</label></div>
+            </fieldset>
+            <div class="form-group">
+              <label for="brand-colors" class="form-label">¿Qué colores institucionales utilizan?</label>
+              <input type="text" id="brand-colors" name="brandColors" class="form-input" placeholder="Ej: #FF0000, #00FF00, #0000FF">
+            </div>
+            <div class="form-group">
+              <label for="reference-site" class="form-label">¿Existe algún sitio web que deba tomarse como referencia?</label>
+              <input type="url" id="reference-site" name="referenceSite" class="form-input" placeholder="https://ejemplo.com" aria-describedby="reference-site-error">
+              <div id="reference-site-error" class="error-message" aria-live="polite"></div>
+            </div>
+            <div class="form-group">
+              <label for="social-media" class="form-label">¿Qué redes sociales utilizan?</label>
+              <textarea id="social-media" name="socialMedia" rows="2" class="form-input" placeholder="Ej: Instagram, Facebook, LinkedIn..."></textarea>
+            </div>
+            <fieldset class="form-group">
+              <legend class="form-label">¿Desean integrar WhatsApp como canal único de contacto?</legend>
+              <div class="form-radio-group"><input type="radio" id="whatsapp-yes" name="whatsappIntegration" value="si" required><label for="whatsapp-yes">Sí</label></div>
+              <div class="form-radio-group"><input type="radio" id="whatsapp-no" name="whatsappIntegration" value="no"><label for="whatsapp-no">No</label></div>
+            </fieldset>
+            <div class="form-group">
+              <label for="future-features" class="form-label">¿Qué secciones son requisitos en la información?</label>
+              <textarea id="future-features" name="futureFeatures" rows="3" class="form-input" placeholder="Ej: Nosotros, Clientes, Diferencial..."></textarea>
+            </div>
+
+            <!-- SECCIÓN CATÁLOGO -->
+            <h2 id="catalogo" class="content-title mt-8">Catálogo de pantallas</h2>
+            <div class="form-group">
+              <label for="screen-count" class="form-label">¿Cuántas pantallas o soportes publicitarios desean cargar inicialmente?</label>
+              <input type="number" id="screen-count" name="screenCount" class="form-input" placeholder="Ej: 50" min="0">
+            </div>
+            <fieldset class="form-group">
+              <legend class="form-label">¿Qué información debe contener cada pantalla?</legend>
+              <div class="form-checkbox-group"><input type="checkbox" id="info-name" name="screenInfo" value="nombre"><label for="info-name">Nombre</label></div>
+              <div class="form-checkbox-group"><input type="checkbox" id="info-address" name="screenInfo" value="direccion"><label for="info-address">Dirección</label></div>
+              <div class="form-checkbox-group"><input type="checkbox" id="info-city" name="screenInfo" value="ciudad"><label for="info-city">Ciudad</label></div>
+              <div class="form-checkbox-group"><input type="checkbox" id="info-size" name="screenInfo" value="medidas"><label for="info-size">Medidas</label></div>
+              <div class="form-checkbox-group"><input type="checkbox" id="info-photos" name="screenInfo" value="fotos"><label for="info-photos">Fotografías</label></div>
+              <div class="form-checkbox-group"><input type="checkbox" id="info-video" name="screenInfo" value="video"><label for="info-video">Video</label></div>
+              <div class="form-checkbox-group"><input type="checkbox" id="info-audience" name="screenInfo" value="audiencia"><label for="info-audience">Audiencia</label></div>
+              <div class="form-checkbox-group"><input type="checkbox" id="info-price" name="screenInfo" value="precio"><label for="info-price">Precio</label></div>
+              <div class="form-checkbox-group"><input type="checkbox" id="info-availability" name="screenInfo" value="disponibilidad"><label for="info-availability">Disponibilidad</label></div>
+              <div class="form-checkbox-group"><input type="checkbox" id="info-other" name="screenInfo" value="otro"><label for="info-other">Otro</label></div>
+              <div id="screenInfo-error" class="error-message" aria-live="polite"></div>
+            </fieldset>
+             <fieldset class="form-group">
+              <legend class="form-label">¿Ya poseen esa información discriminada?</legend>
+              <div class="form-radio-group"><input type="radio" id="digitized-yes" name="digitizedInfo" value="si"><label for="digitized-yes">Sí</label></div>
+              <div class="form-radio-group"><input type="radio" id="digitized-partial" name="digitizedInfo" value="parcialmente"><label for="digitized-partial">Parcialmente</label></div>
+              <div class="form-radio-group"><input type="radio" id="digitized-no" name="digitizedInfo" value="no"><label for="digitized-no">No</label></div>
+            </fieldset>
+            <fieldset class="form-group">
+              <legend class="form-label">¿En qué formato se encuentra?</legend>
+              <div class="form-checkbox-group"><input type="checkbox" id="format-excel" name="infoFormat" value="excel"><label for="format-excel">Excel</label></div>
+              <div class="form-checkbox-group"><input type="checkbox" id="format-sheets" name="infoFormat" value="google-sheets"><label for="format-sheets">Google Sheets</label></div>
+              <div class="form-checkbox-group"><input type="checkbox" id="format-pdf" name="infoFormat" value="pdf"><label for="format-pdf">PDF</label></div>
+              <div class="form-checkbox-group"><input type="checkbox" id="format-word" name="infoFormat" value="word"><label for="format-word">Word</label></div>
+              <div class="form-checkbox-group"><input type="checkbox" id="format-other" name="infoFormat" value="otro"><label for="format-other">Otro</label></div>
+            </fieldset>
+
+            <!-- SECCIÓN BUSCADOR Y FILTROS -->
+            <h2 id="buscador" class="content-title mt-8">Buscador y filtros</h2>
+            <fieldset class="form-group">
+              <legend class="form-label">¿Qué filtros consideran indispensables?</legend>
+              <div class="form-checkbox-group"><input type="checkbox" id="filter-city" name="filters" value="ciudad"><label for="filter-city">Ciudad</label></div>
+              <div class="form-checkbox-group"><input type="checkbox" id="filter-type" name="filters" value="tipo-soporte"><label for="filter-type">Tipo de soporte</label></div>
+              <div class="form-checkbox-group"><input type="checkbox" id="filter-size" name="filters" value="tamaño"><label for="filter-size">Tamaño</label></div>
+              <div class="form-checkbox-group"><input type="checkbox" id="filter-price" name="filters" value="precio"><label for="filter-price">Precio</label></div>
+              <div class="form-checkbox-group"><input type="checkbox" id="filter-availability" name="filters" value="disponibilidad"><label for="filter-availability">Disponibilidad</label></div>
+              <div class="form-checkbox-group"><input type="checkbox" id="filter-audience" name="filters" value="audiencia"><label for="filter-audience">Audiencia</label></div>
+              <div class="form-checkbox-group"><input type="checkbox" id="filter-lighting" name="filters" value="iluminacion"><label for="filter-lighting">Iluminación</label></div>
+              <div class="form-checkbox-group"><input type="checkbox" id="filter-other" name="filters" value="otro"><label for="filter-other">Otro</label></div>
+            </fieldset>
+
+            <!-- SECCIÓN MAPA -->
+            <h2 id="mapa" class="content-title mt-8">Mapa</h2>
+            <fieldset class="form-group">
+              <legend class="form-label">¿Las ubicaciones de las pantallas ya poseen coordenadas GPS?</legend>
+              <div class="form-radio-group"><input type="radio" id="gps-yes" name="gpsCoordinates" value="si"><label for="gps-yes">Sí</label></div>
+              <div class="form-radio-group"><input type="radio" id="gps-no" name="gpsCoordinates" value="no"><label for="gps-no">No</label></div>
+              <div class="form-radio-group"><input type="radio" id="gps-unknown" name="gpsCoordinates" value="no-sabemos"><label for="gps-unknown">No lo sabemos</label></div>
+            </fieldset>
+
+            <!-- SECCIÓN DASHBOARD -->
+            <h2 id="dashboard" class="content-title mt-8">Dashboard y Gestión Comercial</h2>
+            <fieldset class="form-group">
+              <legend class="form-label">¿Quién administrará la plataforma?</legend>
+              <div class="form-radio-group"><input type="radio" id="admin-one" name="platformAdmins" value="una-persona"><label for="admin-one">Una persona</label></div>
+              <div class="form-radio-group"><input type="radio" id="admin-many" name="platformAdmins" value="varias-personas"><label for="admin-many">Varias personas</label></div>
+              <div class="form-radio-group"><input type="radio" id="admin-areas" name="platformAdmins" value="distintas-areas"><label for="admin-areas">Distintas áreas</label></div>
+            </fieldset>
+            <fieldset class="form-group">
+              <legend class="form-label">¿Necesitan distintos permisos para los usuarios?</legend>
+              <div class="form-checkbox-group"><input type="checkbox" id="perm-admin" name="permissions" value="administrador"><label for="perm-admin">Administrador</label></div>
+              <div class="form-checkbox-group"><input type="checkbox" id="perm-sales" name="permissions" value="comercial"><label for="perm-sales">Comercial</label></div>
+              <div class="form-checkbox-group"><input type="checkbox" id="perm-query" name="permissions" value="consulta"><label for="perm-query">Consulta</label></div>
+              <div class="form-checkbox-group"><input type="checkbox" id="perm-editor" name="permissions" value="editor"><label for="perm-editor">Editor</label></div>
+            </fieldset>
+          
+            <div id="hosting-details" style="display: none;">
+              <div class="form-group">
+                <label for="hosting-provider" class="form-label">¿Dónde se encuentra alojado?</label>
+                <input type="text" id="hosting-provider" name="hostingProvider" class="form-input" placeholder="Ej: GoDaddy, DonWeb, etc.">
+              </div>
+              <fieldset class="form-group">
+                <legend class="form-label">¿Tienen acceso administrativo?</legend>
+                <div class="form-radio-group"><input type="radio" id="hosting-access-yes" name="hostingAccess" value="si"><label for="hosting-access-yes">Sí</label></div>
+                <div class="form-radio-group"><input type="radio" id="hosting-access-no" name="hostingAccess" value="no"><label for="hosting-access-no">No</label></div>
+              </fieldset>
+            </div>
+
+            <!-- SECCIÓN MIGRACIÓN -->
+            <h2 id="migracion" class="content-title mt-8">Infraestructura y Migración</h2>
+            <p class="form-hint">Esta sección nos ayuda a planificar una migración segura y sin sorpresas.</p>
+
+            <div class="form-group">
+              <label for="domain-name" class="form-label">¿Cuál es el dominio principal del sitio web?</label>
+              <input type="text" id="domain-name" name="domainName" class="form-input" placeholder="Ej: miempresa.com" aria-describedby="domain-name-error">
+              <div id="domain-name-error" class="error-message" aria-live="polite"></div>
+            </div>
+            <fieldset class="form-group">
+              <legend class="form-label">¿Quién administra actualmente el dominio?</legend>
+              <div class="form-radio-group"><input type="radio" id="domain-admin-company" name="domainAdmin" value="empresa"><label for="domain-admin-company">La empresa</label></div>
+              <div class="form-radio-group"><input type="radio" id="domain-admin-provider" name="domainAdmin" value="proveedor"><label for="domain-admin-provider">Un proveedor externo</label></div>
+              <div class="form-radio-group"><input type="radio" id="domain-admin-agency" name="domainAdmin" value="agencia"><label for="domain-admin-agency">Una agencia</label></div>
+              <div class="form-radio-group"><input type="radio" id="domain-admin-unknown" name="domainAdmin" value="desconocido"><label for="domain-admin-unknown">No lo sabemos</label></div>
+            </fieldset>
+            <fieldset class="form-group">
+              <legend class="form-label">¿Tienen acceso al panel de administración del dominio?</legend>
+              <div class="form-radio-group"><input type="radio" id="domain-access-yes" name="domainAccess" value="si"><label for="domain-access-yes">Sí</label></div>
+              <div class="form-radio-group"><input type="radio" id="domain-access-no" name="domainAccess" value="no"><label for="domain-access-no">No</label></div>
+              <div class="form-radio-group"><input type="radio" id="domain-access-unsure" name="domainAccess" value="no-seguro"><label for="domain-access-unsure">No estamos seguros</label></div>
+            </fieldset>
+
+            <fieldset class="form-group">
+              <legend class="form-label">¿Cuántas cuentas de correo electrónico corporativas existen?</legend>
+              <div class="form-radio-group"><input type="radio" id="email-yes" name="hasEmail" value="si"><label for="email-yes">Sí</label></div>
+              <div class="form-radio-group"><input type="radio" id="email-no" name="hasEmail" value="no"><label for="email-no">No</label></div>
+            </fieldset>
+            <div id="email-details" style="display: none; padding-left: 20px; border-left: 2px solid #eee;">
+              <div class="form-group">
+                <label for="email-count" class="form-label">¿Cuántas cuentas de correo están activas?</label>
+                <input type="number" id="email-count" name="emailCount" class="form-input" placeholder="Ej: 10" min="0">
+              </div>
+              <fieldset class="form-group">
+                <legend class="form-label">¿Dónde se encuentran alojadas actualmente?</legend>
+                <div class="form-radio-group"><input type="radio" id="email-provider-hosting" name="emailProvider" value="hosting"><label for="email-provider-hosting">Mismo hosting</label></div>
+                <div class="form-radio-group"><input type="radio" id="email-provider-gworkspace" name="emailProvider" value="gworkspace"><label for="email-provider-gworkspace">Google Workspace</label></div>
+                <div class="form-radio-group"><input type="radio" id="email-provider-ms365" name="emailProvider" value="ms365"><label for="email-provider-ms365">Microsoft 365</label></div>
+                <div class="form-radio-group"><input type="radio" id="email-provider-zoho" name="emailProvider" value="zoho"><label for="email-provider-zoho">Zoho</label></div>
+                <div class="form-radio-group"><input type="radio" id="email-provider-other" name="emailProvider" value="otro"><label for="email-provider-other">Otro</label></div>
+              </fieldset>
+            </div>
+
+            <fieldset class="form-group">
+              <legend class="form-label">¿Disponen de alguna copia de seguridad (backup) reciente de emails?</legend>
+              <div class="form-radio-group"><input type="radio" id="backup-yes" name="hasBackup" value="si"><label for="backup-yes">Sí</label></div>
+              <div class="form-radio-group"><input type="radio" id="backup-no" name="hasBackup" value="no"><label for="backup-no">No</label></div>
+              <div class="form-radio-group"><input type="radio" id="backup-unknown" name="hasBackup" value="desconocido"><label for="backup-unknown">No lo sabemos</label></div>
+            </fieldset>
+            <fieldset class="form-group">
+              <legend class="form-label">¿Poseen acceso a las siguientes herramientas?</legend>
+              <div class="form-checkbox-group"><input type="checkbox" id="access-hosting" name="toolAccess" value="hosting"><label for="access-hosting">Panel del hosting</label></div>
+              <div class="form-checkbox-group"><input type="checkbox" id="access-dns" name="toolAccess" value="dns"><label for="access-dns">Administrador DNS</label></div>
+              <div class="form-checkbox-group"><input type="checkbox" id="access-ftp" name="toolAccess" value="ftp-sftp"><label for="access-ftp">FTP / SFTP</label></div>
+              <div class="form-checkbox-group"><input type="checkbox" id="access-db" name="toolAccess" value="db"><label for="access-db">Base de datos</label></div>
+              <div class="form-checkbox-group"><input type="checkbox" id="access-wp" name="toolAccess" value="wordpress"><label for="access-wp">WordPress (si aplica)</label></div>
+              <div class="form-checkbox-group"><input type="checkbox" id="access-none" name="toolAccess" value="ninguno"><label for="access-none">Ninguna</label></div>
+            </fieldset>
+
+
+            <div class="form-group">
+              <button type="submit" id="submit-btn" class="btn btn-block" disabled>Enviar Cuestionario</button>
+            </div>
+            <p id="form-status" class="form-status" aria-live="polite"></p>
+
+          </form>
+
+          <!-- MENSAJE DE ÉXITO -->
+          <div id="success-message" style="display: none;" class="cta-box">
+            <h3 class="content-title" style="margin-top: 0;">¡Gracias!</h3>
+            <p>Hemos recibido tu información. Nos pondremos en contacto contigo a la brevedad para coordinar los próximos pasos.</p>
+          </div>
+
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="onboarding.js"></script>
+</body>
+</html>
