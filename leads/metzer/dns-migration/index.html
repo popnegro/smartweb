@@ -3,21 +3,40 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Auditoría DNS, Correo y SSL - metzer.com.ar</title>
-  <meta name="description" content="Informe actualizado de auditoría DNS, correo, SSL y compatibilidad de metzer.com.ar con Kinsta y Cloudflare." />
+
+  <title>Informe Técnico — Metzer Argentina</title>
+
+  <meta
+    name="description"
+    content="Informe técnico de migración, seguridad, HTTPS, DNS, correo, SEO y optimización de metzer.com.ar."
+  />
+
   <meta name="theme-color" content="#000000" />
+
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Auditoría DNS, Correo y SSL - metzer.com.ar" />
-  <meta property="og:description" content="Estado técnico actualizado de DNS, correo, certificados y compatibilidad de metzer.com.ar." />
+  <meta property="og:title" content="Informe Técnico — Metzer Argentina" />
+  <meta
+    property="og:description"
+    content="Estado técnico de infraestructura, seguridad, DNS, correo, SEO y WordPress de metzer.com.ar."
+  />
   <meta property="og:image" content="og-image.png" />
+
   <meta property="twitter:card" content="summary_large_image" />
-  <meta property="twitter:title" content="Auditoría DNS, Correo y SSL - metzer.com.ar" />
-  <meta property="twitter:description" content="Estado técnico actualizado de DNS, correo, certificados y compatibilidad de metzer.com.ar." />
+  <meta property="twitter:title" content="Informe Técnico — Metzer Argentina" />
+  <meta
+    property="twitter:description"
+    content="Estado técnico de infraestructura, seguridad, DNS, correo, SEO y WordPress de metzer.com.ar."
+  />
   <meta property="twitter:image" content="og-image.png" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+    rel="stylesheet"
+  />
+
   <script>
     document.documentElement.classList.add("js");
   </script>
@@ -25,12 +44,14 @@
   <style>
     :root {
       color-scheme: light;
+
       --ink: #111827;
       --muted: #6b7280;
       --soft: #f9fafb;
       --line: #e5e7eb;
       --white: #ffffff;
       --black: #000000;
+
       --ok: #15803d;
       --warn: #a16207;
       --bad: #b91c1c;
@@ -116,12 +137,17 @@
       padding: 0 24px;
     }
 
+    /* =========================================================
+       TOPBAR
+    ========================================================= */
+
     .topbar {
       position: sticky;
       top: 0;
       z-index: 50;
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       background: rgba(0, 0, 0, 0.96);
+      backdrop-filter: blur(10px);
     }
 
     .topbar-inner {
@@ -194,7 +220,9 @@
       height: 2px;
       margin: 5px 0;
       background: #fff;
-      transition: transform 220ms ease, opacity 220ms ease;
+      transition:
+        transform 220ms ease,
+        opacity 220ms ease;
     }
 
     .menu-btn.is-open span:nth-child(1) {
@@ -230,15 +258,9 @@
       visibility: visible;
     }
 
-    .progress {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background: #fff;
-      transition: width 150ms ease-out;
-    }
+    /* =========================================================
+       MAIN
+    ========================================================= */
 
     main {
       padding: 40px 0 0;
@@ -248,11 +270,20 @@
       padding: 0 0 64px;
     }
 
+    .eyebrow {
+      margin-bottom: 16px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
     .hero-meta {
-      max-width: 720px;
+      max-width: 760px;
       margin-top: 6px;
       color: var(--muted);
-      font-size: 14px;
+      font-size: 15px;
     }
 
     .meta-line {
@@ -280,19 +311,25 @@
       border: 1px solid var(--line);
       border-radius: 999px;
       color: #4b5563;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 600;
       letter-spacing: 0.08em;
       padding: 6px 12px;
       text-transform: uppercase;
     }
 
+    /* =========================================================
+       STATUS / SCORE
+    ========================================================= */
+
     .score-strip {
       display: grid;
       grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr);
       gap: 28px;
       align-items: start;
+
       margin-top: 42px;
+
       border: 1px solid var(--line);
       border-radius: 12px;
       padding: 28px;
@@ -314,6 +351,26 @@
       text-transform: uppercase;
     }
 
+    .status {
+      font-weight: 700;
+    }
+
+    .ok {
+      color: var(--ok);
+    }
+
+    .warn {
+      color: var(--warn);
+    }
+
+    .bad {
+      color: var(--bad);
+    }
+
+    /* =========================================================
+       SECTIONS
+    ========================================================= */
+
     .section {
       padding: 56px 0;
       border-top: 1px solid var(--line);
@@ -330,10 +387,6 @@
       gap: 24px;
     }
 
-    .mt-24 {
-      margin-top: 24px;
-    }
-
     .cards-3 {
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
@@ -344,10 +397,16 @@
 
     .split {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(280px, 0.42fr);
+      grid-template-columns:
+        minmax(0, 1fr)
+        minmax(280px, 0.42fr);
       gap: 32px;
       align-items: start;
     }
+
+    /* =========================================================
+       CARDS
+    ========================================================= */
 
     .card {
       border: 1px solid var(--line);
@@ -366,49 +425,18 @@
       font-size: 14px;
     }
 
-    .status,
-    .ok,
-    .warn,
-    .bad {
+    .card .label {
+      margin-bottom: 10px;
+      color: var(--muted);
+      font-size: 11px;
       font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
     }
 
-    .ok {
-      color: var(--ok);
-    }
-
-    .warn {
-      color: var(--warn);
-    }
-
-    .bad {
-      color: var(--bad);
-    }
-
-    .status {
-      display: inline-block;
-      color: #374151;
-      font-size: 14px;
-    }
-
-    .status.ok,
-    .status.warn,
-    .status.bad {
-      background: transparent;
-      padding: 0;
-    }
-
-    .status.ok {
-      color: var(--ok);
-    }
-
-    .status.warn {
-      color: var(--warn);
-    }
-
-    .status.bad {
-      color: var(--bad);
-    }
+    /* =========================================================
+       TABLES
+    ========================================================= */
 
     .table-wrap {
       overflow-x: auto;
@@ -446,12 +474,28 @@
       border-bottom: 0;
     }
 
+    /* =========================================================
+       NOTES
+    ========================================================= */
+
     .note {
       border: 1px solid var(--line);
       border-radius: 12px;
       background: var(--soft);
       padding: 24px;
     }
+
+    .note p:last-child {
+      margin-bottom: 0;
+    }
+
+    .note-warning {
+      border-left: 3px solid var(--warn);
+    }
+
+    /* =========================================================
+       CHECKLIST
+    ========================================================= */
 
     .checklist {
       display: grid;
@@ -466,9 +510,12 @@
       display: flex;
       gap: 12px;
       align-items: flex-start;
+
       border: 1px solid var(--line);
       border-radius: 12px;
+
       padding: 18px;
+
       color: var(--muted);
       font-size: 14px;
     }
@@ -493,173 +540,22 @@
       color: var(--warn);
     }
 
-    .info-term {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      flex-wrap: wrap;
+    /* =========================================================
+       FOOTER
+    ========================================================= */
+
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 40px 0 60px;
+      color: var(--muted);
+      font-size: 13px;
     }
 
-    .tooltip {
-      position: relative;
-      display: inline-flex;
-      vertical-align: middle;
-    }
+    /* =========================================================
+       RESPONSIVE
+    ========================================================= */
 
-    .tooltip-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 18px;
-      height: 18px;
-      border: 1px solid #d1d5db;
-      border-radius: 999px;
-      background: #fff;
-      color: #6b7280;
-      cursor: help;
-      font-size: 11px;
-      font-weight: 700;
-      line-height: 1;
-      padding: 0;
-    }
-
-    .tooltip-panel {
-      position: absolute;
-      bottom: calc(100% + 10px);
-      left: 50%;
-      z-index: 20;
-      width: min(280px, calc(100vw - 48px));
-      border-radius: 10px;
-      background: #111827;
-      color: rgba(255, 255, 255, 0.82);
-      font-size: 12px;
-      font-weight: 400;
-      line-height: 1.5;
-      opacity: 0;
-      padding: 12px 14px;
-      pointer-events: none;
-      text-align: left;
-      transform: translate(-50%, 8px);
-      transition: opacity 160ms ease, transform 160ms ease;
-    }
-
-    .tooltip-panel::after {
-      position: absolute;
-      top: 100%;
-      left: 50%;
-      width: 0;
-      height: 0;
-      border-top: 6px solid #111827;
-      border-right: 6px solid transparent;
-      border-left: 6px solid transparent;
-      content: "";
-      transform: translateX(-50%);
-    }
-
-    .tooltip:hover .tooltip-panel,
-    .tooltip:focus-within .tooltip-panel,
-    .tooltip.is-open .tooltip-panel {
-      opacity: 1;
-      pointer-events: auto;
-      transform: translate(-50%, 0);
-    }
-
-    td .tooltip-panel {
-      left: 0;
-      transform: translate(0, 8px);
-    }
-
-    td .tooltip-panel::after {
-      left: 16px;
-      transform: none;
-    }
-
-    td .tooltip:hover .tooltip-panel,
-    td .tooltip:focus-within .tooltip-panel,
-    td .tooltip.is-open .tooltip-panel {
-      transform: translate(0, 0);
-    }
-
-    .closing {
-      margin-top: 24px;
-      background: #000;
-      color: #fff;
-      padding: 90px 24px;
-      text-align: center;
-    }
-
-    .closing h2 {
-      max-width: 760px;
-      margin: 0 auto 18px;
-      color: #fff;
-      font-size: clamp(30px, 4vw, 48px);
-    }
-
-    .closing p {
-      max-width: 680px;
-      margin: 0 auto;
-      color: rgba(255, 255, 255, 0.68);
-      font-size: 15px;
-    }
-
-    .footer {
-      padding: 44px 24px;
-      color: #9ca3af;
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-align: center;
-      text-transform: uppercase;
-    }
-
-    .back-to-top {
-      position: fixed;
-      right: 28px;
-      bottom: 28px;
-      z-index: 40;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 48px;
-      height: 48px;
-      border: 0;
-      border-radius: 999px;
-      background: #000;
-      color: #fff;
-      cursor: pointer;
-      opacity: 0;
-      pointer-events: none;
-      transform: translateY(16px);
-      transition: opacity 220ms ease, transform 220ms ease, background 180ms ease;
-    }
-
-    .back-to-top:hover {
-      background: #1f2937;
-    }
-
-    .back-to-top.is-visible {
-      opacity: 1;
-      pointer-events: auto;
-      transform: translateY(0);
-    }
-
-    .reveal-item {
-      opacity: 1;
-      transform: none;
-    }
-
-    .js .reveal-item {
-      opacity: 0;
-      transform: translateY(32px);
-      transition: opacity 700ms ease, transform 700ms ease;
-    }
-
-    .js .reveal-item.is-visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    @media (max-width: 940px) {
+    @media (max-width: 900px) {
       .nav {
         display: none;
       }
@@ -668,56 +564,18 @@
         display: block;
       }
 
-      .cards-3,
-      .cards-4,
-      .checklist,
-      .score-strip,
+      .cards-4 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
       .split {
         grid-template-columns: 1fr;
       }
-
-      .section {
-        padding: 46px 0;
-      }
     }
 
-    @media (max-width: 640px) {
-      h1 {
-        max-width: 360px;
-        margin-bottom: 16px;
-        font-size: clamp(30px, 10vw, 38px);
-        line-height: 1.08;
-      }
-
-      h2 {
-        margin-bottom: 18px;
-        font-size: clamp(24px, 8vw, 30px);
-      }
-
-      h3 {
-        font-size: 15px;
-      }
-
+    @media (max-width: 700px) {
       .shell {
-        padding-right: 18px;
-        padding-left: 18px;
-      }
-
-      .topbar-inner {
-        min-height: 68px;
-      }
-
-      .brand img {
-        height: 27px;
-      }
-
-      .mobile-menu {
-        gap: 24px;
-        padding: 86px 24px 32px;
-      }
-
-      .mobile-menu a {
-        font-size: 13px;
+        padding: 0 18px;
       }
 
       main {
@@ -725,735 +583,1468 @@
       }
 
       .hero {
-        padding-bottom: 42px;
-      }
-
-      .hero-meta,
-      .section-intro,
-      .score-strip p,
-      .closing p {
-        font-size: 14px;
-      }
-
-      .meta-line {
-        display: grid;
-        gap: 6px;
-        margin-top: 22px;
-      }
-
-      .chips {
-        gap: 7px;
-        margin-top: 24px;
-      }
-
-      .chip {
-        font-size: 11px;
-        letter-spacing: 0.06em;
-        padding: 5px 10px;
+        padding-bottom: 48px;
       }
 
       .score-strip {
-        gap: 16px;
-        margin-top: 30px;
+        grid-template-columns: 1fr;
       }
 
-      .score {
-        font-size: clamp(42px, 18vw, 62px);
-      }
-
-      .score-label {
-        font-size: 11px;
+      .cards-3,
+      .cards-4,
+      .checklist {
+        grid-template-columns: 1fr;
       }
 
       .section {
-        padding: 38px 0;
+        padding: 44px 0;
       }
 
-      .section-intro {
-        margin-bottom: 24px;
-      }
-
-      .grid {
-        gap: 14px;
-      }
-
-      .score-strip,
-      .card,
-      .note,
-      .checklist li {
-        padding: 18px;
-      }
-
-      .card p,
-      .status,
-      .checklist li {
-        font-size: 13px;
-      }
-
-      .table-wrap {
-        overflow: visible;
-        border: 0;
-        border-radius: 0;
-      }
-
-      table,
-      thead,
-      tbody,
-      tr,
-      th,
-      td {
-        display: block;
-      }
-
-      table {
-        min-width: 0;
-        font-size: 13px;
-      }
-
-      thead {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        overflow: hidden;
-        clip: rect(0 0 0 0);
-        white-space: nowrap;
-      }
-
-      tr {
-        border: 1px solid var(--line);
-        border-radius: 12px;
-        background: #fff;
-        margin-bottom: 12px;
-        overflow: hidden;
-      }
-
-      td {
-        display: grid;
-        grid-template-columns: minmax(92px, 0.38fr) minmax(0, 1fr);
-        gap: 12px;
-        align-items: start;
-        border-bottom: 1px solid var(--line);
-        padding: 12px 14px;
-      }
-
-      td::before {
-        color: var(--muted);
-        content: attr(data-label);
-        font-size: 11px;
-        font-weight: 700;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
-      }
-
-      tr:last-child td {
-        border-bottom: 1px solid var(--line);
-      }
-
-      tr td:last-child {
-        border-bottom: 0;
-      }
-
-      code {
-        font-size: 0.88em;
-      }
-
-      .info-term {
-        gap: 6px;
-      }
-
-      .tooltip {
-        position: static;
-      }
-
-      .tooltip-panel,
-      td .tooltip-panel {
-        position: fixed;
-        top: auto;
-        right: 18px;
-        bottom: 18px;
-        left: 18px;
-        width: auto;
-        max-height: 45vh;
-        overflow: auto;
-        transform: translateY(12px);
-      }
-
-      .tooltip-panel::after {
-        display: none;
-      }
-
-      .tooltip:hover .tooltip-panel,
-      .tooltip:focus-within .tooltip-panel,
-      .tooltip.is-open .tooltip-panel,
-      td .tooltip:hover .tooltip-panel,
-      td .tooltip:focus-within .tooltip-panel,
-      td .tooltip.is-open .tooltip-panel {
-        transform: translateY(0);
-      }
-
-      .closing {
-        margin-top: 12px;
-        padding: 66px 18px;
-      }
-
-      .footer {
-        padding: 34px 18px;
-        font-size: 10px;
-        line-height: 1.7;
-      }
-
-      .back-to-top {
-        display: none;
+      h1 {
+        font-size: 38px;
       }
     }
 
     @media print {
-      .topbar,
-      .back-to-top {
-        display: none;
+      .topbar {
+        position: static;
       }
 
-      main {
-        padding-top: 0;
+      .nav,
+      .menu-btn,
+      .mobile-menu {
+        display: none !important;
       }
 
-      .section,
-      .card,
-      .table-wrap,
-      .checklist li,
-      .note {
+      .section {
         break-inside: avoid;
       }
 
-      .reveal-item {
-        opacity: 1;
-        transform: none;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      html {
-        scroll-behavior: auto;
-      }
-
-      *,
-      *::before,
-      *::after {
-        animation-duration: 0.001ms !important;
-        animation-iteration-count: 1 !important;
-        scroll-behavior: auto !important;
-        transition-duration: 0.001ms !important;
-      }
-
-      .js .reveal-item {
-        opacity: 1;
-        transform: none;
+      .card,
+      .table-wrap,
+      .note {
+        break-inside: avoid;
       }
     }
   </style>
 </head>
 
 <body>
+
+  <!-- =======================================================
+       HEADER
+  ======================================================== -->
+
   <header class="topbar">
     <div class="shell topbar-inner">
-      <a class="brand" href="#" aria-label="Metzer">
-        <img src="metzer-brand.png" width="155" height="49" alt="Metzer Logo" decoding="async" />
+
+      <a
+        class="brand"
+        href="#inicio"
+        aria-label="Metzer Argentina"
+      >
+        <img
+          src="metzer-brand.png"
+          alt="Metzer Argentina"
+        />
       </a>
 
-      <nav class="nav" aria-label="Navegación principal">
-        <a href="#resumen">Resumen</a>
+      <nav
+        class="nav"
+        aria-label="Navegación del informe"
+      >
+        <a href="#ssl">SSL</a>
         <a href="#dns">DNS</a>
         <a href="#correo">Correo</a>
-        <a href="#ssl">SSL</a>
-        <a href="#validacion">Validación</a>
-        <a href="#pendientes">Pendientes</a>
+        <a href="#seo">SEO</a>
+        <a href="#seguridad">Seguridad</a>
+        <a href="#wordpress">WordPress</a>
+        <a href="#estado">Estado</a>
       </nav>
 
-      <button id="menu-btn" class="menu-btn" type="button" aria-label="Abrir menú" aria-controls="mobile-menu" aria-expanded="false">
+      <button
+        class="menu-btn"
+        type="button"
+        aria-label="Abrir menú"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+      >
         <span></span>
         <span></span>
         <span></span>
       </button>
-    </div>
 
-    <div id="mobile-menu" class="mobile-menu" aria-label="Menú móvil" aria-hidden="true">
-      <a href="#resumen">Resumen</a>
-      <a href="#dns">DNS</a>
-      <a href="#correo">Correo</a>
-      <a href="#ssl">SSL</a>
-      <a href="#validacion">Validación</a>
-      <a href="#pendientes">Pendientes</a>
     </div>
-
-    <div id="progress-bar" class="progress"></div>
   </header>
 
-  <main>
-    <section id="hero-section" class="hero">
-      <div class="shell">
-        <h1>Auditoría DNS, Correo y SSL.</h1>
-        <div class="reveal-item">
-          <p class="hero-meta">
-            Informe técnico actualizado para <strong class="ok">metzer.com.ar</strong>, con foco en resolución DNS,
-            seguridad de correo, autorización de certificados y compatibilidad operativa con Kinsta y Cloudflare.
-          </p>
+  <div
+    id="mobile-menu"
+    class="mobile-menu"
+    aria-hidden="true"
+  >
+    <a href="#ssl">SSL</a>
+    <a href="#dns">DNS</a>
+    <a href="#correo">Correo</a>
+    <a href="#seo">SEO</a>
+    <a href="#seguridad">Seguridad</a>
+    <a href="#wordpress">WordPress</a>
+    <a href="#estado">Estado</a>
+  </div>
 
-          <div class="meta-line">
-            <span>Fecha: <strong>Junio 2026</strong></span>
-            <span>Dominio: <strong>metzer.com.ar</strong></span>
-            <span>Puntuación: <strong>10/10</strong></span>
-          </div>
+  <!-- =======================================================
+       MAIN
+  ======================================================== -->
 
-          <div class="chips" aria-label="Alcance del informe">
-            <span class="chip">DNS</span>
-            <span class="chip">SSL</span>
-            <span class="chip">Correo</span>
-            <span class="chip">CAA</span>
-            <span class="chip">Kinsta</span>
-            <span class="chip">Cloudflare</span>
-          </div>
-        </div>
+  <main id="inicio">
 
-        <div class="score-strip reveal-item">
-          <div>
-            <p class="score-label">Puntuación general</p>
-            <div class="score">10/10</div>
-          </div>
-          <p>
-            Configuración saludable. No se detectan bloqueos críticos para sitio web, correo corporativo, SSL ni migración a Kinsta/Cloudflare. Las mejoras pendientes son DNSSEC y PTR.
-          </p>
-        </div>
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
+
+    <section class="shell hero">
+
+      <div class="eyebrow">
+        Informe técnico de intervención
       </div>
+
+      <h1>
+        Metzer Argentina — migración, seguridad y optimización web
+      </h1>
+
+      <p class="hero-meta">
+        Intervención integral sobre
+        <strong>metzer.com.ar</strong>
+        orientada a consolidar HTTPS, resolver la configuración
+        DNS/CAA, preservar el funcionamiento del correo,
+        revisar SEO técnico, reforzar la seguridad y actualizar
+        WordPress.
+      </p>
+
+      <div class="meta-line">
+        <span>
+          <strong>Dominio:</strong>
+          metzer.com.ar
+        </span>
+
+        <span>
+          <strong>Infraestructura:</strong>
+          Kinsta
+        </span>
+
+        <span>
+          <strong>Plataforma:</strong>
+          WordPress
+        </span>
+
+        <span>
+          <strong>Período:</strong>
+          Agosto 2026
+        </span>
+      </div>
+
+      <div class="chips">
+        <span class="chip">
+          HTTPS operativo
+        </span>
+
+        <span class="chip">
+          DNS auditado
+        </span>
+
+        <span class="chip">
+          Seguridad reforzada
+        </span>
+
+        <span class="chip">
+          WordPress actualizado
+        </span>
+      </div>
+
+      <div class="score-strip">
+
+        <div>
+          <div class="score">
+            OK
+          </div>
+
+          <div class="score-label">
+            Estado general
+          </div>
+        </div>
+
+        <div>
+          <h3>
+            Infraestructura principal operativa
+          </h3>
+
+          <p>
+            El sitio responde correctamente bajo HTTPS
+            y la incidencia de validación SSL/CAA fue
+            resuelta.
+
+            Durante la validación posterior se detectaron
+            referencias residuales HTTP en recursos locales
+            de Astra que requieren una limpieza final.
+          </p>
+        </div>
+
+      </div>
+
     </section>
 
-    <section id="resumen" class="section">
+    <!-- =====================================================
+         SSL
+    ====================================================== -->
+
+    <section
+      class="section"
+      id="ssl"
+    >
+
       <div class="shell">
-        <h2 class="reveal-item">Resumen ejecutivo</h2>
-        <p class="section-intro reveal-item">
-          La configuración actual resuelve correctamente, contempla IPv6, conserva correo corporativo y publica controles SPF, DKIM, DMARC y CAA. Las oportunidades de mejora se concentran en DNSSEC y alineación PTR.
+
+        <h2>
+          01. Certificado SSL y HTTPS
+        </h2>
+
+        <p class="section-intro">
+          Se realizó la instalación, configuración y validación
+          del certificado SSL Let's Encrypt para el dominio de
+          Metzer Argentina, consolidando el acceso seguro del
+          sitio.
+        </p>
+
+        <div class="grid cards-3">
+
+          <article class="card">
+
+            <div class="label">
+              Certificación
+            </div>
+
+            <h3>
+              Let's Encrypt
+            </h3>
+
+            <p>
+              Instalación y validación del certificado SSL
+              para <code>metzer.com.ar</code>.
+            </p>
+
+          </article>
+
+          <article class="card">
+
+            <div class="label">
+              Depuración
+            </div>
+
+            <h3>
+              Certigo
+            </h3>
+
+            <p>
+              Revisión y depuración de configuraciones y
+              rastros residuales asociados al sistema de
+              certificación anterior.
+            </p>
+
+          </article>
+
+          <article class="card">
+
+            <div class="label">
+              Redirección
+            </div>
+
+            <h3>
+              HTTP → HTTPS
+            </h3>
+
+            <p>
+              Configuración de redirección permanente para
+              centralizar la navegación en la versión segura
+              del sitio.
+            </p>
+
+          </article>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- =====================================================
+         DNS
+    ====================================================== -->
+
+    <section
+      class="section"
+      id="dns"
+    >
+
+      <div class="shell">
+
+        <h2>
+          02. DNS, SSL/CAA e infraestructura
+        </h2>
+
+        <p class="section-intro">
+          Se auditó la zona DNS y se corrigió la incidencia
+          relacionada con los registros CAA que afectaba la
+          validación del certificado SSL.
+        </p>
+
+        <div class="table-wrap">
+
+          <table>
+
+            <thead>
+              <tr>
+                <th>
+                  Elemento
+                </th>
+
+                <th>
+                  Intervención
+                </th>
+
+                <th>
+                  Estado
+                </th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              <tr>
+                <td>
+                  CAA
+                </td>
+
+                <td>
+                  Corrección de la autorización de
+                  autoridades certificadoras.
+                </td>
+
+                <td class="status ok">
+                  Resuelto
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  letsencrypt.org
+                </td>
+
+                <td>
+                  Alta/autorización requerida para permitir
+                  la emisión del certificado Let's Encrypt.
+                </td>
+
+                <td class="status ok">
+                  Validado
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  pki.goog
+                </td>
+
+                <td>
+                  Alta/autorización requerida por la
+                  infraestructura de Kinsta.
+                </td>
+
+                <td class="status ok">
+                  Validado
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  Registros obsoletos
+                </td>
+
+                <td>
+                  Auditoría y depuración de configuraciones
+                  heredadas de la infraestructura anterior.
+                </td>
+
+                <td class="status ok">
+                  Revisado
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  HTTPS
+                </td>
+
+                <td>
+                  Validación del dominio y funcionamiento del
+                  certificado.
+                </td>
+
+                <td class="status ok">
+                  Operativo
+                </td>
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- =====================================================
+         CORREO
+    ====================================================== -->
+
+    <section
+      class="section"
+      id="correo"
+    >
+
+      <div class="shell">
+
+        <h2>
+          03. Auditoría de correo
+        </h2>
+
+        <p class="section-intro">
+          Se revisó la autenticación del dominio para reducir
+          riesgos de entrega, clasificación como spam y
+          suplantación después de la migración.
+        </p>
+
+        <div class="grid cards-3">
+
+          <article class="card">
+
+            <div class="label">
+              Autenticación
+            </div>
+
+            <h3>
+              SPF
+            </h3>
+
+            <p>
+              Revisión de los servidores y servicios
+              autorizados para realizar envíos en nombre
+              del dominio.
+            </p>
+
+          </article>
+
+          <article class="card">
+
+            <div class="label">
+              Firma
+            </div>
+
+            <h3>
+              DKIM
+            </h3>
+
+            <p>
+              Revisión de la firma criptográfica utilizada
+              para autenticar los mensajes enviados.
+            </p>
+
+          </article>
+
+          <article class="card">
+
+            <div class="label">
+              Política
+            </div>
+
+            <h3>
+              DMARC
+            </h3>
+
+            <p>
+              Revisión de la política y su alineación con
+              SPF y DKIM para proteger la identidad del
+              dominio.
+            </p>
+
+          </article>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- =====================================================
+         SEO
+    ====================================================== -->
+
+    <section
+      class="section"
+      id="seo"
+    >
+
+      <div class="shell">
+
+        <h2>
+          04. SEO técnico: canónicas y datos estructurados
+        </h2>
+
+        <p class="section-intro">
+          Se revisaron las referencias SEO que pueden verse
+          afectadas por la transición de HTTP a HTTPS, con
+          especial atención a URLs canónicas y datos
+          estructurados.
         </p>
 
         <div class="grid cards-4">
-          <article class="card reveal-item"><h3>Resolución DNS</h3><p class="ok">Correcta</p></article>
-          <article class="card reveal-item"><h3>Correo MX</h3><p class="ok">Correcto</p></article>
-          <article class="card reveal-item"><h3>SSL</h3><p class="ok">Sectigo DV R36</p></article>
-          <article class="card reveal-item">
+
+          <article class="card">
+
+            <div class="label">
+              Canonical
+            </div>
+
             <h3>
-              <span class="info-term">DNSSEC
-                <span class="tooltip">
-                  <button class="tooltip-btn" type="button" aria-label="Información sobre DNSSEC" aria-expanded="false">i</button>
-                  <span class="tooltip-panel" role="tooltip">Pendiente de activación en el proveedor DNS y validación en NIC Argentina. No bloquea la operación actual, pero fortalece la integridad de las respuestas DNS.</span>
-                </span>
-              </span>
+              URLs canónicas
             </h3>
-            <p class="warn">No habilitado</p>
+
+            <p>
+              Revisión de las etiquetas
+              <code>link rel="canonical"</code>
+              y consolidación de la versión HTTPS.
+            </p>
+
           </article>
+
+          <article class="card">
+
+            <div class="label">
+              Datos estructurados
+            </div>
+
+            <h3>
+              Schema.org
+            </h3>
+
+            <p>
+              Revisión de los datos estructurados y de las
+              referencias URL utilizadas por el sitio.
+            </p>
+
+          </article>
+
+          <article class="card">
+
+            <div class="label">
+              Implementación
+            </div>
+
+            <h3>
+              JSON-LD
+            </h3>
+
+            <p>
+              Revisión de URLs y entidades declaradas en
+              datos estructurados.
+            </p>
+
+          </article>
+
+          <article class="card">
+
+            <div class="label">
+              Indexación
+            </div>
+
+            <h3>
+              Consolidación
+            </h3>
+
+            <p>
+              Objetivo: evitar duplicidad entre las versiones
+              HTTP y HTTPS y preservar las señales SEO.
+            </p>
+
+          </article>
+
         </div>
+
       </div>
+
     </section>
 
-    <section id="dns" class="section">
-      <div class="shell">
-        <h2 class="reveal-item">Registros DNS principales</h2>
-        <p class="section-intro reveal-item">Registros publicados y controles asociados a navegación, correo y emisión de certificados.</p>
+    <!-- =====================================================
+         SEGURIDAD
+    ====================================================== -->
 
-        <div class="table-wrap reveal-item">
+    <section
+      class="section"
+      id="seguridad"
+    >
+
+      <div class="shell">
+
+        <h2>
+          05. Seguridad HTTP y servidor
+        </h2>
+
+        <p class="section-intro">
+          Se reforzaron las cabeceras HTTP de seguridad y se
+          limitaron vectores de exposición innecesarios.
+        </p>
+
+        <div class="table-wrap">
+
           <table>
+
             <thead>
+
               <tr>
-                <th>Registro</th>
-                <th>Valor detectado</th>
-                <th>Estado</th>
-                <th>Función</th>
+                <th>
+                  Control
+                </th>
+
+                <th>
+                  Configuración
+                </th>
+
+                <th>
+                  Objetivo
+                </th>
               </tr>
+
             </thead>
+
             <tbody>
+
               <tr>
-                <td data-label="Registro"><strong>A</strong></td>
-                <td data-label="Valor detectado"><code>metzer.com.ar -> 200.58.111.25</code></td>
-                <td data-label="Estado"><span class="status ok">Correcto</span></td>
-                <td data-label="Función">Resolución IPv4 del sitio.</td>
-              </tr>
-              <tr>
-                <td data-label="Registro"><strong>AAAA</strong></td>
-                <td data-label="Valor detectado"><code>2800:6c0:2::272</code></td>
-                <td data-label="Estado"><span class="status ok">Implementado</span></td>
-                <td data-label="Función">Resolución IPv6 disponible.</td>
-              </tr>
-              <tr>
-                <td data-label="Registro"><strong>MX</strong></td>
-                <td data-label="Valor detectado"><code>mail.metzer.com.ar</code> prioridad 0</td>
-                <td data-label="Estado"><span class="status ok">Correcto</span></td>
-                <td data-label="Función">Servidor primario de correo.</td>
-              </tr>
-              <tr>
-                <td data-label="Registro"><strong>MX</strong></td>
-                <td data-label="Valor detectado"><code>mx1.metzer.com.ar</code> prioridad 20</td>
-                <td data-label="Estado"><span class="status ok">Correcto</span></td>
-                <td data-label="Función">Servidor secundario de correo.</td>
-              </tr>
-              <tr>
-                <td data-label="Registro"><strong>NS</strong></td>
-                <td data-label="Valor detectado"><code>ns1.donweb.com</code> / <code>ns2.donweb.com</code></td>
-                <td data-label="Estado"><span class="status ok">Delegado</span></td>
-                <td data-label="Función">Autoridad DNS actual.</td>
-              </tr>
-              <tr>
-                <td data-label="Registro">
-                  <strong class="info-term">PTR
-                    <span class="tooltip">
-                      <button class="tooltip-btn" type="button" aria-label="Información sobre PTR" aria-expanded="false">i</button>
-                      <span class="tooltip-panel" role="tooltip">Debe solicitarse al proveedor que administra la IP 200.58.111.25. El objetivo es que la reversa apunte a mail.metzer.com.ar.</span>
-                    </span>
-                  </strong>
+
+                <td>
+                  HSTS
                 </td>
-                <td data-label="Valor detectado"><code>200.58.111.25</code> pendiente de alineación</td>
-                <td data-label="Estado"><span class="status warn">Mejorable</span></td>
-                <td data-label="Función">Reputación y trazabilidad del correo saliente.</td>
+
+                <td>
+                  <code>max-age=31536000</code>
+                </td>
+
+                <td>
+                  Forzar navegación HTTPS en clientes
+                  compatibles.
+                </td>
+
               </tr>
+
+              <tr>
+
+                <td>
+                  X-Frame-Options
+                </td>
+
+                <td>
+                  <code>SAMEORIGIN</code>
+                </td>
+
+                <td>
+                  Reducir riesgo de clickjacking mediante
+                  frames externos.
+                </td>
+
+              </tr>
+
+              <tr>
+
+                <td>
+                  X-Content-Type-Options
+                </td>
+
+                <td>
+                  <code>nosniff</code>
+                </td>
+
+                <td>
+                  Evitar interpretaciones MIME incorrectas.
+                </td>
+
+              </tr>
+
+              <tr>
+
+                <td>
+                  Referrer-Policy
+                </td>
+
+                <td>
+                  <code>
+                    strict-origin-when-cross-origin
+                  </code>
+                </td>
+
+                <td>
+                  Controlar la información enviada como
+                  referencia.
+                </td>
+
+              </tr>
+
+              <tr>
+
+                <td>
+                  Permissions-Policy
+                </td>
+
+                <td>
+                  Cámara, micrófono y geolocalización
+                  restringidos.
+                </td>
+
+                <td>
+                  Reducir el acceso innecesario a capacidades
+                  del navegador.
+                </td>
+
+              </tr>
+
+              <tr>
+
+                <td>
+                  Directory listing
+                </td>
+
+                <td>
+                  <code>Options -Indexes</code>
+                </td>
+
+                <td>
+                  Evitar exposición de listados de directorios.
+                </td>
+
+              </tr>
+
+              <tr>
+
+                <td>
+                  Archivos sensibles
+                </td>
+
+                <td>
+                  Configuraciones, backups, SQL, comprimidos
+                  y archivos ocultos.
+                </td>
+
+                <td>
+                  Reducir exposición accidental de archivos.
+                </td>
+
+              </tr>
+
             </tbody>
+
           </table>
-        </div>
-      </div>
-    </section>
 
-    <section id="correo" class="section">
-      <div class="shell split">
-        <div>
-          <h2 class="reveal-item">Autenticación de correo</h2>
-          <p class="section-intro reveal-item">Los controles esenciales de autenticación están activos y reducen riesgo de spoofing o rechazo por proveedores externos.</p>
-
-          <div class="table-wrap reveal-item">
-            <table>
-              <thead>
-                <tr>
-                  <th>Control</th>
-                  <th>Registro</th>
-                  <th>Estado</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td data-label="Control"><strong>SPF</strong></td>
-                  <td data-label="Registro"><code>v=spf1 include:spf.hostmar.com -all</code></td>
-                  <td data-label="Estado"><span class="status ok">Correcto</span></td>
-                </tr>
-                <tr>
-                  <td data-label="Control"><strong>DKIM</strong></td>
-                  <td data-label="Registro"><code>mail._domainkey.metzer.com.ar</code></td>
-                  <td data-label="Estado"><span class="status ok">Configurado</span></td>
-                </tr>
-                <tr>
-                  <td data-label="Control"><strong>DMARC</strong></td>
-                  <td data-label="Registro"><code>p=quarantine</code></td>
-                  <td data-label="Estado"><span class="status ok">Configurado</span></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
         </div>
 
-        <aside class="note reveal-item">
-          <h3>Impacto operativo</h3>
-          <p>La configuración DNS no modifica los servidores MX ni el flujo SMTP existente. Formularios web, SMTP externo y plataformas de email marketing pueden continuar operando sin cambios previstos.</p>
-        </aside>
       </div>
+
     </section>
 
-    <section id="ssl" class="section">
+    <!-- =====================================================
+         WORDPRESS
+    ====================================================== -->
+
+    <section
+      class="section"
+      id="wordpress"
+    >
+
       <div class="shell">
-        <h2 class="reveal-item">CAA y compatibilidad SSL</h2>
-        <p class="section-intro reveal-item">La autorización CAA permite emisión mediante Sectigo y Let's Encrypt, cubriendo DonWeb, Kinsta y Cloudflare.</p>
+
+        <h2>
+          06. WordPress y administración
+        </h2>
 
         <div class="grid cards-3">
-          <article class="card reveal-item">
-            <h3>CAA issue</h3>
-            <p><code>sectigo.com</code></p>
-            <p class="ok">Autorizado</p>
+
+          <article class="card">
+
+            <div class="label">
+              Mantenimiento
+            </div>
+
+            <h3>
+              Actualización de WordPress
+            </h3>
+
+            <p>
+              Revisión y actualización de la instalación
+              WordPress para mantenerla en condiciones
+              operativas y de seguridad.
+            </p>
+
           </article>
-          <article class="card reveal-item">
-            <h3>CAA issue</h3>
-            <p><code>letsencrypt.org</code></p>
-            <p class="ok">Autorizado</p>
+
+          <article class="card">
+
+            <div class="label">
+              Seguridad
+            </div>
+
+            <h3>
+              Credenciales administrativas
+            </h3>
+
+            <p>
+              Cambio de contraseñas de acceso al área
+              administrativa <code>wp-admin</code>.
+            </p>
+
           </article>
-          <article class="card reveal-item">
-            <h3>CAA iodef</h3>
-            <p><code>mailto:info@metzer.com.ar</code></p>
-            <p class="ok">Publicado</p>
+
+          <article class="card">
+
+            <div class="label">
+              Post-migración
+            </div>
+
+            <h3>
+              Revisión de configuración
+            </h3>
+
+            <p>
+              Revisión posterior a la migración para detectar
+              referencias heredadas y posibles conflictos de
+              infraestructura.
+            </p>
+
           </article>
+
         </div>
 
-        <div class="table-wrap reveal-item mt-24">
-          <table>
-            <thead>
-              <tr>
-                <th>Proveedor</th>
-                <th>Estado SSL</th>
-                <th>Observación</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td data-label="Proveedor"><strong>DonWeb</strong></td><td data-label="Estado SSL"><span class="status ok">Compatible</span></td><td data-label="Observación">Certificado Sectigo DV R36 válido.</td></tr>
-              <tr><td data-label="Proveedor"><strong>Let's Encrypt</strong></td><td data-label="Estado SSL"><span class="status ok">Compatible</span></td><td data-label="Observación">Autorizado por registro CAA.</td></tr>
-              <tr><td data-label="Proveedor"><strong>Kinsta</strong></td><td data-label="Estado SSL"><span class="status ok">Compatible</span></td><td data-label="Observación">Sin bloqueo detectado para SSL automático.</td></tr>
-              <tr><td data-label="Proveedor"><strong>Cloudflare</strong></td><td data-label="Estado SSL"><span class="status ok">Compatible</span></td><td data-label="Observación">Compatible con validaciones de certificado.</td></tr>
-            </tbody>
-          </table>
-        </div>
       </div>
+
     </section>
 
-    <section id="validacion" class="section">
+    <!-- =====================================================
+         PERFORMANCE
+    ====================================================== -->
+
+    <section class="section">
+
       <div class="shell">
-        <h2 class="reveal-item">Checklist de validación</h2>
-        <p class="section-intro reveal-item">Controles verificados y puntos que quedan abiertos para endurecimiento posterior.</p>
 
-        <ul class="checklist">
-          <li class="reveal-item"><span class="mark ok">✓</span><span><strong>Dominio</strong><br />Resuelve correctamente.</span></li>
-          <li class="reveal-item"><span class="mark ok">✓</span><span><strong>IPv6</strong><br />Registro AAAA configurado.</span></li>
-          <li class="reveal-item"><span class="mark ok">✓</span><span><strong>MX</strong><br />Registros de correo publicados.</span></li>
-          <li class="reveal-item"><span class="mark ok">✓</span><span><strong>SPF</strong><br />Política activa con <code>-all</code>.</span></li>
-          <li class="reveal-item"><span class="mark ok">✓</span><span><strong>DKIM</strong><br />Selector publicado.</span></li>
-          <li class="reveal-item"><span class="mark ok">✓</span><span><strong>DMARC</strong><br />Política <code>p=quarantine</code>.</span></li>
-          <li class="reveal-item"><span class="mark ok">✓</span><span><strong>SSL</strong><br />Certificado válido.</span></li>
-          <li class="reveal-item"><span class="mark ok">✓</span><span><strong>CAA</strong><br />Autoridades declaradas.</span></li>
-          <li class="reveal-item"><span class="mark ok">✓</span><span><strong>Kinsta</strong><br />Compatible.</span></li>
-          <li class="reveal-item"><span class="mark ok">✓</span><span><strong>Cloudflare</strong><br />Compatible.</span></li>
-          <li class="reveal-item">
-            <span class="mark warn">!</span>
-            <span>
-              <strong class="info-term">DNSSEC
-                <span class="tooltip">
-                  <button class="tooltip-btn" type="button" aria-label="Información sobre DNSSEC" aria-expanded="false">i</button>
-                  <span class="tooltip-panel" role="tooltip">Requiere activar firma DNSSEC en DonWeb y publicar/validar la cadena DS en NIC Argentina.</span>
-                </span>
-              </strong><br />Pendiente de activación.
-            </span>
-          </li>
-          <li class="reveal-item">
-            <span class="mark warn">!</span>
-            <span>
-              <strong class="info-term">PTR
-                <span class="tooltip">
-                  <button class="tooltip-btn" type="button" aria-label="Información sobre PTR" aria-expanded="false">i</button>
-                  <span class="tooltip-panel" role="tooltip">La reversa de la IP debe alinearse con mail.metzer.com.ar para mejorar consistencia y reputación del correo saliente.</span>
-                </span>
-              </strong><br />Pendiente alinear con <code>mail.metzer.com.ar</code>.
-            </span>
-          </li>
-        </ul>
-      </div>
-    </section>
+        <h2>
+          07. Rendimiento y Core Web Vitals
+        </h2>
 
-    <section id="pendientes" class="section">
-      <div class="shell">
-        <h2 class="reveal-item">Recomendaciones pendientes</h2>
-        <p class="section-intro reveal-item">Acciones sugeridas para elevar la puntuación y fortalecer la operación del dominio.</p>
+        <p class="section-intro">
+          Se realizaron/revisaron ajustes orientados a
+          mejorar la entrega de recursos y la experiencia
+          general de carga del sitio.
+        </p>
 
-        <div class="table-wrap reveal-item">
-          <table>
-            <thead>
-              <tr>
-                <th>Prioridad</th>
-                <th>Acción</th>
-                <th>Motivo</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td data-label="Prioridad"><span class="status warn">Media</span></td>
-                <td data-label="Acción">
-                  <span class="info-term">Activar DNSSEC en DonWeb/NIC Argentina.
-                    <span class="tooltip">
-                      <button class="tooltip-btn" type="button" aria-label="Información sobre activación DNSSEC" aria-expanded="false">i</button>
-                      <span class="tooltip-panel" role="tooltip">Primero se firma la zona DNS en DonWeb; luego se publica el DS correspondiente en NIC Argentina para cerrar la cadena de confianza.</span>
-                    </span>
-                  </span>
-                </td>
-                <td data-label="Motivo">Protege la zona frente a manipulación de respuestas DNS.</td>
-              </tr>
-              <tr>
-                <td data-label="Prioridad"><span class="status warn">Media</span></td>
-                <td data-label="Acción">
-                  <span class="info-term">Solicitar PTR personalizado: <code>mail.metzer.com.ar -> 200.58.111.25</code>.
-                    <span class="tooltip">
-                      <button class="tooltip-btn" type="button" aria-label="Información sobre PTR personalizado" aria-expanded="false">i</button>
-                      <span class="tooltip-panel" role="tooltip">El PTR no se configura en la zona DNS del dominio, sino en la delegación inversa administrada por el proveedor de la IP.</span>
-                    </span>
-                  </span>
-                </td>
-                <td data-label="Motivo">Mejora reputación y consistencia del correo saliente.</td>
-              </tr>
-              <tr>
-                <td data-label="Prioridad"><span class="status ok">Baja</span></td>
-                <td data-label="Acción">Validar periódicamente SPF, DKIM y DMARC.</td>
-                <td data-label="Motivo">Evita degradación por cambios futuros en proveedores de correo.</td>
-              </tr>
-              <tr>
-                <td data-label="Prioridad"><span class="status ok">Baja</span></td>
-                <td data-label="Acción">Verificar compatibilidad IPv6 del sitio web.</td>
-                <td data-label="Motivo">Confirma experiencia estable para usuarios con conectividad IPv6.</td>
-              </tr>
-            </tbody>
-          </table>
+        <div class="grid cards-4">
+
+          <article class="card">
+
+            <div class="label">
+              Recursos
+            </div>
+
+            <h3>
+              Imágenes
+            </h3>
+
+            <p>
+              Revisión del peso y entrega de recursos gráficos.
+            </p>
+
+          </article>
+
+          <article class="card">
+
+            <div class="label">
+              Caché
+            </div>
+
+            <h3>
+              Recursos estáticos
+            </h3>
+
+            <p>
+              Revisión de mecanismos de caché y entrega de
+              archivos estáticos.
+            </p>
+
+          </article>
+
+          <article class="card">
+
+            <div class="label">
+              Optimización
+            </div>
+
+            <h3>
+              Compresión
+            </h3>
+
+            <p>
+              Revisión de la entrega eficiente de recursos.
+            </p>
+
+          </article>
+
+          <article class="card">
+
+            <div class="label">
+              Tipografía
+            </div>
+
+            <h3>
+              Fuentes
+            </h3>
+
+            <p>
+              Revisión de la carga de fuentes locales y de
+              las referencias generadas por Astra.
+            </p>
+
+          </article>
+
         </div>
+
       </div>
+
     </section>
+
+    <!-- =====================================================
+         MIXED CONTENT
+    ====================================================== -->
+
+    <section
+      class="section"
+      id="estado"
+    >
+
+      <div class="shell">
+
+        <h2>
+          08. Mixed Content: estado y seguimiento
+        </h2>
+
+        <div class="note note-warning">
+
+          <h3>
+            HTTPS operativo; queda una limpieza de
+            referencias internas
+          </h3>
+
+          <p>
+            Durante la validación posterior a la activación
+            de HTTPS se detectaron recursos de fuentes locales
+            de Astra solicitados mediante:
+          </p>
+
+          <p>
+            <code>
+              http://metzer.com.ar/wp-content/astra-local-fonts/...
+            </code>
+          </p>
+
+          <p>
+            mientras la página principal se sirve mediante
+            HTTPS.
+          </p>
+
+          <p>
+            El navegador bloquea estos recursos por
+            <strong>Mixed Content</strong>.
+          </p>
+
+          <p>
+            Esta situación
+            <strong>
+              no indica un fallo del certificado SSL
+            </strong>.
+            El certificado y HTTPS se encuentran operativos.
+            Se trata de referencias internas residuales que
+            deben ser regeneradas o limpiadas en WordPress,
+            Astra y las cachés correspondientes.
+          </p>
+
+          <p>
+            <strong class="warn">
+              Acción recomendada:
+            </strong>
+            regenerar CSS y archivos estáticos de Astra,
+            limpiar las cachés y repetir la comprobación de
+            Console/Network hasta eliminar todas las
+            solicitudes HTTP.
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- =====================================================
+         CHECKLIST
+    ====================================================== -->
+
+    <section class="section">
+
+      <div class="shell">
+
+        <h2>
+          09. Checklist de intervención
+        </h2>
+
+        <div class="checklist">
+
+          <li>
+            <span class="mark ok">✓</span>
+
+            <div>
+              <strong>
+                Certificado SSL Let's Encrypt
+              </strong>
+              <br />
+              Instalado y validado.
+            </div>
+          </li>
+
+          <li>
+            <span class="mark ok">✓</span>
+
+            <div>
+              <strong>
+                Depuración de Certigo
+              </strong>
+              <br />
+              Configuraciones y rastros heredados revisados.
+            </div>
+          </li>
+
+          <li>
+            <span class="mark ok">✓</span>
+
+            <div>
+              <strong>
+                SSL/CAA y DNS
+              </strong>
+              <br />
+              Incidencia corregida y registros CAA configurados.
+            </div>
+          </li>
+
+          <li>
+            <span class="mark ok">✓</span>
+
+            <div>
+              <strong>
+                SPF / DKIM / DMARC
+              </strong>
+              <br />
+              Auditoría de autenticación de correo realizada.
+            </div>
+          </li>
+
+          <li>
+            <span class="mark ok">✓</span>
+
+            <div>
+              <strong>
+                Canonical / Schema / JSON-LD
+              </strong>
+              <br />
+              Revisión orientada a HTTPS.
+            </div>
+          </li>
+
+          <li>
+            <span class="mark ok">✓</span>
+
+            <div>
+              <strong>
+                Headers de seguridad
+              </strong>
+              <br />
+              HSTS y cabeceras adicionales configuradas.
+            </div>
+          </li>
+
+          <li>
+            <span class="mark ok">✓</span>
+
+            <div>
+              <strong>
+                WordPress
+              </strong>
+              <br />
+              Actualización y revisión realizadas.
+            </div>
+          </li>
+
+          <li>
+            <span class="mark ok">✓</span>
+
+            <div>
+              <strong>
+                Credenciales wp-admin
+              </strong>
+              <br />
+              Contraseñas actualizadas.
+            </div>
+          </li>
+
+          <li>
+            <span class="mark ok">✓</span>
+
+            <div>
+              <strong>
+                Rendimiento
+              </strong>
+              <br />
+              Revisión de imágenes, caché, compresión y fuentes.
+            </div>
+          </li>
+
+          <li>
+            <span class="mark warn">!</span>
+
+            <div>
+              <strong>
+                Mixed Content
+              </strong>
+              <br />
+              Referencias residuales de Astra pendientes de
+              regeneración final.
+            </div>
+          </li>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- =====================================================
+         CONCLUSION
+    ====================================================== -->
+
+    <section class="section">
+
+      <div class="shell">
+
+        <h2>
+          10. Conclusión
+        </h2>
+
+        <p class="section-intro">
+          La intervención permitió consolidar la
+          infraestructura web de Metzer Argentina bajo HTTPS,
+          resolver la incidencia de CAA que afectaba la
+          emisión/validación del certificado y realizar una
+          revisión integral de DNS, correo, SEO, seguridad,
+          WordPress y rendimiento.
+        </p>
+
+        <p class="section-intro">
+          El sitio se encuentra operativo y accesible mediante
+          HTTPS. La validación posterior identificó únicamente
+          referencias residuales HTTP en recursos locales de
+          Astra.
+        </p>
+
+        <p class="section-intro">
+          La regeneración de los archivos CSS/estáticos de
+          Astra y la limpieza de cachés permitirá completar el
+          cierre técnico de la migración y eliminar los
+          recursos Mixed Content detectados.
+        </p>
+
+      </div>
+
+    </section>
+
+    <!-- =====================================================
+         ESTADO GENERAL
+    ====================================================== -->
+
+    <section class="section">
+
+      <div class="shell">
+
+        <h2>
+          11. Estado general
+        </h2>
+
+        <div class="table-wrap">
+
+          <table>
+
+            <thead>
+
+              <tr>
+                <th>
+                  Área
+                </th>
+
+                <th>
+                  Estado
+                </th>
+
+                <th>
+                  Observación
+                </th>
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              <tr>
+                <td>
+                  Certificado SSL Let's Encrypt
+                </td>
+
+                <td class="status ok">
+                  Operativo
+                </td>
+
+                <td>
+                  Certificado instalado y validado.
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  HTTPS
+                </td>
+
+                <td class="status ok">
+                  Operativo
+                </td>
+
+                <td>
+                  Sitio accesible mediante conexión segura.
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  DNS / CAA
+                </td>
+
+                <td class="status ok">
+                  Resuelto
+                </td>
+
+                <td>
+                  Configuración requerida para certificación
+                  aplicada.
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  Correo
+                </td>
+
+                <td class="status ok">
+                  Auditado
+                </td>
+
+                <td>
+                  SPF, DKIM y DMARC revisados.
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  SEO técnico
+                </td>
+
+                <td class="status ok">
+                  Revisado
+                </td>
+
+                <td>
+                  Canonical y datos estructurados considerados
+                  dentro de la migración HTTPS.
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  Seguridad HTTP
+                </td>
+
+                <td class="status ok">
+                  Reforzada
+                </td>
+
+                <td>
+                  HSTS y cabeceras adicionales configuradas.
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  WordPress
+                </td>
+
+                <td class="status ok">
+                  Actualizado
+                </td>
+
+                <td>
+                  Instalación revisada y credenciales
+                  administrativas actualizadas.
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  Rendimiento
+                </td>
+
+                <td class="status ok">
+                  Revisado
+                </td>
+
+                <td>
+                  Imágenes, caché, compresión y fuentes
+                  contemplados.
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  Mixed Content
+                </td>
+
+                <td class="status warn">
+                  Seguimiento
+                </td>
+
+                <td>
+                  Referencias HTTP residuales en fuentes locales
+                  de Astra pendientes de regeneración/limpieza.
+                </td>
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </section>
+
   </main>
 
-  <section class="closing" id="cierre">
-    <h2 class="reveal-item">Auditoría técnica validada.</h2>
-    <p class="reveal-item">Continuidad operativa preservada para sitio web, correo corporativo, certificados SSL e integración con infraestructura Kinsta/Cloudflare.</p>
-  </section>
+  <!-- =======================================================
+       FOOTER
+  ======================================================== -->
 
-  <footer class="footer">
-    Informe generado a partir de la auditoría DNS, correo y SSL de metzer.com.ar · Última actualización: junio de 2026
+  <footer>
+
+    <div class="shell">
+
+      <strong>
+        Metzer Argentina
+      </strong>
+
+      <br />
+
+      Informe técnico de migración, seguridad y optimización web
+
+      <br />
+
+      Agosto 2026
+
+    </div>
+
   </footer>
 
-  <button id="back-to-top" class="back-to-top" type="button" aria-label="Volver arriba">
-    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
-    </svg>
-  </button>
+  <!-- =======================================================
+       JAVASCRIPT
+  ======================================================== -->
 
   <script>
     (() => {
-      const menuBtn = document.getElementById("menu-btn");
-      const mobileMenu = document.getElementById("mobile-menu");
-      const progressBar = document.getElementById("progress-bar");
-      const backToTopBtn = document.getElementById("back-to-top");
-      const navLinks = document.querySelectorAll(".nav a, .mobile-menu a");
-      const tooltipButtons = document.querySelectorAll(".tooltip-btn");
-      const sectionIds = ["resumen", "dns", "correo", "ssl", "validacion", "pendientes"];
-      const navSections = sectionIds.map((id) => document.getElementById(id)).filter(Boolean);
-      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const button = document.querySelector(".menu-btn");
+      const menu = document.querySelector("#mobile-menu");
+
+      if (!button || !menu) {
+        return;
+      }
+
+      const links = menu.querySelectorAll("a");
 
       const closeMenu = () => {
-        if (!menuBtn || !mobileMenu) return;
-        menuBtn.classList.remove("is-open");
-        mobileMenu.classList.remove("is-open");
-        menuBtn.setAttribute("aria-expanded", "false");
-        mobileMenu.setAttribute("aria-hidden", "true");
+        button.classList.remove("is-open");
+        button.setAttribute("aria-expanded", "false");
+        button.setAttribute("aria-label", "Abrir menú");
+
+        menu.classList.remove("is-open");
+        menu.setAttribute("aria-hidden", "true");
+
         document.body.classList.remove("menu-open");
       };
 
-      const closeTooltips = () => {
-        document.querySelectorAll(".tooltip.is-open").forEach((tooltip) => {
-          tooltip.classList.remove("is-open");
-          tooltip.querySelector(".tooltip-btn")?.setAttribute("aria-expanded", "false");
-        });
+      const openMenu = () => {
+        button.classList.add("is-open");
+        button.setAttribute("aria-expanded", "true");
+        button.setAttribute("aria-label", "Cerrar menú");
+
+        menu.classList.add("is-open");
+        menu.setAttribute("aria-hidden", "false");
+
+        document.body.classList.add("menu-open");
       };
 
-      if (menuBtn && mobileMenu) {
-        menuBtn.addEventListener("click", () => {
-          const isOpen = !mobileMenu.classList.contains("is-open");
-          menuBtn.classList.toggle("is-open", isOpen);
-          mobileMenu.classList.toggle("is-open", isOpen);
-          menuBtn.setAttribute("aria-expanded", String(isOpen));
-          mobileMenu.setAttribute("aria-hidden", String(!isOpen));
-          document.body.classList.toggle("menu-open", isOpen);
-        });
-      }
+      button.addEventListener("click", () => {
+        const expanded =
+          button.getAttribute("aria-expanded") === "true";
 
-      navLinks.forEach((link) => {
+        if (expanded) {
+          closeMenu();
+        } else {
+          openMenu();
+        }
+      });
+
+      links.forEach((link) => {
         link.addEventListener("click", closeMenu);
       });
-
-      tooltipButtons.forEach((button) => {
-        button.addEventListener("click", (event) => {
-          const tooltip = button.closest(".tooltip");
-          if (!tooltip) return;
-
-          const isOpen = tooltip.classList.contains("is-open");
-          closeTooltips();
-
-          tooltip.classList.toggle("is-open", !isOpen);
-          button.setAttribute("aria-expanded", String(!isOpen));
-          event.stopPropagation();
-        });
-      });
-
-      document.addEventListener("click", closeTooltips);
 
       document.addEventListener("keydown", (event) => {
         if (event.key === "Escape") {
           closeMenu();
-          closeTooltips();
         }
       });
 
-      const setActiveNavLink = (currentHash) => {
-        navLinks.forEach((link) => {
-          if (link.getAttribute("href") === currentHash) {
-            link.setAttribute("aria-current", "page");
-          } else {
-            link.removeAttribute("aria-current");
-          }
-        });
-      };
-
-      const updateActiveNavOnScroll = () => {
-        let currentHash = "#";
-
-        navSections.forEach((section) => {
-          if (window.scrollY >= section.offsetTop - 140) {
-            currentHash = `#${section.id}`;
-          }
-        });
-
-        setActiveNavLink(currentHash);
-      };
-
-      const updateScrollUi = () => {
-        const height = document.documentElement.scrollHeight - window.innerHeight;
-        const scrolled = height > 0 ? (window.scrollY / height) * 100 : 0;
-
-        if (progressBar) {
-          progressBar.style.width = `${scrolled}%`;
+      window.addEventListener("resize", () => {
+        if (window.innerWidth > 900) {
+          closeMenu();
         }
-
-        if (backToTopBtn) {
-          backToTopBtn.classList.toggle("is-visible", window.scrollY > 420);
-        }
-
-        updateActiveNavOnScroll();
-      };
-
-      const revealItems = document.querySelectorAll(".reveal-item");
-
-      if (prefersReducedMotion || !("IntersectionObserver" in window)) {
-        revealItems.forEach((item) => item.classList.add("is-visible"));
-      } else {
-        const revealObserver = new IntersectionObserver((entries) => {
-          entries.forEach((entry) => {
-            if (!entry.isIntersecting) return;
-
-            const items = entry.target.classList.contains("reveal-item")
-              ? [entry.target]
-              : entry.target.querySelectorAll(".reveal-item");
-
-            items.forEach((item, index) => {
-              window.setTimeout(() => {
-                item.classList.add("is-visible");
-              }, index * 90);
-            });
-
-            revealObserver.unobserve(entry.target);
-          });
-        }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
-
-        document.querySelectorAll("section, .hero").forEach((section) => {
-          revealObserver.observe(section);
-        });
-      }
-
-      backToTopBtn?.addEventListener("click", () => {
-        window.scrollTo({ top: 0, behavior: prefersReducedMotion ? "auto" : "smooth" });
       });
-
-      window.addEventListener("scroll", updateScrollUi, { passive: true });
-      updateScrollUi();
     })();
   </script>
+
 </body>
 </html>
