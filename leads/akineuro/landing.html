@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>Akineuro — Reservá tu turno</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: { 50: '#eefbf8', 100: '#d3f5ee', 200: '#a7ebdd', 300: '#71dac8', 400: '#3fc1ac', 500: '#20a695', 600: '#158577', 700: '#146a61', 800: '#14544e', 900: '#134542' },
+            ink: '#0d2b28'
+          },
+          fontFamily: { sans: ['"Segoe UI"', 'ui-sans-serif', 'system-ui', '-apple-system', 'sans-serif'] },
+          boxShadow: { card: '0 1px 2px rgba(13,43,40,0.06), 0 1px 8px rgba(13,43,40,0.06)' },
+          borderRadius: { xl2: '1rem' }
+        }
+      }
+    }
+  </script>
+  <style>
+    html,
+    body {
+      background: #ffffff;
+    }
+
+    body {
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    .fade-in {
+      animation: fadeIn .3s ease both;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .pop {
+      animation: pop .28s cubic-bezier(.34, 1.56, .64, 1) both;
+    }
+
+    @keyframes pop {
+      from {
+        transform: scale(.94);
+        opacity: 0;
+      }
+
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .spin {
+      animation: spin .7s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .slot-btn {
+      transition: all .15s ease;
+    }
+
+    .map-grid {
+      background-image:
+        linear-gradient(rgba(20, 106, 97, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(20, 106, 97, 0.08) 1px, transparent 1px);
+      background-size: 22px 22px;
+    }
+  </style>
+</head>
+
+<body class="text-ink antialiased">
+
+  <!-- HEADER -->
+  <header class="border-b border-slate-100 sticky top-0 bg-white/90 backdrop-blur z-30">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-lg bg-primary-700 flex items-center justify-center text-white font-bold text-sm">K+
+        </div>
+        <span class="font-semibold">Akineuro</span>
+      </div>
+      <nav class="hidden sm:flex gap-6 text-sm text-slate-500">
+        <a href="#profesionales" class="hover:text-primary-700">Profesionales</a>
+        <a href="#especialidades" class="hover:text-primary-700">Especialidades</a>
+        <a href="#contacto" class="hover:text-primary-700">Contacto</a>
+      </nav>
+      <a href="#reservar"
+        class="text-sm font-medium text-white bg-primary-700 hover:bg-primary-800 rounded-lg px-4 py-2 transition-colors">Reservar
+        turno</a>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section id="reservar" class="max-w-6xl mx-auto px-6 py-12 lg:py-16 grid lg:grid-cols-2 gap-10 items-start">
+    <div class="lg:sticky lg:top-24">
+      <span class="inline-block text-xs font-semibold text-primary-700 bg-primary-50 rounded-full px-3 py-1 mb-4">+200
+        pacientes atendidos</span>
+      <h1 class="text-4xl lg:text-5xl font-bold leading-tight mb-4">Reservá tu turno<br />en minutos</h1>
+      <p class="text-lg text-slate-500 mb-6 max-w-md">Elegí especialidad, profesional y horario. Sin llamadas, sin
+        esperas.</p>
+      <div class="flex items-center gap-4 text-sm text-slate-500 mb-8">
+        <span class="flex items-center gap-1">⭐ 4.9/5</span>
+        <span class="w-1 h-1 rounded-full bg-slate-300"></span>
+        <span>Cancelás hasta 24hs antes</span>
+      </div>
+      <div id="profesionales" class="hidden lg:block">
+        <p class="text-sm font-medium text-slate-600 mb-3">Nuestro equipo</p>
+        <div id="prof-list" class="space-y-2"></div>
+      </div>
+    </div>
+
+    <!-- WIDGET -->
+    <div id="widget"
+      class="fade-in rounded-xl2 border border-slate-200 shadow-card bg-white p-5 lg:p-6 w-full max-w-md lg:ml-auto">
+    </div>
+  </section>
+
+  <!-- ESPECIALIDADES (contexto) -->
+  <section id="especialidades" class="border-t border-slate-100 bg-slate-50/60 py-14">
+    <div class="max-w-6xl mx-auto px-6">
+      <h2 class="text-2xl font-bold mb-6 text-center">Especialidades</h2>
+      <div id="spec-grid" class="grid sm:grid-cols-3 gap-4"></div>
+    </div>
+  </section>
+
+  <!-- FOOTER INSTITUCIONAL -->
+  <footer id="contacto" class="border-t border-slate-100 bg-white">
+    <div class="max-w-6xl mx-auto px-6 py-14 grid md:grid-cols-3 gap-10">
+      <div>
+        <div class="flex items-center gap-2 mb-3">
+          <div class="w-8 h-8 rounded-lg bg-primary-700 flex items-center justify-center text-white font-bold text-sm">
+            K+</div>
+          <span class="font-semibold">Akineuro</span>
+        </div>
+        <p class="text-sm text-slate-500 leading-relaxed">Av. Las Heras 2140, Mendoza, Argentina.<br />Atención
+          presencial y turnos online.</p>
+      </div>
+
+      <div>
+        <p class="text-sm font-semibold text-ink mb-3">Horarios de atención</p>
+        <table class="text-sm text-slate-500 w-full">
+          <tbody>
+            <tr class="border-b border-slate-100">
+              <td class="py-1.5">Lunes a viernes</td>
+              <td class="py-1.5 text-right font-medium text-ink">08:00 – 20:00</td>
+            </tr>
+            <tr class="border-b border-slate-100">
+              <td class="py-1.5">Sábados</td>
+              <td class="py-1.5 text-right font-medium text-ink">09:00 – 13:00</td>
+            </tr>
+            <tr>
+              <td class="py-1.5">Domingos</td>
+              <td class="py-1.5 text-right font-medium text-ink">Cerrado</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div>
+        <p class="text-sm font-semibold text-ink mb-3">Cómo llegar</p>
+        <div
+          class="map-grid relative w-full h-32 rounded-xl2 border border-slate-200 bg-primary-50/40 overflow-hidden mb-3">
+          <div class="absolute inset-0 flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#146a61" class="w-8 h-8 drop-shadow">
+              <path
+                d="M12 2C7.6 2 4 5.6 4 10c0 5.4 7 11.5 7.3 11.7a1 1 0 0 0 1.4 0C13 21.5 20 15.4 20 10c0-4.4-3.6-8-8-8zm0 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" />
+            </svg>
+          </div>
+          <span class="absolute bottom-2 left-2 text-[10px] text-primary-700 bg-white/80 rounded px-1.5 py-0.5">Vista de
+            mapa simulada</span>
+        </div>
+        <a href="https://wa.me/5492610000000?text=Hola%2C%20quiero%20consultar%20por%20un%20turno" target="_blank"
+          rel="noopener"
+          class="flex items-center justify-center gap-2 rounded-lg bg-[#25D366] hover:brightness-95 text-white text-sm font-medium py-2.5 transition">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+            <path
+              d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.44 1.33 4.93L2 22l5.29-1.39a9.87 9.87 0 0 0 4.75 1.21h.01c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm5.8 14.06c-.24.68-1.4 1.3-1.94 1.38-.5.08-1.12.11-1.8-.11-.42-.13-.96-.31-1.66-.6-2.92-1.26-4.83-4.2-4.98-4.4-.15-.2-1.19-1.58-1.19-3.02 0-1.44.75-2.14 1.02-2.43.27-.29.58-.36.78-.36h.56c.18 0 .42-.03.65.5.24.55.8 1.9.87 2.04.07.14.11.31.02.5-.09.19-.14.31-.27.48-.14.16-.29.36-.41.49-.14.14-.28.29-.12.57.16.28.71 1.18 1.53 1.9 1.06.94 1.94 1.24 2.22 1.38.28.14.44.12.6-.07.16-.19.68-.79.87-1.06.18-.27.36-.22.6-.13.24.09 1.55.73 1.82.87.27.14.44.2.51.32.07.12.07.68-.17 1.35z" />
+          </svg>
+          WhatsApp: +54 9 261 000-0000
+        </a>
+      </div>
+    </div>
+    <div class="border-t border-slate-100 py-5 text-center text-xs text-slate-400">© 2026 Akineuro. Todos los derechos
+      reservados.</div>
+  </footer>
+
+  <!-- WHATSAPP BOTÓN FLOTANTE -->
+  <a href="https://wa.me/5492610000000?text=Hola%2C%20quiero%20consultar%20por%20un%20turno" target="_blank"
+    rel="noopener"
+    class="fixed bottom-5 right-5 z-40 w-14 h-14 rounded-full bg-[#25D366] hover:brightness-95 shadow-lg flex items-center justify-center transition">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="w-7 h-7">
+      <path
+        d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.44 1.33 4.93L2 22l5.29-1.39a9.87 9.87 0 0 0 4.75 1.21h.01c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm5.8 14.06c-.24.68-1.4 1.3-1.94 1.38-.5.08-1.12.11-1.8-.11-.42-.13-.96-.31-1.66-.6-2.92-1.26-4.83-4.2-4.98-4.4-.15-.2-1.19-1.58-1.19-3.02 0-1.44.75-2.14 1.02-2.43.27-.29.58-.36.78-.36h.56c.18 0 .42-.03.65.5.24.55.8 1.9.87 2.04.07.14.11.31.02.5-.09.19-.14.31-.27.48-.14.16-.29.36-.41.49-.14.14-.28.29-.12.57.16.28.71 1.18 1.53 1.9 1.06.94 1.94 1.24 2.22 1.38.28.14.44.12.6-.07.16-.19.68-.79.87-1.06.18-.27.36-.22.6-.13.24.09 1.55.73 1.82.87.27.14.44.2.51.32.07.12.07.68-.17 1.35z" />
+    </svg>
+  </a>
+
+  <script>
+    /* =========================================================
+       DATA
+    ========================================================= */
+    const PROFESSIONALS = [
+      { id: 'vr', name: 'Dra. Valentina Ríos', specialty: 'Kinesiología deportiva', initials: 'VR', color: 'bg-primary-100 text-primary-800', tone: 'mañana' },
+      { id: 'ma', name: 'Lic. Martín Aguirre', specialty: 'Rehabilitación post-quirúrgica', initials: 'MA', color: 'bg-amber-100 text-amber-800', tone: 'tarde' },
+      { id: 'cs', name: 'Lic. Camila Sosa', specialty: 'Osteopatía y dolor postural', initials: 'CS', color: 'bg-rose-100 text-rose-800', tone: 'mixto' },
+      { id: 'ti', name: 'Lic. Tomás Ibarra', specialty: 'Kinesiología general', initials: 'TI', color: 'bg-sky-100 text-sky-800', tone: 'mañana' },
+      { id: 'jf', name: 'Lic. Julieta Fernández', specialty: 'Kinesiología neurológica', initials: 'JF', color: 'bg-violet-100 text-violet-800', tone: 'tarde' },
+    ];
+
+    const SPECIALTIES = [
+      { id: 'general', label: 'Kinesiología General', desc: 'Evaluación y tratamiento general del sistema musculoesquelético.', profIds: ['ti'] },
+      { id: 'deportiva', label: 'Kinesiología Deportiva', desc: 'Prevención y recuperación de lesiones deportivas.', profIds: ['vr'] },
+      { id: 'osteopatia', label: 'Osteopatía', desc: 'Abordaje manual del dolor crónico y postural.', profIds: ['cs'] },
+      { id: 'postquirurgica', label: 'Rehabilitación post-quirúrgica', desc: 'Recuperación funcional tras una cirugía.', profIds: ['ma'] },
+      { id: 'neurologica', label: 'Kinesiología Neurológica', desc: 'Rehabilitación de pacientes con afecciones neurológicas.', profIds: ['jf'] },
+    ];
+
+    const PREFIXES = ['+54', '+56', '+598', '+595', '+591'];
+
+    const DAY_NAMES = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+    function buildDays(n) { const days = []; const d = new Date(); while (days.length < n) { if (d.getDay() !== 0) days.push(new Date(d)); d.setDate(d.getDate() + 1); } return days; }
+    const DAYS = buildDays(6);
+    function dateKey(d) { return d.toISOString().slice(0, 10); }
+    function dayLabel(d, di) { if (di === 0) return 'Hoy'; if (di === 1) return 'Mañana'; return DAY_NAMES[d.getDay()] + ' ' + d.getDate(); }
+    function slotsForTone(tone) {
+      if (tone === 'mañana') return ['08:30', '09:15', '10:00', '10:45', '11:30'];
+      if (tone === 'tarde') return ['14:00', '14:45', '15:30', '16:15', '17:00'];
+      return ['09:00', '10:30', '15:00', '16:30', '17:45'];
+    }
+    function isOccupied(profId, dayIndex, slotIndex) {
+      return ((dayIndex * 7 + slotIndex * 3 + profId.charCodeAt(0)) % 5) === 0;
+    }
+    function slotsForDay(profId, dayIndex) {
+      const prof = PROFESSIONALS.find(p => p.id === profId);
+      return slotsForTone(prof.tone).map((time, si) => ({ time, occupied: isOccupied(profId, dayIndex, si) }));
+    }
+
+    /* =========================================================
+       STATE
+    ========================================================= */
+    const state = {
+      step: 1,
+      specialty: null,
+      prof: null,
+      dayIndex: null,
+      time: null,
+      patient: { nombre: '', prefijo: '+54', telefono: '', email: '', motivo: '' },
+      submitting: false,
+      success: false,
+      errors: {},
+    };
+
+    function setStep(n) { state.step = n; state.errors = {}; renderWidget(); }
+
+    /* =========================================================
+       STATIC SECTIONS (prof list + specialties grid)
+    ========================================================= */
+    function renderStaticSections() {
+      document.getElementById('prof-list').innerHTML = PROFESSIONALS.map(p => `
+    <div class="flex items-center gap-3 rounded-lg border border-slate-100 p-2.5">
+      <span class="w-9 h-9 rounded-full ${p.color} flex items-center justify-center font-semibold text-xs shrink-0">${p.initials}</span>
+      <div class="min-w-0">
+        <p class="text-sm font-medium truncate">${p.name}</p>
+        <p class="text-xs text-slate-500 truncate">${p.specialty}</p>
+      </div>
+    </div>`).join('');
+
+      document.getElementById('spec-grid').innerHTML = SPECIALTIES.map(s => `
+    <div class="rounded-xl2 border border-slate-200 bg-white p-5">
+      <p class="font-semibold text-sm mb-1">${s.label}</p>
+      <p class="text-xs text-slate-500 leading-relaxed">${s.desc}</p>
+    </div>`).join('');
+    }
+
+    /* =========================================================
+       WIDGET STEPS
+    ========================================================= */
+    function Stepper() {
+      const labels = ['Especialidad', 'Horario', 'Tus datos', 'Confirmar'];
+      return `<div class="flex items-center gap-1.5 mb-5">
+    ${labels.map((l, i) => {
+        const n = i + 1;
+        const active = n === state.step;
+        const done = n < state.step;
+        return `<div class="flex-1 flex flex-col items-center gap-1">
+        <div class="w-full h-1.5 rounded-full ${done ? 'bg-primary-600' : active ? 'bg-primary-300' : 'bg-slate-100'}"></div>
+        <span class="text-[10px] ${active ? 'text-primary-700 font-medium' : 'text-slate-400'} hidden sm:block">${l}</span>
+      </div>`;
+      }).join('')}
+  </div>`;
+    }
+
+    function StepEspecialidad() {
+      const profOptions = state.specialty
+        ? PROFESSIONALS.filter(p => SPECIALTIES.find(s => s.id === state.specialty).profIds.includes(p.id))
+        : [];
+      return `
+    <p class="text-xs font-semibold text-primary-700 uppercase tracking-wide mb-4">Reservá ahora</p>
+
+    <label class="block text-sm font-medium text-ink mb-1.5">Especialidad</label>
+    <select id="sel-specialty" class="w-full rounded-lg border border-slate-200 px-3 py-2.5 text-sm mb-4 focus:outline-none focus:ring-2 focus:ring-primary-300">
+      <option value="">Seleccioná una especialidad</option>
+      ${SPECIALTIES.map(s => `<option value="${s.id}" ${state.specialty === s.id ? 'selected' : ''}>${s.label}</option>`).join('')}
+    </select>
+
+    <label class="block text-sm font-medium text-ink mb-1.5">Profesional</label>
+    <select id="sel-prof" ${!state.specialty ? 'disabled' : ''} class="w-full rounded-lg border border-slate-200 px-3 py-2.5 text-sm mb-1 focus:outline-none focus:ring-2 focus:ring-primary-300 disabled:bg-slate-50 disabled:text-slate-400">
+      <option value="">${state.specialty ? 'Seleccioná un profesional' : 'Elegí primero una especialidad'}</option>
+      ${profOptions.map(p => `<option value="${p.id}" ${state.prof === p.id ? 'selected' : ''}>${p.name}</option>`).join('')}
+    </select>
+    <p class="text-xs text-slate-400 mb-5">${state.specialty ? profOptions.length + ' profesional(es) disponible(s) para esta especialidad.' : '&nbsp;'}</p>
+
+    <button id="btn-next-1" ${(!state.specialty || !state.prof) ? 'disabled' : ''}
+      class="w-full rounded-lg bg-primary-700 hover:bg-primary-800 disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed text-white font-medium py-3 transition-colors">
+      Continuar
+    </button>
+  `;
+    }
+
+    function StepHorario() {
+      const prof = PROFESSIONALS.find(p => p.id === state.prof);
+      const di = state.dayIndex ?? 0;
+      const slots = slotsForDay(prof.id, di);
+      const free = slots.filter(s => !s.occupied);
+
+      return `
+    <button id="btn-back" class="text-xs text-slate-400 hover:text-primary-700 mb-3 flex items-center gap-1">&larr; Volver</button>
+    <div class="flex items-center gap-3 rounded-xl2 border border-primary-100 bg-primary-50/60 p-3 mb-4">
+      <span class="w-9 h-9 rounded-full ${prof.color} flex items-center justify-center font-semibold text-xs shrink-0">${prof.initials}</span>
+      <div><p class="text-sm font-medium">${prof.name}</p><p class="text-xs text-slate-500">${prof.specialty}</p></div>
+    </div>
+
+    <p class="text-sm font-medium text-ink mb-2">Elegí un día</p>
+    <div class="flex gap-2 overflow-x-auto no-scrollbar pb-1 mb-4">
+      ${DAYS.map((d, i) => `
+        <button data-day="${i}" class="day-chip shrink-0 rounded-lg border ${i === di ? 'border-primary-600 bg-primary-600 text-white' : 'border-slate-200 text-slate-600 hover:border-primary-300'} text-xs font-medium px-3 py-2 transition-colors">
+          ${dayLabel(d, i)}
+        </button>`).join('')}
+    </div>
+
+    <p class="text-sm font-medium text-ink mb-2">Horarios disponibles</p>
+    <div class="grid grid-cols-3 gap-2 mb-5">
+      ${slots.map(s => `
+        <button data-time="${s.time}" ${s.occupied ? 'disabled' : ''}
+          class="slot-btn rounded-lg border text-xs font-medium py-2.5 text-center
+          ${s.occupied ? 'border-slate-100 bg-slate-50 text-slate-300 cursor-not-allowed line-through' :
+          state.time === s.time ? 'border-primary-600 bg-primary-600 text-white' : 'border-primary-100 bg-primary-50 text-primary-700 hover:border-primary-400'}">
+          ${s.time}
+        </button>`).join('')}
+      ${free.length === 0 ? `<p class="col-span-3 text-xs text-slate-400 text-center py-2">Sin horarios este día, probá otra fecha.</p>` : ''}
+    </div>
+
+    <button id="btn-next-2" ${!state.time ? 'disabled' : ''}
+      class="w-full rounded-lg bg-primary-700 hover:bg-primary-800 disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed text-white font-medium py-3 transition-colors">
+      Continuar
+    </button>
+  `;
+    }
+
+    function fieldError(name) {
+      return state.errors[name] ? `<p class="text-xs text-rose-600 mt-1">${state.errors[name]}</p>` : '';
+    }
+
+    function StepDatos() {
+      const p = state.patient;
+      return `
+    <button id="btn-back" class="text-xs text-slate-400 hover:text-primary-700 mb-3 flex items-center gap-1">&larr; Volver</button>
+    <p class="text-sm font-medium text-ink mb-4">Tus datos</p>
+
+    <form id="patient-form" class="space-y-4">
+      <div>
+        <label class="block text-xs font-medium text-slate-600 mb-1">Nombre completo</label>
+        <input name="nombre" type="text" value="${p.nombre}" placeholder="Ej. Ana Gómez"
+          class="w-full rounded-lg border ${state.errors.nombre ? 'border-rose-300' : 'border-slate-200'} px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300">
+        ${fieldError('nombre')}
+      </div>
+
+      <div>
+        <label class="block text-xs font-medium text-slate-600 mb-1">Teléfono</label>
+        <div class="flex gap-2">
+          <select name="prefijo" class="rounded-lg border border-slate-200 px-2 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300">
+            ${PREFIXES.map(pre => `<option value="${pre}" ${p.prefijo === pre ? 'selected' : ''}>${pre}</option>`).join('')}
+          </select>
+          <input name="telefono" type="tel" value="${p.telefono}" placeholder="261 123 4567"
+            class="flex-1 min-w-0 rounded-lg border ${state.errors.telefono ? 'border-rose-300' : 'border-slate-200'} px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300">
+        </div>
+        ${fieldError('telefono')}
+      </div>
+
+      <div>
+        <label class="block text-xs font-medium text-slate-600 mb-1">Email</label>
+        <input name="email" type="email" value="${p.email}" placeholder="ana@email.com"
+          class="w-full rounded-lg border ${state.errors.email ? 'border-rose-300' : 'border-slate-200'} px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300">
+        ${fieldError('email')}
+      </div>
+
+      <div>
+        <label class="block text-xs font-medium text-slate-600 mb-1">Motivo de consulta <span class="text-slate-400 font-normal">(opcional)</span></label>
+        <textarea name="motivo" rows="2" placeholder="Contanos brevemente qué te trae por acá"
+          class="w-full rounded-lg border border-slate-200 px-3 py-2.5 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-primary-300">${p.motivo}</textarea>
+      </div>
+    </form>
+
+    <button id="btn-next-3" class="w-full rounded-lg bg-primary-700 hover:bg-primary-800 text-white font-medium py-3 transition-colors mt-5">
+      Continuar
+    </button>
+  `;
+    }
+
+    function StepConfirmar() {
+      const prof = PROFESSIONALS.find(p => p.id === state.prof);
+      const spec = SPECIALTIES.find(s => s.id === state.specialty);
+      const di = state.dayIndex ?? 0;
+      const p = state.patient;
+
+      if (state.success) {
+        return `
+      <div class="fade-in text-center py-4">
+        <div class="w-14 h-14 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center mx-auto mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="w-7 h-7"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <p class="text-base font-semibold mb-1">¡Turno confirmado!</p>
+        <p class="text-sm text-slate-500 mb-5">${dayLabel(DAYS[di], di)} a las ${state.time} con ${prof.name}. Te enviamos la confirmación a ${p.email}.</p>
+        <button id="btn-reset" class="w-full rounded-lg border border-primary-200 text-primary-700 hover:bg-primary-50 font-medium py-3 transition-colors">
+          Reservar otro turno
+        </button>
+      </div>`;
+      }
+
+      return `
+    <button id="btn-back" class="text-xs text-slate-400 hover:text-primary-700 mb-3 flex items-center gap-1">&larr; Volver</button>
+    <p class="text-sm font-medium text-ink mb-4">Confirmá tu turno</p>
+
+    <div class="rounded-xl2 border border-slate-200 p-4 mb-5 space-y-2.5 text-sm">
+      <div class="flex items-center gap-3">
+        <span class="w-9 h-9 rounded-full ${prof.color} flex items-center justify-center font-semibold text-xs shrink-0">${prof.initials}</span>
+        <div><p class="font-medium">${prof.name}</p><p class="text-xs text-slate-500">${spec.label}</p></div>
+      </div>
+      <div class="border-t border-slate-100 pt-2.5 flex justify-between text-slate-500">
+        <span>Fecha y hora</span><span class="font-medium text-ink">${dayLabel(DAYS[di], di)}, ${state.time}</span>
+      </div>
+      <div class="flex justify-between text-slate-500">
+        <span>Paciente</span><span class="font-medium text-ink">${p.nombre}</span>
+      </div>
+      <div class="flex justify-between text-slate-500">
+        <span>Contacto</span><span class="font-medium text-ink">${p.prefijo} ${p.telefono}</span>
+      </div>
+    </div>
+
+    <button id="btn-confirm" ${state.submitting ? 'disabled' : ''}
+      class="w-full rounded-lg bg-primary-700 hover:bg-primary-800 disabled:bg-primary-400 text-white font-medium py-3 transition-colors flex items-center justify-center gap-2">
+      ${state.submitting ? `<svg class="spin w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="12" cy="12" r="9" stroke-opacity="0.3"/><path d="M21 12a9 9 0 0 0-9-9"/></svg> Confirmando…` : 'Confirmar mi Turno'}
+    </button>
+    <p class="text-[11px] text-slate-400 text-center mt-2">⭐ 4.9/5 · Cancelás hasta 24hs antes</p>
+  `;
+    }
+
+    /* =========================================================
+       RENDER + EVENTS
+    ========================================================= */
+    function renderWidget() {
+      const el = document.getElementById('widget');
+      let body = '';
+      if (state.step === 1) body = StepEspecialidad();
+      else if (state.step === 2) body = StepHorario();
+      else if (state.step === 3) body = StepDatos();
+      else body = StepConfirmar();
+
+      el.innerHTML = (state.step < 4 || !state.success ? Stepper() : '') + `<div class="fade-in">${body}</div>`;
+      attachEvents();
+    }
+
+    function validatePatient() {
+      const errors = {};
+      const p = state.patient;
+      if (!p.nombre.trim()) errors.nombre = 'Ingresá tu nombre completo.';
+      if (!p.telefono.trim()) errors.telefono = 'Ingresá un teléfono de contacto.';
+      if (!p.email.trim() || !/^\S+@\S+\.\S+$/.test(p.email)) errors.email = 'Ingresá un email válido.';
+      return errors;
+    }
+
+    function syncPatientForm() {
+      const form = document.getElementById('patient-form');
+      if (!form) return;
+      state.patient.nombre = form.querySelector('[name=nombre]').value;
+      state.patient.prefijo = form.querySelector('[name=prefijo]').value;
+      state.patient.telefono = form.querySelector('[name=telefono]').value;
+      state.patient.email = form.querySelector('[name=email]').value;
+      state.patient.motivo = form.querySelector('[name=motivo]').value;
+    }
+
+    function attachEvents() {
+      const specSel = document.getElementById('sel-specialty');
+      if (specSel) specSel.addEventListener('change', (e) => {
+        state.specialty = e.target.value || null;
+        state.prof = null;
+        renderWidget();
+      });
+
+      const profSel = document.getElementById('sel-prof');
+      if (profSel) profSel.addEventListener('change', (e) => {
+        state.prof = e.target.value || null;
+        renderWidget();
+      });
+
+      const next1 = document.getElementById('btn-next-1');
+      if (next1) next1.addEventListener('click', () => { state.dayIndex = 0; state.time = null; setStep(2); });
+
+      document.querySelectorAll('.day-chip').forEach(btn => {
+        btn.addEventListener('click', () => { state.dayIndex = Number(btn.dataset.day); state.time = null; renderWidget(); });
+      });
+      document.querySelectorAll('[data-time]').forEach(btn => {
+        if (btn.disabled) return;
+        btn.addEventListener('click', () => { state.time = btn.dataset.time; renderWidget(); });
+      });
+      const next2 = document.getElementById('btn-next-2');
+      if (next2) next2.addEventListener('click', () => setStep(3));
+
+      const next3 = document.getElementById('btn-next-3');
+      if (next3) next3.addEventListener('click', () => {
+        syncPatientForm();
+        const errors = validatePatient();
+        if (Object.keys(errors).length) { state.errors = errors; renderWidget(); return; }
+        setStep(4);
+      });
+
+      const confirm = document.getElementById('btn-confirm');
+      if (confirm) confirm.addEventListener('click', () => {
+        state.submitting = true; renderWidget();
+        setTimeout(() => { state.submitting = false; state.success = true; renderWidget(); }, 1100);
+      });
+
+      const reset = document.getElementById('btn-reset');
+      if (reset) reset.addEventListener('click', () => {
+        Object.assign(state, {
+          step: 1, specialty: null, prof: null, dayIndex: null, time: null,
+          patient: { nombre: '', prefijo: '+54', telefono: '', email: '', motivo: '' },
+          submitting: false, success: false, errors: {}
+        });
+        renderWidget();
+      });
+
+      const back = document.getElementById('btn-back');
+      if (back) back.addEventListener('click', () => setStep(Math.max(1, state.step - 1)));
+    }
+
+    renderStaticSections();
+    renderWidget();
+  </script>
+</body>
+
+</html>
