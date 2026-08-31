@@ -2,1305 +2,1752 @@
 <html lang="es" class="scroll-smooth">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Propuesta Comercial — Landing + Reservas Online + Gestión</title>
+    <meta name="description"
+        content="Propuesta comercial: Landing Page para captar clientes, Widget de Turnos para reservas online y Dashboard de Gestión para administrar tu agenda." />
+    <meta name="keywords"
+        content="Turnos Online, Landing Page, Reservas Online, Dashboard de Gestión, Agenda Médica, Profesionales, Software Argentina" />
+    <meta name="author" content="SmartWeb SaaS">
 
-  <title>Propuesta Comercial — Landing Page + Widget de Turnos + Dashboard de Gestión</title>
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Propuesta Comercial — Landing + Reservas Online + Gestión">
+    <meta property="og:description"
+        content="Una solución simple para que tus clientes puedan reservar online y vos puedas administrar tu agenda desde un solo lugar.">
 
-  <meta name="description"
-    content="Propuesta comercial integral para el desarrollo e implementación de Landing Page de alta conversión, Widget de Turnos interactivo 24/7 y Dashboard de Gestión de reservas." />
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap"
+        rel="stylesheet">
 
-  <meta name="keywords"
-    content="Landing Page, Widget de Turnos, Dashboard de Gestión, Reservas Online, Agendamiento Automatizado, Software, Argentina" />
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
 
-  <meta name="author" content="Propuesta Comercial">
+        body {
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #ffffff;
+            color: #111827;
+        }
 
-  <!-- Open Graph -->
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="Propuesta Comercial — Landing Page + Widget de Turnos + Dashboard">
-  <meta property="og:description"
-    content="Solución integral de captación, agendamiento autónomo y gestión interna de turnos para potenciar la conversión de tu negocio.">
-  <meta property="og:image" content="og-image.png">
+        h1,
+        h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            letter-spacing: -.02em;
+            line-height: 1.15;
+        }
 
-  <!-- Twitter -->
-  <meta property="twitter:card" content="summary_large_image">
-  <meta property="twitter:title" content="Propuesta Comercial — Landing Page + Widget de Turnos + Dashboard">
-  <meta property="twitter:description"
-    content="Landing Page optimizada + Sistema interactivo de turnos + Panel de control y agenda en tiempo real.">
+        .hero-gradient {
+            background:
+                radial-gradient(circle at top left, rgba(59, 130, 246, 0.10), transparent 45%),
+                radial-gradient(circle at bottom right, rgba(16, 185, 129, 0.08), transparent 40%),
+                #ffffff;
+        }
 
-  <script src="https://cdn.tailwindcss.com"></script>
+        .glass {
+            backdrop-filter: blur(18px);
+            background: rgba(255, 255, 255, .05);
+        }
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap"
-    rel="stylesheet">
+        .nav-link,
+        .mobile-link {
+            color: rgba(255, 255, 255, .72);
+            transition: .25s;
+        }
 
-  <style>
-    html {
-      scroll-behavior: smooth;
-    }
+        .nav-link:hover,
+        .mobile-link:hover {
+            color: #ffffff;
+        }
 
-    body {
-      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      background: #ffffff;
-      color: #111827;
-    }
+        .reveal-item {
+            transition: all .8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
 
-    h1,
-    h2 {
-      font-family: 'Playfair Display', Georgia, serif;
-      letter-spacing: -.02em;
-      line-height: 1.15;
-    }
+        .badge {
+            border: 1px solid rgb(229 231 235);
+            border-radius: 9999px;
+            padding: .45rem .95rem;
+            font-size: .74rem;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            font-weight: 600;
+            color: #4b5563;
+            background: white;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+        }
 
-    .hero-gradient {
-      background:
-        radial-gradient(circle at top left, rgba(59, 130, 246, 0.12), transparent 45%),
-        radial-gradient(circle at bottom right, rgba(16, 185, 129, 0.10), transparent 40%),
-        #ffffff;
-    }
+        .hero-card {
+            background: white;
+            border: 1px solid rgb(229 231 235);
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: 0 30px 60px rgba(15, 23, 42, .06);
+        }
 
-    .glass {
-      backdrop-filter: blur(18px);
-      background: rgba(255, 255, 255, .05);
-    }
-
-    .nav-link,
-    .mobile-link {
-      color: rgba(255, 255, 255, .72);
-      transition: .25s;
-    }
-
-    .nav-link:hover,
-    .mobile-link:hover {
-      color: #ffffff;
-    }
-
-    .reveal-item {
-      transition: all .8s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .badge {
-      border: 1px solid rgb(229 231 235);
-      border-radius: 9999px;
-      padding: .45rem .95rem;
-      font-size: .74rem;
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      font-weight: 600;
-      color: #4b5563;
-      background: white;
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
-    }
-
-    .hero-card {
-      background: white;
-      border: 1px solid rgb(229 231 235);
-      border-radius: 24px;
-      padding: 2rem;
-      box-shadow: 0 30px 60px rgba(15, 23, 42, .06);
-    }
-
-    .metric-number {
-      font-size: 2.25rem;
-      font-weight: 700;
-      color: #111827;
-      letter-spacing: -.03em;
-      line-height: 1;
-    }
-
-    .metric-label {
-      color: #6b7280;
-      font-size: .78rem;
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      font-weight: 600;
-      margin-top: .35rem;
-    }
-
-    details summary::-webkit-details-marker {
-      display: none;
-    }
-  </style>
+        details summary::-webkit-details-marker {
+            display: none;
+        }
+    </style>
 </head>
 
 <body class="bg-white text-gray-900 antialiased selection:bg-black selection:text-white">
 
-  <!-- ========================================= -->
-  <!-- 1. HEADER / NAVEGACIÓN -->
-  <!-- ========================================= -->
-  <header class="sticky top-0 z-50 border-b border-white/10 bg-black/95 backdrop-blur-xl">
-    <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
-      <a href="#hero" class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-white text-black flex items-center justify-center font-bold tracking-tighter text-lg shadow-sm">
-          LT
-        </div>
-        <div>
-          <h3 class="text-white font-semibold text-base md:text-lg tracking-tight">
-            Landing + Turnos
-          </h3>
-          <p class="text-[11px] uppercase tracking-[0.18em] text-gray-400 font-medium">
-            PROPUESTA COMERCIAL
-          </p>
-        </div>
-      </a>
-
-      <nav class="hidden lg:flex items-center gap-8 text-xs uppercase tracking-widest font-medium">
-        <a href="#solucion" class="nav-link">Solución</a>
-        <a href="#modulos" class="nav-link">Plataforma</a>
-        <a href="#arquitectura" class="nav-link">Arquitectura</a>
-        <a href="#roadmap" class="nav-link">Roadmap</a>
-        <a href="#inversion" class="nav-link">Inversión</a>
-        <a href="#faq" class="nav-link">FAQ</a>
-        <a href="#contacto" class="nav-link">Contacto</a>
-      </nav>
-
-      <div class="hidden lg:flex items-center gap-3">
-        <a href="#inversion" class="px-5 py-2.5 rounded-xl bg-white text-black text-xs uppercase tracking-wider font-semibold hover:bg-gray-200 transition shadow-sm">
-          Ver Inversión
-        </a>
-      </div>
-
-      <button id="menu-btn" class="lg:hidden flex flex-col gap-1.5 p-2 text-white" aria-label="Abrir menú">
-        <span class="w-6 h-0.5 bg-white transition"></span>
-        <span class="w-6 h-0.5 bg-white transition"></span>
-        <span class="w-6 h-0.5 bg-white transition"></span>
-      </button>
-    </div>
-
-    <!-- Menú Mobile -->
-    <div id="mobile-menu" class="hidden bg-black border-t border-white/10 lg:hidden">
-      <div class="flex flex-col px-8 py-8 gap-5 uppercase tracking-widest text-xs font-medium">
-        <a href="#solucion" class="mobile-link">Solución</a>
-        <a href="#modulos" class="mobile-link">Plataforma</a>
-        <a href="#arquitectura" class="mobile-link">Arquitectura</a>
-        <a href="#roadmap" class="mobile-link">Roadmap</a>
-        <a href="#inversion" class="mobile-link">Inversión</a>
-        <a href="#faq" class="mobile-link">Preguntas Frecuentes</a>
-        <a href="#contacto" class="mobile-link">Contacto</a>
-        <a href="#inversion" class="mt-4 text-center py-3 bg-white text-black rounded-xl font-semibold">Ver Inversión</a>
-      </div>
-    </div>
-
-    <!-- Barra de progreso de lectura -->
-    <div id="progress-bar" class="absolute bottom-0 left-0 h-[2px] bg-white w-0 transition-all duration-75"></div>
-  </header>
-
-  <main>
     <!-- ========================================= -->
-    <!-- 2. HERO PRINCIPAL -->
+    <!-- 1. HEADER / NAVEGACIÓN -->
     <!-- ========================================= -->
-    <section id="hero" class="hero-gradient border-b border-gray-100">
-      <div class="max-w-7xl mx-auto px-6 py-20 lg:py-32">
-        <div class="grid lg:grid-cols-[1.15fr_.85fr] gap-14 items-center">
-          <div>
-            <!-- Badges -->
-            <div class="flex flex-wrap gap-2.5 mb-8 reveal-item opacity-0 translate-y-8">
-              <span class="badge">Landing Page</span>
-              <span class="badge">Widget de Turnos</span>
-              <span class="badge">Dashboard de Gestión</span>
-              <span class="badge">Atención 24/7</span>
-              <span class="badge">Sincronización Total</span>
-            </div>
-
-            <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-gray-950 reveal-item opacity-0 translate-y-8">
-              Landing Page + Widget de Turnos + Dashboard de Gestión.
-            </h1>
-
-            <p class="mt-8 text-lg sm:text-xl leading-relaxed text-gray-600 max-w-2xl reveal-item opacity-0 translate-y-8">
-              Una solución integral que transforma tu presencia digital: capta nuevos pacientes o clientes en tu propia Landing Page, automatiza las reservas 24/7 con un Widget interactivo y administra toda tu agenda desde un Dashboard centralizado.
-            </p>
-
-            <div class="mt-10 flex flex-wrap items-center gap-4 reveal-item opacity-0 translate-y-8">
-              <a href="#inversion"
-                class="px-8 py-4 rounded-xl bg-black text-white font-semibold hover:bg-gray-800 transition shadow-lg hover:shadow-xl">
-                Ver inversión detallada
-              </a>
-              <a href="#solucion"
-                class="px-8 py-4 rounded-xl border border-gray-300 text-gray-800 font-medium hover:border-black hover:bg-gray-50 transition">
-                Conocer la solución
-              </a>
-            </div>
-
-            <div class="mt-10 flex items-center gap-3 text-xs text-gray-500 reveal-item opacity-0 translate-y-8">
-              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span>Propuesta comercial lista para implementación inmediata</span>
-            </div>
-          </div>
-
-          <!-- Hero Card -->
-          <div class="hero-card reveal-item opacity-0 translate-y-8">
-            <div class="flex items-center justify-between mb-8 pb-6 border-b border-gray-100">
-              <div>
-                <p class="text-xs uppercase tracking-[0.2em] text-gray-500 font-semibold">
-                  Resumen de Proyecto
-                </p>
-                <h3 class="text-2xl sm:text-3xl font-semibold mt-1 text-gray-900">
-                  Sistema de Turnos & Conversión
-                </h3>
-              </div>
-              <div class="w-14 h-14 rounded-2xl bg-black text-white flex items-center justify-center text-2xl shadow-md">
-                ⚡
-              </div>
-            </div>
-
-            <div class="space-y-4 text-sm">
-              <div class="flex justify-between items-center py-1">
-                <span class="text-gray-500">Tiempo de Implementación</span>
-                <strong class="text-gray-900 font-semibold">7 a 12 días hábiles</strong>
-              </div>
-              <div class="flex justify-between items-center py-1">
-                <span class="text-gray-500">Módulos Incluidos</span>
-                <strong class="text-gray-900 font-semibold">Landing + Widget + Dashboard</strong>
-              </div>
-              <div class="flex justify-between items-center py-1">
-                <span class="text-gray-500">Disponibilidad de Reservas</span>
-                <strong class="text-gray-900 font-semibold">24 horas / 365 días</strong>
-              </div>
-              <div class="flex justify-between items-center py-1">
-                <span class="text-gray-500">Mantenimiento y Soporte</span>
-                <strong class="text-gray-900 font-semibold">Mensual Integral</strong>
-              </div>
-              <div class="flex justify-between items-center py-1">
-                <span class="text-gray-500">Inversión Total Implementación</span>
-                <strong class="text-black text-base font-bold">$400.000 ARS</strong>
-              </div>
-            </div>
-
-            <hr class="my-6 border-gray-100">
-
-            <!-- 4. INDICADORES / MÉTRICAS -->
-            <div class="grid grid-cols-3 gap-4 pt-2">
-              <div>
-                <div class="metric-number text-emerald-600">+60%</div>
-                <div class="metric-label">Reservas Online</div>
-              </div>
-              <div>
-                <div class="metric-number text-indigo-600">85%</div>
-                <div class="metric-label">Menos Carga Manual</div>
-              </div>
-              <div>
-                <div class="metric-number text-gray-900">24/7</div>
-                <div class="metric-label">Autoservicio</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ========================================= -->
-    <!-- 3. PROPUESTA DE VALOR: EL FLUJO COMPLETO -->
-    <!-- ========================================= -->
-    <section class="bg-gray-50 py-16 border-b border-gray-200">
-      <div class="max-w-7xl mx-auto px-6">
-        <div class="text-center max-w-3xl mx-auto mb-12">
-          <p class="text-xs uppercase tracking-[0.25em] text-gray-500 font-semibold mb-2">
-            Arquitectura de Flujo
-          </p>
-          <h2 class="text-3xl sm:text-4xl font-semibold">
-            Un ecosistema integrado de 3 componentes clave
-          </h2>
-        </div>
-
-        <div class="grid md:grid-cols-3 gap-6">
-          <!-- Step 1 -->
-          <div class="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm hover:shadow-md transition">
-            <div class="w-12 h-12 rounded-xl bg-black text-white flex items-center justify-center font-bold text-lg mb-6">
-              01
-            </div>
-            <span class="text-xs uppercase tracking-widest text-gray-400 font-bold">Interfaz Pública</span>
-            <h3 class="text-xl font-bold mt-2 mb-3 text-gray-900">Landing Page</h3>
-            <p class="text-gray-600 text-sm leading-relaxed">
-              Diseñada específicamente para presentar tu propuesta de valor, generar confianza y dirigir a los visitantes al llamado a la acción.
-            </p>
-          </div>
-
-          <!-- Step 2 -->
-          <div class="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm hover:shadow-md transition">
-            <div class="w-12 h-12 rounded-xl bg-black text-white flex items-center justify-center font-bold text-lg mb-6">
-              02
-            </div>
-            <span class="text-xs uppercase tracking-widest text-gray-400 font-bold">Reserva Autónoma</span>
-            <h3 class="text-xl font-bold mt-2 mb-3 text-gray-900">Widget de Turnos</h3>
-            <p class="text-gray-600 text-sm leading-relaxed">
-              Permite al usuario elegir profesional, servicio, fecha y horario disponible en segundos, confirmando su reserva sin fricción humana.
-            </p>
-          </div>
-
-          <!-- Step 3 -->
-          <div class="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm hover:shadow-md transition">
-            <div class="w-12 h-12 rounded-xl bg-black text-white flex items-center justify-center font-bold text-lg mb-6">
-              03
-            </div>
-            <span class="text-xs uppercase tracking-widest text-gray-400 font-bold">Gestión Interna</span>
-            <h3 class="text-xl font-bold mt-2 mb-3 text-gray-900">Dashboard de Control</h3>
-            <p class="text-gray-600 text-sm leading-relaxed">
-              Panel integrado con el Widget para que tu equipo administre la agenda, confirme estados, configure horarios y visualice métricas.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ========================================= -->
-    <!-- 5, 6, 7, 8. SECCIÓN "LA SOLUCIÓN" -->
-    <!-- ========================================= -->
-    <section id="solucion" class="max-w-7xl mx-auto px-6 py-24">
-      <div class="max-w-4xl">
-        <p class="text-sm uppercase tracking-[0.25em] text-gray-500 mb-4 font-semibold">
-          La Solución
-        </p>
-        <h2 class="text-4xl md:text-5xl font-semibold mb-8">
-          Automatiza las reservas de tu negocio y elimina las pérdidas de tiempo.
-        </h2>
-        <p class="text-lg text-gray-600 leading-relaxed">
-          Actualmente, la mayoría de los negocios y profesionales pierden oportunidades valiosas coordinando turnos de forma manual por mensajes, lidiando con superposiciones de horarios, ausencias sin aviso y planillas desactualizadas. Esta solución digitaliza y automatiza todo el circuito comercial desde el primer clic hasta la confirmación de la cita.
-        </p>
-      </div>
-
-      <div class="grid lg:grid-cols-3 gap-8 mt-16">
-        <!-- 6. PROBLEMA ACTUAL -->
-        <div class="border border-gray-200 rounded-2xl p-8 bg-white hover:shadow-xl transition">
-          <div class="text-5xl mb-6">📉</div>
-          <h3 class="text-2xl font-semibold mb-4 text-gray-900">
-            Problema Actual
-          </h3>
-          <ul class="space-y-3.5 text-gray-600 text-sm">
-            <li class="flex items-start gap-2">
-              <span class="text-red-500 font-bold shrink-0">✕</span>
-              <span>Mensajes de WhatsApp acumulados fuera de horario comercial.</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <span class="text-red-500 font-bold shrink-0">✕</span>
-              <span>Pérdida de clientes potenciales por demora en responder disponibilidad.</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <span class="text-red-500 font-bold shrink-0">✕</span>
-              <span>Superposición de turnos y errores en planillas manuales o papel.</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <span class="text-red-500 font-bold shrink-0">✕</span>
-              <span>Ausencias imprevistas y cancelaciones sin aviso previo.</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <span class="text-red-500 font-bold shrink-0">✕</span>
-              <span>Falta de métricas claras sobre ocupación y recurrencia.</span>
-            </li>
-          </ul>
-        </div>
-
-        <!-- 7. NUESTRA SOLUCIÓN -->
-        <div class="border border-gray-900 rounded-2xl p-8 bg-black text-white shadow-2xl relative overflow-hidden">
-          <div class="text-5xl mb-6">⚡</div>
-          <h3 class="text-2xl font-semibold mb-4 text-white">
-            Nuestra Solución
-          </h3>
-          <ul class="space-y-3.5 text-gray-200 text-sm">
-            <li class="flex items-start gap-2">
-              <span class="text-emerald-400 font-bold shrink-0">✓</span>
-              <span>Landing Page profesional optimizada para generar confianza.</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <span class="text-emerald-400 font-bold shrink-0">✓</span>
-              <span>Widget de turnos intuitivo con selector de fecha, hora y servicio.</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <span class="text-emerald-400 font-bold shrink-0">✓</span>
-              <span>Dashboard de gestión integrado para control total de la agenda.</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <span class="text-emerald-400 font-bold shrink-0">✓</span>
-              <span>Confirmación instantánea de reservas 24/7 sin intervención manual.</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <span class="text-emerald-400 font-bold shrink-0">✓</span>
-              <span>Control dinámico de disponibilidad, feriados y bloqueos.</span>
-            </li>
-          </ul>
-        </div>
-
-        <!-- 8. RESULTADO / BENEFICIOS -->
-        <div class="border border-gray-200 rounded-2xl p-8 bg-white hover:shadow-xl transition">
-          <div class="text-5xl mb-6">📈</div>
-          <h3 class="text-2xl font-semibold mb-4 text-gray-900">
-            Resultado
-          </h3>
-          <ul class="space-y-3.5 text-gray-600 text-sm">
-            <li class="flex items-start gap-2">
-              <span class="text-emerald-600 font-bold shrink-0">✓</span>
-              <span>Proceso de agendamiento 100% autónomo y sin demoras.</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <span class="text-emerald-600 font-bold shrink-0">✓</span>
-              <span>Experiencia moderna y profesional para el paciente o cliente.</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <span class="text-emerald-600 font-bold shrink-0">✓</span>
-              <span>Ahorro de más del 80% del tiempo de gestión administrativa.</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <span class="text-emerald-600 font-bold shrink-0">✓</span>
-              <span>Reducción drástica de cancelaciones y turnos vacíos.</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <span class="text-emerald-600 font-bold shrink-0">✓</span>
-              <span>Información y registros centralizados en un único lugar seguro.</span>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- ========================================= -->
-    <!-- 9 & 10. SECCIÓN "PLATAFORMA" & FUNCIONALIDADES -->
-    <!-- ========================================= -->
-    <section id="modulos" class="max-w-7xl mx-auto px-6 py-24 border-t border-gray-200">
-      <div class="max-w-4xl mb-16">
-        <p class="uppercase tracking-[0.2em] text-sm text-gray-500 mb-4 font-semibold">
-          Plataforma
-        </p>
-        <h2 class="text-4xl sm:text-5xl font-semibold">
-          Funcionalidades incluidas.
-        </h2>
-        <p class="text-gray-600 text-lg mt-4 leading-relaxed">
-          Cada componente ha sido diseñado para ofrecer una experiencia fluida a los usuarios y un control operativo absoluto a tu equipo.
-        </p>
-      </div>
-
-      <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-8">
-        <!-- Feature 1: Landing -->
-        <div class="border border-gray-200 rounded-2xl p-8 hover:border-gray-400 transition bg-white shadow-sm">
-          <div class="text-3xl mb-4">🖥️</div>
-          <h3 class="font-semibold text-xl mb-3 text-gray-900">
-            Landing Page de Conversión
-          </h3>
-          <p class="text-gray-500 text-xs mb-4 uppercase tracking-wider font-semibold">Módulo 01</p>
-          <ul class="space-y-2.5 text-gray-600 text-sm">
-            <li>✓ Diseño moderno, profesional y a medida</li>
-            <li>✓ Adaptable 100% a móviles, tablets y desktop</li>
-            <li>✓ Copywriting persuasivo enfocado en conversión</li>
-            <li>✓ Sección de servicios, testimonios y beneficios</li>
-            <li>✓ Optimización de velocidad y buenas prácticas SEO</li>
-            <li>✓ Botones de contacto y acceso directo al agendador</li>
-          </ul>
-        </div>
-
-        <!-- Feature 2: Widget -->
-        <div class="border border-gray-200 rounded-2xl p-8 hover:border-gray-400 transition bg-white shadow-sm">
-          <div class="text-3xl mb-4">📅</div>
-          <h3 class="font-semibold text-xl mb-3 text-gray-900">
-            Widget de Turnos Interactivo
-          </h3>
-          <p class="text-gray-500 text-xs mb-4 uppercase tracking-wider font-semibold">Módulo 02 (Cliente)</p>
-          <ul class="space-y-2.5 text-gray-600 text-sm">
-            <li>✓ Selector de servicio, duración y tarifa</li>
-            <li>✓ Selección de profesional o especialista</li>
-            <li>✓ Calendario interactivo con horarios en tiempo real</li>
-            <li>✓ Formulario ágil de datos de contacto</li>
-            <li>✓ Confirmación de reserva automática en pantalla</li>
-            <li>✓ Integrable en la Landing o cualquier sitio web</li>
-          </ul>
-        </div>
-
-        <!-- Feature 3: Dashboard -->
-        <div class="border-2 border-black rounded-2xl p-8 bg-gray-950 text-white shadow-xl relative">
-          <span class="absolute top-4 right-4 bg-emerald-500 text-black text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full">
-            Integrado
-          </span>
-          <div class="text-3xl mb-4">📊</div>
-          <h3 class="font-semibold text-xl mb-3 text-white">
-            Dashboard de Gestión
-          </h3>
-          <p class="text-gray-400 text-xs mb-4 uppercase tracking-wider font-semibold">Módulo 02 (Administración)</p>
-          <ul class="space-y-2.5 text-gray-300 text-sm">
-            <li>✓ Vista de calendario y listado de turnos</li>
-            <li>✓ Administración de estados (Confirmado, Pendiente, Cancelado)</li>
-            <li>✓ Bloqueo manual de horarios, feriados o ausencias</li>
-            <li>✓ Configuración de servicios, duraciones y especialistas</li>
-            <li>✓ Búsqueda rápida de clientes y reservas históricas</li>
-            <li>✓ Acceso seguro y protegido para tu equipo</li>
-          </ul>
-        </div>
-
-        <!-- Feature 4: Datos & Sincronización -->
-        <div class="border border-gray-200 rounded-2xl p-8 hover:border-gray-400 transition bg-white shadow-sm">
-          <div class="text-3xl mb-4">⚡</div>
-          <h3 class="font-semibold text-xl mb-3 text-gray-900">
-            Sincronización en Tiempo Real
-          </h3>
-          <p class="text-gray-500 text-xs mb-4 uppercase tracking-wider font-semibold">Infraestructura de Datos</p>
-          <ul class="space-y-2.5 text-gray-600 text-sm">
-            <li>✓ Actualización instantánea de disponibilidad</li>
-            <li>✓ Prevención total de sobreturnos o reservas duplicadas</li>
-            <li>✓ Almacenamiento estructurado y seguro de registros</li>
-            <li>✓ Respaldo automático de la base de datos</li>
-            <li>✓ Exportación de información para reportes</li>
-          </ul>
-        </div>
-
-        <!-- Feature 5: Producción & Deploy -->
-        <div class="border border-gray-200 rounded-2xl p-8 hover:border-gray-400 transition bg-white shadow-sm">
-          <div class="text-3xl mb-4">🚀</div>
-          <h3 class="font-semibold text-xl mb-3 text-gray-900">
-            Despliegue y Producción
-          </h3>
-          <p class="text-gray-500 text-xs mb-4 uppercase tracking-wider font-semibold">Hosting & Seguridad</p>
-          <ul class="space-y-2.5 text-gray-600 text-sm">
-            <li>✓ Hosting cloud de alto rendimiento y velocidad</li>
-            <li>✓ Certificado de seguridad SSL (HTTPS) incluido</li>
-            <li>✓ Conexión a tu propio dominio personalizado</li>
-            <li>✓ Alta disponibilidad garantizada (CDN global)</li>
-            <li>✓ Cero servidores físicos que mantener o configurar</li>
-          </ul>
-        </div>
-
-        <!-- Feature 6: Soporte & Evolución -->
-        <div class="border border-gray-200 rounded-2xl p-8 hover:border-gray-400 transition bg-white shadow-sm">
-          <div class="text-3xl mb-4">🛠️</div>
-          <h3 class="font-semibold text-xl mb-3 text-gray-900">
-            Mantenimiento y Soporte
-          </h3>
-          <p class="text-gray-500 text-xs mb-4 uppercase tracking-wider font-semibold">Servicio Mensual</p>
-          <ul class="space-y-2.5 text-gray-600 text-sm">
-            <li>✓ Monitoreo técnico continuo y prevención</li>
-            <li>✓ Soporte técnico directo ante consultas</li>
-            <li>✓ Mantenimiento de Landing, Widget y Dashboard</li>
-            <li>✓ Corrección inmediata de errores o incidencias</li>
-            <li>✓ Hasta 2 horas mensuales de cambios menores</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- ========================================= -->
-    <!-- 11. SECCIÓN "ARQUITECTURA" -->
-    <!-- ========================================= -->
-    <section id="arquitectura" class="bg-black text-white py-24">
-      <div class="max-w-7xl mx-auto px-6">
-        <div class="max-w-4xl mb-16">
-          <p class="uppercase tracking-[0.2em] text-sm text-gray-400 mb-4 font-semibold">
-            Arquitectura
-          </p>
-          <h2 class="text-4xl sm:text-5xl font-semibold">
-            Arquitectura modular, ágil y de alta confiabilidad.
-          </h2>
-          <p class="text-gray-400 text-lg mt-6 leading-relaxed">
-            La plataforma combina una interfaz pública ultrarrápida para captar usuarios con un motor de reservas y un panel de gestión sincronizados en la nube, garantizando estabilidad, velocidad y bajo costo operativo.
-          </p>
-        </div>
-
-        <div class="grid lg:grid-cols-5 gap-6">
-          <!-- Col 1 -->
-          <div class="rounded-2xl border border-white/10 p-6 bg-white/[0.02]">
-            <div class="text-3xl mb-4">🎨</div>
-            <h3 class="font-semibold text-base mb-3 text-white">
-              Interfaz Pública
-            </h3>
-            <p class="text-xs text-gray-400 mb-3 font-medium">Landing Page</p>
-            <ul class="space-y-2 text-gray-400 text-xs">
-              <li>• HTML5 / CSS3 semántico</li>
-              <li>• Mobile-First optimizado</li>
-              <li>• Carga en menos de 1.2s</li>
-              <li>• Copywriting estructurado</li>
-              <li>• Integración limpia con Widget</li>
-            </ul>
-          </div>
-
-          <!-- Col 2 -->
-          <div class="rounded-2xl border border-white/10 p-6 bg-white/[0.02]">
-            <div class="text-3xl mb-4">⚙️</div>
-            <h3 class="font-semibold text-base mb-3 text-white">
-              Motor de Reserva
-            </h3>
-            <p class="text-xs text-gray-400 mb-3 font-medium">Widget Autónomo</p>
-            <ul class="space-y-2 text-gray-400 text-xs">
-              <li>• Selector dinámico de slots</li>
-              <li>• Validación de disponibilidades</li>
-              <li>• Formulario reactivo</li>
-              <li>• Prevención de errores de usuario</li>
-              <li>• Experiencia sin fricción</li>
-            </ul>
-          </div>
-
-          <!-- Col 3 -->
-          <div class="rounded-2xl border border-white/10 p-6 bg-white/[0.02]">
-            <div class="text-3xl mb-4">📊</div>
-            <h3 class="font-semibold text-base mb-3 text-white">
-              Gestión Interna
-            </h3>
-            <p class="text-xs text-gray-400 mb-3 font-medium">Dashboard Integrado</p>
-            <ul class="space-y-2 text-gray-400 text-xs">
-              <li>• Calendario y vistas de agenda</li>
-              <li>• Control de estados de reserva</li>
-              <li>• Bloqueo ágil de horarios</li>
-              <li>• Administración de servicios</li>
-              <li>• Panel intuitivo para el staff</li>
-            </ul>
-          </div>
-
-          <!-- Col 4 -->
-          <div class="rounded-2xl border border-white/10 p-6 bg-white/[0.02]">
-            <div class="text-3xl mb-4">☁️</div>
-            <h3 class="font-semibold text-base mb-3 text-white">
-              Infraestructura
-            </h3>
-            <p class="text-xs text-gray-400 mb-3 font-medium">Hosting & Cloud</p>
-            <ul class="space-y-2 text-gray-400 text-xs">
-              <li>• Despliegue en red CDN global</li>
-              <li>• Certificado SSL automático</li>
-              <li>• Disponibilidad 99.9%</li>
-              <li>• Backups programados</li>
-              <li>• Sin servidores que mantener</li>
-            </ul>
-          </div>
-
-          <!-- Col 5 -->
-          <div class="rounded-2xl border border-white/10 p-6 bg-white/[0.02]">
-            <div class="text-3xl mb-4">🔒</div>
-            <h3 class="font-semibold text-base mb-3 text-white">
-              Seguridad
-            </h3>
-            <p class="text-xs text-gray-400 mb-3 font-medium">Protección de Datos</p>
-            <ul class="space-y-2 text-gray-400 text-xs">
-              <li>• Conexión cifrada HTTPS</li>
-              <li>• Sanitización de formularios</li>
-              <li>• Protección anti-spam</li>
-              <li>• Acceso seguro al dashboard</li>
-              <li>• Confidencialidad de clientes</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ========================================= -->
-    <!-- 12. SECCIÓN "ROADMAP / IMPLEMENTACIÓN" -->
-    <!-- ========================================= -->
-    <section id="roadmap" class="max-w-7xl mx-auto px-6 py-24">
-      <div class="max-w-4xl mb-16">
-        <p class="uppercase tracking-[0.2em] text-sm text-gray-500 mb-4 font-semibold">
-          Roadmap
-        </p>
-        <h2 class="text-4xl sm:text-5xl font-semibold">
-          Implementación por etapas.
-        </h2>
-        <p class="text-gray-600 text-lg mt-4 leading-relaxed">
-          Un proceso ágil, estructurado y transparente para poner en funcionamiento tu sistema en menos de dos semanas.
-        </p>
-      </div>
-
-      <div class="space-y-8">
-        <!-- Fase 01 -->
-        <div class="border border-gray-200 rounded-3xl p-8 sm:p-10 bg-white hover:shadow-md transition">
-          <div class="flex justify-between items-start flex-wrap gap-6">
-            <div>
-              <p class="text-xs uppercase tracking-widest text-gray-400 font-bold">
-                Fase 01
-              </p>
-              <h3 class="text-2xl sm:text-3xl font-semibold mt-2 text-gray-900">
-                Discovery & Diseño de Landing Page
-              </h3>
-            </div>
-            <div class="bg-gray-100 px-4 py-2 rounded-xl text-right">
-              <p class="text-[11px] text-gray-500 uppercase tracking-wider font-semibold">Duración Estimada</p>
-              <p class="text-xl font-bold text-gray-900">3 a 4 días</p>
-            </div>
-          </div>
-          <ul class="grid sm:grid-cols-2 gap-3 mt-8 text-gray-600 text-sm">
-            <li class="flex items-center gap-2"><span>✓</span> <span>Reunión de kickoff y relevamiento de servicios</span></li>
-            <li class="flex items-center gap-2"><span>✓</span> <span>Adaptación de identidad visual, tipografías y colores</span></li>
-            <li class="flex items-center gap-2"><span>✓</span> <span>Redacción del contenido y propuestas de valor</span></li>
-            <li class="flex items-center gap-2"><span>✓</span> <span>Maquetación responsive de la Landing Page</span></li>
-          </ul>
-        </div>
-
-        <!-- Fase 02 -->
-        <div class="border border-gray-200 rounded-3xl p-8 sm:p-10 bg-white hover:shadow-md transition">
-          <div class="flex justify-between items-start flex-wrap gap-6">
-            <div>
-              <p class="text-xs uppercase tracking-widest text-gray-400 font-bold">
-                Fase 02
-              </p>
-              <h3 class="text-2xl sm:text-3xl font-semibold mt-2 text-gray-900">
-                Configuración de Widget & Dashboard de Gestión
-              </h3>
-            </div>
-            <div class="bg-gray-100 px-4 py-2 rounded-xl text-right">
-              <p class="text-[11px] text-gray-500 uppercase tracking-wider font-semibold">Duración Estimada</p>
-              <p class="text-xl font-bold text-gray-900">4 a 5 días</p>
-            </div>
-          </div>
-          <ul class="grid sm:grid-cols-2 gap-3 mt-8 text-gray-600 text-sm">
-            <li class="flex items-center gap-2"><span>✓</span> <span>Parametrización de especialidades, servicios y duraciones</span></li>
-            <li class="flex items-center gap-2"><span>✓</span> <span>Configuración de franjas horarias y días de atención</span></li>
-            <li class="flex items-center gap-2"><span>✓</span> <span>Integración del Widget dentro de la Landing Page</span></li>
-            <li class="flex items-center gap-2"><span>✓</span> <span>Puesta a punto del Dashboard de control para el staff</span></li>
-          </ul>
-        </div>
-
-        <!-- Fase 03 -->
-        <div class="border border-gray-200 rounded-3xl p-8 sm:p-10 bg-white hover:shadow-md transition">
-          <div class="flex justify-between items-start flex-wrap gap-6">
-            <div>
-              <p class="text-xs uppercase tracking-widest text-gray-400 font-bold">
-                Fase 03
-              </p>
-              <h3 class="text-2xl sm:text-3xl font-semibold mt-2 text-gray-900">
-                Testing, Deploy & Capacitación (Go Live)
-              </h3>
-            </div>
-            <div class="bg-gray-100 px-4 py-2 rounded-xl text-right">
-              <p class="text-[11px] text-gray-500 uppercase tracking-wider font-semibold">Duración Estimada</p>
-              <p class="text-xl font-bold text-gray-900">2 a 3 días</p>
-            </div>
-          </div>
-          <ul class="grid sm:grid-cols-2 gap-3 mt-8 text-gray-600 text-sm">
-            <li class="flex items-center gap-2"><span>✓</span> <span>Pruebas completas del circuito de reservas y confirmaciones</span></li>
-            <li class="flex items-center gap-2"><span>✓</span> <span>Configuración de dominio personalizado y certificado SSL</span></li>
-            <li class="flex items-center gap-2"><span>✓</span> <span>Capacitación en el uso y administración del Dashboard</span></li>
-            <li class="flex items-center gap-2"><span>✓</span> <span>Lanzamiento oficial a producción (Go Live)</span></li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- ========================================= -->
-    <!-- 13. SECCIÓN "INVERSIÓN" (ESTRUCTURA COMERCIAL) -->
-    <!-- ========================================= -->
-    <section id="inversion" class="bg-black text-white py-24 border-t border-gray-800">
-      <div class="max-w-7xl mx-auto px-6">
-        <div class="max-w-4xl mb-16">
-          <p class="uppercase tracking-[0.2em] text-sm text-gray-400 mb-4 font-semibold">
-            Inversión
-          </p>
-          <h2 class="text-4xl sm:text-5xl font-semibold">
-            Estructura de inversión clara y transparente.
-          </h2>
-          <p class="text-lg text-gray-400 mt-6 leading-relaxed">
-            Planes y módulos adaptados para cada necesidad comercial, con pago único de implementación y abono de mantenimiento integral.
-          </p>
-        </div>
-
-        <!-- Tarjetas Principales de Implementación -->
-        <div class="grid lg:grid-cols-3 gap-8 items-stretch">
-          <!-- MÓDULO 01 -->
-          <article class="rounded-3xl border border-white/15 p-8 sm:p-10 flex flex-col justify-between bg-white/[0.02] hover:border-white/30 transition">
-            <div>
-              <span class="text-xs uppercase tracking-widest text-gray-400 font-semibold">
-                Módulo 01
-              </span>
-              <h3 class="text-2xl sm:text-3xl font-semibold mt-3 text-white">
-                Landing Page
-              </h3>
-              <p class="text-xs text-gray-400 mt-2">
-                Interfaz pública de alta conversión
-              </p>
-
-              <div class="mt-8 pb-6 border-b border-white/10">
-                <span class="text-4xl sm:text-5xl font-bold text-white tracking-tight">
-                  $280.000
-                </span>
-                <span class="text-sm text-gray-400 font-normal ml-1">ARS</span>
-                <p class="text-xs text-gray-400 mt-2 uppercase tracking-wider font-medium">
-                  Pago único de implementación
-                </p>
-              </div>
-
-              <ul class="space-y-3.5 mt-8 text-gray-300 text-sm">
-                <li class="flex items-start gap-2.5">
-                  <span class="text-white font-bold">✓</span>
-                  <span>Diseño a medida 100% responsive</span>
-                </li>
-                <li class="flex items-start gap-2.5">
-                  <span class="text-white font-bold">✓</span>
-                  <span>Estructura de copy orientada a conversión</span>
-                </li>
-                <li class="flex items-start gap-2.5">
-                  <span class="text-white font-bold">✓</span>
-                  <span>Optimización de velocidad y SEO local</span>
-                </li>
-                <li class="flex items-start gap-2.5">
-                  <span class="text-white font-bold">✓</span>
-                  <span>Botones de contacto y llamados a la acción</span>
-                </li>
-                <li class="flex items-start gap-2.5">
-                  <span class="text-white font-bold">✓</span>
-                  <span>Configuración de hosting y dominio</span>
-                </li>
-              </ul>
-            </div>
-
-            <div class="mt-10">
-              <a href="#contacto" class="block w-full py-4 text-center rounded-xl border border-white/20 hover:border-white hover:bg-white/5 transition font-semibold text-sm">
-                Seleccionar Módulo 01
-              </a>
-            </div>
-          </article>
-
-          <!-- TOTAL IMPLEMENTACIÓN (PACK RECOMENDADO) -->
-          <article class="rounded-3xl border-2 border-white bg-white text-black p-8 sm:p-10 shadow-2xl relative flex flex-col justify-between transform lg:-translate-y-2">
-            <span class="absolute -top-4 left-8 sm:left-10 bg-black text-white px-4 py-1.5 rounded-full text-xs uppercase tracking-widest font-bold shadow-md">
-              Recomendado • Solución Completa
-            </span>
-
-            <div>
-              <span class="text-xs uppercase tracking-widest text-gray-500 font-bold">
-                Módulo 01 + Módulo 02
-              </span>
-              <h3 class="text-2xl sm:text-3xl font-semibold mt-3 text-gray-950">
-                Total Implementación
-              </h3>
-              <p class="text-xs text-gray-600 mt-2 font-medium">
-                Landing Page + Widget de Turnos + Dashboard
-              </p>
-
-              <div class="mt-8 pb-6 border-b border-gray-200">
-                <span class="text-4xl sm:text-5xl font-bold text-gray-950 tracking-tight">
-                  $400.000
-                </span>
-                <span class="text-sm text-gray-600 font-normal ml-1">ARS</span>
-                <p class="text-xs text-gray-500 mt-2 uppercase tracking-wider font-semibold">
-                  Pago único • Sistema Integral
-                </p>
-              </div>
-
-              <ul class="space-y-3.5 mt-8 text-gray-900 text-sm">
-                <li class="flex items-start gap-2.5">
-                  <span class="text-black font-bold">✓</span>
-                  <span><strong>Módulo 01:</strong> Landing Page completa ($280.000 ARS)</span>
-                </li>
-                <li class="flex items-start gap-2.5">
-                  <span class="text-black font-bold">✓</span>
-                  <span><strong>Módulo 02:</strong> Widget de Turnos interactivo</span>
-                </li>
-                <li class="flex items-start gap-2.5">
-                  <span class="text-black font-bold">✓</span>
-                  <span><strong>Dashboard de Gestión</strong> para administración total</span>
-                </li>
-                <li class="flex items-start gap-2.5">
-                  <span class="text-black font-bold">✓</span>
-                  <span>Sincronización en tiempo real sin turnos superpuestos</span>
-                </li>
-                <li class="flex items-start gap-2.5">
-                  <span class="text-black font-bold">✓</span>
-                  <span>Pruebas integrales y puesta en producción</span>
-                </li>
-                <li class="flex items-start gap-2.5">
-                  <span class="text-black font-bold">✓</span>
-                  <span>Capacitación personalizada para tu equipo</span>
-                </li>
-              </ul>
-            </div>
-
-            <div class="mt-10">
-              <a href="#contacto" class="block w-full py-4 text-center rounded-xl bg-black text-white hover:bg-gray-800 transition font-semibold text-sm shadow-md">
-                Comenzar Implementación Completa
-              </a>
-            </div>
-          </article>
-
-          <!-- MÓDULO 02 -->
-          <article class="rounded-3xl border border-white/15 p-8 sm:p-10 flex flex-col justify-between bg-white/[0.02] hover:border-white/30 transition">
-            <div>
-              <span class="text-xs uppercase tracking-widest text-gray-400 font-semibold">
-                Módulo 02
-              </span>
-              <h3 class="text-2xl sm:text-3xl font-semibold mt-3 text-white">
-                Widget + Dashboard
-              </h3>
-              <p class="text-xs text-gray-400 mt-2">
-                Sistema de Turnos & Gestión Integral
-              </p>
-
-              <div class="mt-8 pb-6 border-b border-white/10">
-                <span class="text-4xl sm:text-5xl font-bold text-white tracking-tight">
-                  $120.000
-                </span>
-                <span class="text-sm text-gray-400 font-normal ml-1">ARS</span>
-                <p class="text-xs text-gray-400 mt-2 uppercase tracking-wider font-medium">
-                  Pago único de implementación
-                </p>
-              </div>
-
-              <ul class="space-y-3.5 mt-8 text-gray-300 text-sm">
-                <li class="flex items-start gap-2.5">
-                  <span class="text-white font-bold">✓</span>
-                  <span>Widget de reservas interactivo 24/7</span>
-                </li>
-                <li class="flex items-start gap-2.5">
-                  <span class="text-white font-bold">✓</span>
-                  <span><strong>Dashboard de Gestión incluido</strong></span>
-                </li>
-                <li class="flex items-start gap-2.5">
-                  <span class="text-white font-bold">✓</span>
-                  <span>Gestión de especialistas, servicios y horarios</span>
-                </li>
-                <li class="flex items-start gap-2.5">
-                  <span class="text-white font-bold">✓</span>
-                  <span>Control de estados de citas y bloqueos</span>
-                </li>
-                <li class="flex items-start gap-2.5">
-                  <span class="text-white font-bold">✓</span>
-                  <span>Integrable en cualquier web existente</span>
-                </li>
-              </ul>
-            </div>
-
-            <div class="mt-10">
-              <a href="#contacto" class="block w-full py-4 text-center rounded-xl border border-white/20 hover:border-white hover:bg-white/5 transition font-semibold text-sm">
-                Seleccionar Módulo 02
-              </a>
-            </div>
-          </article>
-        </div>
-
-        <!-- MANTENIMIENTO Y OPCIONAL -->
-        <div class="grid md:grid-cols-2 gap-8 mt-14">
-          <!-- Mantenimiento Mensual -->
-          <div class="rounded-3xl border border-white/15 p-8 sm:p-10 bg-white/[0.03]">
-            <div class="flex justify-between items-start flex-wrap gap-4 mb-6">
-              <div>
-                <span class="badge !bg-white/10 !text-gray-200 !border-white/20 mb-3">
-                  Abono Mensual
-                </span>
-                <h3 class="text-2xl font-bold text-white">
-                  Mantenimiento & Soporte
-                </h3>
-              </div>
-              <div class="text-right">
-                <div class="text-3xl sm:text-4xl font-bold text-white">$65.000 <span class="text-sm font-normal text-gray-400">ARS/mes</span></div>
-                <p class="text-xs text-gray-400 mt-1">Continuidad operativa</p>
-              </div>
-            </div>
-
-            <p class="text-sm text-gray-300 mb-6 leading-relaxed">
-              Garantiza el correcto funcionamiento continuo, seguridad y actualización de toda la infraestructura digital sin que debas preocuparte por tareas técnicas.
-            </p>
-
-            <ul class="grid sm:grid-cols-2 gap-3 text-sm text-gray-300 border-t border-white/10 pt-6">
-              <li>✓ Hosting cloud de alta velocidad</li>
-              <li>✓ Soporte técnico prioritario</li>
-              <li>✓ Mantenimiento técnico general</li>
-              <li>✓ Mantenimiento de Landing Page</li>
-              <li>✓ Mantenimiento de Widget de Turnos</li>
-              <li>✓ Mantenimiento de Dashboard</li>
-              <li>✓ Corrección proactiva de errores</li>
-              <li>✓ Hasta 2 horas/mes de cambios menores</li>
-            </ul>
-          </div>
-
-          <!-- Opcional: Analítica y Conversión -->
-          <div class="rounded-3xl border border-white/15 p-8 sm:p-10 bg-white/[0.03] flex flex-col justify-between">
-            <div>
-              <div class="flex justify-between items-start flex-wrap gap-4 mb-6">
+    <header class="sticky top-0 z-50 border-b border-white/10 bg-black/95 backdrop-blur-xl">
+        <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+            <a href="#hero" class="flex items-center gap-3">
+                <div
+                    class="w-10 h-10 rounded-xl bg-white text-black flex items-center justify-center font-bold tracking-tighter text-lg shadow-sm">
+                    T
+                </div>
                 <div>
-                  <span class="badge !bg-emerald-500/10 !text-emerald-400 !border-emerald-500/30 mb-3">
-                    Módulo Opcional
-                  </span>
-                  <h3 class="text-2xl font-bold text-white">
-                    Analítica y Conversión
-                  </h3>
-                </div>
-                <div class="text-right">
-                  <div class="text-3xl sm:text-4xl font-bold text-white">$60.000 <span class="text-sm font-normal text-gray-400">ARS</span></div>
-                  <p class="text-xs text-gray-400 mt-1">Pago único</p>
-                </div>
-              </div>
+                    <h3 class="text-white font-semibold text-base md:text-lg tracking-tight">
+                        Turnos
+                    </h3>
 
-              <p class="text-sm text-gray-300 mb-6 leading-relaxed">
-                Configuración profesional de analítica para medir cada etapa del embudo, conocer de dónde llegan tus visitas y optimizar el rendimiento de campañas publicitarias.
-              </p>
+                </div>
+            </a>
 
-              <ul class="space-y-3 text-sm text-gray-300 border-t border-white/10 pt-6">
-                <li>✓ Configuración avanzada de Google Analytics 4 (GA4)</li>
-                <li>✓ Instalación y verificación de Meta Pixel (Facebook & Instagram)</li>
-                <li>✓ Medición de eventos clave de conversión (clics, inicio y reserva completada)</li>
-                <li>✓ Reporte inicial de métricas y embudo de conversión</li>
-              </ul>
+            <nav class="hidden lg:flex items-center gap-7 text-xs uppercase tracking-widest font-medium">
+                <a href="#problema" class="nav-link">Problema</a>
+                <a href="#solucion" class="nav-link">Solución</a>
+                <a href="#como-funciona" class="nav-link">¿Cómo funciona?</a>
+                <a href="#landing" class="nav-link">Landing</a>
+                <a href="#sistema" class="nav-link">Sistema de Turnos</a>
+                <a href="#beneficios" class="nav-link">Beneficios</a>
+                <a href="#implementacion" class="nav-link">Implementación</a>
+                <a href="#inversion" class="nav-link">Inversión</a>
+                <a href="#faq" class="nav-link">FAQ</a>
+            </nav>
+
+
+
+            <button id="menu-btn" class="lg:hidden flex flex-col gap-1.5 p-2 text-white" aria-label="Abrir menú">
+                <span class="w-6 h-0.5 bg-white transition"></span>
+                <span class="w-6 h-0.5 bg-white transition"></span>
+                <span class="w-6 h-0.5 bg-white transition"></span>
+            </button>
+        </div>
+
+        <!-- Menú Mobile -->
+        <div id="mobile-menu" class="hidden bg-black border-t border-white/10 lg:hidden">
+            <div class="flex flex-col px-8 py-8 gap-5 uppercase tracking-widest text-xs font-medium">
+                <a href="#problema" class="mobile-link">Problema</a>
+                <a href="#solucion" class="mobile-link">Solución</a>
+                <a href="#como-funciona" class="mobile-link">¿Cómo funciona?</a>
+                <a href="#landing" class="mobile-link">Tu Landing</a>
+                <a href="#sistema" class="mobile-link">Sistema de Turnos</a>
+                <a href="#beneficios" class="mobile-link">Beneficios</a>
+                <a href="#implementacion" class="mobile-link">Implementación</a>
+                <a href="#inversion" class="mobile-link">Inversión</a>
+                <a href="#faq" class="mobile-link">Preguntas Frecuentes</a>
+                <a href="#contacto" class="mobile-link">Contacto</a>
+                <a href="https://wa.me/5492613871088?text=Hola,%20quiero%20implementar%20el%20sistema%20de%20Landing%20+%20Reservas%20online%20+%20Gesti%C3%B3n"
+                    target="_blank" rel="noopener noreferrer"
+                    class="mt-4 text-center py-3 bg-white text-black rounded-xl font-semibold">
+                    Quiero implementar el sistema
+                </a>
+            </div>
+        </div>
+
+        <!-- Barra de progreso de lectura -->
+        <div id="progress-bar" class="absolute bottom-0 left-0 h-[2px] bg-white w-0 transition-all duration-75"></div>
+    </header>
+
+    <main>
+        <!-- ========================================= -->
+        <!-- HERO PRINCIPAL -->
+        <!-- ========================================= -->
+        <section id="hero" class="hero-gradient border-b border-gray-100">
+            <div class="max-w-7xl mx-auto px-6 py-20 lg:py-28">
+                <div class="grid lg:grid-cols-[1.15fr_.85fr] gap-14 items-center">
+                    <div>
+                        <!-- Badges -->
+                        <div class="flex flex-wrap gap-2.5 mb-8 reveal-item">
+                            <span class="badge">PROPUESTA COMERCIAL · 2026</span>
+                            <span class="badge">CAPTAR</span>
+                            <span class="badge">RESERVAR</span>
+                            <span class="badge">GESTIONAR</span>
+                        </div>
+
+                        <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-gray-950 reveal-item">
+                            Landing + reservas online + gestión
+                        </h1>
+
+                        <p class="mt-8 text-lg sm:text-xl leading-relaxed text-gray-600 max-w-2xl reveal-item">
+                            Una solución simple para que tus clientes puedan reservar online y vos puedas administrar tu
+                            agenda desde un solo lugar.
+                        </p>
+
+                        <!-- Precios Inmediatos Visibles -->
+                        <div class="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl reveal-item">
+                            <div class="p-5 rounded-2xl bg-gray-50 border border-gray-200">
+                                <p class="text-xs uppercase tracking-wider text-gray-500 font-semibold mb-1">
+                                    Implementación</p>
+                                <div class="text-3xl font-bold text-gray-900">$400.000 <span
+                                        class="text-base font-normal text-gray-500">ARS</span></div>
+                                <p class="text-xs text-gray-500 mt-1">Pago único · Llave en mano</p>
+                            </div>
+                            <div class="p-5 rounded-2xl bg-gray-50 border border-gray-200">
+                                <p class="text-xs uppercase tracking-wider text-gray-500 font-semibold mb-1">Hosting +
+                                    soporte + mantenimiento</p>
+                                <div class="text-3xl font-bold text-gray-900">$65.000 <span
+                                        class="text-base font-normal text-gray-500">ARS / mes</span></div>
+                                <p class="text-xs text-gray-500 mt-1">Servicio mensual integral</p>
+                            </div>
+                        </div>
+
+                        <div class="mt-10 flex flex-wrap items-center gap-4 reveal-item">
+                            <a href="https://wa.me/5492613871088?text=Hola,%20quiero%20implementar%20el%20sistema%20de%20Landing%20+%20Reservas%20online%20+%20Gesti%C3%B3n"
+                                target="_blank" rel="noopener noreferrer"
+                                class="px-8 py-4 rounded-xl bg-black text-white font-semibold hover:bg-gray-800 transition shadow-lg hover:shadow-xl text-center">
+                                Quiero implementar el sistema
+                            </a>
+                            <a href="#inversion"
+                                class="px-8 py-4 rounded-xl border border-gray-300 text-gray-800 font-medium hover:border-black hover:bg-gray-50 transition text-center">
+                                Ver detalle de inversión
+                            </a>
+                        </div>
+
+                        <div class="mt-10 flex items-center gap-3 text-xs text-gray-500 reveal-item">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                            <span>Plazo estimado de entrega: 5 a 7 días hábiles</span>
+                        </div>
+                    </div>
+
+                    <!-- Hero Card -->
+                    <div class="hero-card reveal-item">
+                        <div class="flex items-center justify-between mb-8 pb-6 border-b border-gray-100">
+                            <div>
+                                <p class="text-xs uppercase tracking-[0.2em] text-gray-500 font-semibold">
+                                    Resumen Comercial
+                                </p>
+                                <h3 class="text-2xl sm:text-3xl font-semibold mt-1 text-gray-900">
+                                    Solución Integral
+                                </h3>
+                            </div>
+                            <div
+                                class="w-14 h-14 rounded-2xl bg-black text-white flex items-center justify-center text-2xl shadow-md">
+                                ⚡
+                            </div>
+                        </div>
+
+                        <div class="space-y-4 text-sm">
+                            <div class="flex justify-between items-center py-1">
+                                <span class="text-gray-500">Concepto Central</span>
+                                <strong class="text-gray-900 font-semibold">Captar → Reservar → Gestionar</strong>
+                            </div>
+                            <div class="flex justify-between items-center py-1">
+                                <span class="text-gray-500">Módulos Incluidos</span>
+                                <strong class="text-gray-900 font-semibold">Landing + Widget + Dashboard</strong>
+                            </div>
+                            <div class="flex justify-between items-center py-1">
+                                <span class="text-gray-500">Dashboard de Gestión</span>
+                                <span
+                                    class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">
+                                    Incluido sin costo extra
+                                </span>
+                            </div>
+                            <div class="flex justify-between items-center py-1">
+                                <span class="text-gray-500">Tiempo de Implementación</span>
+                                <strong class="text-gray-900 font-semibold">5 a 7 días hábiles</strong>
+                            </div>
+                            <div class="flex justify-between items-center py-1">
+                                <span class="text-gray-500">Inversión Implementación</span>
+                                <strong class="text-black text-base font-bold">$400.000 ARS</strong>
+                            </div>
+                            <div class="flex justify-between items-center py-1">
+                                <span class="text-gray-500">Mantenimiento Mensual</span>
+                                <strong class="text-gray-900 font-bold">$65.000 ARS / mes</strong>
+                            </div>
+                        </div>
+
+                        <div
+                            class="mt-6 p-4 rounded-xl bg-gray-50 border border-gray-200/80 text-xs text-gray-600 leading-relaxed">
+                            💡 <strong>Simple y transparente:</strong> El Dashboard forma parte integral del sistema de
+                            turnos para que administres tus reservas sin pagar costos adicionales.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================= -->
+        <!-- SECCIÓN 01 — EL PROBLEMA -->
+        <!-- ========================================= -->
+        <section id="problema" class="max-w-7xl mx-auto px-6 py-24 border-b border-gray-100">
+            <div class="max-w-3xl mb-14">
+                <p class="text-xs uppercase tracking-[0.25em] text-gray-500 font-semibold mb-3">
+                    El Problema
+                </p>
+                <h2 class="text-3xl sm:text-4xl md:text-5xl font-semibold text-gray-900">
+                    ¿Cuánto tiempo dedicás hoy a coordinar turnos?
+                </h2>
+                <p class="text-base sm:text-lg text-gray-600 mt-6 leading-relaxed">
+                    Cuando la gestión de turnos depende completamente de mensajes y coordinación manual, cada reserva
+                    requiere tiempo y atención.
+                </p>
             </div>
 
-            <div class="mt-8 pt-4">
-              <span class="text-xs text-gray-400">
-                * Puede sumarse en el momento de la contratación o activarse en una segunda etapa.
-              </span>
+            <!-- Diagrama de Flujo del Problema -->
+            <div class="bg-gray-50 rounded-3xl p-8 sm:p-12 border border-gray-200">
+                <p class="text-xs uppercase tracking-wider text-gray-500 font-semibold text-center mb-8">
+                    Circuito manual habitual paso a paso
+                </p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+
+                    <div
+                        class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm flex flex-col justify-between text-center relative">
+                        <div>
+                            <div
+                                class="w-8 h-8 rounded-full bg-red-100 text-red-700 text-xs font-bold flex items-center justify-center mx-auto mb-3">
+                                01</div>
+                            <h4 class="font-semibold text-sm text-gray-900">Consultas por WhatsApp</h4>
+                        </div>
+                        <span class="text-xs text-gray-400 mt-3 font-medium">Mensajes entrantes</span>
+                    </div>
+
+                    <div
+                        class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm flex flex-col justify-between text-center relative">
+                        <div>
+                            <div
+                                class="w-8 h-8 rounded-full bg-red-100 text-red-700 text-xs font-bold flex items-center justify-center mx-auto mb-3">
+                                02</div>
+                            <h4 class="font-semibold text-sm text-gray-900">Consultar disponibilidad</h4>
+                        </div>
+                        <span class="text-xs text-gray-400 mt-3 font-medium">Revisar agenda</span>
+                    </div>
+
+                    <div
+                        class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm flex flex-col justify-between text-center relative">
+                        <div>
+                            <div
+                                class="w-8 h-8 rounded-full bg-red-100 text-red-700 text-xs font-bold flex items-center justify-center mx-auto mb-3">
+                                03</div>
+                            <h4 class="font-semibold text-sm text-gray-900">Coordinar horario</h4>
+                        </div>
+                        <span class="text-xs text-gray-400 mt-3 font-medium">Ida y vuelta</span>
+                    </div>
+
+                    <div
+                        class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm flex flex-col justify-between text-center relative">
+                        <div>
+                            <div
+                                class="w-8 h-8 rounded-full bg-red-100 text-red-700 text-xs font-bold flex items-center justify-center mx-auto mb-3">
+                                04</div>
+                            <h4 class="font-semibold text-sm text-gray-900">Confirmar turno</h4>
+                        </div>
+                        <span class="text-xs text-gray-400 mt-3 font-medium">Anotar datos</span>
+                    </div>
+
+                    <div
+                        class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm flex flex-col justify-between text-center relative">
+                        <div>
+                            <div
+                                class="w-8 h-8 rounded-full bg-red-100 text-red-700 text-xs font-bold flex items-center justify-center mx-auto mb-3">
+                                05</div>
+                            <h4 class="font-semibold text-sm text-gray-900">Cambios / cancelaciones</h4>
+                        </div>
+                        <span class="text-xs text-gray-400 mt-3 font-medium">Reacomodar</span>
+                    </div>
+
+                    <div
+                        class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm flex flex-col justify-between text-center relative">
+                        <div>
+                            <div
+                                class="w-8 h-8 rounded-full bg-red-100 text-red-700 text-xs font-bold flex items-center justify-center mx-auto mb-3">
+                                06</div>
+                            <h4 class="font-semibold text-sm text-gray-900">Seguimiento manual</h4>
+                        </div>
+                        <span class="text-xs text-gray-400 mt-3 font-medium">Recordatorios</span>
+                    </div>
+
+                </div>
+
+                <div class="mt-8 text-center text-sm text-gray-600 max-w-2xl mx-auto">
+                    Este proceso disperso genera demoras en la respuesta, interrupciones continuas y pérdida de clientes
+                    por no poder reservar en el momento en que buscan el servicio.
+                </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </section>
+        </section>
+
+        <!-- ========================================= -->
+        <!-- SECCIÓN 02 — LA SOLUCIÓN -->
+        <!-- ========================================= -->
+        <section id="solucion" class="bg-white py-24 border-b border-gray-100">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="max-w-3xl mb-16">
+                    <p class="text-xs uppercase tracking-[0.25em] text-gray-500 font-semibold mb-3">
+                        La Solución
+                    </p>
+                    <h2 class="text-3xl sm:text-4xl md:text-5xl font-semibold text-gray-900">
+                        Un solo sistema para todo el proceso.
+                    </h2>
+                    <p class="text-base sm:text-lg text-gray-600 mt-6 leading-relaxed">
+                        Tu presencia online, las reservas y la gestión de tu agenda conectadas en una misma solución.
+                    </p>
+                </div>
+
+                <!-- 3 Componentes Clave: CAPTAR → RESERVAR → GESTIONAR -->
+                <div class="grid md:grid-cols-3 gap-8">
+
+                    <!-- Elemento 01: Landing Page -->
+                    <div
+                        class="border border-gray-200 rounded-3xl p-8 bg-white hover:shadow-lg transition flex flex-col justify-between">
+                        <div>
+                            <div
+                                class="w-12 h-12 rounded-2xl bg-black text-white flex items-center justify-center font-bold text-lg mb-6">
+                                01
+                            </div>
+                            <span
+                                class="text-xs uppercase tracking-widest text-emerald-700 font-bold bg-emerald-50 px-2.5 py-1 rounded-full">
+                                Captar
+                            </span>
+                            <h3 class="text-2xl font-bold mt-4 mb-2 text-gray-900">
+                                LANDING PAGE
+                            </h3>
+                            <p class="text-sm font-semibold text-gray-800 mb-4">
+                                "Tu espacio comercial en internet."
+                            </p>
+                            <p class="text-gray-600 text-sm leading-relaxed">
+                                Presenta tu negocio de manera profesional, muestra tus servicios, responde preguntas
+                                frecuentes y genera oportunidades de nuevos clientes las 24 horas.
+                            </p>
+                        </div>
+                        <div class="mt-8 pt-6 border-t border-gray-100 text-xs text-gray-500 font-medium">
+                            ✓ Imagen profesional y confiable
+                        </div>
+                    </div>
+
+                    <!-- Elemento 02: Widget de Turnos -->
+                    <div
+                        class="border border-gray-200 rounded-3xl p-8 bg-white hover:shadow-lg transition flex flex-col justify-between">
+                        <div>
+                            <div
+                                class="w-12 h-12 rounded-2xl bg-black text-white flex items-center justify-center font-bold text-lg mb-6">
+                                02
+                            </div>
+                            <span
+                                class="text-xs uppercase tracking-widest text-blue-700 font-bold bg-blue-50 px-2.5 py-1 rounded-full">
+                                Reservar
+                            </span>
+                            <h3 class="text-2xl font-bold mt-4 mb-2 text-gray-900">
+                                WIDGET DE TURNOS
+                            </h3>
+                            <p class="text-sm font-semibold text-gray-800 mb-4">
+                                "Tu cliente reserva cuando quiere."
+                            </p>
+                            <p class="text-gray-600 text-sm leading-relaxed">
+                                Permite que tus clientes elijan servicio, fecha y horario disponible en segundos,
+                                directamente desde su celular o computadora sin intermediarios.
+                            </p>
+                        </div>
+                        <div class="mt-8 pt-6 border-t border-gray-100 text-xs text-gray-500 font-medium">
+                            ✓ Reservas online directas y ágiles
+                        </div>
+                    </div>
+
+                    <!-- Elemento 03: Dashboard -->
+                    <div
+                        class="border border-gray-200 rounded-3xl p-8 bg-white hover:shadow-lg transition flex flex-col justify-between">
+                        <div>
+                            <div
+                                class="w-12 h-12 rounded-2xl bg-black text-white flex items-center justify-center font-bold text-lg mb-6">
+                                03
+                            </div>
+                            <span
+                                class="text-xs uppercase tracking-widest text-purple-700 font-bold bg-purple-50 px-2.5 py-1 rounded-full">
+                                Gestionar
+                            </span>
+                            <h3 class="text-2xl font-bold mt-4 mb-2 text-gray-900">
+                                DASHBOARD
+                            </h3>
+                            <p class="text-sm font-semibold text-gray-800 mb-4">
+                                "Vos administrás todo desde un solo lugar."
+                            </p>
+                            <p class="text-gray-600 text-sm leading-relaxed">
+                                Panel administrativo integrado para ver turnos solicitados, confirmar o cancelar citas,
+                                bloquear horarios y tener el control absoluto de tu agenda.
+                            </p>
+                        </div>
+                        <div class="mt-8 pt-6 border-t border-gray-100 text-xs text-gray-500 font-medium">
+                            ✓ Incluido dentro del sistema de turnos
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================= -->
+        <!-- SECCIÓN 03 — CÓMO FUNCIONA -->
+        <!-- ========================================= -->
+        <section id="como-funciona" class="bg-gray-50 py-24 border-b border-gray-200">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <p class="text-xs uppercase tracking-[0.25em] text-gray-500 font-semibold mb-3">
+                        Paso a Paso
+                    </p>
+                    <h2 class="text-3xl sm:text-4xl md:text-5xl font-semibold text-gray-900">
+                        ¿Cómo funciona?
+                    </h2>
+                    <p class="text-base sm:text-lg text-gray-600 mt-4 leading-relaxed">
+                        Un flujo ágil y sin fricciones desde que la persona conoce tus servicios hasta que queda
+                        agendada.
+                    </p>
+                </div>
+
+                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+                    <!-- Paso 01 -->
+                    <div class="bg-white rounded-3xl p-8 border border-gray-200 shadow-sm hover:shadow-md transition">
+                        <div
+                            class="w-12 h-12 rounded-2xl bg-black text-white flex items-center justify-center font-bold text-lg mb-6">
+                            01
+                        </div>
+                        <span class="text-xs uppercase tracking-widest text-gray-400 font-bold">Paso Inicial</span>
+                        <h3 class="text-xl font-bold mt-2 mb-2 text-gray-900">EL CLIENTE</h3>
+                        <p class="text-gray-600 text-sm leading-relaxed">
+                            "Ingresa a tu landing y conoce tus servicios."
+                        </p>
+                    </div>
+
+                    <!-- Paso 02 -->
+                    <div class="bg-white rounded-3xl p-8 border border-gray-200 shadow-sm hover:shadow-md transition">
+                        <div
+                            class="w-12 h-12 rounded-2xl bg-black text-white flex items-center justify-center font-bold text-lg mb-6">
+                            02
+                        </div>
+                        <span class="text-xs uppercase tracking-widest text-gray-400 font-bold">Elección Online</span>
+                        <h3 class="text-xl font-bold mt-2 mb-2 text-gray-900">RESERVA</h3>
+                        <p class="text-gray-600 text-sm leading-relaxed">
+                            "Elige el servicio, fecha y horario disponible."
+                        </p>
+                    </div>
+
+                    <!-- Paso 03 -->
+                    <div class="bg-white rounded-3xl p-8 border border-gray-200 shadow-sm hover:shadow-md transition">
+                        <div
+                            class="w-12 h-12 rounded-2xl bg-black text-white flex items-center justify-center font-bold text-lg mb-6">
+                            03
+                        </div>
+                        <span class="text-xs uppercase tracking-widest text-gray-400 font-bold">Automatización</span>
+                        <h3 class="text-xl font-bold mt-2 mb-2 text-gray-900">EL SISTEMA</h3>
+                        <p class="text-gray-600 text-sm leading-relaxed">
+                            "Registra la reserva."
+                        </p>
+                    </div>
+
+                    <!-- Paso 04 -->
+                    <div class="bg-white rounded-3xl p-8 border border-gray-200 shadow-sm hover:shadow-md transition">
+                        <div
+                            class="w-12 h-12 rounded-2xl bg-black text-white flex items-center justify-center font-bold text-lg mb-6">
+                            04
+                        </div>
+                        <span class="text-xs uppercase tracking-widest text-gray-400 font-bold">Control Total</span>
+                        <h3 class="text-xl font-bold mt-2 mb-2 text-gray-900">VOS</h3>
+                        <p class="text-gray-600 text-sm leading-relaxed">
+                            "La gestionás desde el Dashboard."
+                        </p>
+                    </div>
+
+                </div>
+
+                <!-- Mensaje final destacado -->
+                <div class="mt-14 text-center">
+                    <div class="inline-block bg-white px-8 py-5 rounded-2xl border border-gray-200 shadow-sm">
+                        <p class="text-lg sm:text-xl font-semibold text-gray-900 tracking-tight">
+                            ✨ "Simple para quien reserva. Simple para quien administra."
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================= -->
+        <!-- SECCIÓN 04 — TU LANDING -->
+        <!-- ========================================= -->
+        <section id="landing" class="max-w-7xl mx-auto px-6 py-24 border-b border-gray-100">
+            <div class="max-w-3xl mb-16">
+                <p class="text-xs uppercase tracking-[0.25em] text-gray-500 font-semibold mb-3">
+                    Presencia Comercial
+                </p>
+                <h2 class="text-3xl sm:text-4xl md:text-5xl font-semibold text-gray-900">
+                    Una landing pensada para convertir visitas en consultas.
+                </h2>
+                <p class="text-base sm:text-lg text-gray-600 mt-6 leading-relaxed">
+                    Diseñada específicamente para comunicar con claridad tu propuesta de valor, transmitir confianza y
+                    guiar a cada visitante a reservar o consultar.
+                </p>
+            </div>
+
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                <div class="p-6 rounded-2xl border border-gray-200 bg-white hover:border-gray-300 transition">
+                    <div class="text-2xl mb-3">🎯</div>
+                    <h4 class="font-bold text-base text-gray-900 mb-1">Hero</h4>
+                    <p class="text-xs text-gray-600 leading-relaxed">Presentación visual atractiva con mensaje principal
+                        claro y llamado a la acción inmediato.</p>
+                </div>
+
+                <div class="p-6 rounded-2xl border border-gray-200 bg-white hover:border-gray-300 transition">
+                    <div class="text-2xl mb-3">📋</div>
+                    <h4 class="font-bold text-base text-gray-900 mb-1">Servicios</h4>
+                    <p class="text-xs text-gray-600 leading-relaxed">Detalle completo de cada prestación, especialidad y
+                        modalidad de atención que ofrecés.</p>
+                </div>
+
+                <div class="p-6 rounded-2xl border border-gray-200 bg-white hover:border-gray-300 transition">
+                    <div class="text-2xl mb-3">⭐</div>
+                    <h4 class="font-bold text-base text-gray-900 mb-1">Beneficios</h4>
+                    <p class="text-xs text-gray-600 leading-relaxed">Diferenciales y razones por las cuales tus
+                        pacientes o clientes eligen tu propuesta.</p>
+                </div>
+
+                <div class="p-6 rounded-2xl border border-gray-200 bg-white hover:border-gray-300 transition">
+                    <div class="text-2xl mb-3">👨‍⚕️</div>
+                    <h4 class="font-bold text-base text-gray-900 mb-1">Información profesional</h4>
+                    <p class="text-xs text-gray-600 leading-relaxed">Trayectoria, credenciales y respaldo del equipo o
+                        profesional a cargo.</p>
+                </div>
+
+                <div class="p-6 rounded-2xl border border-gray-200 bg-white hover:border-gray-300 transition">
+                    <div class="text-2xl mb-3">💬</div>
+                    <h4 class="font-bold text-base text-gray-900 mb-1">Contacto</h4>
+                    <p class="text-xs text-gray-600 leading-relaxed">Canales directos de comunicación, botón de WhatsApp
+                        e información de consulta.</p>
+                </div>
+
+                <div class="p-6 rounded-2xl border border-gray-200 bg-white hover:border-gray-300 transition">
+                    <div class="text-2xl mb-3">📍</div>
+                    <h4 class="font-bold text-base text-gray-900 mb-1">Ubicación</h4>
+                    <p class="text-xs text-gray-600 leading-relaxed">Dirección, mapa interactivo de acceso y horarios de
+                        atención al público.</p>
+                </div>
+
+                <div class="p-6 rounded-2xl border border-gray-200 bg-white hover:border-gray-300 transition">
+                    <div class="text-2xl mb-3">❓</div>
+                    <h4 class="font-bold text-base text-gray-900 mb-1">FAQ</h4>
+                    <p class="text-xs text-gray-600 leading-relaxed">Sección de preguntas frecuentes para despejar dudas
+                        antes de reservar.</p>
+                </div>
+
+                <div class="p-6 rounded-2xl border border-gray-200 bg-white hover:border-gray-300 transition">
+                    <div class="text-2xl mb-3">🚀</div>
+                    <h4 class="font-bold text-base text-gray-900 mb-1">CTA (Llamados a la acción)</h4>
+                    <p class="text-xs text-gray-600 leading-relaxed">Botones estratégicos para facilitar la decisión de
+                        reserva en cada tramo de la página.</p>
+                </div>
+
+                <div class="p-6 rounded-2xl border border-gray-200 bg-white hover:border-gray-300 transition">
+                    <div class="text-2xl mb-3">📅</div>
+                    <h4 class="font-bold text-base text-gray-900 mb-1">Integración del widget</h4>
+                    <p class="text-xs text-gray-600 leading-relaxed">Módulo interactivo de reserva online integrado de
+                        forma nativa en la página.</p>
+                </div>
+
+                <div class="p-6 rounded-2xl border border-gray-200 bg-white hover:border-gray-300 transition">
+                    <div class="text-2xl mb-3">📱</div>
+                    <h4 class="font-bold text-base text-gray-900 mb-1">Responsive</h4>
+                    <p class="text-xs text-gray-600 leading-relaxed">Adaptación visual perfecta para teléfonos
+                        celulares, tablets y computadoras.</p>
+                </div>
+
+                <div
+                    class="p-6 rounded-2xl border border-gray-200 bg-white hover:border-gray-300 transition sm:col-span-2 lg:col-span-2">
+                    <div class="text-2xl mb-3">🔍</div>
+                    <h4 class="font-bold text-base text-gray-900 mb-1">SEO técnico inicial</h4>
+                    <p class="text-xs text-gray-600 leading-relaxed">Configuración de títulos, descripciones y
+                        estructura para facilitar que te encuentren en buscadores como Google.</p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ========================================= -->
+        <!-- SECCIÓN 05 — TU SISTEMA DE TURNOS -->
+        <!-- ========================================= -->
+        <section id="sistema" class="bg-gray-50 py-24 border-b border-gray-200">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="max-w-3xl mb-16">
+                    <p class="text-xs uppercase tracking-[0.25em] text-gray-500 font-semibold mb-3">
+                        El Sistema Completo
+                    </p>
+                    <h2 class="text-3xl sm:text-4xl md:text-5xl font-semibold text-gray-900">
+                        Reservas online + gestión administrativa
+                    </h2>
+                    <p class="text-base sm:text-lg text-gray-600 mt-6 leading-relaxed">
+                        El Widget permite que tus clientes soliciten sus turnos online. El Dashboard te permite
+                        administrar las reservas generadas.
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8">
+
+                    <!-- SUBSECCIÓN: Para tus clientes -->
+                    <div class="bg-white rounded-3xl p-8 sm:p-10 border border-gray-200 shadow-sm">
+                        <div class="flex items-center gap-3 mb-6">
+                            <div
+                                class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-lg">
+                                👥
+                            </div>
+                            <div>
+                                <h3 class="text-xl sm:text-2xl font-bold text-gray-900">Para tus clientes</h3>
+                                <p class="text-xs text-gray-500 font-medium">Experiencia ágil en el Widget de Turnos</p>
+                            </div>
+                        </div>
+
+                        <ul class="space-y-4 text-sm text-gray-700">
+                            <li class="flex items-start gap-3">
+                                <span
+                                    class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">✓</span>
+                                <span><strong>Reservar online:</strong> Solicitud directa de turnos en cualquier momento
+                                    del día.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span
+                                    class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">✓</span>
+                                <span><strong>Consultar disponibilidad:</strong> Visualización de fechas y horarios
+                                    disponibles.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span
+                                    class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">✓</span>
+                                <span><strong>Seleccionar servicio:</strong> Elección de la prestación o atención
+                                    deseada.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span
+                                    class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">✓</span>
+                                <span><strong>Seleccionar fecha y horario:</strong> Selección del momento que mejor se
+                                    adapte a su tiempo.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span
+                                    class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">✓</span>
+                                <span><strong>Confirmar solicitud:</strong> Envío de datos de contacto de forma clara y
+                                    sencilla.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span
+                                    class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">✓</span>
+                                <span><strong>Recibir estado de la reserva:</strong> Notificación clara del estado de su
+                                    turno.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- SUBSECCIÓN: Para vos -->
+                    <div class="bg-white rounded-3xl p-8 sm:p-10 border border-gray-200 shadow-sm">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold text-lg">
+                                    📊
+                                </div>
+                                <div>
+                                    <h3 class="text-xl sm:text-2xl font-bold text-gray-900">Para vos</h3>
+                                    <p class="text-xs text-gray-500 font-medium">Control total en el Dashboard de
+                                        Gestión</p>
+                                </div>
+                            </div>
+                            <span
+                                class="text-[11px] uppercase tracking-wider font-bold text-purple-700 bg-purple-50 px-2.5 py-1 rounded-full">
+                                Incluido
+                            </span>
+                        </div>
+
+                        <ul class="space-y-3.5 text-sm text-gray-700">
+                            <li class="flex items-start gap-3">
+                                <span
+                                    class="w-5 h-5 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">✓</span>
+                                <span><strong>Ver reservas:</strong> Registro ordenado y cronológico de todas las
+                                    solicitudes.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span
+                                    class="w-5 h-5 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">✓</span>
+                                <span><strong>Consultar próximos turnos:</strong> Vista rápida de la agenda de los
+                                    próximos días.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span
+                                    class="w-5 h-5 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">✓</span>
+                                <span><strong>Confirmar o cancelar:</strong> Acción directa sobre cada turno con un solo
+                                    clic.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span
+                                    class="w-5 h-5 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">✓</span>
+                                <span><strong>Gestionar estados:</strong> Seguimiento claro de turnos pendientes,
+                                    confirmados o cancelados.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span
+                                    class="w-5 h-5 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">✓</span>
+                                <span><strong>Bloquear horarios:</strong> Inhabilitar feriados, ausencias o descansos
+                                    fácilmente.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span
+                                    class="w-5 h-5 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">✓</span>
+                                <span><strong>Gestionar servicios:</strong> Actualizar prestaciones, nombres y
+                                    duraciones.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span
+                                    class="w-5 h-5 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">✓</span>
+                                <span><strong>Configurar disponibilidad:</strong> Definir franjas horarias y días de
+                                    atención.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span
+                                    class="w-5 h-5 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">✓</span>
+                                <span><strong>Consultar información de las reservas:</strong> Datos del cliente para su
+                                    atención.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================= -->
+        <!-- SECCIÓN 06 — BENEFICIOS -->
+        <!-- ========================================= -->
+        <section id="beneficios" class="max-w-7xl mx-auto px-6 py-24 border-b border-gray-100">
+            <div class="max-w-3xl mb-16">
+                <p class="text-xs uppercase tracking-[0.25em] text-gray-500 font-semibold mb-3">
+                    Beneficios Concretos
+                </p>
+                <h2 class="text-3xl sm:text-4xl md:text-5xl font-semibold text-gray-900">
+                    Más simple para tus clientes. Más control para vos.
+                </h2>
+                <p class="text-base sm:text-lg text-gray-600 mt-6 leading-relaxed">
+                    Beneficios reales y tangibles para el día a día de tu negocio, sin complicaciones innecesarias.
+                </p>
+            </div>
+
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                <div class="p-8 rounded-3xl border border-gray-200 bg-white hover:shadow-md transition">
+                    <div class="w-12 h-12 rounded-2xl bg-gray-100 flex items-center justify-center text-2xl mb-6">
+                        🌙
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Reservas 24/7</h3>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                        Tu negocio recibe solicitudes de turnos en cualquier momento, incluso fuera de tu horario
+                        habitual de atención.
+                    </p>
+                </div>
+
+                <div class="p-8 rounded-3xl border border-gray-200 bg-white hover:shadow-md transition">
+                    <div class="w-12 h-12 rounded-2xl bg-gray-100 flex items-center justify-center text-2xl mb-6">
+                        ⚡
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Menos coordinación manual</h3>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                        Reducí el intercambio constante de mensajes para consultar qué días y horarios tenés
+                        disponibles.
+                    </p>
+                </div>
+
+                <div class="p-8 rounded-3xl border border-gray-200 bg-white hover:shadow-md transition">
+                    <div class="w-12 h-12 rounded-2xl bg-gray-100 flex items-center justify-center text-2xl mb-6">
+                        📅
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Agenda centralizada</h3>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                        Todos tus turnos y solicitudes reunidos en un único calendario ordenado, evitando
+                        superposiciones.
+                    </p>
+                </div>
+
+                <div class="p-8 rounded-3xl border border-gray-200 bg-white hover:shadow-md transition">
+                    <div class="w-12 h-12 rounded-2xl bg-gray-100 flex items-center justify-center text-2xl mb-6">
+                        🎛️
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Gestión desde un solo lugar</h3>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                        Confirmá, cancelá, reprogramá o bloqueá franjas horarias con un par de clics desde tu panel.
+                    </p>
+                </div>
+
+                <div class="p-8 rounded-3xl border border-gray-200 bg-white hover:shadow-md transition">
+                    <div class="w-12 h-12 rounded-2xl bg-gray-100 flex items-center justify-center text-2xl mb-6">
+                        ✨
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Experiencia profesional</h3>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                        Brindás una imagen moderna y confiable que facilita la decisión de quienes buscan tus servicios.
+                    </p>
+                </div>
+
+                <div class="p-8 rounded-3xl border border-gray-200 bg-white hover:shadow-md transition">
+                    <div class="w-12 h-12 rounded-2xl bg-gray-100 flex items-center justify-center text-2xl mb-6">
+                        📱
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Acceso desde celular o computadora</h3>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                        Tanto tus clientes al reservar como vos al administrar pueden usar el sistema cómodamente desde
+                        cualquier dispositivo.
+                    </p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ========================================= -->
+        <!-- SECCIÓN 07 — PLATAFORMA / DETALLES TÉCNICOS -->
+        <!-- ========================================= -->
+        <section id="plataforma" class="bg-gray-900 text-white py-24">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="max-w-3xl mb-16">
+                    <p class="uppercase tracking-[0.2em] text-xs text-gray-400 mb-3 font-semibold">
+                        Infraestructura y Seguridad
+                    </p>
+                    <h2 class="text-3xl sm:text-4xl md:text-5xl font-semibold text-white">
+                        Todo lo necesario para funcionar online.
+                    </h2>
+                    <p class="text-base sm:text-lg text-gray-400 mt-6 leading-relaxed">
+                        Nos ocupamos de los aspectos técnicos para que tu solución esté activa, segura y disponible
+                        permanentemente.
+                    </p>
+                </div>
+
+                <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                    <div class="rounded-2xl border border-white/10 p-6 bg-white/[0.03]">
+                        <div class="text-2xl mb-3">☁️</div>
+                        <h3 class="font-bold text-base text-white mb-1">Hosting</h3>
+                        <p class="text-xs text-gray-400 leading-relaxed">Alojamiento de alta velocidad y estabilidad
+                            para que tu página y sistema estén siempre accesibles.</p>
+                    </div>
+
+                    <div class="rounded-2xl border border-white/10 p-6 bg-white/[0.03]">
+                        <div class="text-2xl mb-3">🔒</div>
+                        <h3 class="font-bold text-base text-white mb-1">SSL / Seguridad</h3>
+                        <p class="text-xs text-gray-400 leading-relaxed">Conexión cifrada HTTPS y protección de datos
+                            para resguardar la información de tus reservas.</p>
+                    </div>
+
+                    <div class="rounded-2xl border border-white/10 p-6 bg-white/[0.03]">
+                        <div class="text-2xl mb-3">📱</div>
+                        <h3 class="font-bold text-base text-white mb-1">Responsive</h3>
+                        <p class="text-xs text-gray-400 leading-relaxed">Visualización optimizada para cualquier tamaño
+                            de pantalla, sin desajustes.</p>
+                    </div>
+
+                    <div class="rounded-2xl border border-white/10 p-6 bg-white/[0.03]">
+                        <div class="text-2xl mb-3">⚡</div>
+                        <h3 class="font-bold text-base text-white mb-1">Performance</h3>
+                        <p class="text-xs text-gray-400 leading-relaxed">Carga rápida para que los visitantes no
+                            abandonen la página por demoras.</p>
+                    </div>
+
+                    <div class="rounded-2xl border border-white/10 p-6 bg-white/[0.03]">
+                        <div class="text-2xl mb-3">🛠️</div>
+                        <h3 class="font-bold text-base text-white mb-1">Mantenimiento</h3>
+                        <p class="text-xs text-gray-400 leading-relaxed">Actualizaciones preventivas para garantizar la
+                            continuidad operativa de todo el sistema.</p>
+                    </div>
+
+                    <div class="rounded-2xl border border-white/10 p-6 bg-white/[0.03]">
+                        <div class="text-2xl mb-3">💾</div>
+                        <h3 class="font-bold text-base text-white mb-1">Backups & Respaldo</h3>
+                        <p class="text-xs text-gray-400 leading-relaxed">Copias de seguridad programadas para proteger
+                            la información de tu configuración.</p>
+                    </div>
+
+                    <div class="rounded-2xl border border-white/10 p-6 bg-white/[0.03] sm:col-span-2 lg:col-span-3">
+                        <div class="text-2xl mb-3">💬</div>
+                        <h3 class="font-bold text-base text-white mb-1">Soporte técnico</h3>
+                        <p class="text-xs text-gray-400 leading-relaxed">Atención directa para resolver dudas, realizar
+                            ajustes menores y asistirte ante cualquier eventualidad.</p>
+                    </div>
+
+                </div>
+
+                <!-- Bloque secundario: Detalles técnicos -->
+                <div class="mt-12">
+                    <details class="border border-white/10 rounded-2xl p-6 bg-white/[0.02]">
+                        <summary
+                            class="text-xs uppercase tracking-widest text-gray-400 font-semibold cursor-pointer select-none flex justify-between items-center">
+                            <span>Detalles técnicos adicionales</span>
+                            <span class="text-sm font-bold text-gray-400">+</span>
+                        </summary>
+                        <div class="mt-4 pt-4 border-t border-white/10 grid sm:grid-cols-3 gap-4 text-xs text-gray-400">
+                            <div>
+                                <strong class="text-gray-300 block mb-1">Tecnología Front-End:</strong>
+                                HTML5 estándar, CSS moderno, JavaScript optimizado sin sobrecarga de dependencias.
+                            </div>
+                            <div>
+                                <strong class="text-gray-300 block mb-1">Red y Entrega:</strong>
+                                Distribución mediante CDN global para entrega de contenido de baja latencia.
+                            </div>
+                            <div>
+                                <strong class="text-gray-300 block mb-1">Protocolo Seguro:</strong>
+                                Certificados SSL/TLS automáticos con renovación continua.
+                            </div>
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================= -->
+        <!-- SECCIÓN 08 — IMPLEMENTACIÓN -->
+        <!-- ========================================= -->
+        <section id="implementacion" class="max-w-7xl mx-auto px-6 py-24 border-b border-gray-100">
+            <div class="max-w-3xl mb-16">
+                <p class="uppercase tracking-[0.2em] text-xs text-gray-500 mb-3 font-semibold">
+                    Metodología
+                </p>
+                <h2 class="text-3xl sm:text-4xl md:text-5xl font-semibold text-gray-900">
+                    Del diseño al lanzamiento.
+                </h2>
+                <p class="text-base sm:text-lg text-gray-600 mt-6 leading-relaxed">
+                    Un proceso claro y ordenado en tres etapas para poner tu solución online sin demoras.
+                </p>
+            </div>
+
+            <div class="space-y-6">
+
+                <!-- FASE 01 -->
+                <div class="border border-gray-200 rounded-3xl p-8 sm:p-10 bg-white hover:shadow-md transition">
+                    <div class="flex justify-between items-start flex-wrap gap-4">
+                        <div>
+                            <span
+                                class="text-xs uppercase tracking-widest text-emerald-700 font-bold bg-emerald-50 px-3 py-1 rounded-full">
+                                Fase 01
+                            </span>
+                            <h3 class="text-2xl sm:text-3xl font-bold mt-3 text-gray-900">
+                                DISEÑAMOS
+                            </h3>
+                        </div>
+                        <div class="bg-gray-100 px-4 py-2 rounded-xl text-right">
+                            <p class="text-[11px] text-gray-500 uppercase tracking-wider font-semibold">Etapa Inicial
+                            </p>
+                            <p class="text-sm font-bold text-gray-900">Estructura & Identidad</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 text-base mt-4 leading-relaxed">
+                        "Definimos la estructura de la landing y adaptamos la experiencia a tu negocio."
+                    </p>
+                    <ul class="grid sm:grid-cols-2 gap-2.5 mt-6 text-xs text-gray-600">
+                        <li class="flex items-center gap-2"><span>✓</span> Relevamiento de servicios y contenidos clave
+                        </li>
+                        <li class="flex items-center gap-2"><span>✓</span> Aplicación de tu logo, colores e identidad
+                            visual</li>
+                        <li class="flex items-center gap-2"><span>✓</span> Maquetación de secciones orientada a la
+                            conversión</li>
+                        <li class="flex items-center gap-2"><span>✓</span> Adaptación responsive para dispositivos
+                            móviles</li>
+                    </ul>
+                </div>
+
+                <!-- FASE 02 -->
+                <div class="border border-gray-200 rounded-3xl p-8 sm:p-10 bg-white hover:shadow-md transition">
+                    <div class="flex justify-between items-start flex-wrap gap-4">
+                        <div>
+                            <span
+                                class="text-xs uppercase tracking-widest text-blue-700 font-bold bg-blue-50 px-3 py-1 rounded-full">
+                                Fase 02
+                            </span>
+                            <h3 class="text-2xl sm:text-3xl font-bold mt-3 text-gray-900">
+                                CONFIGURAMOS
+                            </h3>
+                        </div>
+                        <div class="bg-gray-100 px-4 py-2 rounded-xl text-right">
+                            <p class="text-[11px] text-gray-500 uppercase tracking-wider font-semibold">Parametrización
+                            </p>
+                            <p class="text-sm font-bold text-gray-900">Turnos & Agenda</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 text-base mt-4 leading-relaxed">
+                        "Configuramos el sistema de reservas, servicios, horarios y Dashboard."
+                    </p>
+                    <ul class="grid sm:grid-cols-2 gap-2.5 mt-6 text-xs text-gray-600">
+                        <li class="flex items-center gap-2"><span>✓</span> Carga de servicios, duraciones y modalidades
+                        </li>
+                        <li class="flex items-center gap-2"><span>✓</span> Configuración de días de atención y franjas
+                            horarias</li>
+                        <li class="flex items-center gap-2"><span>✓</span> Integración del Widget de reservas en la
+                            Landing</li>
+                        <li class="flex items-center gap-2"><span>✓</span> Puesta a punto del Dashboard de
+                            administración</li>
+                    </ul>
+                </div>
+
+                <!-- FASE 03 -->
+                <div class="border border-gray-200 rounded-3xl p-8 sm:p-10 bg-white hover:shadow-md transition">
+                    <div class="flex justify-between items-start flex-wrap gap-4">
+                        <div>
+                            <span
+                                class="text-xs uppercase tracking-widest text-purple-700 font-bold bg-purple-50 px-3 py-1 rounded-full">
+                                Fase 03
+                            </span>
+                            <h3 class="text-2xl sm:text-3xl font-bold mt-3 text-gray-900">
+                                PUBLICAMOS
+                            </h3>
+                        </div>
+                        <div class="bg-gray-100 px-4 py-2 rounded-xl text-right">
+                            <p class="text-[11px] text-gray-500 uppercase tracking-wider font-semibold">Puesta en Marcha
+                            </p>
+                            <p class="text-sm font-bold text-gray-900">Lanzamiento Online</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 text-base mt-4 leading-relaxed">
+                        "Realizamos las pruebas finales y ponemos la solución online."
+                    </p>
+                    <ul class="grid sm:grid-cols-2 gap-2.5 mt-6 text-xs text-gray-600">
+                        <li class="flex items-center gap-2"><span>✓</span> Pruebas integrales de reserva y recepción de
+                            datos</li>
+                        <li class="flex items-center gap-2"><span>✓</span> Configuración de dominio y seguridad SSL</li>
+                        <li class="flex items-center gap-2"><span>✓</span> Guía de uso del Dashboard para tu equipo</li>
+                        <li class="flex items-center gap-2"><span>✓</span> Publicación definitiva a producción</li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <!-- Plazo Destacado -->
+            <div class="mt-10 p-6 rounded-2xl bg-gray-50 border border-gray-200 text-center">
+                <p class="text-sm sm:text-base font-semibold text-gray-900">
+                    ⏱️ <strong>Plazo:</strong> "Implementación estimada: 5–7 días hábiles para Landing + Widget, sujeto
+                    a disponibilidad de contenidos y accesos."
+                </p>
+            </div>
+        </section>
+
+        <!-- ========================================= -->
+        <!-- SECCIÓN 09 — INVERSIÓN -->
+        <!-- ========================================= -->
+        <section id="inversion" class="bg-black text-white py-24 border-t border-gray-800">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="max-w-3xl mb-16">
+                    <p class="uppercase tracking-[0.2em] text-xs text-gray-400 mb-3 font-semibold">
+                        Presupuesto Comercial
+                    </p>
+                    <h2 class="text-3xl sm:text-4xl md:text-5xl font-semibold text-white">
+                        Una solución completa, con una inversión clara.
+                    </h2>
+                    <p class="text-base sm:text-lg text-gray-400 mt-6 leading-relaxed">
+                        Costos transparentes de implementación y mantenimiento mensual para que sepas exactamente qué
+                        obtenés.
+                    </p>
+                </div>
+
+                <!-- Módulos de Implementación -->
+                <div class="grid md:grid-cols-2 gap-8 items-stretch mb-10">
+
+                    <!-- MÓDULO 01 -->
+                    <div
+                        class="rounded-3xl border border-white/15 p-8 sm:p-10 flex flex-col justify-between bg-white/[0.02]">
+                        <div>
+                            <span class="text-xs uppercase tracking-widest text-gray-400 font-semibold">
+                                MÓDULO 01
+                            </span>
+                            <h3 class="text-2xl sm:text-3xl font-bold mt-3 text-white">
+                                LANDING PAGE
+                            </h3>
+                            <p class="text-xs text-gray-400 mt-1">
+                                Tu espacio comercial en internet
+                            </p>
+
+                            <div class="mt-8 mb-6">
+                                <div class="text-4xl font-bold text-white tracking-tight">
+                                    $280.000 <span class="text-lg font-normal text-gray-400">ARS</span>
+                                </div>
+                                <span class="text-xs uppercase tracking-wider text-gray-400 font-medium">Pago
+                                    único</span>
+                            </div>
+
+                            <ul class="space-y-2.5 text-xs text-gray-300">
+                                <li class="flex items-center gap-2"><span>✓</span> Hero, Servicios, Beneficios y
+                                    Trayectoria</li>
+                                <li class="flex items-center gap-2"><span>✓</span> Formulario y botones de contacto /
+                                    WhatsApp</li>
+                                <li class="flex items-center gap-2"><span>✓</span> Ubicación y preguntas frecuentes
+                                    (FAQ)</li>
+                                <li class="flex items-center gap-2"><span>✓</span> Diseño 100% responsive y SEO inicial
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="mt-8 pt-6 border-t border-white/10 text-xs text-gray-400">
+                            Captación y presencia profesional
+                        </div>
+                    </div>
+
+                    <!-- MÓDULO 02 -->
+                    <div
+                        class="rounded-3xl border border-white/20 p-8 sm:p-10 flex flex-col justify-between bg-white/[0.04] relative">
+                        <div
+                            class="absolute top-6 right-6 bg-white text-black text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">
+                            Incluye Dashboard
+                        </div>
+                        <div>
+                            <span class="text-xs uppercase tracking-widest text-gray-400 font-semibold">
+                                MÓDULO 02
+                            </span>
+                            <h3 class="text-2xl sm:text-3xl font-bold mt-3 text-white">
+                                WIDGET DE TURNOS + DASHBOARD
+                            </h3>
+                            <p class="text-xs text-gray-400 mt-1">
+                                Reservas online autónomas y gestión administrativa
+                            </p>
+
+                            <div class="mt-8 mb-6">
+                                <div class="text-4xl font-bold text-white tracking-tight">
+                                    $120.000 <span class="text-lg font-normal text-gray-400">ARS</span>
+                                </div>
+                                <span class="text-xs uppercase tracking-wider text-gray-400 font-medium">Pago
+                                    único</span>
+                            </div>
+
+                            <ul class="space-y-2.5 text-xs text-gray-300">
+                                <li class="flex items-center gap-2"><span>✓</span> Widget interactivo de reserva online
+                                    24/7</li>
+                                <li class="flex items-center gap-2"><span>✓</span> Elección de servicios, fechas y
+                                    horarios</li>
+                                <li class="flex items-center gap-2"><span>✓</span> <strong>Dashboard de Gestión
+                                        integrado</strong></li>
+                                <li class="flex items-center gap-2"><span>✓</span> Confirmación, cancelación y bloqueo
+                                    de agenda</li>
+                            </ul>
+                        </div>
+
+                        <div class="mt-8 pt-6 border-t border-white/10">
+                            <span class="text-xs text-emerald-400 font-medium">
+                                ✓ El Dashboard está incluido dentro del sistema de turnos.
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Aclaración visual destacada -->
+                <div class="p-6 rounded-2xl bg-white/[0.05] border border-white/20 text-center mb-12">
+                    <p class="text-base sm:text-lg font-semibold text-white">
+                        ✨ <strong>Aclaración importante:</strong> "El Dashboard está incluido dentro del sistema de
+                        turnos. No tiene un costo adicional."
+                    </p>
+                </div>
+
+                <!-- Resumen de Inversión Total & Mantenimiento -->
+                <div class="grid md:grid-cols-2 gap-8">
+
+                    <!-- TOTAL IMPLEMENTACIÓN -->
+                    <div class="p-8 sm:p-10 rounded-3xl bg-white text-black shadow-2xl flex flex-col justify-between">
+                        <div>
+                            <span class="text-xs uppercase tracking-widest text-gray-500 font-bold">Inversión
+                                Total</span>
+                            <h3 class="text-2xl sm:text-3xl font-bold mt-2 text-gray-900">Implementación completa</h3>
+                            <p class="text-xs text-gray-500 mt-1">Landing Page + Widget de Turnos + Dashboard</p>
+
+                            <div class="my-6">
+                                <div class="text-5xl font-extrabold text-black tracking-tight">$400.000 <span
+                                        class="text-xl font-normal text-gray-600">ARS</span></div>
+                                <p class="text-xs text-gray-600 mt-1 font-medium">Pago único de implementación</p>
+                            </div>
+
+                            <div class="text-xs text-gray-600 space-y-1.5 pt-4 border-t border-gray-200">
+                                <div class="flex justify-between"><span>Landing Page:</span> <span
+                                        class="font-semibold">$280.000 ARS</span></div>
+                                <div class="flex justify-between"><span>Widget de Turnos + Dashboard:</span> <span
+                                        class="font-semibold">$120.000 ARS</span></div>
+                                <div class="flex justify-between font-bold text-gray-900 pt-1 border-t border-gray-100">
+                                    <span>Total Implementación:</span> <span>$400.000 ARS</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-8">
+                            <a href="https://wa.me/5492613871088?text=Hola,%20quiero%20implementar%20el%20sistema%20de%20Landing%20+%20Reservas%20online%20+%20Gesti%C3%B3n"
+                                target="_blank" rel="noopener noreferrer"
+                                class="w-full py-4 rounded-xl bg-black text-white font-semibold hover:bg-gray-800 transition block text-center text-sm shadow-md">
+                                Quiero implementar el sistema
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- MANTENIMIENTO -->
+                    <div
+                        class="p-8 sm:p-10 rounded-3xl border border-white/20 bg-white/[0.03] flex flex-col justify-between">
+                        <div>
+                            <span class="text-xs uppercase tracking-widest text-gray-400 font-bold">Servicio
+                                Continuo</span>
+                            <h3 class="text-2xl sm:text-3xl font-bold mt-2 text-white">Hosting + soporte + mantenimiento
+                            </h3>
+                            <p class="text-xs text-gray-400 mt-1">Tranquilidad técnica y soporte operativo</p>
+
+                            <div class="my-6">
+                                <div class="text-5xl font-extrabold text-white tracking-tight">$65.000 <span
+                                        class="text-xl font-normal text-gray-400">ARS / mes</span></div>
+                                <p class="text-xs text-gray-400 mt-1 font-medium">Incluye hosting + soporte +
+                                    mantenimiento</p>
+                            </div>
+
+                            <p class="text-xs text-gray-300 leading-relaxed pt-4 border-t border-white/10">
+                                Nos ocupamos del funcionamiento continuo, seguridad, hosting de alta disponibilidad y
+                                soporte técnico vía WhatsApp para resolver consultas o cambios menores.
+                            </p>
+                        </div>
+
+                        <div class="mt-8">
+                            <a href="#mantenimiento"
+                                class="w-full py-4 rounded-xl border border-white/30 text-white font-semibold hover:bg-white/10 transition block text-center text-sm">
+                                Ver detalle de qué incluye
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ========================================= -->
+        <!-- SECCIÓN 10 — QUÉ INCLUYE EL MANTENIMIENTO -->
+        <!-- ========================================= -->
+        <section id="mantenimiento" class="max-w-7xl mx-auto px-6 py-24 border-b border-gray-100">
+            <div class="max-w-3xl mb-16">
+                <p class="uppercase tracking-[0.2em] text-xs text-gray-500 mb-3 font-semibold">
+                    Abono Mensual
+                </p>
+                <h2 class="text-3xl sm:text-4xl md:text-5xl font-semibold text-gray-900">
+                    Nos ocupamos de que siga funcionando.
+                </h2>
+                <p class="text-base sm:text-lg text-gray-600 mt-6 leading-relaxed">
+                    El mantenimiento mensual te asegura soporte técnico, hosting confiable y tranquilidad en la
+                    operación diaria.
+                </p>
+            </div>
+
+            <div class="bg-gray-50 rounded-3xl p-8 sm:p-12 border border-gray-200">
+                <h3 class="text-xl font-bold text-gray-900 mb-6">El abono de $65.000 ARS/mes incluye:</h3>
+
+                <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-4 text-sm text-gray-700">
+
+                    <div class="p-4 bg-white rounded-2xl border border-gray-200 flex items-start gap-3">
+                        <span class="text-emerald-600 font-bold text-base">✓</span>
+                        <div>
+                            <strong class="text-gray-900 block">Hosting</strong>
+                            <span class="text-xs text-gray-500">Alojamiento de alta velocidad y disponibilidad.</span>
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-white rounded-2xl border border-gray-200 flex items-start gap-3">
+                        <span class="text-emerald-600 font-bold text-base">✓</span>
+                        <div>
+                            <strong class="text-gray-900 block">Soporte técnico</strong>
+                            <span class="text-xs text-gray-500">Asistencia técnica ante cualquier consulta o
+                                duda.</span>
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-white rounded-2xl border border-gray-200 flex items-start gap-3">
+                        <span class="text-emerald-600 font-bold text-base">✓</span>
+                        <div>
+                            <strong class="text-gray-900 block">Mantenimiento de Landing</strong>
+                            <span class="text-xs text-gray-500">Control operativo y actualizaciones de la
+                                landing.</span>
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-white rounded-2xl border border-gray-200 flex items-start gap-3">
+                        <span class="text-emerald-600 font-bold text-base">✓</span>
+                        <div>
+                            <strong class="text-gray-900 block">Mantenimiento de Widget</strong>
+                            <span class="text-xs text-gray-500">Revisión constante del flujo de reservas online.</span>
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-white rounded-2xl border border-gray-200 flex items-start gap-3">
+                        <span class="text-emerald-600 font-bold text-base">✓</span>
+                        <div>
+                            <strong class="text-gray-900 block">Mantenimiento de Dashboard</strong>
+                            <span class="text-xs text-gray-500">Operatividad del panel de administración.</span>
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-white rounded-2xl border border-gray-200 flex items-start gap-3">
+                        <span class="text-emerald-600 font-bold text-base">✓</span>
+                        <div>
+                            <strong class="text-gray-900 block">Corrección de errores</strong>
+                            <span class="text-xs text-gray-500">Resolución ágil de eventuales fallos técnicos.</span>
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-white rounded-2xl border border-gray-200 flex items-start gap-3">
+                        <span class="text-emerald-600 font-bold text-base">✓</span>
+                        <div>
+                            <strong class="text-gray-900 block">Monitoreo básico</strong>
+                            <span class="text-xs text-gray-500">Supervisión del estado de los servicios.</span>
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-white rounded-2xl border border-gray-200 flex items-start gap-3">
+                        <span class="text-emerald-600 font-bold text-base">✓</span>
+                        <div>
+                            <strong class="text-gray-900 block">Hasta 2 horas mensuales</strong>
+                            <span class="text-xs text-gray-500">Para cambios menores de texto o precios.</span>
+                        </div>
+                    </div>
+
+                    <div
+                        class="p-4 bg-white rounded-2xl border border-gray-200 flex items-start gap-3 sm:col-span-2 md:col-span-1">
+                        <span class="text-emerald-600 font-bold text-base">✓</span>
+                        <div>
+                            <strong class="text-gray-900 block">Soporte vía WhatsApp</strong>
+                            <span class="text-xs text-gray-500">Comunicación directa en horario laboral.</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="mt-6 text-xs text-gray-500">
+                    * El mantenimiento cubre el correcto funcionamiento y cambios menores. No contempla el desarrollo de
+                    nuevas funcionalidades importantes fuera del alcance contratado.
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================= -->
+        <!-- SECCIÓN 11 — OPCIONAL -->
+        <!-- ========================================= -->
+        <section id="opcional" class="bg-gray-50 py-24 border-b border-gray-200">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="max-w-4xl mx-auto bg-white rounded-3xl p-8 sm:p-12 border border-gray-200 shadow-sm">
+                    <div
+                        class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 pb-8 border-b border-gray-100">
+                        <div>
+                            <span
+                                class="text-xs uppercase tracking-widest font-bold text-amber-700 bg-amber-50 px-3 py-1 rounded-full">
+                                MÓDULO ADICIONAL OPCIONAL
+                            </span>
+                            <h3 class="text-3xl font-bold mt-3 text-gray-900">
+                                Analítica y conversión
+                            </h3>
+                            <p class="text-sm text-gray-500 mt-1">
+                                Medición detallada del comportamiento de los usuarios
+                            </p>
+                        </div>
+                        <div class="text-left md:text-right">
+                            <div class="text-3xl sm:text-4xl font-extrabold text-gray-900">
+                                $60.000 <span class="text-base font-normal text-gray-500">ARS</span>
+                            </div>
+                            <p class="text-xs text-gray-400 font-medium mt-0.5">Pago único · Opcional</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-8">
+                        <p class="text-sm font-semibold text-gray-800 mb-4">Incluye configuración completa de:</p>
+                        <div class="grid sm:grid-cols-2 gap-3 text-sm text-gray-600">
+                            <div class="flex items-center gap-2"><span>📊</span> <span>Google Analytics</span></div>
+                            <div class="flex items-center gap-2"><span>🖱️</span> <span>Clicks en reservar</span></div>
+                            <div class="flex items-center gap-2"><span>💬</span> <span>Clicks en WhatsApp</span></div>
+                            <div class="flex items-center gap-2"><span>⚙️</span> <span>Interacciones con widget</span>
+                            </div>
+                            <div class="flex items-center gap-2 sm:col-span-2"><span>🎯</span> <span>Eventos de
+                                    conversión</span></div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 pt-6 border-t border-gray-100 text-xs text-gray-500">
+                        Ideal si realizás o pensás realizar campañas publicitarias en redes sociales o Google Ads para
+                        medir el retorno de tu inversión.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================= -->
+        <!-- SECCIÓN 12 — FAQ (PREGUNTAS FRECUENTES) -->
+        <!-- ========================================= -->
+        <section id="faq" class="max-w-4xl mx-auto px-6 py-24 border-b border-gray-100">
+            <div class="text-center mb-16">
+                <p class="text-xs uppercase tracking-[0.25em] text-gray-500 font-semibold mb-3">
+                    Dudas Comunes
+                </p>
+                <h2 class="text-3xl sm:text-4xl md:text-5xl font-semibold text-gray-900">
+                    Preguntas Frecuentes
+                </h2>
+                <p class="text-base text-gray-600 mt-4">
+                    Respuestas claras y directas a las consultas más habituales.
+                </p>
+            </div>
+
+            <div class="space-y-4">
+
+                <!-- FAQ 1 -->
+                <details class="border border-gray-200 rounded-2xl p-6 sm:p-8 bg-white transition hover:border-gray-300"
+                    open>
+                    <summary
+                        class="font-semibold text-base sm:text-lg text-gray-900 cursor-pointer flex justify-between items-center select-none">
+                        <span>¿El Dashboard está incluido?</span>
+                        <span class="text-xl text-gray-400 font-bold ml-4">+</span>
+                    </summary>
+                    <p class="mt-4 text-gray-600 leading-relaxed text-sm">
+                        Sí. El Dashboard forma parte del sistema de Widget de Turnos y está incluido dentro del
+                        presupuesto de implementación.
+                    </p>
+                </details>
+
+                <!-- FAQ 2 -->
+                <details
+                    class="border border-gray-200 rounded-2xl p-6 sm:p-8 bg-white transition hover:border-gray-300">
+                    <summary
+                        class="font-semibold text-base sm:text-lg text-gray-900 cursor-pointer flex justify-between items-center select-none">
+                        <span>¿Qué incluye el mantenimiento mensual?</span>
+                        <span class="text-xl text-gray-400 font-bold ml-4">+</span>
+                    </summary>
+                    <p class="mt-4 text-gray-600 leading-relaxed text-sm">
+                        Hosting, soporte técnico, mantenimiento y corrección de errores de la solución.
+                    </p>
+                </details>
+
+                <!-- FAQ 3 -->
+                <details
+                    class="border border-gray-200 rounded-2xl p-6 sm:p-8 bg-white transition hover:border-gray-300">
+                    <summary
+                        class="font-semibold text-base sm:text-lg text-gray-900 cursor-pointer flex justify-between items-center select-none">
+                        <span>¿Puedo utilizar el Widget en mi web?</span>
+                        <span class="text-xl text-gray-400 font-bold ml-4">+</span>
+                    </summary>
+                    <p class="mt-4 text-gray-600 leading-relaxed text-sm">
+                        La propuesta contempla su integración dentro de la nueva landing.
+                    </p>
+                </details>
+
+                <!-- FAQ 4 -->
+                <details
+                    class="border border-gray-200 rounded-2xl p-6 sm:p-8 bg-white transition hover:border-gray-300">
+                    <summary
+                        class="font-semibold text-base sm:text-lg text-gray-900 cursor-pointer flex justify-between items-center select-none">
+                        <span>¿Qué necesito para comenzar?</span>
+                        <span class="text-xl text-gray-400 font-bold ml-4">+</span>
+                    </summary>
+                    <p class="mt-4 text-gray-600 leading-relaxed text-sm">
+                        Contenido, imágenes, identidad visual y los accesos necesarios para configurar el proyecto.
+                    </p>
+                </details>
+
+                <!-- FAQ 5 -->
+                <details
+                    class="border border-gray-200 rounded-2xl p-6 sm:p-8 bg-white transition hover:border-gray-300">
+                    <summary
+                        class="font-semibold text-base sm:text-lg text-gray-900 cursor-pointer flex justify-between items-center select-none">
+                        <span>¿Cuánto demora la implementación?</span>
+                        <span class="text-xl text-gray-400 font-bold ml-4">+</span>
+                    </summary>
+                    <p class="mt-4 text-gray-600 leading-relaxed text-sm">
+                        El plazo estimado es de 5–7 días hábiles, sujeto a disponibilidad de contenidos, accesos y
+                        definiciones necesarias.
+                    </p>
+                </details>
+
+            </div>
+        </section>
+
+        <!-- ========================================= -->
+        <!-- SECCIÓN 13 — CONDICIONES COMERCIALES -->
+        <!-- ========================================= -->
+        <section id="condiciones" class="max-w-4xl mx-auto px-6 py-16">
+            <div class="bg-gray-50 rounded-3xl p-8 sm:p-10 border border-gray-200">
+                <p class="text-xs uppercase tracking-[0.2em] text-gray-500 font-semibold mb-3 text-center">
+                    Términos de Contratación
+                </p>
+                <h3 class="text-2xl font-bold text-gray-900 text-center mb-8">
+                    Condiciones comerciales claras
+                </h3>
+
+                <div class="grid sm:grid-cols-3 gap-6 text-center">
+                    <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                        <div
+                            class="w-10 h-10 rounded-full bg-black text-white font-bold flex items-center justify-center mx-auto mb-3 text-sm">
+                            1</div>
+                        <h4 class="font-bold text-gray-900 mb-1">50%</h4>
+                        <p class="text-xs text-gray-600">Al comenzar el proyecto.</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                        <div
+                            class="w-10 h-10 rounded-full bg-black text-white font-bold flex items-center justify-center mx-auto mb-3 text-sm">
+                            2</div>
+                        <h4 class="font-bold text-gray-900 mb-1">50%</h4>
+                        <p class="text-xs text-gray-600">Contra entrega y publicación.</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                        <div
+                            class="w-10 h-10 rounded-full bg-black text-white font-bold flex items-center justify-center mx-auto mb-3 text-sm">
+                            3</div>
+                        <h4 class="font-bold text-gray-900 mb-1">Mantenimiento</h4>
+                        <p class="text-xs text-gray-600">Comienza una vez publicada la solución.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================= -->
+        <!-- SECCIÓN 14 — CTA FINAL -->
+        <!-- ========================================= -->
+        <section id="contacto" class="bg-black text-white py-28 border-t border-gray-800">
+            <div class="max-w-5xl mx-auto px-6 text-center">
+                <p class="uppercase tracking-[0.25em] text-xs text-gray-400 mb-6 font-semibold">
+                    Comencemos
+                </p>
+
+                <h2 class="text-4xl sm:text-5xl md:text-6xl font-semibold leading-tight max-w-4xl mx-auto text-white">
+                    ¿Listo para simplificar la gestión de tus turnos?
+                </h2>
+
+                <p class="max-w-2xl mx-auto mt-8 text-lg sm:text-xl text-gray-400 leading-relaxed">
+                    Una landing profesional para captar clientes, un sistema para recibir reservas y un Dashboard para
+                    gestionar tu agenda.
+                </p>
+
+                <div class="mt-12 flex flex-wrap justify-center gap-5">
+                    <a href="https://wa.me/5492613871088?text=Hola,%20quiero%20implementar%20el%20sistema%20de%20Landing%20+%20Reservas%20online%20+%20Gesti%C3%B3n"
+                        target="_blank" rel="noopener noreferrer"
+                        class="px-8 py-4 sm:py-5 rounded-2xl bg-white text-black font-semibold hover:bg-gray-200 transition shadow-xl hover:shadow-2xl text-base flex items-center gap-2">
+                        <span>💬</span> Quiero implementar el sistema
+                    </a>
+
+                    <a href="mailto:contacto@smartweb-saas.com?subject=Consulta%20sobre%20Propuesta%20Comercial%20Landing%20+%20Turnos"
+                        class="px-8 py-4 sm:py-5 rounded-2xl border border-white/30 hover:border-white hover:bg-white/10 transition text-base font-medium flex items-center gap-2 text-white">
+                        <span>✉️</span> Consultar propuesta
+                    </a>
+                </div>
+
+                <div class="mt-12 text-xs text-gray-500">
+                    Validez de la propuesta comercial: 15 días hábiles a partir de su emisión.
+                </div>
+            </div>
+        </section>
+    </main>
 
     <!-- ========================================= -->
-    <!-- 14. SECCIÓN "PREGUNTAS FRECUENTES" (FAQ) -->
+    <!-- FOOTER -->
     <!-- ========================================= -->
-    <section id="faq" class="max-w-5xl mx-auto px-6 py-24">
-      <div class="max-w-3xl mb-16">
-        <p class="uppercase tracking-[0.2em] text-sm text-gray-500 mb-4 font-semibold">
-          Preguntas Frecuentes
-        </p>
-        <h2 class="text-4xl sm:text-5xl font-semibold">
-          Todo lo que necesitas saber.
-        </h2>
-        <p class="text-gray-600 text-lg mt-4 leading-relaxed">
-          Respuestas claras a las dudas más comunes sobre la implementación, gestión y mantenimiento del sistema.
-        </p>
-      </div>
+    <footer class="bg-white border-t border-gray-200">
+        <div class="max-w-7xl mx-auto px-6 py-12">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="flex items-center gap-3">
+                    <div
+                        class="w-8 h-8 rounded-lg bg-black text-white flex items-center justify-center font-bold text-xs">
+                        T
+                    </div>
+                    <span class="text-sm font-semibold text-gray-900">
+                        Turnos
+                    </span>
+                </div>
 
-      <div class="space-y-5">
-        <!-- FAQ 1 -->
-        <details class="border border-gray-200 rounded-2xl p-6 sm:p-8 bg-white transition hover:border-gray-300">
-          <summary class="font-semibold text-lg text-gray-900 cursor-pointer flex justify-between items-center select-none">
-            <span>¿El Dashboard de Gestión tiene costo adicional?</span>
-            <span class="text-xl text-gray-400 font-bold ml-4">+</span>
-          </summary>
-          <p class="mt-4 text-gray-600 leading-relaxed text-sm">
-            <strong>No, en absoluto.</strong> El Dashboard forma parte integral del sistema del Widget de Turnos (Módulo 02). No se presupuesta como un módulo independiente ni tiene costos ocultos de licencia.
-          </p>
-        </details>
+                <div
+                    class="flex flex-wrap justify-center gap-6 text-xs uppercase tracking-wider text-gray-500 font-medium">
+                    <a href="#problema" class="hover:text-black transition">Problema</a>
+                    <a href="#solucion" class="hover:text-black transition">Solución</a>
+                    <a href="#como-funciona" class="hover:text-black transition">¿Cómo funciona?</a>
+                    <a href="#landing" class="hover:text-black transition">Landing</a>
+                    <a href="#sistema" class="hover:text-black transition">Sistema</a>
+                    <a href="#inversion" class="hover:text-black transition">Inversión</a>
+                    <a href="#faq" class="hover:text-black transition">FAQ</a>
+                    <a href="#contacto" class="hover:text-black transition">Contacto</a>
+                </div>
 
-        <!-- FAQ 2 -->
-        <details class="border border-gray-200 rounded-2xl p-6 sm:p-8 bg-white transition hover:border-gray-300">
-          <summary class="font-semibold text-lg text-gray-900 cursor-pointer flex justify-between items-center select-none">
-            <span>¿Cómo confirman los clientes su turno y reciben el recordatorio?</span>
-            <span class="text-xl text-gray-400 font-bold ml-4">+</span>
-          </summary>
-          <p class="mt-4 text-gray-600 leading-relaxed text-sm">
-            Al seleccionar el horario e ingresar sus datos en el Widget, el cliente visualiza la confirmación inmediata en pantalla y se registra el turno automáticamente en el Dashboard. Asimismo, se puede conectar un enlace directo de confirmación para WhatsApp.
-          </p>
-        </details>
+                <p class="text-xs text-gray-400">
+                    © 2026 Propuesta Comercial.
+                </p>
+            </div>
+        </div>
+    </footer>
 
-        <!-- FAQ 3 -->
-        <details class="border border-gray-200 rounded-2xl p-6 sm:p-8 bg-white transition hover:border-gray-300">
-          <summary class="font-semibold text-lg text-gray-900 cursor-pointer flex justify-between items-center select-none">
-            <span>¿Qué incluye exactamente el mantenimiento mensual de $65.000 ARS?</span>
-            <span class="text-xl text-gray-400 font-bold ml-4">+</span>
-          </summary>
-          <p class="mt-4 text-gray-600 leading-relaxed text-sm">
-            Cubre el alojamiento (hosting de alta velocidad), certificado de seguridad SSL, soporte técnico prioritario ante cualquier duda o incidencia, mantenimiento preventivo de la Landing, el Widget y el Dashboard, y hasta 2 horas mensuales para ajustes menores (como modificar textos, precios o imágenes).
-          </p>
-        </details>
-
-        <!-- FAQ 4 -->
-        <details class="border border-gray-200 rounded-2xl p-6 sm:p-8 bg-white transition hover:border-gray-300">
-          <summary class="font-semibold text-lg text-gray-900 cursor-pointer flex justify-between items-center select-none">
-            <span>¿Puedo contratar solo el Widget de Turnos si ya tengo un sitio web?</span>
-            <span class="text-xl text-gray-400 font-bold ml-4">+</span>
-          </summary>
-          <p class="mt-4 text-gray-600 leading-relaxed text-sm">
-            Sí. El Módulo 02 ($120.000 ARS) incluye el Widget de Turnos y su respectivo Dashboard de Gestión, y puede embeberse fácilmente en cualquier sitio web existente (WordPress, HTML, Shopify, Webflow, etc.) o compartirse mediante un enlace directo.
-          </p>
-        </details>
-
-        <!-- FAQ 5 -->
-        <details class="border border-gray-200 rounded-2xl p-6 sm:p-8 bg-white transition hover:border-gray-300">
-          <summary class="font-semibold text-lg text-gray-900 cursor-pointer flex justify-between items-center select-none">
-            <span>¿Cómo se modifican los horarios de atención, feriados o ausencias?</span>
-            <span class="text-xl text-gray-400 font-bold ml-4">+</span>
-          </summary>
-          <p class="mt-4 text-gray-600 leading-relaxed text-sm">
-            Desde el Dashboard de Gestión tienes control total para bloquear días, modificar franjas horarias por especialista o agregar nuevos servicios en cualquier momento, reflejándose en tiempo real en el Widget público.
-          </p>
-        </details>
-
-        <!-- FAQ 6 -->
-        <details class="border border-gray-200 rounded-2xl p-6 sm:p-8 bg-white transition hover:border-gray-300">
-          <summary class="font-semibold text-lg text-gray-900 cursor-pointer flex justify-between items-center select-none">
-            <span>¿Qué necesitamos para comenzar con el proyecto?</span>
-            <span class="text-xl text-gray-400 font-bold ml-4">+</span>
-          </summary>
-          <p class="mt-4 text-gray-600 leading-relaxed text-sm">
-            Solo requerimos el logo e identidad de tu negocio, el listado de servicios o especialidades con sus duraciones estimadas, y los horarios habituales de atención. Nosotros nos encargamos de todo el desarrollo, maquetación y puesta en marcha.
-          </p>
-        </details>
-      </div>
-    </section>
+    <!-- BOTÓN VOLVER ARRIBA -->
+    <button id="back-to-top"
+        class="fixed bottom-8 right-8 w-12 h-12 rounded-full bg-black text-white shadow-2xl opacity-0 pointer-events-none transition-all duration-300 flex items-center justify-center hover:-translate-y-1 z-40 text-lg font-bold"
+        aria-label="Volver arriba">
+        ↑
+    </button>
 
     <!-- ========================================= -->
-    <!-- 15. SECCIÓN "CTA / COMENCEMOS" -->
+    <!-- JAVASCRIPT / INTERACTIVIDAD -->
     <!-- ========================================= -->
-    <section id="contacto" class="bg-black text-white py-28 border-t border-gray-800">
-      <div class="max-w-5xl mx-auto px-6 text-center">
-        <p class="uppercase tracking-[0.25em] text-sm text-gray-400 mb-6 font-semibold">
-          Comencemos
-        </p>
-
-        <h2 class="text-4xl sm:text-5xl md:text-6xl font-semibold leading-tight max-w-4xl mx-auto">
-          Moderniza la captación y gestión de turnos de tu negocio.
-        </h2>
-
-        <p class="max-w-2xl mx-auto mt-8 text-lg sm:text-xl text-gray-400 leading-relaxed">
-          Implementemos una solución integral que trabaje por ti las 24 horas, maximizando tus reservas y liberando a tu equipo de tareas manuales.
-        </p>
-
-        <div class="mt-12 flex flex-wrap justify-center gap-5">
-          <a href="https://wa.me/5492613871088?text=Hola,%20quiero%20iniciar%20la%20implementaci%C3%B3n%20del%20sistema%20de%20Landing%20+%20Widget%20de%20Turnos%20+%20Dashboard"
-            target="_blank" rel="noopener noreferrer"
-            class="px-8 py-4 sm:py-5 rounded-2xl bg-white text-black font-semibold hover:bg-gray-200 transition shadow-xl hover:shadow-2xl text-base flex items-center gap-2">
-            <span>💬</span> Solicitar Reunión por WhatsApp
-          </a>
-
-          <a href="mailto:contacto@smartweb-saas.com?subject=Propuesta%20Landing%20+%20Widget%20de%20Turnos%20+%20Dashboard"
-            class="px-8 py-4 sm:py-5 rounded-2xl border border-white/30 hover:border-white hover:bg-white/10 transition text-base font-medium flex items-center gap-2">
-            <span>✉️</span> Solicitar Confirmación de Propuesta
-          </a>
-        </div>
-
-        <div class="mt-12 text-xs text-gray-500">
-          Validez de la propuesta comercial: 15 días hábiles a partir de su emisión.
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- ========================================= -->
-  <!-- 16. FOOTER -->
-  <!-- ========================================= -->
-  <footer class="bg-white border-t border-gray-200">
-    <div class="max-w-7xl mx-auto px-6 py-12">
-      <div class="flex flex-col md:flex-row justify-between items-center gap-6">
-        <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-lg bg-black text-white flex items-center justify-center font-bold text-xs">
-            LT
-          </div>
-          <span class="text-sm font-semibold text-gray-900">
-            Landing + Widget de Turnos + Dashboard
-          </span>
-        </div>
-
-        <div class="flex flex-wrap justify-center gap-6 text-xs uppercase tracking-wider text-gray-500 font-medium">
-          <a href="#hero" class="hover:text-black transition">Inicio</a>
-          <a href="#solucion" class="hover:text-black transition">Solución</a>
-          <a href="#modulos" class="hover:text-black transition">Plataforma</a>
-          <a href="#arquitectura" class="hover:text-black transition">Arquitectura</a>
-          <a href="#inversion" class="hover:text-black transition">Inversión</a>
-          <a href="#faq" class="hover:text-black transition">FAQ</a>
-          <a href="#contacto" class="hover:text-black transition">Contacto</a>
-        </div>
-
-        <p class="text-xs text-gray-400">
-          © 2026 Propuesta Comercial. Todos los derechos reservados.
-        </p>
-      </div>
-    </div>
-  </footer>
-
-  <!-- BOTÓN VOLVER ARRIBA -->
-  <button id="back-to-top"
-    class="fixed bottom-8 right-8 w-12 h-12 rounded-full bg-black text-white shadow-2xl opacity-0 pointer-events-none transition-all duration-300 flex items-center justify-center hover:-translate-y-1 z-40 text-lg font-bold"
-    aria-label="Volver arriba">
-    ↑
-  </button>
-
-  <!-- ========================================= -->
-  <!-- JAVASCRIPT / INTERACTIVIDAD -->
-  <!-- ========================================= -->
-  <script>
-    /* ===========================
-       MENU MOBILE
-       =========================== */
-    const menuBtn = document.getElementById("menu-btn");
-    const mobileMenu = document.getElementById("mobile-menu");
-
-    if (menuBtn && mobileMenu) {
-      menuBtn.addEventListener("click", () => {
-        mobileMenu.classList.toggle("hidden");
-      });
-    }
-
-    /* ===========================
-       SCROLL PROGRESS
-       =========================== */
-    const progress = document.getElementById("progress-bar");
-    window.addEventListener("scroll", () => {
-      if (progress) {
-        const h = document.documentElement.scrollHeight - window.innerHeight;
-        const s = h > 0 ? (window.scrollY / h) * 100 : 0;
-        progress.style.width = s + "%";
-      }
-    });
-
-    /* ===========================
-       BACK TO TOP
-       =========================== */
-    const topButton = document.getElementById("back-to-top");
-    window.addEventListener("scroll", () => {
-      if (topButton) {
-        if (window.scrollY > 400) {
-          topButton.classList.remove("opacity-0", "pointer-events-none");
-        } else {
-          topButton.classList.add("opacity-0", "pointer-events-none");
+    <script>
+        /* ===========================
+           MENU MOBILE
+           =========================== */
+        const menuBtn = document.getElementById("menu-btn");
+        const mobileMenu = document.getElementById("mobile-menu");
+        if (menuBtn && mobileMenu) {
+            menuBtn.addEventListener("click", () => {
+                mobileMenu.classList.toggle("hidden");
+            });
         }
-      }
-    });
 
-    if (topButton) {
-      topButton.addEventListener("click", () => {
-        window.scrollTo({
-          top: 0,
-          behavior: "smooth"
+        /* ===========================
+           SCROLL PROGRESS
+           =========================== */
+        const progress = document.getElementById("progress-bar");
+        window.addEventListener("scroll", () => {
+            if (progress) {
+                const h = document.documentElement.scrollHeight - window.innerHeight;
+                const s = h > 0 ? (window.scrollY / h) * 100 : 0;
+                progress.style.width = s + "%";
+            }
         });
-      });
-    }
 
-    /* ===========================
-       REVEAL ANIMATION
-       =========================== */
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.remove("opacity-0", "translate-y-8");
-          entry.target.classList.add("opacity-100", "translate-y-0");
+        /* ===========================
+           BACK TO TOP
+           =========================== */
+        const topButton = document.getElementById("back-to-top");
+        window.addEventListener("scroll", () => {
+            if (topButton) {
+                if (window.scrollY > 400) {
+                    topButton.classList.remove("opacity-0", "pointer-events-none");
+                } else {
+                    topButton.classList.add("opacity-0", "pointer-events-none");
+                }
+            }
+        });
+
+        if (topButton) {
+            topButton.addEventListener("click", () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: "smooth"
+                });
+            });
         }
-      });
-    }, {
-      threshold: 0.1
-    });
 
-    document.querySelectorAll(".reveal-item").forEach(item => {
-      observer.observe(item);
-    });
-
-    /* ===========================
-       ACTIVE NAVIGATION
-       =========================== */
-    const sections = document.querySelectorAll("section[id]");
-    const navLinks = document.querySelectorAll(".nav-link, .mobile-link");
-
-    window.addEventListener("scroll", () => {
-      let current = "";
-      sections.forEach(section => {
-        const top = section.offsetTop - 180;
-        if (window.scrollY >= top) {
-          current = section.getAttribute("id");
-        }
-      });
-
-      navLinks.forEach(link => {
-        link.classList.remove("text-white", "font-bold");
-        if (link.getAttribute("href") === "#" + current) {
-          link.classList.add("text-white", "font-bold");
-        }
-      });
-    });
-
-    /* ===========================
-       SMOOTH LINKS & CLOSE MOBILE
-       =========================== */
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener("click", function (e) {
-        const target = document.querySelector(this.getAttribute("href"));
-        if (target) {
-          e.preventDefault();
-          target.scrollIntoView({
-            behavior: "smooth"
-          });
-          if (mobileMenu) {
-            mobileMenu.classList.add("hidden");
-          }
-        }
-      });
-    });
-  </script>
+        /* ===========================
+           SMOOTH LINKS & CLOSE MOBILE
+           =========================== */
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener("click", function (e) {
+                const target = document.querySelector(this.getAttribute("href"));
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({
+                        behavior: "smooth"
+                    });
+                    if (mobileMenu) {
+                        mobileMenu.classList.add("hidden");
+                    }
+                }
+            });
+        });
+    </script>
 </body>
+
 </html>
