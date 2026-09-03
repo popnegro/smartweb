@@ -1,0 +1,1495 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Turnos Online — Centro Médico Palmares</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#132A26;
+    --forest:#1F4B43;
+    --forest-dark:#0F2E28;
+    --sage:#7FA694;
+    --sage-light:#E4EEE9;
+    --paper:#FBFAF6;
+    --paper-2:#F3F1E9;
+    --amber:#D9A441;
+    --amber-dark:#A97A24;
+    --coral:#C25B3F;
+    --line: #DAD6C8;
+    --white:#fff;
+    --radius:10px;
+    --shadow: 0 1px 2px rgba(19,42,38,.06);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.serif{font-family:'Fraunces',serif;}
+  .app{max-width:1180px;margin:0 auto;padding:0 28px 80px;}
+
+  /* Top bar */
+  .topbar{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:20px 28px;border-bottom:1px solid var(--line);
+    background:var(--white);
+  }
+  .brand{display:flex;align-items:center;gap:10px;}
+  .brand .mark{
+    width:34px;height:34px;border-radius:8px;background:var(--forest);
+    display:flex;align-items:center;justify-content:center;color:var(--white);
+    font-family:'Fraunces',serif;font-weight:600;font-size:16px;
+  }
+  .brand .name{font-family:'Fraunces',serif;font-size:17px;font-weight:600;line-height:1.1;}
+  .brand .tag{font-size:11px;color:#6B6656;letter-spacing:.02em;}
+  .view-toggle{display:flex;gap:2px;background:var(--paper-2);padding:3px;border-radius:8px;}
+  .view-toggle button{
+    border:none;background:transparent;padding:8px 16px;font-size:13px;font-weight:500;
+    border-radius:6px;cursor:pointer;color:#6B6656;font-family:'Inter',sans-serif;
+  }
+  .view-toggle button.active{background:var(--white);color:var(--forest);box-shadow:var(--shadow);}
+
+  /* Hero */
+  .hero{padding:44px 0 32px;border-bottom:1px solid var(--line);margin-bottom:36px;}
+  .hero h1{font-size:32px;font-weight:500;margin:0 0 8px;color:var(--forest-dark);line-height:1.15;}
+  .hero p{font-size:15px;color:#5B5749;max-width:520px;margin:0;line-height:1.55;}
+  .hero-stats{display:flex;gap:32px;margin-top:22px;}
+  .hero-stats div{border-left:2px solid var(--amber);padding-left:12px;}
+  .hero-stats .num{font-family:'Fraunces',serif;font-size:22px;color:var(--forest-dark);}
+  .hero-stats .lbl{font-size:12px;color:#8A8471;}
+
+  /* Stepper */
+  .stepper{display:flex;align-items:center;margin-bottom:34px;gap:0;}
+  .step{display:flex;align-items:center;gap:10px;flex:1;}
+  .step .dot{
+    width:28px;height:28px;border-radius:50%;background:var(--paper-2);color:#9B9683;
+    display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;
+    border:1px solid var(--line);flex-shrink:0;
+  }
+  .step .lbl{font-size:13px;color:#9B9683;font-weight:500;}
+  .step.done .dot{background:var(--forest);color:#fff;border-color:var(--forest);}
+  .step.done .lbl{color:var(--forest);}
+  .step.current .dot{background:var(--amber);color:var(--forest-dark);border-color:var(--amber);}
+  .step.current .lbl{color:var(--ink);}
+  .step-line{height:1px;background:var(--line);flex:1;margin:0 6px;}
+
+  .panel{display:none;}
+  .panel.active{display:block;}
+
+  /* Especialidad picker */
+  .search-row{display:flex;gap:10px;margin-bottom:22px;}
+  .search-row input{
+    flex:1;padding:12px 14px;border:1px solid var(--line);border-radius:var(--radius);
+    font-size:14px;font-family:'Inter',sans-serif;background:var(--white);
+  }
+  .search-row input:focus{outline:none;border-color:var(--forest);}
+  .tabs{display:flex;gap:8px;margin-bottom:20px;}
+  .tabs button{
+    padding:8px 16px;border-radius:20px;border:1px solid var(--line);background:var(--white);
+    font-size:13px;font-weight:500;cursor:pointer;color:#5B5749;font-family:'Inter',sans-serif;
+  }
+  .tabs button.active{background:var(--forest);color:#fff;border-color:var(--forest);}
+
+  .spec-grid{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;
+  }
+  .spec-card{
+    background:var(--white);border:1px solid var(--line);border-radius:var(--radius);
+    padding:14px 16px;cursor:pointer;transition:.12s;
+  }
+  .spec-card:hover{border-color:var(--sage);background:var(--sage-light);}
+  .spec-card.selected{border-color:var(--forest);background:var(--forest);color:#fff;}
+  .spec-card .name{font-size:14px;font-weight:600;}
+  .spec-card .count{font-size:11.5px;color:#8A8471;margin-top:2px;}
+  .spec-card.selected .count{color:#CFE0D8;}
+
+  /* Profesionales */
+  .prof-list{display:flex;flex-direction:column;gap:10px;}
+  .prof-card{
+    display:flex;align-items:center;gap:14px;background:var(--white);
+    border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;cursor:pointer;
+  }
+  .prof-card:hover{border-color:var(--sage);}
+  .prof-card.selected{border-color:var(--forest);background:var(--sage-light);}
+  .avatar{
+    width:42px;height:42px;border-radius:50%;background:var(--forest);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;
+    font-size:15px;flex-shrink:0;
+  }
+  .prof-info{flex:1;}
+  .prof-info .pname{font-size:14.5px;font-weight:600;}
+  .prof-info .pmeta{font-size:12.5px;color:#8A8471;margin-top:2px;}
+  .prof-badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;}
+  .badge{font-size:10.5px;padding:2px 8px;border-radius:10px;background:var(--paper-2);color:#6B6656;}
+  .prof-next{font-size:12px;color:var(--forest);font-weight:600;white-space:nowrap;}
+
+  /* Calendario */
+  .cal-wrap{display:flex;gap:24px;}
+  .cal-days{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;margin-bottom:18px;}
+  .day-chip{
+    min-width:64px;padding:10px 6px;border:1px solid var(--line);border-radius:var(--radius);
+    text-align:center;cursor:pointer;background:var(--white);flex-shrink:0;
+  }
+  .day-chip .dow{font-size:10.5px;color:#8A8471;text-transform:uppercase;letter-spacing:.04em;}
+  .day-chip .dnum{font-size:17px;font-weight:600;margin-top:2px;font-family:'Fraunces',serif;}
+  .day-chip.selected{background:var(--forest);border-color:var(--forest);color:#fff;}
+  .day-chip.selected .dow{color:#CFE0D8;}
+  .day-chip.disabled{opacity:.35;cursor:not-allowed;}
+
+  .slot-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:8px;}
+  .slot{
+    padding:9px 4px;text-align:center;border:1px solid var(--line);border-radius:8px;
+    font-size:13px;cursor:pointer;background:var(--white);font-weight:500;
+  }
+  .slot:hover{border-color:var(--forest);}
+  .slot.selected{background:var(--amber);border-color:var(--amber);color:var(--forest-dark);font-weight:600;}
+  .slot.taken{opacity:.3;cursor:not-allowed;text-decoration:line-through;}
+
+  /* Form */
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:640px;}
+  .form-grid .full{grid-column:1/-1;}
+  .fld label{display:block;font-size:12.5px;font-weight:600;color:#5B5749;margin-bottom:6px;}
+  .fld input,.fld select{
+    width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:8px;font-size:14px;
+    font-family:'Inter',sans-serif;background:var(--white);
+  }
+  .fld input:focus,.fld select:focus{outline:none;border-color:var(--forest);}
+  .fld .err{font-size:12px;color:var(--coral);margin-top:4px;display:none;}
+  .fld.has-err input,.fld.has-err select{border-color:var(--coral);}
+  .fld.has-err .err{display:block;}
+
+  /* Summary card */
+  .summary{
+    background:var(--white);border:1px solid var(--line);border-radius:12px;padding:18px 20px;
+    margin-bottom:24px;
+  }
+  .summary .row{display:flex;justify-content:space-between;padding:7px 0;font-size:13.5px;border-bottom:1px solid var(--paper-2);}
+  .summary .row:last-child{border:none;}
+  .summary .row span:first-child{color:#8A8471;}
+  .summary .row span:last-child{font-weight:600;text-align:right;}
+
+  /* Buttons */
+  .btn-row{display:flex;justify-content:space-between;margin-top:28px;}
+  .btn{
+    padding:12px 22px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;
+    border:1px solid var(--line);background:var(--white);color:var(--ink);font-family:'Inter',sans-serif;
+  }
+  .btn.primary{background:var(--forest);color:#fff;border-color:var(--forest);}
+  .btn.primary:hover{background:var(--forest-dark);}
+  .btn:disabled{opacity:.4;cursor:not-allowed;}
+  .btn.ghost{border-color:transparent;color:#8A8471;}
+
+  /* Confirmation */
+  .confirm{text-align:center;padding:50px 20px;}
+  .confirm .check{
+    width:64px;height:64px;border-radius:50%;background:var(--sage-light);color:var(--forest);
+    display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:28px;
+  }
+  .confirm h2{font-size:24px;margin:0 0 8px;}
+  .confirm p{color:#5B5749;font-size:14px;max-width:400px;margin:0 auto 24px;}
+  .confirm-card{
+    max-width:380px;margin:0 auto;background:var(--white);border:1px solid var(--line);
+    border-radius:12px;padding:20px;text-align:left;
+  }
+  .confirm-actions{display:flex;gap:10px;justify-content:center;margin-top:24px;}
+
+  /* Admin panel */
+  .admin-grid{display:grid;grid-template-columns:220px 1fr;gap:24px;}
+  .admin-nav{display:flex;flex-direction:column;gap:4px;}
+  .admin-nav button{
+    text-align:left;padding:10px 12px;border-radius:8px;border:none;background:transparent;
+    font-size:13.5px;font-weight:500;color:#5B5749;cursor:pointer;font-family:'Inter',sans-serif;
+  }
+  .admin-nav button.active{background:var(--sage-light);color:var(--forest-dark);font-weight:600;}
+  .admin-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px;}
+  .metric{background:var(--white);border:1px solid var(--line);border-radius:10px;padding:16px;}
+  .metric .mnum{font-family:'Fraunces',serif;font-size:26px;color:var(--forest-dark);}
+  .metric .mlbl{font-size:12px;color:#8A8471;margin-top:4px;}
+  table.agenda{width:100%;border-collapse:collapse;background:var(--white);border:1px solid var(--line);border-radius:10px;overflow:hidden;}
+  table.agenda th{text-align:left;font-size:11.5px;color:#8A8471;text-transform:uppercase;letter-spacing:.03em;padding:10px 14px;background:var(--paper-2);}
+  table.agenda td{padding:11px 14px;font-size:13.5px;border-top:1px solid var(--paper-2);}
+  .status-pill{font-size:11px;padding:3px 9px;border-radius:10px;font-weight:600;}
+  .status-pill.ok{background:#E4EEE9;color:var(--forest);}
+  .status-pill.pend{background:#FBF0DA;color:var(--amber-dark);}
+  .status-pill.cancel{background:#F7E7E2;color:var(--coral);}
+
+  .footnote{font-size:12px;color:#9B9683;text-align:center;margin-top:40px;line-height:1.6;}
+  .footnote b{color:#6B6656;}
+
+  /* Admin panes */
+  .admin-pane{display:none;}
+  .admin-pane.active{display:block;}
+  .admin-toolbar{display:flex;gap:10px;margin-bottom:14px;}
+  .admin-toolbar input,.admin-toolbar select{
+    padding:10px 12px;border:1px solid var(--line);border-radius:8px;font-size:13.5px;
+    font-family:'Inter',sans-serif;background:var(--white);
+  }
+  .admin-toolbar input{flex:1;}
+  .btn.sm{padding:9px 14px;font-size:13px;white-space:nowrap;}
+  .row-action{
+    border:none;background:transparent;cursor:pointer;font-size:12px;font-weight:600;
+    color:var(--forest);font-family:'Inter',sans-serif;padding:4px 8px;
+  }
+  .row-action.danger{color:var(--coral);}
+  .toggle-pill{
+    border:none;padding:3px 10px;border-radius:10px;font-size:11px;font-weight:600;cursor:pointer;
+    font-family:'Inter',sans-serif;
+  }
+  .toggle-pill.active-y{background:#E4EEE9;color:var(--forest);}
+  .toggle-pill.active-n{background:#F3EFE6;color:#8A8471;}
+  .block-form{
+    display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr auto;gap:12px;align-items:end;
+    background:var(--white);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:20px;
+  }
+  .block-form .fld label{margin-bottom:5px;}
+  .block-form .fld input,.block-form .fld select{padding:9px 10px;font-size:13px;}
+  .bar-row{display:flex;align-items:center;gap:12px;margin-bottom:9px;}
+  .bar-row .bar-lbl{width:170px;font-size:12.5px;color:#5B5749;flex-shrink:0;}
+  .bar-row .bar-track{flex:1;height:16px;background:var(--paper-2);border-radius:4px;overflow:hidden;}
+  .bar-row .bar-fill{height:100%;background:var(--forest);border-radius:4px;}
+  .bar-row .bar-val{width:38px;text-align:right;font-size:12px;font-weight:600;color:#5B5749;flex-shrink:0;}
+
+  .row-actions{display:flex;gap:6px;}
+  .row-action{border-radius:6px;border:1px solid var(--line);}
+  .row-action:hover{background:var(--paper-2);}
+
+  /* Modal */
+  .modal-overlay{
+    display:none;position:fixed;inset:0;background:rgba(19,42,38,.45);
+    align-items:center;justify-content:center;z-index:100;padding:20px;
+  }
+  .modal-overlay.open{display:flex;}
+  .modal-box{
+    background:var(--white);border-radius:14px;max-width:440px;width:100%;
+    padding:22px 24px;max-height:88vh;overflow-y:auto;
+  }
+  .modal-box h3{font-size:17px;margin:0 0 4px;}
+  .modal-sub{font-size:12.5px;color:#8A8471;margin:0 0 16px;}
+  .wa-tabs{display:flex;gap:6px;margin-bottom:14px;}
+  .wa-tabs button{
+    padding:7px 13px;border-radius:16px;border:1px solid var(--line);background:var(--white);
+    font-size:12.5px;font-weight:500;cursor:pointer;color:#5B5749;font-family:'Inter',sans-serif;
+  }
+  .wa-tabs button.active{background:var(--forest);color:#fff;border-color:var(--forest);}
+  .wa-preview{
+    background:#E7F5EC;border-radius:10px;padding:14px 16px;font-size:13.5px;line-height:1.55;
+    white-space:pre-wrap;margin-bottom:14px;border:1px solid #CFE6D8;
+  }
+  .wa-preview .wa-tail{font-size:10.5px;color:#8A8471;text-align:right;margin-top:8px;}
+  .modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:6px;}
+  .modal-head{display:flex;justify-content:space-between;align-items:flex-start;}
+  .modal-head button{border:none;background:transparent;font-size:18px;cursor:pointer;color:#8A8471;line-height:1;padding:2px 4px;}
+  .reagendar-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
+  .wa-sent-note{font-size:12px;color:var(--forest);font-weight:600;margin-top:10px;display:none;}
+
+  .hero-actions{display:flex;gap:10px;margin-top:20px;}
+  .empty-state{
+    text-align:center;padding:32px 16px;color:#8A8471;font-size:13.5px;
+    background:var(--paper-2);border-radius:var(--radius);grid-column:1/-1;
+  }
+  .empty-state b{color:#5B5749;}
+  .lookup-row{display:flex;gap:10px;margin-bottom:16px;}
+  .lookup-row input{flex:1;padding:11px 12px;border:1px solid var(--line);border-radius:8px;font-size:14px;font-family:'Inter',sans-serif;}
+  .lookup-result{background:var(--paper-2);border-radius:10px;padding:14px 16px;margin-bottom:14px;}
+  .lookup-empty{font-size:13px;color:#8A8471;text-align:center;padding:20px 0;}
+  .informes-links{display:flex;flex-direction:column;gap:10px;}
+  .informes-links a{
+    display:flex;justify-content:space-between;align-items:center;padding:13px 16px;
+    border:1px solid var(--line);border-radius:10px;text-decoration:none;color:var(--ink);
+    font-size:13.5px;font-weight:600;
+  }
+  .informes-links a span.arrow{color:#8A8471;font-weight:400;}
+  .informes-links a:hover{border-color:var(--forest);}
+
+  @media (max-width: 760px){
+    .app{padding:0 16px 60px;}
+    .topbar{padding:16px;flex-wrap:wrap;gap:10px;}
+    .hero-stats{flex-wrap:wrap;gap:18px;}
+    .hero-actions{flex-direction:column;}
+    .stepper .lbl{display:none;}
+    .form-grid{grid-template-columns:1fr;}
+    .admin-grid{grid-template-columns:1fr;}
+    .admin-nav{flex-direction:row;overflow-x:auto;gap:6px;}
+    .admin-nav button{white-space:nowrap;}
+    .admin-metrics{grid-template-columns:repeat(2,1fr) !important;}
+    .block-form{grid-template-columns:1fr;}
+    .reagendar-grid{grid-template-columns:1fr;}
+    .row-actions{flex-direction:column;}
+    .bar-row .bar-lbl{width:110px;font-size:11.5px;}
+    .modal-box{padding:18px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <div class="mark">CP</div>
+    <div>
+      <div class="name">Centro Médico Palmares</div>
+      <div class="tag">Sistema de turnos — Demo</div>
+    </div>
+  </div>
+  <div class="view-toggle">
+    <button id="btn-paciente" class="active">Vista paciente</button>
+    <button id="btn-admin" style="display:none;">Vista administración</button>
+  </div>
+</div>
+
+<div class="app">
+
+  <!-- ================= VISTA PACIENTE ================= -->
+  <div id="view-paciente">
+    <div class="hero">
+      <h1>Reservá tu turno</h1>
+      <p>Elegí especialidad, profesional y horario. Confirmación inmediata por email y recordatorio 24hs antes.</p>
+      <div class="hero-stats">
+        <div><div class="num">190+</div><div class="lbl">Profesionales</div></div>
+        <div><div class="num">40+</div><div class="lbl">Especialidades</div></div>
+        <div><div class="num">25+</div><div class="lbl">Obras sociales</div></div>
+      </div>
+      <div class="hero-actions">
+        <button class="btn sm" id="btn-cancelar-turno">Cancelar o reagendar un turno</button>
+        <button class="btn sm" id="btn-ver-informes">Ver resultados / informes</button>
+      </div>
+    </div>
+
+    <div class="stepper" id="stepper"></div>
+
+    <!-- Paso 1: especialidad -->
+    <div class="panel active" id="panel-1">
+      <div class="search-row">
+        <input type="text" id="spec-search" placeholder="Buscar especialidad, ej. Cardiología">
+      </div>
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="adultos">Adultos</button>
+        <button class="tab-btn" data-tab="pediatria">Niños y adolescentes</button>
+        <button class="tab-btn" data-tab="servicios">Diagnóstico y laboratorio</button>
+      </div>
+      <div class="spec-grid" id="spec-grid"></div>
+      <div class="btn-row">
+        <span></span>
+        <button class="btn primary" id="to-step2" disabled>Continuar</button>
+      </div>
+    </div>
+
+    <!-- Paso 2: profesional -->
+    <div class="panel" id="panel-2">
+      <div class="prof-list" id="prof-list"></div>
+      <div class="btn-row">
+        <button class="btn ghost" data-back="1">Atrás</button>
+        <button class="btn primary" id="to-step3" disabled>Continuar</button>
+      </div>
+    </div>
+
+    <!-- Paso 3: fecha y hora -->
+    <div class="panel" id="panel-3">
+      <h3 class="serif" style="font-size:16px;margin:0 0 14px;">Elegí día</h3>
+      <div class="cal-days" id="cal-days"></div>
+      <h3 class="serif" style="font-size:16px;margin:0 0 14px;">Horarios disponibles</h3>
+      <div id="slot-groups">
+        <div id="slot-group-am" style="margin-bottom:18px;">
+          <div style="font-size:12.5px;font-weight:600;color:#8A8471;text-transform:uppercase;letter-spacing:.03em;margin-bottom:8px;">Mañana</div>
+          <div class="slot-grid" id="slot-grid-am"></div>
+        </div>
+        <div id="slot-group-pm">
+          <div style="font-size:12.5px;font-weight:600;color:#8A8471;text-transform:uppercase;letter-spacing:.03em;margin-bottom:8px;">Tarde</div>
+          <div class="slot-grid" id="slot-grid-pm"></div>
+        </div>
+        <div id="slot-empty" style="display:none;"></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn ghost" data-back="2">Atrás</button>
+        <button class="btn primary" id="to-step4" disabled>Continuar</button>
+      </div>
+    </div>
+
+    <!-- Paso 4: datos del paciente -->
+    <div class="panel" id="panel-4">
+      <div class="summary" id="summary-box"></div>
+      <div class="form-grid">
+        <div class="fld"><label>Nombre completo</label><input type="text" id="f-nombre" placeholder="Nombre y apellido"><div class="err">Ingresá tu nombre completo</div></div>
+        <div class="fld"><label>DNI</label><input type="text" id="f-dni" placeholder="Sin puntos"><div class="err">Ingresá un DNI válido</div></div>
+        <div class="fld"><label>Email</label><input type="email" id="f-email" placeholder="nombre@correo.com"><div class="err">Ingresá un email válido</div></div>
+        <div class="fld"><label>Teléfono</label><input type="text" id="f-tel" placeholder="+54 9 261..."><div class="err">Ingresá un teléfono</div></div>
+        <div class="fld full" id="fld-edad" style="display:none;"><label>Edad</label><input type="number" id="f-edad" placeholder="Años"><div class="err">El chequeo deportivo es a partir de los 15 años</div></div>
+        <div class="fld full"><label>Obra social / prepaga</label>
+          <select id="f-os">
+            <option value="">Particular</option>
+            <option>OSDE</option><option>Swiss Medical</option><option>Galeno</option>
+            <option>PAMI</option><option>OSEP</option><option>Federada Salud</option>
+            <option>Otra (indicar en observaciones)</option>
+          </select>
+        </div>
+        <div class="fld full" id="fld-consent">
+          <label style="display:flex;align-items:flex-start;gap:8px;font-weight:500;">
+            <input type="checkbox" id="f-consent" style="width:auto;margin-top:2px;">
+            <span>Acepto el tratamiento de mis datos personales conforme a la Ley 25.326 para la gestión de este turno.</span>
+          </label>
+          <div class="err">Necesitamos tu consentimiento para poder reservar el turno</div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn ghost" data-back="3">Atrás</button>
+        <button class="btn primary" id="to-step5">Confirmar turno</button>
+      </div>
+    </div>
+
+    <!-- Paso 5: confirmación -->
+    <div class="panel" id="panel-5">
+      <div class="confirm">
+        <div class="check"><i>✓</i></div>
+        <h2 class="serif">Turno confirmado</h2>
+        <p>Te enviamos la confirmación por email. Vas a recibir un recordatorio 24hs antes del turno.</p>
+        <div class="confirm-card" id="confirm-card"></div>
+        <div class="confirm-actions">
+          <button class="btn" id="new-booking">Reservar otro turno</button>
+          <button class="btn primary" id="btn-add-ics">Agregar a mi calendario</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= VISTA ADMIN ================= -->
+  <div id="view-admin" style="display:none;">
+    <div class="hero" style="padding-top:32px;">
+      <h1 style="font-size:26px;">Panel de administración</h1>
+      <p>Agenda, profesionales y disponibilidad. Pensado para que recepción lo gestione sin soporte técnico.</p>
+    </div>
+    <div class="admin-metrics">
+      <div class="metric"><div class="mnum" id="m-hoy">0</div><div class="mlbl">Turnos hoy</div></div>
+      <div class="metric"><div class="mnum">190</div><div class="mlbl">Profesionales activos</div></div>
+      <div class="metric"><div class="mnum">40</div><div class="mlbl">Especialidades</div></div>
+      <div class="metric"><div class="mnum">6.4%</div><div class="mlbl">Ausentismo (30d)</div></div>
+    </div>
+    <div class="admin-grid">
+      <div class="admin-nav" id="admin-nav">
+        <button data-admin="agenda" class="active">Agenda del día</button>
+        <button data-admin="profesionales">Profesionales</button>
+        <button data-admin="especialidades">Especialidades</button>
+        <button data-admin="obrassociales">Obras sociales</button>
+        <button data-admin="bloqueos">Bloqueos y licencias</button>
+        <button data-admin="reportes">Reportes</button>
+      </div>
+      <div>
+
+        <!-- Agenda -->
+        <div class="admin-pane active" id="admin-agenda">
+          <div class="admin-toolbar">
+            <input type="text" id="agenda-filter" placeholder="Buscar paciente o profesional...">
+            <select id="agenda-status-filter">
+              <option value="">Todos los estados</option>
+              <option value="ok">Confirmado</option>
+              <option value="pend">Pendiente</option>
+              <option value="cancel">Cancelado</option>
+            </select>
+          </div>
+          <table class="agenda">
+            <thead><tr><th>Hora</th><th>Paciente</th><th>Profesional</th><th>Especialidad</th><th>Cobertura</th><th>Estado</th><th></th></tr></thead>
+            <tbody id="agenda-body"></tbody>
+          </table>
+        </div>
+
+        <!-- Profesionales -->
+        <div class="admin-pane" id="admin-profesionales">
+          <div class="admin-toolbar">
+            <input type="text" id="prof-admin-filter" placeholder="Buscar profesional...">
+            <button class="btn primary sm" id="prof-add-btn">+ Nuevo profesional</button>
+          </div>
+          <table class="agenda">
+            <thead><tr><th>Profesional</th><th>Especialidad</th><th>Duración turno</th><th>Obras sociales</th><th>Turnos (30d)</th><th>Estado</th></tr></thead>
+            <tbody id="prof-admin-body"></tbody>
+          </table>
+        </div>
+
+        <!-- Especialidades -->
+        <div class="admin-pane" id="admin-especialidades">
+          <div class="admin-toolbar">
+            <input type="text" id="spec-admin-filter" placeholder="Buscar especialidad...">
+            <button class="btn primary sm" id="spec-add-btn">+ Nueva especialidad</button>
+          </div>
+          <table class="agenda">
+            <thead><tr><th>Especialidad</th><th>Sector</th><th>Duración por defecto</th><th>Profesionales</th><th>Demanda (30d)</th></tr></thead>
+            <tbody id="spec-admin-body"></tbody>
+          </table>
+        </div>
+
+        <!-- Obras sociales -->
+        <div class="admin-pane" id="admin-obrassociales">
+          <div class="admin-toolbar">
+            <input type="text" id="os-admin-filter" placeholder="Buscar obra social o prepaga...">
+            <button class="btn primary sm" id="os-add-btn">+ Agregar convenio</button>
+          </div>
+          <table class="agenda">
+            <thead><tr><th>Obra social / prepaga</th><th>Profesionales adheridos</th><th>Turnos (30d)</th><th>Estado convenio</th></tr></thead>
+            <tbody id="os-admin-body"></tbody>
+          </table>
+        </div>
+
+        <!-- Bloqueos y licencias -->
+        <div class="admin-pane" id="admin-bloqueos">
+          <div class="block-form">
+            <div class="fld"><label>Profesional</label><select id="bl-prof"></select></div>
+            <div class="fld"><label>Desde</label><input type="date" id="bl-desde"></div>
+            <div class="fld"><label>Hasta</label><input type="date" id="bl-hasta"></div>
+            <div class="fld"><label>Motivo</label><select id="bl-motivo">
+              <option>Licencia</option><option>Congreso</option><option>Feriado</option><option>Mantenimiento de equipo</option>
+            </select></div>
+            <button class="btn primary sm" id="bl-add-btn" style="align-self:end;">Bloquear agenda</button>
+          </div>
+          <table class="agenda">
+            <thead><tr><th>Profesional</th><th>Desde</th><th>Hasta</th><th>Motivo</th><th>Turnos afectados</th><th></th></tr></thead>
+            <tbody id="bl-admin-body"></tbody>
+          </table>
+        </div>
+
+        <!-- Reportes -->
+        <div class="admin-pane" id="admin-reportes">
+          <div class="admin-metrics" style="grid-template-columns:repeat(3,1fr);margin-bottom:20px;">
+            <div class="metric"><div class="mnum">1.284</div><div class="mlbl">Turnos este mes</div></div>
+            <div class="metric"><div class="mnum">6.4%</div><div class="mlbl">Ausentismo</div></div>
+            <div class="metric"><div class="mnum">18 min</div><div class="mlbl">Tiempo prom. de espera</div></div>
+          </div>
+          <h3 class="serif" style="font-size:15px;margin:0 0 12px;">Turnos por especialidad (últimos 30 días)</h3>
+          <div class="bar-chart" id="report-specs"></div>
+          <h3 class="serif" style="font-size:15px;margin:24px 0 12px;">Turnos por obra social</h3>
+          <div class="bar-chart" id="report-os"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="footnote">
+    Demo funcional — datos de ejemplo. Especialidades y volumen basados en <b>centromedicopalmares.com.ar</b>.<br>
+    Cobertura real listada en el sitio: Avalian, Caja Forense, Damsu, Federada Salud, Galeno, Integral Salud y otras (la tabla de "Obras sociales" del admin usa nombres genéricos a modo ilustrativo).<br>
+    Pensado para reemplazar la fragmentación actual entre BioBoxCloud, distintos sistemas de laboratorio/imágenes y WhatsApp manual.
+  </div>
+</div>
+
+<!-- Modal: WhatsApp -->
+<div class="modal-overlay" id="wa-overlay">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div>
+        <h3>Mensaje de WhatsApp</h3>
+        <p class="modal-sub" id="wa-dest">Para —</p>
+      </div>
+      <button id="wa-close" aria-label="Cerrar">✕</button>
+    </div>
+    <div class="wa-tabs">
+      <button class="wa-tab-btn active" data-wa="confirmacion">Confirmación</button>
+      <button class="wa-tab-btn" data-wa="recordatorio">Recordatorio 24hs</button>
+      <button class="wa-tab-btn" data-wa="reagendamiento">Reagendamiento</button>
+      <button class="wa-tab-btn" data-wa="cancelacion">Cancelación</button>
+    </div>
+    <div class="wa-preview" id="wa-preview"></div>
+    <div class="wa-sent-note" id="wa-sent-note">Mensaje enviado (simulado en esta demo).</div>
+    <div class="modal-actions">
+      <button class="btn" id="wa-cancel">Cerrar</button>
+      <button class="btn primary" id="wa-send">Enviar por WhatsApp</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Reagendar -->
+<div class="modal-overlay" id="rg-overlay">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div>
+        <h3>Reagendar turno</h3>
+        <p class="modal-sub" id="rg-dest">Para —</p>
+      </div>
+      <button id="rg-close" aria-label="Cerrar">✕</button>
+    </div>
+    <div class="reagendar-grid">
+      <div class="fld"><label>Nueva fecha</label><input type="date" id="rg-fecha"></div>
+      <div class="fld"><label>Nuevo horario</label><input type="time" id="rg-hora" step="1200"></div>
+    </div>
+    <div class="fld" style="margin-bottom:14px;"><label>Motivo del cambio</label>
+      <select id="rg-motivo">
+        <option>Pedido del paciente</option>
+        <option>Reprogramación del profesional</option>
+        <option>Superposición de agenda</option>
+        <option>Ausencia del profesional</option>
+      </select>
+    </div>
+    <div class="fld" style="margin-bottom:4px;">
+      <label><input type="checkbox" id="rg-notify" checked style="width:auto;margin-right:6px;">Avisar al paciente por WhatsApp al confirmar</label>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" id="rg-cancel">Cancelar</button>
+      <button class="btn primary" id="rg-confirm">Confirmar reagendamiento</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Cancelar/reagendar (lado paciente) -->
+<div class="modal-overlay" id="lk-overlay">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div>
+        <h3>Cancelar o reagendar tu turno</h3>
+        <p class="modal-sub">Buscalo con tu DNI</p>
+      </div>
+      <button id="lk-close" aria-label="Cerrar">✕</button>
+    </div>
+    <div class="lookup-row">
+      <input type="text" id="lk-dni" placeholder="Tu DNI, sin puntos">
+      <button class="btn primary sm" id="lk-search">Buscar</button>
+    </div>
+    <div id="lk-results"></div>
+  </div>
+</div>
+
+<!-- Modal: Informes -->
+<div class="modal-overlay" id="inf-overlay">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div>
+        <h3>Resultados e informes</h3>
+        <p class="modal-sub" id="inf-sub">Ingresá tu DNI y el código de estudio para acceder</p>
+      </div>
+      <button id="inf-close" aria-label="Cerrar">✕</button>
+    </div>
+
+    <!-- Paso A: acceso -->
+    <div id="inf-step-access">
+      <div class="reagendar-grid" style="margin-bottom:10px;">
+        <div class="fld"><label>DNI</label><input type="text" id="inf-dni" placeholder="Sin puntos"></div>
+        <div class="fld"><label>Código de estudio</label><input type="text" id="inf-codigo" placeholder="Ej. LB-4821"></div>
+      </div>
+      <p class="modal-sub" style="margin:0 0 14px;">El código llega por email/SMS al retirar la orden. <span style="color:#8A8471;">Dato de ejemplo de esta demo: DNI 30111222, código LB-4821.</span></p>
+      <div class="modal-actions" style="justify-content:space-between;">
+        <span style="font-size:11.5px;color:#8A8471;align-self:center;">Powered by BioBoxCloud — visor de estudios</span>
+        <button class="btn primary sm" id="inf-buscar">Acceder</button>
+      </div>
+      <div id="inf-access-err" class="fld has-err" style="display:none;margin-top:10px;"><div class="err" style="display:block;">No encontramos estudios con esos datos. Revisá el DNI y el código.</div></div>
+    </div>
+
+    <!-- Paso B: listado de estudios -->
+    <div id="inf-step-results" style="display:none;">
+      <div id="inf-results-list"></div>
+      <div class="modal-actions" style="justify-content:flex-start;margin-top:14px;">
+        <button class="row-action" id="inf-back">← Buscar otro DNI</button>
+      </div>
+    </div>
+
+    <p class="modal-sub" style="margin-top:14px;">En producción, este acceso valida DNI + código de estudio contra BioBoxCloud (visor real que ya usan instituciones de Mendoza) en vez de simularlo localmente.</p>
+  </div>
+</div>
+
+<script>
+const specialtiesAdultos = [
+  "Alergia","Audiología","Cardiología","Cirugía estética","Cirugía general","Clínica médica",
+  "Dermatología","Endocrinología","Flebología","Gastroenterología","Ginecología",
+  "Ginecología y Obstetricia","Hematología","Hepatología","Infectología","Medicina del Dolor",
+  "Neumonología","Neurocirugía","Neurología","Nutrición","Odontología","Oftalmología",
+  "Oncología Clínica","Otorrinolaringología","Proctología","Psicología","Reumatología",
+  "Traumatología","Urología"
+];
+const specialtiesPed = [
+  "Audiología","Cardiología","Cirugía","Clínica pediátrica","Dermatología","Endocrinología",
+  "Gastroenterología","Hematología","Infectología","Inmunología","Neumonología","Neurocirugía",
+  "Neurología","Nutrición","Odontología","Oftalmología","Otorrinolaringología","Psicología",
+  "Reumatología","Traumatología","Urología"
+];
+const servicios = ["Laboratorio","Diagnóstico por imágenes","Vacunatorio","Chequeo deportivo"];
+
+const nombresProf = ["Dra. M. Ibáñez","Dr. R. Contreras","Dra. L. Funes","Dr. J. Aguirre","Dra. C. Molina","Dr. F. Suárez"];
+const obrasSociales = ["OSDE","Swiss Medical","Galeno","PAMI","OSEP","Particular"];
+
+const specNotes = {
+  "Chequeo deportivo": "Para todos los deportes y actividades físicas, desde los 15 años.",
+  "Laboratorio": "Turnos para extracción. Consultas de resultados por canal aparte.",
+};
+
+/* Enrutamiento de WhatsApp por sector — replica los canales reales del centro,
+   que hoy están fragmentados por especialidad/servicio. */
+const channelMap = {
+  "Laboratorio": {
+    turnos:     { label:"Laboratorio — Turnos",    wa:"+54 9 2616 15-9797" },
+    consultas:  { label:"Laboratorio — Consultas", wa:"+54 9 261 759-9500" },
+    horario:"Recepción: lunes a viernes de 8 a 20hs, sábados de 9 a 13hs"
+  },
+  "Diagnóstico por imágenes": {
+    turnos: { label:"Diagnóstico por imágenes", wa:"+54 9 261-508-2424", tel:"261 476-2172" }
+  },
+  "Vacunatorio": {
+    turnos: { label:"Vacunatorio", wa:"+54 9 261 615-9797" }
+  },
+  "Chequeo deportivo": {
+    turnos: { label:"Chequeo deportivo", wa:"+54 9 261 615-9797" }
+  },
+};
+const defaultChannel = { turnos: { label:"Recepción general", wa:"+54 9 261 508-2424", tel:"0810-666-1505" } };
+function getChannel(spec){
+  return (channelMap[spec] || defaultChannel).turnos;
+}
+
+let state = { tab:"adultos", spec:null, prof:null, day:null, slot:null, step:1 };
+
+function buildSpecGrid(){
+  const list = state.tab==="adultos"?specialtiesAdultos: state.tab==="pediatria"?specialtiesPed:servicios;
+  const q = document.getElementById("spec-search").value.toLowerCase();
+  const grid = document.getElementById("spec-grid");
+  grid.innerHTML="";
+  list.filter(s=>s.toLowerCase().includes(q)).forEach(s=>{
+    const card = document.createElement("div");
+    card.className="spec-card"+(state.spec===s?" selected":"");
+    const note = specNotes[s];
+    const n = 3 + Math.floor(Math.random()*9);
+    card.innerHTML = `<div class="name">${s}</div><div class="count">${note ? note : n + " profesionales disponibles"}</div>`;
+    card.onclick=()=>{ state.spec=s; buildSpecGrid(); document.getElementById("to-step2").disabled=false; };
+    grid.appendChild(card);
+  });
+}
+
+document.querySelectorAll(".tab-btn").forEach(b=>{
+  b.onclick=()=>{
+    document.querySelectorAll(".tab-btn").forEach(x=>x.classList.remove("active"));
+    b.classList.add("active");
+    state.tab=b.dataset.tab; state.spec=null;
+    document.getElementById("to-step2").disabled=true;
+    buildSpecGrid();
+  };
+});
+document.getElementById("spec-search").addEventListener("input", buildSpecGrid);
+
+function buildProfList(){
+  const list = document.getElementById("prof-list");
+  list.innerHTML="";
+
+  if(state.spec==="Chequeo deportivo"){
+    const card = document.createElement("div");
+    card.className="prof-card selected";
+    card.innerHTML = `
+      <div class="avatar">CD</div>
+      <div class="prof-info">
+        <div class="pname">Equipo de Chequeo Deportivo</div>
+        <div class="pmeta">Clínica médica + ECG — Sede Panamericana 2650</div>
+        <div class="prof-badges"><span class="badge">Sin obra social — particular</span><span class="badge">Desde 15 años</span></div>
+      </div>
+      <div class="prof-next">Próximo turno<br>hoy 15:20</div>
+    `;
+    list.appendChild(card);
+    state.prof = "Equipo de Chequeo Deportivo";
+    document.getElementById("to-step3").disabled=false;
+    return;
+  }
+
+  const n = 3 + Math.floor(Math.random()*3);
+  for(let i=0;i<n;i++){
+    const name = nombresProf[i % nombresProf.length];
+    const initials = name.split(" ").filter(w=>w.length>1).map(w=>w[0]).join("").slice(0,2).toUpperCase();
+    const os = obrasSociales.slice(0, 2+Math.floor(Math.random()*3));
+    const card = document.createElement("div");
+    card.className="prof-card";
+    card.innerHTML = `
+      <div class="avatar">${initials}</div>
+      <div class="prof-info">
+        <div class="pname">${name}</div>
+        <div class="pmeta">${state.spec} — Sede Panamericana 2650</div>
+        <div class="prof-badges">${os.map(o=>`<span class="badge">${o}</span>`).join("")}</div>
+      </div>
+      <div class="prof-next">Próximo turno<br>${["hoy 16:40","mañana 09:20","jueves 11:00"][i%3]}</div>
+    `;
+    card.onclick=()=>{
+      document.querySelectorAll(".prof-card").forEach(c=>c.classList.remove("selected"));
+      card.classList.add("selected");
+      state.prof=name;
+      document.getElementById("to-step3").disabled=false;
+    };
+    list.appendChild(card);
+  }
+}
+
+function buildCalendar(){
+  const days = document.getElementById("cal-days");
+  days.innerHTML="";
+  const dow = ["dom","lun","mar","mié","jue","vie","sáb"];
+  const today = new Date();
+  for(let i=0;i<10;i++){
+    const d = new Date(today); d.setDate(today.getDate()+i);
+    const isSunday = d.getDay()===0;
+    const chip = document.createElement("div");
+    chip.className="day-chip"+(isSunday?" disabled":"");
+    chip.innerHTML = `<div class="dow">${dow[d.getDay()]}</div><div class="dnum">${d.getDate()}</div>`;
+    if(!isSunday){
+      chip.onclick=()=>{
+        document.querySelectorAll(".day-chip").forEach(c=>c.classList.remove("selected"));
+        chip.classList.add("selected");
+        state.day = `${d.getDate()}/${d.getMonth()+1}`;
+        state.slot=null;
+        document.getElementById("to-step4").disabled=true;
+        buildSlots();
+      };
+    }
+    days.appendChild(chip);
+  }
+}
+
+function buildSlots(){
+  const gridAm = document.getElementById("slot-grid-am");
+  const gridPm = document.getElementById("slot-grid-pm");
+  gridAm.innerHTML=""; gridPm.innerHTML="";
+  const startHour = 8;
+  const fullyBooked = Math.random()<0.15;
+  let anyFree = false;
+  for(let h=0; h<24; h++){
+    const totalMin = startHour*60 + h*20;
+    const hh = Math.floor(totalMin/60), mm = totalMin%60;
+    if(hh>=20) break;
+    const label = `${String(hh).padStart(2,"0")}:${String(mm).padStart(2,"0")}`;
+    const taken = fullyBooked || Math.random()<0.3;
+    const slot = document.createElement("div");
+    slot.className="slot"+(taken?" taken":"");
+    slot.textContent=label;
+    if(!taken){
+      anyFree = true;
+      slot.onclick=()=>{
+        document.querySelectorAll(".slot").forEach(s=>s.classList.remove("selected"));
+        slot.classList.add("selected");
+        state.slot=label;
+        document.getElementById("to-step4").disabled=false;
+      };
+    }
+    (hh<14 ? gridAm : gridPm).appendChild(slot);
+  }
+  const emptyEl = document.getElementById("slot-empty");
+  document.getElementById("slot-group-am").style.display = (anyFree && gridAm.children.length) ? "" : "none";
+  document.getElementById("slot-group-pm").style.display = (anyFree && gridPm.children.length) ? "" : "none";
+  if(!anyFree){
+    emptyEl.innerHTML = `<div class="empty-state">No hay turnos disponibles para <b>${state.prof}</b> este día. Probá otro día en el calendario de arriba.</div>`;
+    emptyEl.style.display = "block";
+  } else {
+    emptyEl.style.display = "none";
+    emptyEl.innerHTML = "";
+  }
+}
+
+function goStep(n){
+  state.step=n;
+  document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));
+  document.getElementById("panel-"+n).classList.add("active");
+  buildStepper();
+  window.scrollTo({top:200,behavior:"smooth"});
+}
+
+function buildStepper(){
+  const labels = ["Especialidad","Profesional","Fecha y hora","Tus datos","Confirmación"];
+  const el = document.getElementById("stepper");
+  el.innerHTML="";
+  labels.forEach((lbl,i)=>{
+    const num=i+1;
+    const wrap=document.createElement("div");
+    wrap.className="step"+(num<state.step?" done":num===state.step?" current":"");
+    wrap.innerHTML = `<div class="dot">${num<state.step?"✓":num}</div><div class="lbl">${lbl}</div>`;
+    el.appendChild(wrap);
+    if(num<labels.length){
+      const line=document.createElement("div");
+      line.className="step-line";
+      el.appendChild(line);
+    }
+  });
+}
+
+document.getElementById("to-step2").onclick=()=>{ buildProfList(); goStep(2); };
+document.getElementById("to-step3").onclick=()=>{ buildCalendar(); buildSlots(); goStep(3); };
+document.getElementById("to-step4").onclick=()=>{ buildSummary(); goStep(4); };
+document.querySelectorAll("[data-back]").forEach(b=>b.onclick=()=>goStep(parseInt(b.dataset.back)));
+
+function buildSummary(){
+  const channel = getChannel(state.spec);
+  const isChequeo = state.spec==="Chequeo deportivo";
+  document.getElementById("fld-edad").style.display = isChequeo ? "block" : "none";
+  let channelNote = `<div class="row"><span>Turnos por WhatsApp</span><span>${channel.label} — ${channel.wa}</span></div>`;
+  document.getElementById("summary-box").innerHTML = `
+    <div class="row"><span>Especialidad</span><span>${state.spec}</span></div>
+    <div class="row"><span>Profesional</span><span>${state.prof}</span></div>
+    <div class="row"><span>Día</span><span>${state.day}</span></div>
+    <div class="row"><span>Horario</span><span>${state.slot} hs</span></div>
+    ${channelNote}
+  `;
+}
+
+function validate(){
+  const fields = [
+    {id:"f-nombre", test:v=>v.trim().length>3},
+    {id:"f-dni", test:v=>/^\d{7,8}$/.test(v.trim())},
+    {id:"f-email", test:v=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim())},
+    {id:"f-tel", test:v=>v.trim().length>=6},
+  ];
+  if(state.spec==="Chequeo deportivo"){
+    fields.push({id:"f-edad", test:v=>parseInt(v)>=15});
+  }
+  let ok=true;
+  fields.forEach(f=>{
+    const input = document.getElementById(f.id);
+    const wrap = input.closest(".fld");
+    if(!f.test(input.value)){ wrap.classList.add("has-err"); ok=false; }
+    else{ wrap.classList.remove("has-err"); }
+  });
+  const consentInput = document.getElementById("f-consent");
+  const consentWrap = consentInput.closest(".fld");
+  if(!consentInput.checked){ consentWrap.classList.add("has-err"); ok=false; }
+  else{ consentWrap.classList.remove("has-err"); }
+  return ok;
+}
+document.querySelectorAll("#f-nombre,#f-dni,#f-email,#f-tel,#f-edad").forEach(inp=>{
+  inp.addEventListener("input", ()=>inp.closest(".fld").classList.remove("has-err"));
+});
+document.getElementById("f-consent").addEventListener("change", (e)=>{
+  if(e.target.checked) e.target.closest(".fld").classList.remove("has-err");
+});
+
+let lastConfirmedTurno = null;
+
+document.getElementById("to-step5").onclick=()=>{
+  if(!validate()) return;
+  const nombre = document.getElementById("f-nombre").value;
+  const dni = document.getElementById("f-dni").value;
+  const email = document.getElementById("f-email").value;
+  const os = document.getElementById("f-os").value || "Particular";
+  const codigo = "PLM-" + Math.floor(10000+Math.random()*89999);
+  const channel = getChannel(state.spec);
+  lastConfirmedTurno = { nombre, spec: state.spec, prof: state.prof, day: state.day, slot: state.slot, codigo };
+  document.getElementById("confirm-card").innerHTML = `
+    <div class="row"><span style="color:#8A8471;font-size:12.5px;">Código</span><span style="font-weight:700;">${codigo}</span></div>
+    <div style="height:1px;background:var(--paper-2);margin:10px 0;"></div>
+    <div class="summary" style="border:none;padding:0;">
+      <div class="row"><span>Paciente</span><span>${nombre}</span></div>
+      <div class="row"><span>DNI</span><span>${dni}</span></div>
+      <div class="row"><span>Especialidad</span><span>${state.spec}</span></div>
+      <div class="row"><span>Profesional</span><span>${state.prof}</span></div>
+      <div class="row"><span>Fecha</span><span>${state.day} — ${state.slot} hs</span></div>
+      <div class="row"><span>Cobertura</span><span>${os}</span></div>
+      <div class="row"><span>Email envío</span><span>${email}</span></div>
+      <div class="row"><span>Canal de contacto</span><span>${channel.label}</span></div>
+    </div>
+  `;
+  addAgendaRow(nombre, os, dni);
+  goStep(5);
+};
+
+function downloadTurnoICS(){
+  if(!lastConfirmedTurno) return;
+  const t = lastConfirmedTurno;
+  const [dia, mes] = (t.day||"").split("/").map(n=>parseInt(n));
+  const [hh, mm] = (t.slot||"00:00").split(":").map(n=>parseInt(n));
+  const now = new Date();
+  let year = now.getFullYear();
+  const start = new Date(year, (mes||1)-1, dia||1, hh||0, mm||0);
+  if(start < now) start.setFullYear(year+1);
+  const end = new Date(start.getTime() + 20*60000);
+  const fmt = d => d.toISOString().replace(/[-:]/g,"").split(".")[0]+"Z";
+  const esc = s => String(s||"").replace(/([,;])/g,"\\$1");
+  const ics = [
+    "BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Centro Medico Palmares//Turnos//ES","BEGIN:VEVENT",
+    `UID:${t.codigo}@palmares-demo`,
+    `DTSTAMP:${fmt(now)}`,
+    `DTSTART:${fmt(start)}`,
+    `DTEND:${fmt(end)}`,
+    `SUMMARY:${esc(t.spec+" — "+t.prof)}`,
+    `DESCRIPTION:${esc("Turno en Centro Médico Palmares. Código: "+t.codigo+". Paciente: "+t.nombre)}`,
+    "LOCATION:Panamericana 2650, Godoy Cruz",
+    "END:VEVENT","END:VCALENDAR"
+  ].join("\r\n");
+  const blob = new Blob([ics], {type:"text/calendar;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `turno-palmares-${t.codigo}.ics`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+document.getElementById("new-booking").onclick=()=>{
+  state = { tab:"adultos", spec:null, prof:null, day:null, slot:null, step:1 };
+  document.getElementById("to-step2").disabled=true;
+  document.querySelectorAll(".tab-btn").forEach(x=>x.classList.remove("active"));
+  document.querySelector('.tab-btn[data-tab="adultos"]').classList.add("active");
+  document.getElementById("spec-search").value="";
+  document.getElementById("fld-edad").style.display="none";
+  document.getElementById("f-edad").value="";
+  document.getElementById("f-consent").checked=false;
+  document.getElementById("fld-consent").classList.remove("has-err");
+  buildSpecGrid();
+  goStep(1);
+};
+
+/* ===== Admin panel ===== */
+const agendaSeed = [
+  ["08:00","Marcos Vidal","Dra. M. Ibáñez","Clínica médica","OSDE","ok","30111222"],
+  ["08:20","Sol Ferreyra","Dr. R. Contreras","Traumatología","Particular","ok","28456789"],
+  ["08:40","Lucas Peralta","Dra. L. Funes","Pediatría — Clínica","Swiss Medical","pend","35998877"],
+  ["09:00","Ana Rosales","Dr. J. Aguirre","Cardiología","PAMI","ok","19334455"],
+  ["09:20","Bruno Castro","Dra. C. Molina","Ginecología","OSEP","cancel","32112233"],
+  ["09:40","Valentina Ruiz","Dr. F. Suárez","Dermatología","Galeno","ok","40887766"],
+];
+function addAgendaRow(nombre, os, dni){
+  agendaSeed.unshift([state.slot||"—", nombre, state.prof||"—", state.spec||"—", os, "pend", dni||""]);
+}
+function renderAgenda(){
+  const body = document.getElementById("agenda-body");
+  const qf = (document.getElementById("agenda-filter")?.value||"").toLowerCase();
+  const sf = document.getElementById("agenda-status-filter")?.value||"";
+  body.innerHTML="";
+  agendaSeed
+    .map((r,i)=>({r,i}))
+    .filter(({r})=> (r[1]+r[2]).toLowerCase().includes(qf) && (!sf || r[5]===sf))
+    .forEach(({r,i})=>{
+      const tr = document.createElement("tr");
+      const statusMap = {ok:["Confirmado","ok"],pend:["Pendiente","pend"],cancel:["Cancelado","cancel"]};
+      const [txt,cls] = statusMap[r[5]];
+      tr.innerHTML = `<td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td>${r[4]}</td><td><span class="status-pill ${cls}">${txt}</span></td>
+        <td class="row-actions">
+          <button class="row-action" data-act="wa" data-idx="${i}">WhatsApp</button>
+          <button class="row-action" data-act="reagendar" data-idx="${i}">Reagendar</button>
+        </td>`;
+      body.appendChild(tr);
+    });
+  document.getElementById("m-hoy").textContent = agendaSeed.length;
+  body.querySelectorAll('[data-act="wa"]').forEach(b=>b.onclick=()=>openWaModal(parseInt(b.dataset.idx)));
+  body.querySelectorAll('[data-act="reagendar"]').forEach(b=>b.onclick=()=>openReagendarModal(parseInt(b.dataset.idx)));
+}
+document.getElementById("agenda-filter")?.addEventListener("input", renderAgenda);
+document.getElementById("agenda-status-filter")?.addEventListener("change", renderAgenda);
+
+/* --- Profesionales admin --- */
+const profAdminSeed = [
+  ["Dra. M. Ibáñez","Clínica médica","20 min",["OSDE","Swiss Medical","PAMI"],42,true],
+  ["Dr. R. Contreras","Traumatología","30 min",["OSDE","Galeno"],37,true],
+  ["Dra. L. Funes","Clínica pediátrica","20 min",["Swiss Medical","OSEP","Particular"],55,true],
+  ["Dr. J. Aguirre","Cardiología","30 min",["PAMI","OSDE","Federada Salud"],29,true],
+  ["Dra. C. Molina","Ginecología","25 min",["OSEP","Galeno"],33,false],
+  ["Dr. F. Suárez","Dermatología","20 min",["Galeno","Swiss Medical"],24,true],
+  ["Dra. P. Godoy","Oftalmología","25 min",["OSDE","PAMI","Particular"],31,true],
+  ["Dr. N. Ortega","Otorrinolaringología","20 min",["Swiss Medical","OSDE"],19,true],
+];
+function renderProfAdmin(){
+  const body = document.getElementById("prof-admin-body");
+  const qf = (document.getElementById("prof-admin-filter")?.value||"").toLowerCase();
+  body.innerHTML="";
+  profAdminSeed.filter(p=>(p[0]+p[1]).toLowerCase().includes(qf)).forEach((p,i)=>{
+    const tr=document.createElement("tr");
+    tr.innerHTML = `<td>${p[0]}</td><td>${p[1]}</td><td>${p[2]}</td><td>${p[3].map(o=>`<span class="badge">${o}</span>`).join(" ")}</td><td>${p[4]}</td>
+      <td><button class="toggle-pill ${p[5]?"active-y":"active-n"}" data-idx="${i}">${p[5]?"Activo":"Inactivo"}</button></td>`;
+    body.appendChild(tr);
+  });
+  body.querySelectorAll(".toggle-pill").forEach(btn=>{
+    btn.onclick=()=>{
+      const idx = parseInt(btn.dataset.idx);
+      profAdminSeed[idx][5] = !profAdminSeed[idx][5];
+      renderProfAdmin();
+    };
+  });
+}
+document.getElementById("prof-admin-filter")?.addEventListener("input", renderProfAdmin);
+document.getElementById("prof-add-btn")?.addEventListener("click", ()=>{
+  const nombre = prompt("Nombre del nuevo profesional (ej. Dr. A. Pérez):");
+  if(!nombre) return;
+  profAdminSeed.unshift([nombre,"Clínica médica","20 min",["Particular"],0,true]);
+  renderProfAdmin();
+});
+
+/* --- Especialidades admin --- */
+function buildSpecAdminSeed(){
+  return specialtiesAdultos.map(s=>[s,"Adultos", (20+5*Math.floor(Math.random()*3))+" min", 3+Math.floor(Math.random()*9), 20+Math.floor(Math.random()*180)])
+    .concat(specialtiesPed.map(s=>[s,"Pediatría", (20+5*Math.floor(Math.random()*3))+" min", 2+Math.floor(Math.random()*6), 10+Math.floor(Math.random()*90)]))
+    .concat(servicios.map(s=>[s,"Diagnóstico y laboratorio", "Variable", 2+Math.floor(Math.random()*8), 30+Math.floor(Math.random()*220)]));
+}
+const specAdminAll = buildSpecAdminSeed();
+function renderSpecAdmin(){
+  const body = document.getElementById("spec-admin-body");
+  const qf = (document.getElementById("spec-admin-filter")?.value||"").toLowerCase();
+  body.innerHTML="";
+  specAdminAll.filter(s=>s[0].toLowerCase().includes(qf)).forEach(s=>{
+    const tr=document.createElement("tr");
+    tr.innerHTML = `<td>${s[0]}</td><td><span class="badge">${s[1]}</span></td><td>${s[2]}</td><td>${s[3]}</td><td>${s[4]} turnos</td>`;
+    body.appendChild(tr);
+  });
+}
+document.getElementById("spec-admin-filter")?.addEventListener("input", renderSpecAdmin);
+document.getElementById("spec-add-btn")?.addEventListener("click", ()=>{
+  const nombre = prompt("Nombre de la nueva especialidad:");
+  if(!nombre) return;
+  specAdminAll.unshift([nombre,"Adultos","20 min",0,0]);
+  renderSpecAdmin();
+});
+
+/* --- Obras sociales admin --- */
+const osAdminSeed = [
+  ["OSDE",118,312,true],["Swiss Medical",96,271,true],["Galeno",74,198,true],
+  ["PAMI",142,405,true],["OSEP",61,177,true],["Federada Salud",38,94,true],
+  ["Sancor Salud",29,68,false],["Medifé",22,51,true],["Particular",190,540,true],
+];
+function renderOSAdmin(){
+  const body = document.getElementById("os-admin-body");
+  const qf = (document.getElementById("os-admin-filter")?.value||"").toLowerCase();
+  body.innerHTML="";
+  osAdminSeed.filter(o=>o[0].toLowerCase().includes(qf)).forEach((o,i)=>{
+    const tr=document.createElement("tr");
+    tr.innerHTML = `<td>${o[0]}</td><td>${o[1]}</td><td>${o[2]} turnos</td>
+      <td><button class="toggle-pill ${o[3]?"active-y":"active-n"}" data-idx="${i}">${o[3]?"Convenio activo":"Suspendido"}</button></td>`;
+    body.appendChild(tr);
+  });
+  body.querySelectorAll(".toggle-pill").forEach(btn=>{
+    btn.onclick=()=>{
+      const idx = parseInt(btn.dataset.idx);
+      osAdminSeed[idx][3] = !osAdminSeed[idx][3];
+      renderOSAdmin();
+    };
+  });
+}
+document.getElementById("os-admin-filter")?.addEventListener("input", renderOSAdmin);
+document.getElementById("os-add-btn")?.addEventListener("click", ()=>{
+  const nombre = prompt("Nombre de la obra social o prepaga:");
+  if(!nombre) return;
+  osAdminSeed.unshift([nombre,0,0,true]);
+  renderOSAdmin();
+});
+
+/* --- Bloqueos y licencias --- */
+const blAdminSeed = [
+  ["Dra. C. Molina","2026-09-08","2026-09-12","Congreso",6],
+  ["Dr. N. Ortega","2026-09-15","2026-09-15","Mantenimiento de equipo",4],
+];
+function fillBlProfSelect(){
+  const sel = document.getElementById("bl-prof");
+  if(!sel) return;
+  sel.innerHTML = profAdminSeed.map(p=>`<option>${p[0]}</option>`).join("");
+}
+function renderBlAdmin(){
+  const body = document.getElementById("bl-admin-body");
+  body.innerHTML="";
+  blAdminSeed.forEach((b,i)=>{
+    const tr=document.createElement("tr");
+    tr.innerHTML = `<td>${b[0]}</td><td>${b[1]}</td><td>${b[2]}</td><td>${b[3]}</td><td>${b[4]}</td>
+      <td><button class="row-action danger" data-idx="${i}">Quitar</button></td>`;
+    body.appendChild(tr);
+  });
+  body.querySelectorAll(".row-action").forEach(btn=>{
+    btn.onclick=()=>{ blAdminSeed.splice(parseInt(btn.dataset.idx),1); renderBlAdmin(); };
+  });
+}
+document.getElementById("bl-add-btn")?.addEventListener("click", ()=>{
+  const prof = document.getElementById("bl-prof").value;
+  const desde = document.getElementById("bl-desde").value;
+  const hasta = document.getElementById("bl-hasta").value;
+  const motivo = document.getElementById("bl-motivo").value;
+  if(!prof || !desde || !hasta){ alert("Completá profesional, desde y hasta antes de bloquear la agenda."); return; }
+  blAdminSeed.unshift([prof, desde, hasta, motivo, Math.floor(Math.random()*8)]);
+  renderBlAdmin();
+});
+
+/* --- Reportes --- */
+function renderReportes(){
+  const specData = [["Clínica médica",142],["Traumatología",118],["Pediatría",104],["Cardiología",91],["Dermatología",77],["Ginecología",68]];
+  const osData = [["Particular",190],["PAMI",164],["OSDE",151],["Swiss Medical",128],["OSEP",96],["Galeno",84]];
+  const maxSpec = Math.max(...specData.map(d=>d[1]));
+  const maxOs = Math.max(...osData.map(d=>d[1]));
+  document.getElementById("report-specs").innerHTML = specData.map(d=>`
+    <div class="bar-row"><div class="bar-lbl">${d[0]}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${Math.round(d[1]/maxSpec*100)}%"></div></div>
+      <div class="bar-val">${d[1]}</div></div>`).join("");
+  document.getElementById("report-os").innerHTML = osData.map(d=>`
+    <div class="bar-row"><div class="bar-lbl">${d[0]}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${Math.round(d[1]/maxOs*100)}%"></div></div>
+      <div class="bar-val">${d[1]}</div></div>`).join("");
+}
+
+/* --- Admin nav switching --- */
+document.getElementById("admin-nav")?.addEventListener("click",(e)=>{
+  const btn = e.target.closest("button[data-admin]");
+  if(!btn) return;
+  document.querySelectorAll("#admin-nav button").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  document.querySelectorAll(".admin-pane").forEach(p=>p.classList.remove("active"));
+  document.getElementById("admin-"+btn.dataset.admin).classList.add("active");
+  if(btn.dataset.admin==="profesionales"){ fillBlProfSelect(); renderProfAdmin(); }
+  if(btn.dataset.admin==="especialidades") renderSpecAdmin();
+  if(btn.dataset.admin==="obrassociales") renderOSAdmin();
+  if(btn.dataset.admin==="bloqueos"){ fillBlProfSelect(); renderBlAdmin(); }
+  if(btn.dataset.admin==="reportes") renderReportes();
+});
+
+document.getElementById("btn-paciente").onclick=()=>{
+  document.getElementById("view-paciente").style.display="block";
+  document.getElementById("view-admin").style.display="none";
+  document.getElementById("btn-paciente").classList.add("active");
+  document.getElementById("btn-admin").classList.remove("active");
+};
+document.getElementById("btn-admin").onclick=()=>{
+  document.getElementById("view-paciente").style.display="none";
+  document.getElementById("view-admin").style.display="block";
+  document.getElementById("btn-admin").classList.add("active");
+  document.getElementById("btn-paciente").classList.remove("active");
+  renderAgenda();
+};
+if(new URLSearchParams(location.search).get("admin")==="1"){
+  document.getElementById("btn-admin").style.display="";
+}
+document.getElementById("btn-add-ics").onclick=downloadTurnoICS;
+
+/* --- Plantillas de WhatsApp --- */
+function waTemplates(row){
+  const [hora,paciente,prof,especialidad,cobertura] = row;
+  const nombrePila = paciente.split(" ")[0];
+  const channel = getChannel(especialidad);
+  const contacto = `${channel.wa} (${channel.label})`;
+  return {
+    confirmacion:
+`Hola ${nombrePila}! Te confirmamos tu turno en Centro Médico Palmares.
+
+📋 ${especialidad}
+👤 ${prof}
+🕒 ${hora} hs
+🏥 Panamericana 2650, Godoy Cruz
+💳 Cobertura: ${cobertura}
+
+Si necesitás cancelar o reagendar, respondé este mensaje o escribinos a ${contacto}.`,
+    recordatorio:
+`Hola ${nombrePila}! Te recordamos tu turno de mañana en Centro Médico Palmares.
+
+📋 ${especialidad}
+👤 ${prof}
+🕒 ${hora} hs
+
+Por favor llegá 10 minutos antes. Si no podés asistir, avisanos respondiendo este mensaje para liberar el horario a otro paciente.`,
+    reagendamiento:
+`Hola ${nombrePila}! Tu turno con ${prof} (${especialidad}) fue reprogramado.
+
+🕒 Nuevo horario: ${hora} hs
+
+Si el nuevo horario no te sirve, respondé este mensaje o escribinos a ${contacto} para buscar otra opción.`,
+    cancelacion:
+`Hola ${nombrePila}, confirmamos la cancelación de tu turno.
+
+📋 ${especialidad}
+👤 ${prof}
+🕒 ${hora} hs
+
+Cuando quieras, podés reservar un nuevo turno online o escribiendo a ${contacto}.`
+  };
+}
+
+let waCurrentIdx = null;
+let waCurrentTab = "confirmacion";
+function openWaModal(idx, tab){
+  waCurrentIdx = idx;
+  waCurrentTab = tab || "confirmacion";
+  const row = agendaSeed[idx];
+  document.getElementById("wa-dest").textContent = `Para ${row[1]} — ${row[2]}`;
+  document.querySelectorAll(".wa-tab-btn").forEach(b=>b.classList.toggle("active", b.dataset.wa===waCurrentTab));
+  document.getElementById("wa-sent-note").style.display="none";
+  renderWaPreview();
+  document.getElementById("wa-overlay").classList.add("open");
+}
+function renderWaPreview(){
+  const row = agendaSeed[waCurrentIdx];
+  const templates = waTemplates(row);
+  document.getElementById("wa-preview").innerHTML = templates[waCurrentTab].replace(/\n/g,"<br>") + `<div class="wa-tail">Vista previa — WhatsApp Business API</div>`;
+}
+document.querySelectorAll(".wa-tab-btn").forEach(b=>{
+  b.onclick=()=>{
+    document.querySelectorAll(".wa-tab-btn").forEach(x=>x.classList.remove("active"));
+    b.classList.add("active");
+    waCurrentTab = b.dataset.wa;
+    document.getElementById("wa-sent-note").style.display="none";
+    renderWaPreview();
+  };
+});
+document.getElementById("wa-send").onclick=()=>{
+  document.getElementById("wa-sent-note").style.display="block";
+};
+function closeWa(){ document.getElementById("wa-overlay").classList.remove("open"); }
+document.getElementById("wa-close").onclick=closeWa;
+document.getElementById("wa-cancel").onclick=closeWa;
+document.getElementById("wa-overlay").addEventListener("click",(e)=>{ if(e.target.id==="wa-overlay") closeWa(); });
+
+/* --- Reagendamiento --- */
+let rgCurrentIdx = null;
+function openReagendarModal(idx){
+  rgCurrentIdx = idx;
+  const row = agendaSeed[idx];
+  document.getElementById("rg-dest").textContent = `${row[1]} — ${row[2]} (${row[3]})`;
+  document.getElementById("rg-fecha").value="";
+  document.getElementById("rg-hora").value=row[0] && row[0].includes(":") ? row[0] : "";
+  document.getElementById("rg-motivo").value="Pedido del paciente";
+  document.getElementById("rg-notify").checked=true;
+  document.getElementById("rg-overlay").classList.add("open");
+}
+function closeRg(){ document.getElementById("rg-overlay").classList.remove("open"); }
+document.getElementById("rg-close").onclick=closeRg;
+document.getElementById("rg-cancel").onclick=closeRg;
+document.getElementById("rg-overlay").addEventListener("click",(e)=>{ if(e.target.id==="rg-overlay") closeRg(); });
+document.getElementById("rg-confirm").onclick=()=>{
+  const fecha = document.getElementById("rg-fecha").value;
+  const hora = document.getElementById("rg-hora").value;
+  if(!fecha || !hora){ alert("Elegí nueva fecha y horario antes de confirmar."); return; }
+  const [hh,mm] = hora.split(":");
+  const nuevaHora = `${hh}:${mm}`;
+  const row = agendaSeed[rgCurrentIdx];
+  row[0] = nuevaHora;
+  row[5] = "pend";
+  closeRg();
+  renderAgenda();
+  if(document.getElementById("rg-notify").checked){
+    openWaModal(rgCurrentIdx, "reagendamiento");
+  }
+};
+
+buildSpecGrid();
+buildStepper();
+renderAgenda();
+
+/* --- Lado paciente: cancelar / reagendar por DNI --- */
+document.getElementById("btn-cancelar-turno").onclick=()=>{
+  document.getElementById("lk-dni").value="";
+  document.getElementById("lk-results").innerHTML = `<p class="lookup-empty">Ingresá tu DNI para ver tus turnos.</p>`;
+  document.getElementById("lk-overlay").classList.add("open");
+};
+function closeLk(){ document.getElementById("lk-overlay").classList.remove("open"); }
+document.getElementById("lk-close").onclick=closeLk;
+document.getElementById("lk-overlay").addEventListener("click",(e)=>{ if(e.target.id==="lk-overlay") closeLk(); });
+
+function renderLkResults(){
+  const dniVal = document.getElementById("lk-dni").value.trim();
+  const box = document.getElementById("lk-results");
+  if(!dniVal){ box.innerHTML = `<p class="lookup-empty">Ingresá tu DNI para ver tus turnos.</p>`; return; }
+  const matches = agendaSeed.map((r,i)=>({r,i})).filter(({r})=>r[6]===dniVal && r[5]!=="cancel");
+  if(matches.length===0){
+    box.innerHTML = `<p class="lookup-empty">No encontramos turnos activos con ese DNI.<br><span style="font-size:11.5px;">Probá con 30111222 (dato de ejemplo de esta demo).</span></p>`;
+    return;
+  }
+  box.innerHTML = matches.map(({r,i})=>`
+    <div class="lookup-result">
+      <div class="row"><span style="color:#8A8471;">Especialidad</span><span style="font-weight:600;">${r[3]}</span></div>
+      <div class="row"><span style="color:#8A8471;">Profesional</span><span style="font-weight:600;">${r[2]}</span></div>
+      <div class="row"><span style="color:#8A8471;">Horario</span><span style="font-weight:600;">${r[0]} hs</span></div>
+      <div class="modal-actions" style="margin-top:10px;">
+        <button class="btn sm" data-lk-cancel="${i}">Cancelar turno</button>
+        <button class="btn primary sm" data-lk-reagendar="${i}">Reagendar</button>
+      </div>
+    </div>`).join("");
+  box.querySelectorAll("[data-lk-cancel]").forEach(b=>{
+    b.onclick=()=>{
+      const idx = parseInt(b.dataset.lkCancel);
+      if(!confirm("¿Confirmás la cancelación de este turno? Recordá que se pide con al menos 24hs de anticipación.")) return;
+      agendaSeed[idx][5]="cancel";
+      renderAgenda();
+      renderLkResults();
+      openWaModal(idx,"cancelacion");
+    };
+  });
+  box.querySelectorAll("[data-lk-reagendar]").forEach(b=>{
+    b.onclick=()=>{
+      closeLk();
+      openReagendarModal(parseInt(b.dataset.lkReagendar));
+    };
+  });
+}
+document.getElementById("lk-search").onclick=renderLkResults;
+document.getElementById("lk-dni").addEventListener("keydown",(e)=>{ if(e.key==="Enter") renderLkResults(); });
+
+/* --- Lado paciente: informes (visor tipo BioBoxCloud) --- */
+const estudiosSeed = [
+  {dni:"30111222", codigo:"LB-4821", tipo:"Laboratorio", nombre:"Hemograma completo", fecha:"28/08", estado:"listo"},
+  {dni:"30111222", codigo:"LB-4821", tipo:"Laboratorio", nombre:"Perfil lipídico", fecha:"28/08", estado:"listo"},
+  {dni:"30111222", codigo:"LB-4821", tipo:"Diagnóstico por imágenes", nombre:"Radiografía de tórax", fecha:"20/08", estado:"listo"},
+  {dni:"28456789", codigo:"IM-1092", tipo:"Diagnóstico por imágenes", nombre:"Ecografía abdominal", fecha:"30/08", estado:"procesando"},
+];
+
+document.getElementById("btn-ver-informes").onclick=()=>{
+  document.getElementById("inf-dni").value="";
+  document.getElementById("inf-codigo").value="";
+  document.getElementById("inf-access-err").style.display="none";
+  document.getElementById("inf-step-access").style.display="block";
+  document.getElementById("inf-step-results").style.display="none";
+  document.getElementById("inf-sub").textContent="Ingresá tu DNI y el código de estudio para acceder";
+  document.getElementById("inf-overlay").classList.add("open");
+};
+function closeInf(){ document.getElementById("inf-overlay").classList.remove("open"); }
+document.getElementById("inf-close").onclick=closeInf;
+document.getElementById("inf-overlay").addEventListener("click",(e)=>{ if(e.target.id==="inf-overlay") closeInf(); });
+
+document.getElementById("inf-buscar").onclick=()=>{
+  const dni = document.getElementById("inf-dni").value.trim();
+  const codigo = document.getElementById("inf-codigo").value.trim().toUpperCase();
+  const matches = estudiosSeed.filter(e => e.dni===dni && e.codigo===codigo);
+  if(matches.length===0){
+    document.getElementById("inf-access-err").style.display="block";
+    return;
+  }
+  document.getElementById("inf-access-err").style.display="none";
+  document.getElementById("inf-step-access").style.display="none";
+  document.getElementById("inf-step-results").style.display="block";
+  document.getElementById("inf-sub").textContent=`${matches.length} estudio${matches.length>1?"s":""} encontrado${matches.length>1?"s":""}`;
+  const estadoLbl = {listo:["Listo","ok"], procesando:["Procesando","pend"]};
+  document.getElementById("inf-results-list").innerHTML = matches.map((e,i)=>{
+    const [txt,cls] = estadoLbl[e.estado];
+    return `
+    <div class="lookup-result">
+      <div class="row"><span style="color:#8A8471;">Estudio</span><span style="font-weight:600;">${e.nombre}</span></div>
+      <div class="row"><span style="color:#8A8471;">Tipo</span><span style="font-weight:600;">${e.tipo}</span></div>
+      <div class="row"><span style="color:#8A8471;">Fecha</span><span style="font-weight:600;">${e.fecha}</span></div>
+      <div class="row"><span style="color:#8A8471;">Estado</span><span><span class="status-pill ${cls}">${txt}</span></span></div>
+      <div class="modal-actions" style="margin-top:10px;">
+        <button class="btn primary sm" data-inf-download="${i}" ${e.estado!=="listo"?"disabled":""}>Descargar informe</button>
+      </div>
+    </div>`;
+  }).join("");
+  document.getElementById("inf-results-list").querySelectorAll("[data-inf-download]").forEach(b=>{
+    b.onclick=()=>downloadInformeDemo(matches[parseInt(b.dataset.infDownload)]);
+  });
+};
+document.getElementById("inf-back").onclick=()=>{
+  document.getElementById("inf-step-access").style.display="block";
+  document.getElementById("inf-step-results").style.display="none";
+  document.getElementById("inf-sub").textContent="Ingresá tu DNI y el código de estudio para acceder";
+};
+["inf-dni","inf-codigo"].forEach(id=>{
+  document.getElementById(id).addEventListener("keydown",(e)=>{ if(e.key==="Enter") document.getElementById("inf-buscar").click(); });
+});
+
+function downloadInformeDemo(estudio){
+  const contenido =
+`CENTRO MÉDICO PALMARES
+Informe de estudio — DOCUMENTO DE DEMOSTRACIÓN
+
+Estudio: ${estudio.nombre}
+Tipo: ${estudio.tipo}
+Fecha: ${estudio.fecha}
+Paciente DNI: ${estudio.dni}
+Código: ${estudio.codigo}
+
+Este es un archivo de ejemplo generado por la demo.
+En producción, este botón descarga el PDF real emitido por BioBoxCloud.`;
+  const blob = new Blob([contenido], {type:"text/plain;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `informe-${estudio.codigo}.txt`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+/* --- Accesibilidad: cerrar cualquier modal con Esc --- */
+document.addEventListener("keydown",(e)=>{
+  if(e.key!=="Escape") return;
+  document.querySelectorAll(".modal-overlay.open").forEach(o=>o.classList.remove("open"));
+});
+</script>
+</body>
+</html>
