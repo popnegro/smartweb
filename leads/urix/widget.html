@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <meta name="description" content="Demo de widget de atención y solicitud para URIX Salud" />
+  <title>URIX Salud — Atención y turnos</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            urix: { 50:'#effafa',100:'#d9f2f1',200:'#b5e5e3',300:'#82d3d0',400:'#4dbbb7',500:'#269f9c',600:'#16817f',700:'#126967',800:'#115554',900:'#104746',950:'#082c2b' },
+            ink: '#163332'
+          },
+          fontFamily: { sans:['Inter','ui-sans-serif','system-ui','-apple-system','sans-serif'] },
+          boxShadow: { card:'0 1px 2px rgba(22,51,50,.06),0 8px 28px rgba(22,51,50,.06)' }
+        }
+      }
+    }
+  </script>
+  <style>
+    :root{--primary:#16817f;--bg:#f5faf9;--ink:#163332}
+    html,body{margin:0;background:var(--bg);color:var(--ink)}
+    .fade{animation:fade .28s ease both}@keyframes fade{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+    .choice{transition:.16s ease}.choice:hover{transform:translateY(-2px)}
+    .choice.selected{border-color:var(--primary);box-shadow:0 0 0 3px rgba(22,129,127,.12)}
+    .hide-scroll::-webkit-scrollbar{display:none}.hide-scroll{scrollbar-width:none}
+  </style>
+</head>
+<body class="font-sans antialiased">
+<div id="app"></div>
+<script>
+/* URIX SALUD — personalized adaptation of the Akineuro widget flow.
+   Demo only: availability, prices, coverage and contact data are configurable.
+*/
+const CONFIG={
+  brand:'URIX SALUD',
+  eyebrow:'Atención digital',
+  headline:'Gestioná tu atención de forma simple',
+  subheadline:'Encontrá el estudio o gestión que necesitás y dejá tu solicitud en pocos pasos.',
+  whatsapp:'', // configurar número real en formato internacional, sin + ni espacios
+  location:'Mendoza',
+  accent:'#16817f'
+};
+
+const OPTIONS=[
+  {id:'analisis',icon:'🧪',title:'Análisis clínicos',text:'Consultá por estudios y preparación.'},
+  {id:'turno',icon:'📅',title:'Solicitar turno',text:'Dejá tus datos para coordinar atención.'},
+  {id:'resultados',icon:'📄',title:'Resultados',text:'Consultas relacionadas con tus resultados.'},
+  {id:'cobertura',icon:'💳',title:'Obra social / prepaga',text:'Consultá cobertura y requisitos.'}
+];
+const STUDIES=[
+  ['rutina','Análisis de rutina'],['sangre','Extracción / sangre'],['orina','Orina'],['hormonas','Hormonas'],['bacterio','Bacteriología'],['otro','Otro estudio']
+];
+const COVERAGES=['Particular','OSDE','Swiss Medical','Galeno','Medifé','PAMI','Sancor Salud','Otra'];
+const DAYS=['Hoy','Mañana','Pasado mañana'];
+
+const state={step:1,service:null,study:null,coverage:null,day:null,time:null,patient:{name:'',phone:'',dni:'',note:''},sent:false};
+
+function icon(name){const m={check:'<path d="m5 12 4 4L19 6"/>',arrow:'<path d="m9 18 6-6-6-6"/>',back:'<path d="m15 18-6-6 6-6"/>',calendar:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',lock:'<rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>'};return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">'+m[name]+'</svg>'}
+function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+function set(field,value){state[field]=value;render()}
+function patient(field,value){state.patient[field]=value}
+
+function header(){return `<header class="border-b border-urix-100 bg-white/90 backdrop-blur sticky top-0 z-20"><div class="max-w-xl mx-auto px-4 py-3 flex items-center justify-between"><div><div class="font-bold tracking-tight text-lg">${CONFIG.brand}</div><div class="text-xs text-urix-700">${CONFIG.eyebrow}</div></div><div class="w-9 h-9 rounded-xl bg-urix-50 text-urix-700 grid place-items-center font-bold">U</div></div></header>`}
+function progress(){return `<div class="max-w-xl mx-auto px-4 pt-5"><div class="flex items-center gap-2 text-xs text-slate-500"><span class="font-semibold text-urix-700">Paso ${state.step} de 4</span><span class="flex-1 h-1.5 rounded-full bg-slate-100 overflow-hidden"><span class="block h-full bg-urix-600 rounded-full" style="width:${state.step*25}%"></span></span></div></div>`}
+function card(content){return `<main class="max-w-xl mx-auto px-4 py-5"><section class="bg-white rounded-3xl border border-slate-100 shadow-card overflow-hidden fade">${content}</section></main>`}
+function footer(){return `<footer class="max-w-xl mx-auto px-4 pb-8 text-center text-xs text-slate-400">${icon('lock')}<span class="inline-flex items-center gap-1 ml-1">Tus datos se usan únicamente para gestionar tu solicitud.</span></footer>`}
+
+function step1(){return card(`<div class="p-6"><div class="text-xs font-semibold uppercase tracking-widest text-urix-600 mb-2">URIX Salud</div><h1 class="text-2xl font-bold tracking-tight">${CONFIG.headline}</h1><p class="mt-2 text-sm leading-6 text-slate-600">${CONFIG.subheadline}</p><div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-6">${OPTIONS.map(o=>`<button onclick="set('service','${o.id}')" class="choice text-left border rounded-2xl p-4 ${state.service===o.id?'selected':''}"><div class="text-2xl">${o.icon}</div><div class="font-semibold mt-3">${o.title}</div><div class="text-xs text-slate-500 mt-1 leading-5">${o.text}</div></button>`).join('')}</div></div><div class="px-6 pb-6"><button onclick="next()" ${state.service?'':'disabled'} class="w-full rounded-xl bg-urix-700 disabled:bg-slate-200 disabled:text-slate-400 text-white py-3.5 font-semibold flex items-center justify-center gap-2">Continuar ${icon('arrow')}</button></div>`)}
+
+function step2(){let body='';if(state.service==='analisis'){body=`<p class="text-sm text-slate-600 mb-4">Seleccioná una categoría para orientar la solicitud.</p><div class="grid grid-cols-2 gap-3">${STUDIES.map(x=>`<button onclick="set('study','${x[0]}')" class="choice text-left border rounded-2xl p-4 ${state.study===x[0]?'selected':''}"><div class="font-semibold text-sm">${x[1]}</div><div class="text-xs text-slate-500 mt-1">Consultar preparación</div></button>`).join('')}</div>`}else if(state.service==='cobertura'){body=`<p class="text-sm text-slate-600 mb-4">Elegí tu cobertura para orientar la consulta.</p><div class="grid grid-cols-2 gap-3">${COVERAGES.map(x=>`<button onclick="set('coverage','${x}')" class="choice text-left border rounded-2xl p-4 ${state.coverage===x?'selected':''}"><div class="font-semibold text-sm">${x}</div></button>`).join('')}</div>`}else if(state.service==='turno'){body=`<p class="text-sm text-slate-600 mb-4">Elegí una referencia de día. La disponibilidad real se conecta con el sistema de URIX al implementar.</p><div class="grid grid-cols-3 gap-2">${DAYS.map((x,i)=>`<button onclick="set('day','${x}')" class="choice border rounded-2xl p-3 ${state.day===x?'selected':''}"><div class="text-xs text-slate-500">${i===0?'Disponibilidad':'Próximo'}</div><div class="font-semibold text-sm mt-1">${x}</div></button>`).join('')}</div><div class="mt-4 grid grid-cols-3 gap-2">${['08:00','09:30','11:00','15:00','16:30','18:00'].map(t=>`<button onclick="set('time','${t}')" class="choice border rounded-xl py-3 text-sm font-semibold ${state.time===t?'selected':''}">${t}</button>`).join('')}</div>`}else{body=`<div class="rounded-2xl bg-urix-50 p-4 text-sm text-urix-900"><strong>Resultados:</strong> dejá tus datos en el siguiente paso y el equipo podrá indicarte cómo acceder o consultar el estado de tu solicitud.</div>`}
+return card(`<div class="p-6"><button onclick="back()" class="text-sm text-slate-500 flex items-center gap-1 mb-5">${icon('back')} Volver</button><h2 class="text-xl font-bold">${state.service==='analisis'?'¿Qué estudio necesitás?':state.service==='cobertura'?'¿Con qué cobertura contás?':state.service==='turno'?'¿Cuándo te gustaría venir?':'¿Qué necesitás gestionar?'}</h2><div class="mt-5">${body}</div></div><div class="px-6 pb-6"><button onclick="next()" ${canStep2()?'':'disabled'} class="w-full rounded-xl bg-urix-700 disabled:bg-slate-200 disabled:text-slate-400 text-white py-3.5 font-semibold">Continuar</button></div>`)}
+function canStep2(){if(state.service==='analisis')return !!state.study;if(state.service==='cobertura')return !!state.coverage;if(state.service==='turno')return !!state.day&&!!state.time;return true}
+
+function step3(){return card(`<div class="p-6"><button onclick="back()" class="text-sm text-slate-500 flex items-center gap-1 mb-5">${icon('back')} Volver</button><h2 class="text-xl font-bold">Completá tus datos</h2><p class="text-sm text-slate-600 mt-2">Así podemos continuar con tu solicitud.</p><div class="space-y-3 mt-5"><label class="block text-sm font-medium">Nombre y apellido<input oninput="patient('name',this.value)" value="${esc(state.patient.name)}" class="mt-1.5 w-full rounded-xl border border-slate-200 px-3.5 py-3 outline-none focus:border-urix-500" placeholder="Ej. María González"></label><label class="block text-sm font-medium">Teléfono / WhatsApp<input oninput="patient('phone',this.value)" value="${esc(state.patient.phone)}" class="mt-1.5 w-full rounded-xl border border-slate-200 px-3.5 py-3 outline-none focus:border-urix-500" placeholder="261..." inputmode="tel"></label><label class="block text-sm font-medium">DNI<input oninput="patient('dni',this.value)" value="${esc(state.patient.dni)}" class="mt-1.5 w-full rounded-xl border border-slate-200 px-3.5 py-3 outline-none focus:border-urix-500" placeholder="Sin puntos" inputmode="numeric"></label><label class="block text-sm font-medium">Comentario <span class="font-normal text-slate-400">(opcional)</span><textarea oninput="patient('note',this.value)" class="mt-1.5 w-full rounded-xl border border-slate-200 px-3.5 py-3 outline-none focus:border-urix-500 min-h-24" placeholder="Contanos brevemente qué necesitás">${esc(state.patient.note)}</textarea></label></div></div><div class="px-6 pb-6"><button onclick="next()" ${state.patient.name&&state.patient.phone?'':'disabled'} class="w-full rounded-xl bg-urix-700 disabled:bg-slate-200 disabled:text-slate-400 text-white py-3.5 font-semibold">Revisar solicitud</button></div>`)}
+
+function label(){if(state.service==='analisis')return state.study; if(state.service==='cobertura')return state.coverage; if(state.service==='turno')return `${state.day} · ${state.time}`;return 'Consulta de resultados'}
+function step4(){if(state.sent)return card(`<div class="p-7 text-center"><div class="mx-auto w-14 h-14 rounded-full bg-urix-100 text-urix-700 grid place-items-center">${icon('check')}</div><h2 class="text-2xl font-bold mt-5">Solicitud preparada</h2><p class="text-sm text-slate-600 mt-2 leading-6">La demo generó el resumen correctamente. En producción, este botón puede enviar la solicitud al WhatsApp, CRM o sistema de turnos de URIX.</p><button onclick="send()" class="mt-6 w-full rounded-xl bg-urix-700 text-white py-3.5 font-semibold">Enviar por WhatsApp</button><button onclick="restart()" class="mt-2 w-full rounded-xl border border-slate-200 py-3.5 font-semibold">Nueva solicitud</button></div>`);return card(`<div class="p-6"><button onclick="back()" class="text-sm text-slate-500 flex items-center gap-1 mb-5">${icon('back')} Volver</button><h2 class="text-xl font-bold">Revisá tu solicitud</h2><div class="mt-5 rounded-2xl bg-slate-50 border border-slate-100 p-4 space-y-3 text-sm"><div><div class="text-xs text-slate-400">Gestión</div><div class="font-semibold">${esc(label())}</div></div><div><div class="text-xs text-slate-400">Paciente</div><div class="font-semibold">${esc(state.patient.name)}</div></div><div><div class="text-xs text-slate-400">Contacto</div><div class="font-semibold">${esc(state.patient.phone)}</div></div>${state.patient.dni?`<div><div class="text-xs text-slate-400">DNI</div><div class="font-semibold">${esc(state.patient.dni)}</div></div>`:''}</div><div class="mt-4 text-xs text-slate-500 flex gap-2">${icon('lock')} No ingreses información clínica sensible en este demo.</div></div><div class="px-6 pb-6"><button onclick="prepare()" class="w-full rounded-xl bg-urix-700 text-white py-3.5 font-semibold">Confirmar solicitud</button></div>`)}
+
+function next(){if(state.step===1&&state.service)state.step=2;else if(state.step===2&&canStep2())state.step=3;else if(state.step===3&&state.patient.name&&state.patient.phone)state.step=4;render()}
+function back(){state.step=Math.max(1,state.step-1);render()}
+function prepare(){state.sent=true;render()}
+function restart(){Object.assign(state,{step:1,service:null,study:null,coverage:null,day:null,time:null,sent:false,patient:{name:'',phone:'',dni:'',note:''}});render()}
+function send(){const text=`Hola, quiero realizar una solicitud en URIX Salud.\n\nGestión: ${label()}\nNombre: ${state.patient.name}\nTeléfono: ${state.patient.phone}${state.patient.dni?'\nDNI: '+state.patient.dni:''}${state.patient.note?'\nComentario: '+state.patient.note:''}`;if(CONFIG.whatsapp){location.href='https://wa.me/'+CONFIG.whatsapp+'?text='+encodeURIComponent(text)}else{alert('Demo: configurar CONFIG.whatsapp con el número real de URIX Salud para activar el envío.')}}
+function render(){document.getElementById('app').innerHTML=header()+progress()+(state.step===1?step1():state.step===2?step2():state.step===3?step3():step4())+footer()}
+render();
+</script>
+</body>
+</html>
