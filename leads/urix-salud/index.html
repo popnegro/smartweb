@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-  <title>Reservá tu turno — Urquí Salud</title>
+  <title>Reservá tu turno — Urix Salud</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -287,7 +287,7 @@
     <div class="flex items-center gap-2">
       <div class="w-8 h-8 rounded-lg bg-primary-700 flex items-center justify-center text-white font-bold text-sm">U</div>
       <div>
-        <span class="font-semibold text-ink block">Urquí Salud</span>
+        <span class="font-semibold text-ink block">Urix Salud</span>
         <span class="text-[10px] text-slate-500 leading-none">Centro de salud integral</span>
       </div>
     </div>
@@ -566,7 +566,7 @@
       const prof = PROFESSIONALS.find(p => p.id === b.profId);
       const precios = { np: 2000, cf: 2500, sg: 2200, rd: 3000, mc: 2000 };
       const precio = precios[prof.id] || 2000;
-      const waMsg = encodeURIComponent(`Hola! Confirmo mi turno en Urquí Salud con ${prof.name} el ${fmtFull(new Date(b.dateKey))} a las ${b.time} hs. Nombre: ${b.patient.nombre}. 🙋`);
+      const waMsg = encodeURIComponent(`Hola! Confirmo mi turno en Urix Salud con ${prof.name} el ${fmtFull(new Date(b.dateKey))} a las ${b.time} hs. Nombre: ${b.patient.nombre}. 🙋`);
       return `
   <div class="fade-in max-w-2xl mx-auto px-4 py-8">
     <div class="text-center mb-6">
@@ -589,7 +589,7 @@
       <div class="flex items-center gap-2">${Badge('Pagado', 'success')} ${b.gcalSynced ? Badge(`${svgInline(Icon.gcal)} Agendado`, 'neutral') : ''}</div>
     </div>
 
-    <a href="https://wa.me/5491123456789?text=${waMsg}" target="_blank" rel="noopener" class="w-full flex items-center justify-center gap-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-3 transition-colors mb-3">${Icon.whatsapp} Enviar por WhatsApp</a>
+    <a href="https://wa.me/5492616706710?text=${waMsg}" target="_blank" rel="noopener" class="w-full flex items-center justify-center gap-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-3 transition-colors mb-3">${Icon.whatsapp} Enviar por WhatsApp</a>
     <button data-action="new-booking" class="w-full rounded-lg border border-slate-200 text-slate-600 font-medium py-3 hover:border-primary-300 transition-colors">Agendar otro turno</button>
   </div>`;
     }
@@ -643,7 +643,7 @@
     <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
       <div class="flex items-center gap-2">
         <div class="w-8 h-8 rounded-lg bg-primary-700 flex items-center justify-center text-white font-bold text-sm">U</div>
-        <span class="font-semibold text-ink">Panel Urquí Salud</span>
+        <span class="font-semibold text-ink">Panel Urix Salud</span>
         ${Badge(store.role === 'superadmin' ? 'SúperAdmin' : 'Editor', store.role === 'superadmin' ? 'primary' : 'neutral')}
       </div>
       <button data-action="logout" class="text-sm text-slate-500 hover:text-rose-600">Cerrar sesión</button>
